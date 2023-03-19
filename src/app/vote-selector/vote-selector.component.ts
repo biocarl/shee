@@ -38,7 +38,7 @@ export class VoteSelectorComponent implements OnInit{
   questionId : string = "";
   questions ? : string[];
 
-  colorPalette : string [] = ["#3f51b5","#a35","#c66", "#2cb", "#e94" ];
+  colorPalette : string [] = [ "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44"];
   voted: boolean = false;
 
   constructor(private http: HttpClient, private zone : NgZone, private route: ActivatedRoute, private groupService : GroupService) {}
@@ -63,6 +63,7 @@ export class VoteSelectorComponent implements OnInit{
           // decoded already
           if (typeof actualEvent.message !== "string") {
             this.questions = actualEvent.message.questions;
+            this.groupService.hasQuestions = true;
           }
           console.log(actualEvent);
         }
@@ -89,6 +90,7 @@ export class VoteSelectorComponent implements OnInit{
 
     // Wait for the others
     this.voted = true;
+    this.groupService.hasQuestions = false;
 
     // handle vote
     const voting : number[] = Array(this.questions.length).fill(0);

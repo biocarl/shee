@@ -15,7 +15,12 @@
           *ngFor="let question of questions; let i = index;"
           (click)="voteForQuestion(i)"
           class="v-question"
-          [style.background-color]="colorPalette[i]">
+          [style.border-top-width]='i != 0 ? "3px" : "0"'
+          [style.background]='
+          "linear-gradient(-40deg, "+colorPalette[i]+" 30px, transparent 0),"
+          +"linear-gradient(40deg, "+colorPalette[i]+" 30px, transparent 0)"
+
+'>
     <span>
       {{question}}
     </span>

@@ -6,4 +6,5 @@ import { Injectable } from '@angular/core';
 export class GroupService {
 
   public groupName : string = "";
+  public hasQuestions: boolean = false;
 }
