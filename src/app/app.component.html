@@ -1,0 +1,7 @@
+<div class="v-center">
+  <h1 *ngIf="groupService.groupName; else NoGroup" class="title is-1">{{groupService.groupName}}</h1>
+  <ng-template #NoGroup>
+    <h1 class="title is-1">Voting App</h1>
+  </ng-template>
+</div>
+<router-outlet></router-outlet>

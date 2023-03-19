@@ -1,0 +1,23 @@
+.v-questions {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  justify-content: space-evenly;
+}
+
+.v-question {
+  height: 100%;
+  text-align: center;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.v-question span {
+  font-size: 130%;
+  font-weight: bold;
+}
+
+

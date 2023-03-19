@@ -1,0 +1,37 @@
+<div>
+ <div *ngIf="voted;else showQuestion" class="v-message">
+   <div>
+     You voted
+   </div>
+   <img src="assets/thx.png" alt="thx-emoji" width="100px">
+ </div>
+  <ng-template #showQuestion>
+    <ng-container *ngIf="questions; then selector; else wait"></ng-container>
+
+
+    <ng-template #selector>
+      <div class="v-questions content is-large">
+        <div
+          *ngFor="let question of questions; let i = index;"
+          (click)="voteForQuestion(i)"
+          class="v-question"
+          [style.background-color]="colorPalette[i]">
+    <span>
+      {{question}}
+    </span>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #wait>
+      <div class="v-message">
+        <div>
+          Please wait
+        </div>
+        <img src="assets/waiting_transparent.png" alt="waiting" width="160px">
+
+      </div>
+    </ng-template>
+
+  </ng-template>
+</div>

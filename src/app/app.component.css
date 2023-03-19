@@ -1,0 +1,13 @@
+.v-center {
+  background-color: #F58B44;
+  height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+h1 {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
