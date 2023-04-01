@@ -1,7 +1,7 @@
-<div class="v-nav" [class.small]="groupService.groupName" [class.v-blue]="groupService.hasQuestions">
-    <div *ngIf="groupService.groupName; else NoGroup" class="title is-1" >
+<div class="v-nav" [class.small]="groupService.getGroupName()" [class.v-blue]="groupService.hasQuestions">
+    <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-1" >
       <div class="v-container">
-        <h1><code>&lt;</code>{{groupService.groupName}}<code>&gt;</code></h1>
+        <h1><code>&lt;</code>{{groupService.getGroupName()}}<code>&gt;</code></h1>
       </div>
     </div>
     <ng-template #NoGroup>

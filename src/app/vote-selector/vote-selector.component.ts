@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component,OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {GroupService} from "../group.service";
 import {QueueService} from "../queue.service";
 
 interface PollPublish {
-  event: string, voting : number[],
+  event: "poll_event",
+  voting : number[],
   participant : string,
   question_id: string
 };
@@ -37,7 +37,7 @@ export class VoteSelectorComponent implements OnInit{
     this.route.paramMap.subscribe( params => {
       this.groupName = params.get("group");
       if(this.groupName){
-        this.groupService.groupName = this.groupName;
+        this.groupService.setGroupName(this.groupName);
       }
       console.log(this.groupName);
     });

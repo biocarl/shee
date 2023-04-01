@@ -33,7 +33,7 @@ export class QueueService {
   constructor(private groupService : GroupService, private zone : NgZone, private http: HttpClient) { }
 
   onPresenterEvent<Type>(handlePresenterEvent: (event : Type) => void) {
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.groupName + this.PRESENTER_TOPIC_SUFFIX}/sse`);
+    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
@@ -56,7 +56,7 @@ export class QueueService {
 
   publishClientEvent<Type>(publishEvent: Type) {
     const payload : ClientPublish = {
-      topic: this.groupService.groupName + this.CLIENT_TOPIC_SUFFIX,
+      topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
       message: this.encodeMessageToBase64(publishEvent),
       title: "Client event published",
       tags: [],
