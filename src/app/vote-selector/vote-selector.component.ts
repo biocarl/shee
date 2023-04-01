@@ -4,6 +4,13 @@ import {ActivatedRoute} from "@angular/router";
 import {GroupService} from "../group.service";
 import {QueueService} from "../queue.service";
 
+interface PollPublish {
+  event: string, voting : number[],
+  participant : string,
+  question_id: string
+};
+
+
 interface ClientPublish {
   topic: string,
   message: string | PollPublish, // base64 encoding
@@ -12,29 +19,12 @@ interface ClientPublish {
   attach: string,
 }
 
-interface PollPublish {
-  event: string, voting : number[],
-  participant : string,
-  question_id: string
-};
-
 interface PollSubscribe {
   id: string,
   "event": "question_event",
   "questions" : string[]
 }
 
-interface PresenterSubscribe {
-  id: string,
-  topic: string,
-  title: string,
-  message: string | PollSubscribe,
-  tags: string[],
-  attachment: {
-    "name": string,
-    "url": string
-  }
-}
 
 @Component({
   selector: 'app-vote-selector',
@@ -50,7 +40,7 @@ export class VoteSelectorComponent implements OnInit{
   colorPalette : string [] = [ "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44"];
   voted: boolean = false;
 
-  constructor(private http: HttpClient, private zone : NgZone, private route: ActivatedRoute, private groupService : GroupService, private queueService : QueueService) {}
+  constructor(private http: HttpClient, private route: ActivatedRoute, private groupService : GroupService, private queueService : QueueService) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( params => {
@@ -61,28 +51,12 @@ export class VoteSelectorComponent implements OnInit{
       console.log(this.groupName);
     });
 
-    //this.queueService.onPresenterEvent<PollSubscribe>(event => console.log(event));
-
-
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupName + "_presenter_topic"}/sse`);
-    eventSource.onmessage = (eventWrapper) => {
-      this.zone.run(
-        () => {
-
-          // this is happening in service
-          const rawEvent : PresenterSubscribe = this.decodeMessageFromBase64(JSON.parse(eventWrapper.data));
-          const pollSubscriptionEvent : PollSubscribe = rawEvent.message as PollSubscribe;
-          pollSubscriptionEvent.id = rawEvent.id;
-
-
-          // this is happening client side
-          this.questionId = pollSubscriptionEvent.id;
-          this.questions =  pollSubscriptionEvent.questions;
-          this.groupService.hasQuestions = true;
-          this.voted = false; //allow voting again
-        }
-      )
-    };
+    this.queueService.onPresenterEvent<PollSubscribe>( pollSubscriptionEvent=> {
+      this.questionId = pollSubscriptionEvent.id;
+      this.questions =  pollSubscriptionEvent.questions;
+      this.groupService.hasQuestions = true;
+      this.voted = false; //allow voting again
+    });
 
     return;
   }
@@ -92,12 +66,6 @@ export class VoteSelectorComponent implements OnInit{
     return payload;
   }
 
-  decodeMessageFromBase64( payload : PresenterSubscribe) : PresenterSubscribe {
-    if (typeof payload.message === "string") {
-      payload.message = JSON.parse(atob(payload.message));
-    }
-    return payload;
-  }
 
   voteForQuestion(voteSelectionIndex: number) {
     if(!this.questions) return
