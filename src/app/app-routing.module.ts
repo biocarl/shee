@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {PollClientComponent} from "./poll-client/poll-client.component";
 import {NoGroupComponent} from "./no-group/no-group.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {PresenterComponent} from "./presenter/presenter.component";
+import {PollClientComponent} from "./poll/poll-client/poll-client.component";
 
 const routes: Routes = [
   {path: "", component: NoGroupComponent},

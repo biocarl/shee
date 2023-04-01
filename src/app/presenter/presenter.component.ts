@@ -3,9 +3,9 @@ import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
 import {AnchorDirective} from "./anchor.directive";
-import {PollPresenterComponent} from "../poll-presenter/poll-presenter.component";
 import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
 import {PresenterPublishRequest} from "../dto/presenter-publish-request";
+import {PollPresenterComponent} from "../poll/poll-presenter/poll-presenter.component";
 
 
 @Component({
@@ -13,7 +13,7 @@ import {PresenterPublishRequest} from "../dto/presenter-publish-request";
   templateUrl: './presenter.component.html',
   styleUrls: ['./presenter.component.css']
 })
-export class PresenterComponent implements OnInit{
+export class PresenterComponent{
   groupName: string | null = "";
   paramsPayload ?: PresenterPublishRequest;
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
@@ -25,7 +25,9 @@ export class PresenterComponent implements OnInit{
     private groupService : GroupService,
   ) {}
 
+
   ngOnInit(): void {
+
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe( params => {
       this.groupName = params.get("group");

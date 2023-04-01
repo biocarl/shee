@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {PresenterView} from "../presenter-view";
-import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
+import {PresenterView} from "../../presenter-view";
+import {PresenterSubscribeResponse} from "../../dto/presenter-subscribe-response";
 
 @Component({
   selector: 'app-poll-presenter',

@@ -3,13 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PollClientComponent } from './poll-client/poll-client.component';
 import {HttpClientModule} from "@angular/common/http";
 import { NoGroupComponent } from './no-group/no-group.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PresenterComponent } from './presenter/presenter.component';
-import { PollPresenterComponent } from './poll-presenter/poll-presenter.component';
 import {AnchorDirective} from "./presenter/anchor.directive";
+import {PollClientComponent} from "./poll/poll-client/poll-client.component";
+import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.component";
 
 @NgModule({
   declarations: [

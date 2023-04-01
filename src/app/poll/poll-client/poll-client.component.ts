@@ -1,21 +1,9 @@
 import {Component,OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {GroupService} from "../group.service";
-import {QueueService} from "../queue.service";
-
-interface PollPublish {
-  event: "poll_event",
-  voting : number[],
-  participant : string,
-  question_id: string
-};
-
-interface PollSubscribe {
-  id: string,
-  "event": "question_event",
-  "questions" : string[]
-}
-
+import {GroupService} from "../../group.service";
+import {QueueService} from "../../queue.service";
+import {PollPresenterSubscribe} from "../poll-presenter-subscribe";
+import {PollClientPublish} from "../poll-client-publish";
 
 @Component({
   selector: 'app-vote-selector',
@@ -42,7 +30,7 @@ export class PollClientComponent implements OnInit{
       console.log(this.groupName);
     });
 
-    this.queueService.onPresenterEvent<PollSubscribe>( pollSubscriptionEvent=> {
+    this.queueService.onPresenterEvent<PollPresenterSubscribe>( pollSubscriptionEvent=> {
       this.questionId = pollSubscriptionEvent.id;
       this.questions =  pollSubscriptionEvent.questions;
       this.groupService.hasQuestions = true;
@@ -51,7 +39,6 @@ export class PollClientComponent implements OnInit{
 
     return;
   }
-
 
 
   voteForQuestion(voteSelectionIndex: number) {
@@ -64,13 +51,13 @@ export class PollClientComponent implements OnInit{
     // handle vote
     const voting : number[] = Array(this.questions.length).fill(0);
     voting[voteSelectionIndex] = 1;
-    const message : PollPublish =  {
+    const message : PollClientPublish =  {
         event: "poll_event",
         question_id: this.questionId,
         voting : voting,
         participant : "biocarl" // TODO This you will retrieve from the frontend
       };
 
-    this.queueService.publishClientEvent<PollPublish>(message);
+    this.queueService.publishClientEvent<PollClientPublish>(message);
   }
 }
