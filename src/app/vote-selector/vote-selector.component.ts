@@ -10,15 +10,6 @@ interface PollPublish {
   question_id: string
 };
 
-
-interface ClientPublish {
-  topic: string,
-  message: string | PollPublish, // base64 encoding
-  title: string,
-  tags: string[],
-  attach: string,
-}
-
 interface PollSubscribe {
   id: string,
   "event": "question_event",
@@ -40,7 +31,7 @@ export class VoteSelectorComponent implements OnInit{
   colorPalette : string [] = [ "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44"];
   voted: boolean = false;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private groupService : GroupService, private queueService : QueueService) {}
+  constructor(private route: ActivatedRoute, private groupService : GroupService, private queueService : QueueService) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( params => {
@@ -61,10 +52,6 @@ export class VoteSelectorComponent implements OnInit{
     return;
   }
 
-  encodeMessageToBase64(payload : ClientPublish) : ClientPublish {
-    payload.message = btoa(JSON.stringify(payload.message));
-    return payload;
-  }
 
 
   voteForQuestion(voteSelectionIndex: number) {
@@ -84,17 +71,6 @@ export class VoteSelectorComponent implements OnInit{
         participant : "biocarl" // TODO This you will retrieve from the frontend
       };
 
-    const payload : ClientPublish = {
-      topic: this.groupName + "_client_topic", // TODO Will eventually extracted from route root/:groupname
-      message: message,
-      title: "Publish polling results",
-      tags: [],
-      attach: ""
-    }
-
-    this.http.post<any>('https://ntfy.sh', this.encodeMessageToBase64(payload))
-      .subscribe(result => {
-        console.log("Post request sent" + result)
-      });
+    this.queueService.publishClientEvent<PollPublish>(message);
   }
 }
