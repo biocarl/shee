@@ -5,20 +5,28 @@ import {GroupService} from "../group.service";
 
 interface PollingResultsPublish {
   topic: string,
-  message: string | { event: string, voting : number[], participant : string, question_id: string}, // base64 encoding
+  message: string | PollPublish, // base64 encoding
   title: string,
   tags: string[],
   attach: string,
+}
+
+interface PollPublish {
+  event: string, voting : number[],
+  participant : string,
+  question_id: string
+};
+
+interface PollSubscribe {
+  "event": "question_event",
+  "questions" : string[]
 }
 
 interface QuestionResponse {
   id: string,
   topic: string,
   title: string,
-  message: string | {
-      "event": "question_event",
-      "questions" : string[]
-  },
+  message: string | PollSubscribe,
   tags: string[],
   attachment: {
     "name": string,
@@ -34,7 +42,6 @@ interface QuestionResponse {
 export class VoteSelectorComponent implements OnInit{
 
   groupName: string | null = "";
-  questionsTopic : string = "topic_question_event_tester";
   questionId : string = "";
   questions ? : string[];
 
@@ -95,7 +102,7 @@ export class VoteSelectorComponent implements OnInit{
     // handle vote
     const voting : number[] = Array(this.questions.length).fill(0);
     voting[voteSelectionIndex] = 1;
-    const message =  {
+    const message : PollPublish =  {
         event: "poll_event",
         question_id: this.questionId,
         voting : voting,

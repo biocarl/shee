@@ -1,0 +1,41 @@
+### BROADCASTING QUESTION
+GET https://ntfy.sh/{{topic_question_event}}/json?poll=1
+
+###
+# @topic: name of the topic (do not change here)
+# @message, @title: payload, the contents of the event
+# @tag: You can use tags for filtering, categorizing the messages
+# @attach: An additional field where you can add a image for example
+POST https://ntfy.sh
+Content-Type: application/json
+
+{
+    "topic": "{{topic_question_event}}",
+    "message": "{{topic_question_payload_string}}",
+    "title": "Question event",
+    "tags": ["font-size: 100px", "text-shadow: 1px 1px 2px pink"],
+    "attach": "https://filesrv.lan/space.jpg"
+}
+
+
+### BROADCASTING POLL
+GET https://ntfy.sh/{{topic_poll_event}}/json?poll=1
+
+###
+# @topic: name of the topic (do not change here)
+# @message, @title: payload, the contents of the event
+# @tag: You can use tags for filtering, categorizing the messages
+# @attach: An additional field where you can add a image for example
+POST https://ntfy.sh
+Content-Type: application/json
+
+{
+    "topic": "{{topic_poll_event}}",
+    "message": "{{topic_poll_payload_string}}",
+    "title": "Polling event",
+    "tags": ["font-size: 100px", "text-shadow: 1px 1px 2px pink"],
+    "attach": "https://filesrv.lan/space.jpg"
+}
+
+
+###
