@@ -7,7 +7,13 @@ import {GroupService} from "../group.service";
 // TODO: Is the most general type (all other presenter events subscribe from this)
 interface PresenterSubscribe {
   interaction: string;
-  event: string;
+  id: string;
+  event: string; // TODO delete - interaction is better
+}
+
+// All the other fields are custom to the presenter events (params dependent)
+interface PresenterPublish {
+  interaction: string;
 }
 
 @Component({
@@ -17,7 +23,7 @@ interface PresenterSubscribe {
 })
 export class PresenterComponent implements OnInit{
   groupName: string | null = "";
-  payload: {} = {};
+  paramsPayload ?: PresenterPublish;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,23 +41,26 @@ export class PresenterComponent implements OnInit{
     });
 
     // Retrieve query parameter ?param1=value1&param2=... from url
-    this.payload =  this.retrieveQueryParamsAsJson();
+    this.paramsPayload =  this.retrieveQueryParamsAsJson();
 
     // Listen to all presenter events for choosing which component to choose
     this.queueService.onPresenterEvent<PresenterSubscribe>( presenterEvent=> {
       // if(presenterEvent.interaction === "poll"){
-      if(presenterEvent.event === "question_event"){
+      if(presenterEvent.interaction === "generic"){
         console.log("Event...");
         console.log("Polling detected");
       }
     });
 
-
-    // If a valid payload retrieved from parameters publish as present event
-
+    // If a valid payload retrieved from parameters publish as presenter event
+    if(this.paramsPayload.interaction){
+      this.queueService.publishPresenterEvent<PresenterPublish>(this.paramsPayload);
+    }else{
+      console.error('No valid presenter event via query provided. At least `interaction` field is required');
+    }
   }
 
-  retrieveQueryParamsAsJson() : {} {
+  retrieveQueryParamsAsJson() : PresenterPublish {
     return this.route.snapshot.queryParamMap.keys.reduce( (agg, key )=> {
         const value = this.route.snapshot.queryParamMap.get(key) ?? "";
         if(value.includes(",")){
@@ -63,6 +72,6 @@ export class PresenterComponent implements OnInit{
         }
         return agg;
       }
-      , {});
+      , {}) as PresenterPublish;
   }
 }

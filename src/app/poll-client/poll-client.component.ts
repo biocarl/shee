@@ -19,10 +19,10 @@ interface PollSubscribe {
 
 @Component({
   selector: 'app-vote-selector',
-  templateUrl: './vote-selector.component.html',
-  styleUrls: ['./vote-selector.component.css']
+  templateUrl: './poll-client.component.html',
+  styleUrls: ['./poll-client.component.css']
 })
-export class VoteSelectorComponent implements OnInit{
+export class PollClientComponent implements OnInit{
 
   groupName: string | null = "";
   questionId : string = "";

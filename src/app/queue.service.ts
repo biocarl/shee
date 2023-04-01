@@ -2,7 +2,7 @@ import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
 
-interface PresenterSubscribe {
+interface SubscribeResponse {
   id: string,
   topic: string,
   title: string,
@@ -14,7 +14,7 @@ interface PresenterSubscribe {
   }
 }
 
-interface ClientPublish {
+interface PublishRequest {
   topic: string,
   message: string,
   title: string,
@@ -38,7 +38,7 @@ export class QueueService {
       this.zone.run(
         () => {
 
-          const rawEvent : PresenterSubscribe = JSON.parse(eventWrapper.data);
+          const rawEvent : SubscribeResponse = JSON.parse(eventWrapper.data);
           const event : Type = this.decodeMessageFromBase64<Type>(rawEvent.message);
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
@@ -54,10 +54,10 @@ export class QueueService {
   }
 
 
-  publishClientEvent<Type>(publishEvent: Type) {
-    const payload : ClientPublish = {
+  publishClientEvent<Type>(clientEvent: Type) {
+    const payload :  PublishRequest = {
       topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
-      message: this.encodeMessageToBase64(publishEvent),
+      message: this.encodeMessageToBase64(clientEvent),
       title: "Client event published",
       tags: [],
       attach: ""
@@ -79,4 +79,18 @@ export class QueueService {
     return JSON.parse(atob(payloadMessage));
   }
 
+  publishPresenterEvent<Type>(presenterEvent: Type) {
+    const payload :  PublishRequest = {
+      topic: this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX,
+      message: this.encodeMessageToBase64(presenterEvent),
+      title: "Presenter event published",
+      tags: [],
+      attach: ""
+    }
+
+    this.http.post<any>('https://ntfy.sh', payload)
+      .subscribe(result => {
+        console.log("Post request sent" + result)
+      });
+  }
 }
