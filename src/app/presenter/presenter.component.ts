@@ -1,20 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
+import {AnchorDirective} from "./anchor.directive";
+import {PollPresenterComponent} from "../poll-presenter/poll-presenter.component";
+import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
+import {PresenterPublishRequest} from "../dto/presenter-publish-request";
 
-
-// TODO: Is the most general type (all other presenter events subscribe from this)
-interface PresenterSubscribe {
-  interaction: string;
-  id: string;
-  event: string; // TODO delete - interaction is better
-}
-
-// All the other fields are custom to the presenter events (params dependent)
-interface PresenterPublish {
-  interaction: string;
-}
 
 @Component({
   selector: 'app-presenter',
@@ -23,7 +15,9 @@ interface PresenterPublish {
 })
 export class PresenterComponent implements OnInit{
   groupName: string | null = "";
-  paramsPayload ?: PresenterPublish;
+  paramsPayload ?: PresenterPublishRequest;
+  @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -44,23 +38,26 @@ export class PresenterComponent implements OnInit{
     this.paramsPayload =  this.retrieveQueryParamsAsJson();
 
     // Listen to all presenter events for choosing which component to choose
-    this.queueService.onPresenterEvent<PresenterSubscribe>( presenterEvent=> {
-      // if(presenterEvent.interaction === "poll"){
-      if(presenterEvent.interaction === "generic"){
-        console.log("Event...");
+    this.queueService.onPresenterEvent<PresenterSubscribeResponse>( presenterEvent=> {
+      if(presenterEvent.interaction === "poll"){
         console.log("Polling detected");
+        const _viewContainerRef = this.anchor.viewContainerRef;
+        _viewContainerRef.clear(); // clean container
+        const pollPresenterRef = _viewContainerRef.createComponent<PollPresenterComponent>(PollPresenterComponent);
+        pollPresenterRef.instance.populateWithData(presenterEvent);
       }
     });
 
     // If a valid payload retrieved from parameters publish as presenter event
     if(this.paramsPayload.interaction){
-      this.queueService.publishPresenterEvent<PresenterPublish>(this.paramsPayload);
+      this.queueService.publishPresenterEvent<PresenterPublishRequest>(this.paramsPayload);
     }else{
       console.error('No valid presenter event via query provided. At least `interaction` field is required');
     }
+
   }
 
-  retrieveQueryParamsAsJson() : PresenterPublish {
+  retrieveQueryParamsAsJson() : PresenterPublishRequest {
     return this.route.snapshot.queryParamMap.keys.reduce( (agg, key )=> {
         const value = this.route.snapshot.queryParamMap.get(key) ?? "";
         if(value.includes(",")){
@@ -72,6 +69,6 @@ export class PresenterComponent implements OnInit{
         }
         return agg;
       }
-      , {}) as PresenterPublish;
+      , {}) as PresenterPublishRequest;
   }
 }

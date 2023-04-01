@@ -9,6 +9,7 @@ import { NoGroupComponent } from './no-group/no-group.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { PresenterComponent } from './presenter/presenter.component';
 import { PollPresenterComponent } from './poll-presenter/poll-presenter.component';
+import {AnchorDirective} from "./presenter/anchor.directive";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { PollPresenterComponent } from './poll-presenter/poll-presenter.componen
     NoGroupComponent,
     NotFoundComponent,
     PresenterComponent,
-    PollPresenterComponent
+    PollPresenterComponent,
+    AnchorDirective
   ],
   imports: [
     BrowserModule,
