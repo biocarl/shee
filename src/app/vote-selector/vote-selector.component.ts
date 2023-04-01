@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/c
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute} from "@angular/router";
 import {GroupService} from "../group.service";
+import {QueueService} from "../queue.service";
 
-interface PollingResultsPublish {
+interface ClientPublish {
   topic: string,
   message: string | PollPublish, // base64 encoding
   title: string,
@@ -18,11 +19,12 @@ interface PollPublish {
 };
 
 interface PollSubscribe {
+  id: string,
   "event": "question_event",
   "questions" : string[]
 }
 
-interface QuestionResponse {
+interface PresenterSubscribe {
   id: string,
   topic: string,
   title: string,
@@ -48,7 +50,7 @@ export class VoteSelectorComponent implements OnInit{
   colorPalette : string [] = [ "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44", "#F58B44"];
   voted: boolean = false;
 
-  constructor(private http: HttpClient, private zone : NgZone, private route: ActivatedRoute, private groupService : GroupService) {}
+  constructor(private http: HttpClient, private zone : NgZone, private route: ActivatedRoute, private groupService : GroupService, private queueService : QueueService) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe( params => {
@@ -59,20 +61,25 @@ export class VoteSelectorComponent implements OnInit{
       console.log(this.groupName);
     });
 
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupName + "_question_topic"}/sse`);
+    //this.queueService.onPresenterEvent<PollSubscribe>(event => console.log(event));
+
+
+    const eventSource = new EventSource(`https://ntfy.sh/${this.groupName + "_presenter_topic"}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
-          this.voted = false; //allow voting again
-          const actualEvent : QuestionResponse = this.decodeMessageFromBase64(JSON.parse(eventWrapper.data));
-          this.questionId = actualEvent.id;
 
-          // decoded already
-          if (typeof actualEvent.message !== "string") {
-            this.questions = actualEvent.message.questions;
-            this.groupService.hasQuestions = true;
-          }
-          console.log(actualEvent);
+          // this is happening in service
+          const rawEvent : PresenterSubscribe = this.decodeMessageFromBase64(JSON.parse(eventWrapper.data));
+          const pollSubscriptionEvent : PollSubscribe = rawEvent.message as PollSubscribe;
+          pollSubscriptionEvent.id = rawEvent.id;
+
+
+          // this is happening client side
+          this.questionId = pollSubscriptionEvent.id;
+          this.questions =  pollSubscriptionEvent.questions;
+          this.groupService.hasQuestions = true;
+          this.voted = false; //allow voting again
         }
       )
     };
@@ -80,12 +87,12 @@ export class VoteSelectorComponent implements OnInit{
     return;
   }
 
-  encodeMessageToBase64(payload : PollingResultsPublish) : PollingResultsPublish {
+  encodeMessageToBase64(payload : ClientPublish) : ClientPublish {
     payload.message = btoa(JSON.stringify(payload.message));
     return payload;
   }
 
-  decodeMessageFromBase64( payload : QuestionResponse) : QuestionResponse {
+  decodeMessageFromBase64( payload : PresenterSubscribe) : PresenterSubscribe {
     if (typeof payload.message === "string") {
       payload.message = JSON.parse(atob(payload.message));
     }
@@ -109,8 +116,8 @@ export class VoteSelectorComponent implements OnInit{
         participant : "biocarl" // TODO This you will retrieve from the frontend
       };
 
-    const payload : PollingResultsPublish = {
-      topic: this.groupName + "_poll_topic", // TODO Will eventually extracted from route root/:groupname
+    const payload : ClientPublish = {
+      topic: this.groupName + "_client_topic", // TODO Will eventually extracted from route root/:groupname
       message: message,
       title: "Publish polling results",
       tags: [],

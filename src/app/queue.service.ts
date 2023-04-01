@@ -7,7 +7,7 @@ export class QueueService {
 
   constructor() { }
 
-  publishVoting(payload : any){
+  onPresenterEvent<Type>(handlePresenterEvent: (event : Type) => void) {
 
   }
 }
