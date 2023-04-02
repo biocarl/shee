@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
 import {GroupService} from "../../group.service";
 import {QueueService} from "../../queue.service";
 import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-response";
@@ -16,7 +15,7 @@ export class PollClientComponent implements ClientView {
   questionEvent ? : PollPresenterSubscribeResponse;
   voted: boolean = false;
 
-  constructor(private route: ActivatedRoute, private groupService : GroupService, private queueService : QueueService) {}
+  constructor(private groupService : GroupService, private queueService : QueueService) {}
 
   voteForQuestion(voteSelectionIndex: number) {
     if(!this.questionEvent?.questions) return

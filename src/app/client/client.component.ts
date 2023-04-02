@@ -7,6 +7,7 @@ import {PollClientComponent} from "../poll/poll-client/poll-client.component";
 import {NotFoundComponent} from "../not-found/not-found.component";
 import {WaitComponent} from "../wait/wait.component";
 import {AnchorDirective} from "../anchor.directive";
+import {ComponentChooserService} from "../component-chooser.service";
 
 @Component({
   selector: 'app-client',
@@ -24,6 +25,7 @@ export class ClientComponent implements OnInit {
     private route: ActivatedRoute,
     private queueService : QueueService,
     private groupService : GroupService,
+    private componentChooserService : ComponentChooserService
   ) {}
 
   ngOnInit(): void {
@@ -41,18 +43,8 @@ export class ClientComponent implements OnInit {
 
     // Listen to all presenter events for choosing which component to choose
     this.queueService.onPresenterEvent<PresenterSubscribeResponse>( presenterEvent=> {
-      if(!this.viewContainerRef){
-        console.error("Error: Container ref is empty");
-        return;
-      }
-      if(presenterEvent.interaction === "poll"){
-        this.viewContainerRef.clear(); // clean container
-        const pollClientRef = this.viewContainerRef.createComponent<PollClientComponent>(PollClientComponent);
-        pollClientRef.instance.populateWithData(presenterEvent);
-      }else {
-        const ref404 = this.viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
-        console.error("Error: No matching interaction id was found for " + presenterEvent.interaction);
-      }
+      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+        presenterEvent.interaction, "client",presenterEvent);
     });
   }
 }

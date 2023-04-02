@@ -7,6 +7,7 @@ import {PresenterPublishRequest} from "../dto/presenter-publish-request";
 import {PollPresenterComponent} from "../poll/poll-presenter/poll-presenter.component";
 import {AnchorDirective} from "../anchor.directive";
 import {QueryToEventService} from "./query-to-event.service";
+import {ComponentChooserService} from "../component-chooser.service";
 
 
 @Component({
@@ -23,6 +24,7 @@ export class PresenterComponent implements OnInit {
     private queueService : QueueService,
     private groupService : GroupService,
     private queryToEventService : QueryToEventService,
+    private componentChooserService : ComponentChooserService
   ) {}
 
 
@@ -37,13 +39,8 @@ export class PresenterComponent implements OnInit {
 
     // Listen to all presenter events for determining which component to choose
     this.queueService.onPresenterEvent<PresenterSubscribeResponse>( presenterEvent=> {
-      if(presenterEvent.interaction === "poll"){
-        console.log("Polling detected");
-        const _viewContainerRef = this.anchor.viewContainerRef;
-        _viewContainerRef.clear(); // clean container
-        const pollPresenterRef = _viewContainerRef.createComponent<PollPresenterComponent>(PollPresenterComponent);
-        pollPresenterRef.instance.populateWithData(presenterEvent);
-      }
+      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+                                                      presenterEvent.interaction, "presenter",presenterEvent);
     });
 
     // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
