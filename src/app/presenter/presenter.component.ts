@@ -13,7 +13,7 @@ import {PollPresenterComponent} from "../poll/poll-presenter/poll-presenter.comp
   templateUrl: './presenter.component.html',
   styleUrls: ['./presenter.component.css']
 })
-export class PresenterComponent{
+export class PresenterComponent implements OnInit {
   groupName: string | null = "";
   paramsPayload ?: PresenterPublishRequest;
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;

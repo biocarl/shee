@@ -1,2 +1,8 @@
-<h3>Poll presenter:</h3>
-<p>{{response | json }}</p>
+<h3>Poll presenter</h3>
+<ul *ngIf="questionEvent && questionResponses">
+  <li *ngFor="let question of questionEvent.questions; let i = index;" style="list-style-type: none; font-size: 1em; display: flex;align-items: center; flex-direction: row-reverse; flex-wrap: wrap">
+    <span class="badge" style="flex: 1">{{questionResponses[i]}}</span>
+    <span style="flex: 8"> {{question}} </span>
+  </li>
+</ul>
+

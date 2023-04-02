@@ -53,6 +53,23 @@ export class QueueService {
     };
   }
 
+  // TODO Code duplication of onPresenterEvent (parametrize with SUFFIX)
+  onClientEvent<Type>(handleClientEvent: (event : Type) => void) {
+    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
+    eventSource.onmessage = (eventWrapper) => {
+      this.zone.run(
+        () => {
+          const rawEvent : SubscribeResponse = JSON.parse(eventWrapper.data);
+          const event : Type = this.decodeMessageFromBase64<Type>(rawEvent.message);
+          // @ts-ignore
+          event.id = rawEvent.id;
+          // Run callback
+          handleClientEvent(event);
+        }
+      )
+    };
+  }
+
 
   publishClientEvent<Type>(clientEvent: Type) {
     const payload :  PublishRequest = {
@@ -93,4 +110,5 @@ export class QueueService {
         console.log("Post request sent" + result)
       });
   }
+
 }

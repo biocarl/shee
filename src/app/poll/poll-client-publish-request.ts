@@ -1,4 +1,4 @@
-export interface PollClientPublish {
+export interface PollClientPublishRequest {
   event: "poll_event",
   voting : number[],
   participant : string,
