@@ -2,10 +2,11 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
-import {AnchorDirective} from "./anchor.directive";
 import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
 import {PresenterPublishRequest} from "../dto/presenter-publish-request";
 import {PollPresenterComponent} from "../poll/poll-presenter/poll-presenter.component";
+import {AnchorDirective} from "../anchor.directive";
+import {QueryToEventService} from "./query-to-event.service";
 
 
 @Component({
@@ -15,19 +16,17 @@ import {PollPresenterComponent} from "../poll/poll-presenter/poll-presenter.comp
 })
 export class PresenterComponent implements OnInit {
   groupName: string | null = "";
-  paramsPayload ?: PresenterPublishRequest;
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
-
 
   constructor(
     private route: ActivatedRoute,
     private queueService : QueueService,
     private groupService : GroupService,
+    private queryToEventService : QueryToEventService,
   ) {}
 
 
   ngOnInit(): void {
-
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe( params => {
       this.groupName = params.get("group");
@@ -36,10 +35,7 @@ export class PresenterComponent implements OnInit {
       }
     });
 
-    // Retrieve query parameter ?param1=value1&param2=... from url
-    this.paramsPayload =  this.retrieveQueryParamsAsJson();
-
-    // Listen to all presenter events for choosing which component to choose
+    // Listen to all presenter events for determining which component to choose
     this.queueService.onPresenterEvent<PresenterSubscribeResponse>( presenterEvent=> {
       if(presenterEvent.interaction === "poll"){
         console.log("Polling detected");
@@ -50,27 +46,7 @@ export class PresenterComponent implements OnInit {
       }
     });
 
-    // If a valid payload retrieved from parameters publish as presenter event
-    if(this.paramsPayload.interaction){
-      this.queueService.publishPresenterEvent<PresenterPublishRequest>(this.paramsPayload);
-    }else{
-      console.error('No valid presenter event via query provided. At least `interaction` field is required');
-    }
-
-  }
-
-  retrieveQueryParamsAsJson() : PresenterPublishRequest {
-    return this.route.snapshot.queryParamMap.keys.reduce( (agg, key )=> {
-        const value = this.route.snapshot.queryParamMap.get(key) ?? "";
-        if(value.includes(",")){
-          // @ts-ignore
-          agg[key] = value.split(",");
-        }else {
-          // @ts-ignore
-          agg[key] = value;
-        }
-        return agg;
-      }
-      , {}) as PresenterPublishRequest;
+    // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
+    this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
   }
 }

@@ -1,5 +1,4 @@
 import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import {AnchorDirective} from "../presenter/anchor.directive";
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
@@ -7,6 +6,7 @@ import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
 import {PollClientComponent} from "../poll/poll-client/poll-client.component";
 import {NotFoundComponent} from "../not-found/not-found.component";
 import {WaitComponent} from "../wait/wait.component";
+import {AnchorDirective} from "../anchor.directive";
 
 @Component({
   selector: 'app-client',
@@ -55,5 +55,4 @@ export class ClientComponent implements OnInit {
       }
     });
   }
-
 }

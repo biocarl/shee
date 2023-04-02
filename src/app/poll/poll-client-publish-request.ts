@@ -1,5 +1,5 @@
 export interface PollClientPublishRequest {
-  event: "poll_event",
+  interaction: "poll",
   voting : number[],
   participant : string,
   question_id: string

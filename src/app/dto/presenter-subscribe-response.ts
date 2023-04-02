@@ -1,4 +1,4 @@
-// TODO: Is the most general type (all other presenter events subscribe from this)
+// Is the most general type (all other presenter events subscribe from this) - TODO: Introduce inheritance
 export interface PresenterSubscribeResponse {
   interaction: string;
   id: string;

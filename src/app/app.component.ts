@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
 import {GroupService} from "./group.service";
 
 @Component({
@@ -8,6 +7,5 @@ import {GroupService} from "./group.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent{
-  constructor(protected groupService: GroupService) {
-  }
+  constructor(protected groupService: GroupService) {}
 }

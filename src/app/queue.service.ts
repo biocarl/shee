@@ -70,7 +70,6 @@ export class QueueService {
     };
   }
 
-
   publishClientEvent<Type>(clientEvent: Type) {
     const payload :  PublishRequest = {
       topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,

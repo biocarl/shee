@@ -20,6 +20,12 @@
 li {
   color: white;
   font-weight: bold;
+  list-style-type: none;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  flex-wrap: wrap
 }
 
 h3 {
