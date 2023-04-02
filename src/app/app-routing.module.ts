@@ -4,11 +4,12 @@ import {NoGroupComponent} from "./no-group/no-group.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {PresenterComponent} from "./presenter/presenter.component";
 import {PollClientComponent} from "./poll/poll-client/poll-client.component";
+import {ClientComponent} from "./client/client.component";
 
 const routes: Routes = [
   {path: "", component: NoGroupComponent},
   {path: ":group", children: [
-      {path: "" , component: PollClientComponent},
+      {path: "" , component: ClientComponent},
       {path: "presenter" , component: PresenterComponent},
     ]},
   {path: "**", component: NotFoundComponent},
