@@ -14,7 +14,7 @@ export class QueryToEventService {
 
     // If a valid payload retrieved from parameters publish as presenter event
     if(jsonPayload.interaction){
-      this.queueService.publishMessageToPresenterInbox<PresenterMessageCreationRequest>(jsonPayload);
+      this.queueService.publishMessageToPresenterChannel<PresenterMessageCreationRequest>(jsonPayload);
     }else{
       console.error('No valid presenter event via query provided. At least `interaction` field is required');
     }

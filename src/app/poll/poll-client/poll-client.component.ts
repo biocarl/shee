@@ -32,7 +32,7 @@ export class PollClientComponent implements ClientView {
         voting : voting,
         participant : "unknown" // TODO Not used for now
       };
-    this.queueService.publishMessageToClientInbox<PollClientPublishRequest>(message);
+    this.queueService.publishMessageToClientChannel<PollClientPublishRequest>(message);
   }
 
   initializeComponent(data : PresenterMessage) {

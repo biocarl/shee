@@ -29,6 +29,6 @@ export class CounterClientComponent implements ClientView {
     const message : CounterClientPublishRequest =  {
       interaction: "counter",
     };
-    this.queueService.publishMessageToClientInbox<CounterClientPublishRequest>(message);
+    this.queueService.publishMessageToClientChannel<CounterClientPublishRequest>(message);
   }
 }

@@ -11,7 +11,7 @@ export class QueueService {
 
   constructor(private groupService : GroupService, private zone : NgZone, private http: HttpClient) { }
 
-  listenToPresenterInbox<Type>(handlePresenterMessage: (presenterMessage : Type) => void) {
+  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage : Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
@@ -31,8 +31,7 @@ export class QueueService {
       )
     };
   }
-
-  listenToClientInbox<Type>(handleClientMessage: (clientMessage : Type) => void) {
+  listenToClientChannel<Type>(handleClientMessage: (clientMessage : Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
@@ -47,8 +46,7 @@ export class QueueService {
       )
     };
   }
-
-  publishMessageToClientInbox<Type>(clientMessage: Type) {
+  publishMessageToClientChannel<Type>(clientMessage: Type) {
     const payload :  EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
       message: this.#encodeMessageToBase64(clientMessage),
@@ -63,8 +61,7 @@ export class QueueService {
       });
 
   }
-
-  publishMessageToPresenterInbox<Type>(presenterMessage: Type) {
+  publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
     const payload :  EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX,
       message: this.#encodeMessageToBase64(presenterMessage),

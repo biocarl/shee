@@ -40,7 +40,7 @@ export class ClientComponent implements OnInit {
     this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
 
     // Listen to all presenter messages and inject component into view accordingly
-    this.queueService.listenToPresenterInbox<PresenterMessage>(presenterMessage=> {
+    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage=> {
       this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
         presenterMessage.interaction, "client",presenterMessage);
     });

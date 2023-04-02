@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+vag.iml
 
 # Node
 /node_modules

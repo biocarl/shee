@@ -36,7 +36,7 @@ export class PresenterComponent implements OnInit {
     });
 
     // Listen to all presenter events for determining which component to choose
-    this.queueService.listenToPresenterInbox<PresenterMessage>(presenterMessage => {
+    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
                                                       presenterMessage.interaction, "presenter",presenterMessage);
     });

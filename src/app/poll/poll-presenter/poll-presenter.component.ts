@@ -19,7 +19,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
 
 
   ngOnInit(): void {
-    this.queueService.listenToClientInbox<PollClientSubscribeResponse>(pollSubscriptionEvent => {
+    this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
       if(!this.questionEvent){
         console.error("Error: question event was not populated by parent client component");
         return;

@@ -18,7 +18,7 @@ export class CounterPresenterComponent implements OnInit, PresenterView {
   constructor(private queueService: QueueService) {}
 
   ngOnInit(): void {
-    this.queueService.listenToClientInbox<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
+    this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
       if(counterSubscriptionEvent.interaction && counterSubscriptionEvent.interaction === "counter"){
         this.counter++;
       }
