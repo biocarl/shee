@@ -2,12 +2,10 @@ import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
-import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
-import {PollClientComponent} from "../poll/poll-client/poll-client.component";
-import {NotFoundComponent} from "../not-found/not-found.component";
 import {WaitComponent} from "../wait/wait.component";
 import {AnchorDirective} from "../anchor.directive";
 import {ComponentChooserService} from "../component-chooser.service";
+import {PresenterMessage} from "../presenter-message";
 
 @Component({
   selector: 'app-client',
@@ -39,12 +37,12 @@ export class ClientComponent implements OnInit {
     this.viewContainerRef = this.anchor.viewContainerRef;
 
     // Show "waiting" while presenter has not initialized yet
-    const waitingComponent = this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
+    this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
 
-    // Listen to all presenter events for choosing which component to choose
-    this.queueService.onPresenterEvent<PresenterSubscribeResponse>( presenterEvent=> {
+    // Listen to all presenter messages and inject component into view accordingly
+    this.queueService.listenToPresenterInbox<PresenterMessage>(presenterMessage=> {
       this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
-        presenterEvent.interaction, "client",presenterEvent);
+        presenterMessage.interaction, "client",presenterMessage);
     });
   }
 }

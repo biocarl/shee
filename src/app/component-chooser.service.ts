@@ -1,10 +1,10 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
 import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.component";
-import {PresenterSubscribeResponse} from "./dto/presenter-subscribe-response";
 import {PollClientComponent} from "./poll/poll-client/poll-client.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {CounterPresenterComponent} from "./counter/counter-presenter/counter-presenter.component";
 import {CounterClientComponent} from "./counter/counter-client/counter-client.component";
+import {PresenterMessage} from "./presenter-message";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ComponentChooserService {
 
   constructor() { }
 
-  injectComponent(viewContainerRef: ViewContainerRef, interaction : string, type: string, event: PresenterSubscribeResponse) {
+  injectComponent(viewContainerRef: ViewContainerRef, interaction : string, type: string, event: PresenterMessage) {
     if(!viewContainerRef){
       console.error("Error: Container ref is empty");
       return;
@@ -31,11 +31,11 @@ export class ComponentChooserService {
       switch (interaction){
         case "poll" :
           const pollPresenterRef = viewContainerRef.createComponent<PollPresenterComponent>(PollPresenterComponent);
-          pollPresenterRef.instance.populateWithData(event);
+          pollPresenterRef.instance.initializeComponent(event);
           break
         case "counter" :
           const counterRef = viewContainerRef.createComponent<CounterPresenterComponent>(CounterPresenterComponent);
-          counterRef.instance.populateWithData(event);
+          counterRef.instance.initializeComponent(event);
           break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
@@ -47,11 +47,11 @@ export class ComponentChooserService {
       switch (interaction){
         case "poll" :
           const pollClientRef = viewContainerRef.createComponent<PollClientComponent>(PollClientComponent);
-          pollClientRef .instance.populateWithData(event);
+          pollClientRef .instance.initializeComponent(event);
           break
         case "counter" :
           const counterRef = viewContainerRef.createComponent<CounterClientComponent>(CounterClientComponent);
-          counterRef.instance.populateWithData(event);
+          counterRef.instance.initializeComponent(event);
           break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);

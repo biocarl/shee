@@ -2,27 +2,6 @@ import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
 
-interface SubscribeResponse {
-  id: string,
-  topic: string,
-  title: string,
-  message: string,
-  tags: string[],
-  attachment: {
-    "name": string,
-    "url": string
-  }
-}
-
-interface PublishRequest {
-  topic: string,
-  message: string,
-  title: string,
-  tags: string[],
-  attach: string,
-}
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -32,14 +11,14 @@ export class QueueService {
 
   constructor(private groupService : GroupService, private zone : NgZone, private http: HttpClient) { }
 
-  onPresenterEvent<Type>(handlePresenterEvent: (event : Type) => void) {
+  listenToPresenterInbox<Type>(handlePresenterMessage: (presenterMessage : Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
 
-          const rawEvent : SubscribeResponse = JSON.parse(eventWrapper.data);
-          const event : Type = this.decodeMessageFromBase64<Type>(rawEvent.message);
+          const rawEvent : EventResponse = JSON.parse(eventWrapper.data);
+          const event : Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
           // @ts-ignore
@@ -47,33 +26,32 @@ export class QueueService {
 
 
           // Run callback
-          handlePresenterEvent(event);
+          handlePresenterMessage(event);
         }
       )
     };
   }
 
-  // TODO Code duplication of onPresenterEvent (parametrize with SUFFIX)
-  onClientEvent<Type>(handleClientEvent: (event : Type) => void) {
+  listenToClientInbox<Type>(handleClientMessage: (clientMessage : Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
-          const rawEvent : SubscribeResponse = JSON.parse(eventWrapper.data);
-          const event : Type = this.decodeMessageFromBase64<Type>(rawEvent.message);
+          const rawEvent : EventResponse = JSON.parse(eventWrapper.data);
+          const event : Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
           // @ts-ignore
           event.id = rawEvent.id;
           // Run callback
-          handleClientEvent(event);
+          handleClientMessage(event);
         }
       )
     };
   }
 
-  publishClientEvent<Type>(clientEvent: Type) {
-    const payload :  PublishRequest = {
+  publishMessageToClientInbox<Type>(clientMessage: Type) {
+    const payload :  EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
-      message: this.encodeMessageToBase64(clientEvent),
+      message: this.#encodeMessageToBase64(clientMessage),
       title: "Client event published",
       tags: [],
       attach: ""
@@ -86,19 +64,10 @@ export class QueueService {
 
   }
 
-  // TODO Bind this properly to be {} at least
-  encodeMessageToBase64(payload : any) : string{
-    return btoa(JSON.stringify(payload));
-  }
-
-  decodeMessageFromBase64<Type>( payloadMessage : string) : Type{
-    return JSON.parse(atob(payloadMessage));
-  }
-
-  publishPresenterEvent<Type>(presenterEvent: Type) {
-    const payload :  PublishRequest = {
+  publishMessageToPresenterInbox<Type>(presenterMessage: Type) {
+    const payload :  EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX,
-      message: this.encodeMessageToBase64(presenterEvent),
+      message: this.#encodeMessageToBase64(presenterMessage),
       title: "Presenter event published",
       tags: [],
       attach: ""
@@ -110,4 +79,33 @@ export class QueueService {
       });
   }
 
+  #encodeMessageToBase64(payload : any) : string{
+    // TODO Bind this properly to be {} at least
+    return btoa(JSON.stringify(payload));
+  }
+
+  #decodeMessageFromBase64<Type>( payloadMessage : string) : Type{
+    return JSON.parse(atob(payloadMessage));
+  }
 }
+
+interface EventResponse {
+  id: string,
+  topic: string,
+  title: string,
+  message: string,
+  tags: string[],
+  attachment: {
+    "name": string,
+    "url": string
+  }
+}
+
+interface EventCreationRequest {
+  topic: string,
+  message: string,
+  title: string,
+  tags: string[],
+  attach: string,
+}
+

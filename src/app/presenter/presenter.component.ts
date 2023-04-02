@@ -2,12 +2,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
-import {PresenterSubscribeResponse} from "../dto/presenter-subscribe-response";
-import {PresenterPublishRequest} from "../dto/presenter-publish-request";
-import {PollPresenterComponent} from "../poll/poll-presenter/poll-presenter.component";
 import {AnchorDirective} from "../anchor.directive";
 import {QueryToEventService} from "./query-to-event.service";
 import {ComponentChooserService} from "../component-chooser.service";
+import {PresenterMessage} from "../presenter-message";
 
 
 @Component({
@@ -38,9 +36,9 @@ export class PresenterComponent implements OnInit {
     });
 
     // Listen to all presenter events for determining which component to choose
-    this.queueService.onPresenterEvent<PresenterSubscribeResponse>( presenterEvent=> {
+    this.queueService.listenToPresenterInbox<PresenterMessage>(presenterMessage => {
       this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
-                                                      presenterEvent.interaction, "presenter",presenterEvent);
+                                                      presenterMessage.interaction, "presenter",presenterMessage);
     });
 
     // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event

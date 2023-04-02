@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {QueueService} from "../../queue.service";
-import {PollClientSubscribeResponse} from "../../poll/poll-client-subscribe-response";
 import {PresenterView} from "../../presenter-view";
-import {PresenterSubscribeResponse} from "../../dto/presenter-subscribe-response";
+import {PresenterMessage} from "../../presenter-message";
 
 interface CounterClientSubscribeResponse {
   interaction : string;
@@ -19,14 +18,11 @@ export class CounterPresenterComponent implements OnInit, PresenterView {
   constructor(private queueService: QueueService) {}
 
   ngOnInit(): void {
-    this.queueService.onClientEvent<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
+    this.queueService.listenToClientInbox<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
       if(counterSubscriptionEvent.interaction && counterSubscriptionEvent.interaction === "counter"){
         this.counter++;
       }
     });
   }
-
-  populateWithData(data: PresenterSubscribeResponse): void {
-  }
-
+  initializeComponent(data: PresenterMessage): void {}
 }

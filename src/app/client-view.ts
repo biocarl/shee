@@ -1,5 +1,5 @@
-import {PresenterSubscribeResponse} from "./dto/presenter-subscribe-response";
+import {PresenterMessage} from "./presenter-message";
 
 export interface ClientView {
-  populateWithData(data : PresenterSubscribeResponse ) : void;
+  initializeComponent(data : PresenterMessage) : void;
 }

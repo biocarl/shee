@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {PresenterView} from "../../presenter-view";
-import {PresenterSubscribeResponse} from "../../dto/presenter-subscribe-response";
 import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-response";
 import {QueueService} from "../../queue.service";
 import {PollClientSubscribeResponse} from "../poll-client-subscribe-response";
+import {PresenterMessage} from "../../presenter-message";
 
 
 @Component({
@@ -19,7 +19,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
 
 
   ngOnInit(): void {
-    this.queueService.onClientEvent<PollClientSubscribeResponse>(pollSubscriptionEvent => {
+    this.queueService.listenToClientInbox<PollClientSubscribeResponse>(pollSubscriptionEvent => {
       if(!this.questionEvent){
         console.error("Error: question event was not populated by parent client component");
         return;
@@ -31,7 +31,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     });
   }
 
-  populateWithData(data: PresenterSubscribeResponse): void {
+  initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as PollPresenterSubscribeResponse;
     this.questionResponses = Array(this.questionEvent.questions.length).fill(0);
   }

@@ -3,8 +3,8 @@ import {GroupService} from "../../group.service";
 import {QueueService} from "../../queue.service";
 import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-response";
 import {PollClientPublishRequest} from "../poll-client-publish-request";
-import {PresenterSubscribeResponse} from "../../dto/presenter-subscribe-response";
 import {ClientView} from "../../client-view";
+import {PresenterMessage} from "../../presenter-message";
 
 @Component({
   selector: 'app-vote-selector',
@@ -32,10 +32,10 @@ export class PollClientComponent implements ClientView {
         voting : voting,
         participant : "unknown" // TODO Not used for now
       };
-    this.queueService.publishClientEvent<PollClientPublishRequest>(message);
+    this.queueService.publishMessageToClientInbox<PollClientPublishRequest>(message);
   }
 
-  populateWithData(data : PresenterSubscribeResponse) {
+  initializeComponent(data : PresenterMessage) {
     this.questionEvent = data as PollPresenterSubscribeResponse;
   }
 }

@@ -1,3 +1,0 @@
-These two interfaces are the high level abstraction of what we expect as payload for our presenter events: interaction field.
-This is used for routing to the correct component once a presenter event is received.
-All remaining fields are specific to each component and used there.

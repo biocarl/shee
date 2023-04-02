@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ClientView} from "../../client-view";
-import {PresenterSubscribeResponse} from "../../dto/presenter-subscribe-response";
 import {QueueService} from "../../queue.service";
+import {PresenterMessage} from "../../presenter-message";
 
 interface CounterPresenterSubscribeResponse {
   // This is the event presenter side was publishing
@@ -22,13 +22,13 @@ export class CounterClientComponent implements ClientView {
   private counterRequestFromPresenter ? : CounterPresenterSubscribeResponse;
 
   constructor(private queueService : QueueService) {}
-  populateWithData(data: PresenterSubscribeResponse): void {
+  initializeComponent(data: PresenterMessage): void {
     this.counterRequestFromPresenter = data as CounterPresenterSubscribeResponse;
 
 
     const message : CounterClientPublishRequest =  {
       interaction: "counter",
     };
-    this.queueService.publishClientEvent<CounterClientPublishRequest>(message);
+    this.queueService.publishMessageToClientInbox<CounterClientPublishRequest>(message);
   }
 }
