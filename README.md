@@ -21,7 +21,7 @@ console.log(u);
 
 
 ## Contributors
-- Sebastian  
+- Sebastian ([@JefCos](https://github.com/JefCos))
 - Bodo      
 - Marc       
 - Tamayo    
