@@ -26,7 +26,7 @@ console.log(u);
 - Marc       
 - Tamayo    
 - Alina     
-- Tarik     
+- Tarik  ([@trklkddr](https://github.com/trklkddr))      
 - Christian 
 - Rene      
 - Josi      
