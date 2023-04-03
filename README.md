@@ -28,7 +28,7 @@ console.log(u);
 - Alina     
 - Tarik     
 - Christian 
-- Rene      
+- Rene (Github:@MeisterRLampe)      
 - Josi      
 - Minh      
 - Bacdasch  
