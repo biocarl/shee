@@ -30,6 +30,6 @@ console.log(u);
 - Christian 
 - Rene      
 - Josi      
-- Minh      
+- Minh  = yungminox (https://github.com/yungminox)    
 - Bacdasch  
 - Carl
