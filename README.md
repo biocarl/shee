@@ -23,7 +23,7 @@ console.log(u);
 ## Contributors
 - Sebastian  
 - Bodo      
-- Marc       
+- Marc	[@Knollen](https://github.com/knollen)      
 - Tamayo    
 - Alina     
 - Tarik     
