@@ -24,7 +24,7 @@ console.log(u);
 - Sebastian  
 - Bodo      
 - Marc       
-- Tamayo    
+- Tamayo  ([@SETA1609)](https://github.com/SETA1609))  
 - Alina     
 - Tarik     
 - Christian 
