@@ -30,6 +30,6 @@ console.log(u);
 - Christian 
 - Rene (Github:@MeisterRLampe)      
 - Josi      
-- Minh      
+- Minh  = yungminox (https://github.com/yungminox)    
 - Bacdasch  
 - Carl ([@biocarl](https://github.com/biocarl))
