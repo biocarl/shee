@@ -21,7 +21,6 @@ console.log(u);
 
 
 ## Contributors
-
 - Sebastian  
 - Bodo      
 - Marc       
@@ -33,3 +32,4 @@ console.log(u);
 - Josi      
 - Minh      
 - Bacdasch  
+- Carl
