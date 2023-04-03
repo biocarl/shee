@@ -29,7 +29,7 @@ console.log(u);
 - Tarik     
 - Christian 
 - Rene      
-- Josi      
+- Josi (Ru79jel)  
 - Minh      
 - Bacdasch  
 - Carl
