@@ -22,7 +22,7 @@ console.log(u);
 
 ## Contributors
 - Sebastian  
-- Bodo      
+- Bodo ([@Bohdoh](https://github.com/Bohdoh))
 - Marc       
 - Tamayo    
 - Alina     
