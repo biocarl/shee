@@ -28,7 +28,7 @@ console.log(u);
 - Alina     
 - Tarik  ([@trklkddr](https://github.com/trklkddr))      
 - Christian 
-- Rene      
+- Rene (Github:@MeisterRLampe)      
 - Josi      
 - Minh      
 - Bacdasch  
