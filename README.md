@@ -32,4 +32,4 @@ console.log(u);
 - Josi      
 - Minh      
 - Bacdasch  
-- Carl
+- Carl ([@biocarl](https://github.com/biocarl))
