@@ -27,7 +27,7 @@ console.log(u);
 - Tamayo    
 - Alina     
 - Tarik     
-- Christian 
+- Christian (Languste1)
 - Rene      
 - Josi      
 - Minh      
