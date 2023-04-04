@@ -5,6 +5,8 @@ import {NotFoundComponent} from "./not-found/not-found.component";
 import {CounterPresenterComponent} from "./counter/counter-presenter/counter-presenter.component";
 import {CounterClientComponent} from "./counter/counter-client/counter-client.component";
 import {PresenterMessage} from "./presenter-message";
+import {DecisionChartClientComponent} from "./decision-chart/decision-chart-client/decision-chart-client/decision-chart-client.component";
+import {DecisionChartPresenterComponent} from "./decision-chart/decision-chart-presenter/decision-chart-presenter/decision-chart-presenter.component";
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +38,10 @@ export class ComponentChooserService {
         case "counter" :
           const counterRef = viewContainerRef.createComponent<CounterPresenterComponent>(CounterPresenterComponent);
           counterRef.instance.initializeComponent(event);
+          break;
+        case "decision" :
+          const decisionPresenterRef = viewContainerRef.createComponent<DecisionChartPresenterComponent>(DecisionChartPresenterComponent);
+          decisionPresenterRef.instance.initializeComponent(event);
           break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
