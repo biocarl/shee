@@ -21,9 +21,9 @@ console.log(u);
 
 
 ## Contributors
-- Sebastian ([@JefCos](https://github.com/JefCos))
-- Bodo      
+- Bodo ([@Bohdoh](https://github.com/Bohdoh))
 - Marc	[@Knollen](https://github.com/knollen)      
+- Sebastian ([@JefCos](https://github.com/JefCos))
 - Tamayo    
 - Alina     
 - Tarik  ([@trklkddr](https://github.com/trklkddr))      
