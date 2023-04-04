@@ -1,6 +1,7 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
+import {ParticipantService} from "./participant.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
 
-  constructor(private groupService : GroupService, private zone : NgZone, private http: HttpClient) { }
+  constructor(private groupService : GroupService, private participantService: ParticipantService, private zone : NgZone, private http: HttpClient) { }
 
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage : Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
@@ -40,6 +41,7 @@ export class QueueService {
           const event : Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
           // @ts-ignore
           event.id = rawEvent.id;
+          console.log(event)
           // Run callback
           handleClientMessage(event);
         }
