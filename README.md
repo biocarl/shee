@@ -19,17 +19,16 @@ console.log(u);
 ```
 
 
-
-## Contributors
-- Sebastian  
-- Bodo      
-- Marc       
-- Tamayo    
-- Alina     
-- Tarik     
-- Christian (Languste1)
-- Rene      
-- Josi      
-- Minh      
-- Bacdasch  
-- Carl
+## Contributors 🎉
+- Tamayo ([@SETA1609)](https://github.com/SETA1609))  
+- Bodo ([@Bohdoh](https://github.com/Bohdoh))
+- Marc ([@Knollen](https://github.com/knollen))      
+- Sebastian ([@JefCos](https://github.com/JefCos))  
+- Alina ([@neko5687](https://github.com/neko5687))   
+- Tarik ([@trklkddr](https://github.com/trklkddr))      
+- Christian ([@Languste1](https://github.com/Languste1))
+- Josi ([@Ru79jel](https://github.com/Ru79jel))
+- Rene ([@MeisterRLampe](https://github.com/MeisterRLampe))      
+- Minh ([@yungminox](https://github.com/yungminox))    
+- Bacdasch ([@Baco98](https://github.com/Baco98))  
+- Carl ([@biocarl](https://github.com/biocarl))
