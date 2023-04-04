@@ -21,15 +21,16 @@ console.log(u);
 
 
 ## Contributors
-- Sebastian  
-- Bodo      
-- Marc       
-- Tamayo  ([@SETA1609)](https://github.com/SETA1609))  
-- Alina     
-- Tarik     
-- Christian 
-- Rene      
-- Josi      
-- Minh      
-- Bacdasch  
-- Carl
+
+- Bodo ([@Bohdoh](https://github.com/Bohdoh))
+- Marc	([@Knollen](https://github.com/knollen))      
+- Sebastian ([@JefCos](https://github.com/JefCos))
+- Tamayo  ([@SETA1609)](https://github.com/SETA1609))     
+- Alina (neko5687)    
+- Tarik  ([@trklkddr](https://github.com/trklkddr))      
+- Christian (Languste1) 
+- Josi ([@Ru79jel](https://github.com/Ru79jel))
+- Rene (Github:@MeisterRLampe)      
+- Minh  = yungminox (https://github.com/yungminox)    
+- Bacdasch Baco98
+- Carl ([@biocarl](https://github.com/biocarl))
