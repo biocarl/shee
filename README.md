@@ -21,13 +21,14 @@ console.log(u);
 
 
 ## Contributors
+
 - Bodo ([@Bohdoh](https://github.com/Bohdoh))
 - Marc	([@Knollen](https://github.com/knollen))      
 - Sebastian ([@JefCos](https://github.com/JefCos))
-- Tamayo    
+- Tamayo  ([@SETA1609)](https://github.com/SETA1609))     
 - Alina (neko5687)    
 - Tarik  ([@trklkddr](https://github.com/trklkddr))      
-- Christian 
+- Christian (Languste1) 
 - Josi ([@Ru79jel](https://github.com/Ru79jel))
 - Rene (Github:@MeisterRLampe)      
 - Minh  = yungminox (https://github.com/yungminox)    
