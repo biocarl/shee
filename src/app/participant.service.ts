@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParticipantService {
-  private participantName : string = "Anonym";
+  private participantName: string = "Unknown";
 
-  getParticipantName() : string{
+  getParticipantName(): string {
     return this.participantName;
   }
 
-  setParticipantName(name:string){
+  setParticipantName(name: string) {
     this.participantName = name;
   }
 }
