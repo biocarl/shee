@@ -31,5 +31,6 @@ console.log(u);
 - Josi ([@Ru79jel](https://github.com/Ru79jel))
 - Rene (Github:@MeisterRLampe)      
 - Minh  = yungminox (https://github.com/yungminox)    
-- Bacdasch  
+- Bacdasch Baco98
 - Carl ([@biocarl](https://github.com/biocarl))
+
