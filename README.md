@@ -25,7 +25,7 @@ console.log(u);
 - Marc	[@Knollen](https://github.com/knollen)      
 - Sebastian ([@JefCos](https://github.com/JefCos))
 - Tamayo    
-- Alina     
+- Alina (neko5687)    
 - Tarik  ([@trklkddr](https://github.com/trklkddr))      
 - Christian 
 - Josi ([@Ru79jel](https://github.com/Ru79jel))
