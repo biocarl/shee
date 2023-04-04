@@ -18,6 +18,18 @@ const u = new URLSearchParams(myParams).toString();
 console.log(u);
 ```
 
+## ntfy.js script
+
+The ntfy script is located in the `/scripts/ntfy` folder. To use the script, navigate to the root directory of the project and run the following commands:
+
+```sh
+node scripts/ntfy/ntfy.js <command> <topic> <message.json>
+```
+For more information on how to use the script, use the --help command:
+```sh
+node scripts/ntfy/ntfy.js --help
+```
+
 
 
 ## Contributors
@@ -33,3 +45,6 @@ console.log(u);
 - Minh      
 - Bacdasch  
 - Carl
+
+
+
