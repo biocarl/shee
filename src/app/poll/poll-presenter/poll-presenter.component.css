@@ -39,3 +39,9 @@ h4{
   font-weight: lighter;
   text-align: center;
 }
+
+strong{
+  font-size: 25px;
+  font-weight: bolder;
+  color: red;
+}
