@@ -18,13 +18,13 @@ export class PollClientComponent implements ClientView {
   constructor(private groupService : GroupService, private queueService : QueueService) {}
 
   voteForQuestion(voteSelectionIndex: number) {
-    if(!this.questionEvent?.questions) return
+    if(!this.questionEvent?.answers) return
     // You can't vote twice
     this.voted = true;
     this.groupService.hasQuestions = false;
 
     // handle vote
-    const voting : number[] = Array(this.questionEvent.questions.length).fill(0);
+    const voting : number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
     const message : PollClientPublishRequest =  {
         interaction: "poll",

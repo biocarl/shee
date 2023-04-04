@@ -1,8 +1,23 @@
-<h3>Poll presenter</h3>
+<!--How to use the presenter-->
+<div *ngIf="questionEvent">
+  <div *ngIf="!questionEvent.question && !questionEvent.answers">
+    <h4>Enter a valid url that includes params for question and answers.</h4>
+    <h4>It should look like this -> /roomname/presenter?interaction=poll&question=Your Question here!&answers=Your,
+      answers, here!</h4>
+  </div>
+
+
+</div>
+
+<!--Show question-->
+<h3 *ngIf="questionEvent">{{questionEvent.question}}</h3>
+
+<!--Show answers-->
 <ul *ngIf="questionEvent && questionResponses">
-  <li *ngFor="let question of questionEvent.questions; let i = index;">
+  <li *ngFor="let answer of questionEvent.answers; let i = index;">
     <span class="badge" style="flex: 1">{{questionResponses[i]}}</span>
-    <span style="flex: 8"> {{question}} </span>
+    <span style="flex: 8"> {{answer}} </span>
   </li>
 </ul>
+
 
