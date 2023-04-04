@@ -28,8 +28,8 @@ console.log(u);
 - Alina     
 - Tarik  ([@trklkddr](https://github.com/trklkddr))      
 - Christian 
+- Josi ([@Ru79jel](https://github.com/Ru79jel))
 - Rene (Github:@MeisterRLampe)      
-- Josi      
 - Minh  = yungminox (https://github.com/yungminox)    
 - Bacdasch  
 - Carl ([@biocarl](https://github.com/biocarl))
