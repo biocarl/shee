@@ -28,9 +28,12 @@ async function subscribe(topic) {
     const response = await axios.get(`https://ntfy.sh/${topic}/json?poll=1`);
     const base64Message = response.data.message;
 
-    const messageJson = JSON.parse(Buffer.from(base64Message, 'base64').toString('utf-8'));
-
-    console.log("Decoded Message:", messageJson);
+    if (base64Message) {
+      const messageJson = JSON.parse(Buffer.from(base64Message, 'base64').toString('utf-8'));
+      console.log("Decoded Message:", messageJson);
+    } else {
+      console.error("No message received from the topic");
+    }
   } catch (error) {
     console.error(`Error: ${error.message}`);
   }
@@ -67,7 +70,7 @@ const topic = process.argv[3];
 if (command === '--publish') {
   const messageJsonFile = process.argv[4];
   publish(topic, messageJsonFile);
-} else if (command === '--subscribe--live') {
+} else if (command === '--subscribe-live') {
   subscribeWithInterval(topic);
 } else if (command === '--subscribe') {
     subscribe(topic);
