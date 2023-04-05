@@ -6,7 +6,7 @@
     <img src="assets/thx.png" alt="thx-emoji" width="100px">
   </div>
   <ng-template #showQuestion>
-    <ng-container *ngIf="questionEvent?.questions; then selector"></ng-container>
+    <ng-container *ngIf="questionEvent?.answers; then selector"></ng-container>
 
     <ng-template #selector>
       <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent?.timer !== undefined">
@@ -19,14 +19,14 @@
       <div class=" v-questions content is-large
       " [style.filter]="questionEvent?.timer === 0 ? 'grayscale(100%)' : 'none'">
         <div
-          *ngFor="let question of questionEvent?.questions; let i = index;"
+          *ngFor="let answer of questionEvent?.answers; let i = index;"
           (click)="voteForQuestion(i)"
           class="v-question"
           [style.pointer-events]="questionEvent?.timer === 0 ? 'none' : 'auto'"
           [style.border-top-width]='i != 0 ? "3px" : "0"'
         >
     <span>
-      {{question}}
+      {{answer}}
     </span>
         </div>
       </div>
