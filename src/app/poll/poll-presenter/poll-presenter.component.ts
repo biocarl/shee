@@ -46,7 +46,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
 
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as PollPresenterSubscribeResponse;
-    this.questionResponses = Array(this.questionEvent.questions.length).fill(0);
+    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
 
     if (this.questionEvent.timer) {
       const timerInterval = setInterval(() => {
