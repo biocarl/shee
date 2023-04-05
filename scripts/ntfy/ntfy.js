@@ -42,7 +42,7 @@ async function subscribe(topic) {
 }
 
 
-async function subscribeLive(topic){
+async function subscribeLive(topic) {
   try {
     const eventSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
     eventSource.onmessage = (e) => {
@@ -54,7 +54,7 @@ async function subscribeLive(topic){
   } catch (err) {
     console.error('An error occurred:', err);
   }
-
+}
 function printHelp() {
   console.log(`
 Usage:
