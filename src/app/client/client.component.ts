@@ -6,6 +6,7 @@ import {WaitComponent} from "../wait/wait.component";
 import {AnchorDirective} from "../anchor.directive";
 import {ComponentChooserService} from "../component-chooser.service";
 import {PresenterMessage} from "../presenter-message";
+import {ParticipantService} from "../participant.service";
 
 @Component({
   selector: 'app-client',
@@ -14,16 +15,18 @@ import {PresenterMessage} from "../presenter-message";
 })
 export class ClientComponent implements OnInit {
   groupName: string | null = "";
+  participantName: string | null = "";
 
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
 
-  viewContainerRef ? : ViewContainerRef ;
+  viewContainerRef ? : ViewContainerRef;
 
   constructor(
     private route: ActivatedRoute,
     private queueService : QueueService,
     private groupService : GroupService,
-    private componentChooserService : ComponentChooserService
+    private componentChooserService : ComponentChooserService,
+    private participantService: ParticipantService
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +37,12 @@ export class ClientComponent implements OnInit {
         this.groupService.setGroupName(this.groupName);
       }
     });
+    this.route.queryParamMap.subscribe(params => {
+      this.participantName = params.get("user");
+      if(this.participantName){
+        this.participantService.setParticipantName(this.participantName);
+      }
+    })
     this.viewContainerRef = this.anchor.viewContainerRef;
 
     // Show "waiting" while presenter has not initialized yet
