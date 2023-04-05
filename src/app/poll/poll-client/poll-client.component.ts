@@ -5,6 +5,7 @@ import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-respon
 import {PollClientPublishRequest} from "../poll-client-publish-request";
 import {ClientView} from "../../client-view";
 import {PresenterMessage} from "../../presenter-message";
+import {ParticipantService} from "../../participant.service";
 
 @Component({
   selector: 'app-vote-selector',
@@ -15,22 +16,22 @@ export class PollClientComponent implements ClientView {
   questionEvent ? : PollPresenterSubscribeResponse;
   voted: boolean = false;
 
-  constructor(private groupService : GroupService, private queueService : QueueService) {}
+  constructor(private groupService : GroupService, private queueService : QueueService, private participantService: ParticipantService) {}
 
   voteForQuestion(voteSelectionIndex: number) {
-    if(!this.questionEvent?.questions) return
+    if(!this.questionEvent?.answers) return
     // You can't vote twice
     this.voted = true;
     this.groupService.hasQuestions = false;
 
     // handle vote
-    const voting : number[] = Array(this.questionEvent.questions.length).fill(0);
+    const voting : number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
     const message : PollClientPublishRequest =  {
         interaction: "poll",
         question_id: this.questionEvent.id,
         voting : voting,
-        participant : "unknown" // TODO Not used for now
+        participantName : this.participantService.getParticipantName()
       };
     this.queueService.publishMessageToClientChannel<PollClientPublishRequest>(message);
   }
