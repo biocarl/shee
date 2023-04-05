@@ -24,3 +24,11 @@
     /roomname/presenter?interaction=poll&question=question&answers=answer1,answer2,answer3</h4>
 </ng-template>
 
+<!-- QR-Code implemented -->
+<ng-container *ngIf="qrCodeUrl">
+  <div class="qr-code">
+    <img [src]="qrCodeUrl" alt="QR Code">
+  </div>
+</ng-container>
+
+
