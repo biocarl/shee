@@ -16,6 +16,7 @@ export class PollClientComponent implements ClientView {
   questionEvent ? : PollPresenterSubscribeResponse;
   voted: boolean = false;
 
+
   constructor(private groupService : GroupService, private queueService : QueueService, private participantService: ParticipantService) {}
 
   voteForQuestion(voteSelectionIndex: number) {
@@ -38,5 +39,16 @@ export class PollClientComponent implements ClientView {
 
   initializeComponent(data : PresenterMessage) {
     this.questionEvent = data as PollPresenterSubscribeResponse;
+
+    if (this.questionEvent.timer) {
+      const timerInterval = setInterval(() => {
+        if (this.questionEvent && this.questionEvent.timer) {
+          this.questionEvent.timer -= 1;
+          if (this.questionEvent.timer <= 0) {
+            clearInterval(timerInterval);
+          }
+        }
+      }, 1000);
+    }
   }
 }

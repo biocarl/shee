@@ -1,4 +1,11 @@
 <h3>Poll presenter</h3>
+
+<div style="font-size: 3rem; text-align: center" *ngIf="questionEvent?.timer !== undefined">
+  <div *ngIf="questionEvent!.timer> 0; else timeUp">
+    Timer: {{ questionEvent?.timer }}
+  </div>
+</div>
+<ng-template #timeUp>Time is up!</ng-template>
 <ul *ngIf="questionEvent && questionResponses">
   <li *ngFor="let question of questionEvent.questions; let i = index;">
     <span class="badge" style="flex: 1">{{questionResponses[i]}}</span>
