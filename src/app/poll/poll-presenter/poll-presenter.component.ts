@@ -41,7 +41,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
       }
 
       if (pollSubscriptionEvent.participantName) {
-        console.log(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.questions[pollSubscriptionEvent.voting.indexOf(1)]);
+        console.log(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
       }
     });
   }
