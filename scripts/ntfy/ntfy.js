@@ -76,15 +76,17 @@ A sample message.json file is available in the scripts/ntfy folder. You can use 
 }
 
 const command = process.argv[2];
-const topic = process.argv[3];
+const topicBasename = process.argv[3];
+const topicPresenter = topicBasename + "_presenter_topic";
+const topicClient = topicBasename + "_presenter_client";
 
 if (command === '--publish') {
   const messageJsonFile = process.argv[4];
-  publish(topic, messageJsonFile);
+  publish(topicPresenter, messageJsonFile);
 } else if (command === '--subscribe-live') {
-  subscribeLive(topic);
+  subscribeLive(topicClient);
 } else if (command === '--subscribe') {
-    subscribe(topic);
+    subscribe(topicClient);
 } else if (command === '--help') {
   printHelp();
 } else {
