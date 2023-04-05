@@ -5,7 +5,7 @@
     <div class="bar-label">{{question}}</div>
     <div class="bar-container">
       <div class="bar" [style.width.%]="getPercentage(i)">
-        <span class="bar-value">{{questionResponses[i]}}</span>
+        <span class="bar-value">{{getPercentage(i) | number:'1.0-0'}}%</span>
       </div>
     </div>
   </div>
