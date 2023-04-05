@@ -22,6 +22,11 @@ console.log(u);
 
 The ntfy script is located in the `/scripts/ntfy` folder. To use the script, navigate to the root directory of the project and run the following commands:
 
+To ensure that the script runs properly, it is necessary to install the required modules using the following command:
+```sh
+npm install axios fs base-64 eventsource
+```
+After installing the modules, you can run the script using the following command:
 ```sh
 node scripts/ntfy/ntfy.js <command> <topic> <message.json>
 ```
