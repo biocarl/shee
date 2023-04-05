@@ -3,4 +3,4 @@ export interface PollClientPublishRequest {
   voting : number[],
   participant : string,
   question_id: string
-};
+}

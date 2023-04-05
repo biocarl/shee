@@ -10,6 +10,7 @@ const routes: Routes = [
   {path: ":group", children: [
       {path: "" , component: ClientComponent},
       {path: "presenter" , component: PresenterComponent},
+
     ]},
   {path: "**", component: NotFoundComponent},
 ];

@@ -13,8 +13,8 @@ import { WaitComponent } from './wait/wait.component';
 import {AnchorDirective} from "./anchor.directive";
 import { CounterPresenterComponent } from './counter/counter-presenter/counter-presenter.component';
 import { CounterClientComponent } from './counter/counter-client/counter-client.component';
-import { DecisionChartClientComponent } from './decision-chart/decision-chart-client/decision-chart-client/decision-chart-client.component';
-import { DecisionChartPresenterComponent } from './decision-chart/decision-chart-presenter/decision-chart-presenter/decision-chart-presenter.component';
+import { DecisionChartClientComponent } from './decision-chart/decision-client/decision-chart-client.component';
+import { DecisionChartPresenterComponent } from './decision-chart/decision-chart-presenter/decision-chart-presenter.component';
 
 @NgModule({
   declarations: [

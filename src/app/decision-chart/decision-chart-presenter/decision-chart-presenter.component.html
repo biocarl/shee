@@ -1,0 +1,13 @@
+
+<h3>Decision presenter</h3>
+<div *ngIf="questionEvent && questionResponses" class="bar-chart">
+  <div *ngFor="let question of questionEvent.questions; let i = index" class="bar-chart-item">
+    <div class="bar-label">{{question}}</div>
+    <div class="bar-container">
+      <div class="bar" [style.width.%]="getPercentage(i)">
+        <span class="bar-value">{{questionResponses[i]}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,6 +1,0 @@
-<h3>Bars presenter</h3>
-<div class="chart-container" *ngIf="questionEvent && questionResponses">
-  <div *ngFor="let question of questionEvent.questions; let i = index;" class="bar yes" [style.height.%]="yesVote ? (yesVote / (yesVote + noVote)) * 100 : 0">
-    {{question}}: {{questionResponses[i]}}
-  </div>
-</div>
