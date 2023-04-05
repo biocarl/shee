@@ -1,0 +1,26 @@
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+}
+.bar-chart-item {
+  margin-bottom: 10px;
+}
+.bar-label {
+  margin-bottom: 5px;
+}
+.bar-container {
+  background-color: #f0f0f0;
+  height: 30px;
+  position: relative;
+}
+.bar {
+  background-color: #007bff;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bar-value {
+  color: white;
+}
