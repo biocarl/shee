@@ -1,0 +1,19 @@
+- Goal of the exercise is to come up with a bunch of hypothetical modules which your persona would happily use.
+  - Step 0: Read through all the steps and decide how much time you want to spend on each Step (you might need a time-keeper?)
+  - Step 1: Everyone brainstorms some ideas for himself
+  - Step 2: Cluster together / Merge similiar ideas
+  - Step 3: Prioritize 3-5 module ideas
+         - Always aks yourself: Would you actually use this or is this some fun but total hypothetical thing you just came up with
+         - Look at the Disney method (this might help you)
+  - Step 4: Come up for a short module name for each of the ideas and refine the ideas
+         - How does the module look like? (presenter/client side)
+         - What further extended features can you imagine to be useful?
+         - What edge cases - akward situations might come up (any ideas how to mitigate those?)
+  - Step 5: Prepare a very (!) short and convincing pitch for each module
+         - max 3 mins for all
+         - the group might ask questions to get the general idea
+         - Remember: This is the moment where you can convince the group which modules we will actually implement
+         - On Thursay we will vote on 3-4 modules for priotize them on the backlog
+   - Some tips
+         - You have now 1h time to do this in a self-organized way (do what works for you as a group)
+         - For example, once you have some modules you want to investigate further it may make sense to split work even  further
