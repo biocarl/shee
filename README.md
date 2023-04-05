@@ -22,17 +22,22 @@ console.log(u);
 
 The ntfy script is located in the `/scripts/ntfy` folder. To use the script, navigate to the root directory of the project and run the following commands:
 
-To ensure that the script runs properly, it is necessary to install the required modules using the following command:
+After installing the modules, you can run the script in the following ways.
+(Alternatively you can also run the scripts from the `package.json` - but be aware that some arguments are expected. Set those in the run configuration)
+
+**Publish message to presenter/client topic**
+- Note that the topic name is the channel name and presenter/client (with `/` delimiter) value (e.g. `java-2022/presenter` or `java-2022/client`)
 ```sh
-npm install axios fs base-64 eventsource
+npm run publish -- <channel/audience> <message.json>
 ```
-After installing the modules, you can run the script using the following command:
+**Listen to client/presenter topic**
 ```sh
-node scripts/ntfy/ntfy.js <command> <topic> <message.json>
+npm run subscribeLive -- <channel/audience>
 ```
-For more information on how to use the script, use the --help command:
+
+**Retrieve last published event**
 ```sh
-node scripts/ntfy/ntfy.js --help
+npm run subscribe -- <channel/audience>
 ```
 
 ## Contributors 🎉

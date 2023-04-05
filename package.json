@@ -6,6 +6,10 @@
     "start": "ng serve",
     "build": "ng build --output-path docs --deploy-url /",
     "watch": "ng build --watch --configuration development",
+    "publish": "node scripts/ntfy/ntfy.js --publish ",
+    "subscribeLive": "node scripts/ntfy/ntfy.js --subscribe-live ",
+    "subscribe": "node scripts/ntfy/ntfy.js --subscribe ",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
