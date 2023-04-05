@@ -3,8 +3,8 @@
   - Step 1: Everyone brainstorms some ideas for himself
   - Step 2: Cluster together / Merge similiar ideas
   - Step 3: Prioritize 3-5 module ideas
-         - Always aks yourself: Would you actually use this or is this some fun but total hypothetical thing you just came up with
-         - Look at the Disney method (this might help you)
+   - Always aks yourself: Would you actually use this or is this some fun but total hypothetical thing you just came up with
+   - Look at the Disney method (this might help you)
   - Step 4: Come up for a short module name for each of the ideas and refine the ideas
          - How does the module look like? (presenter/client side)
          - What further extended features can you imagine to be useful?
