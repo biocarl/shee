@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const base64 = require('base-64');
+
 const EventSource = require('eventsource');
 
 const API_URL = 'https://ntfy.sh';
@@ -40,6 +41,7 @@ async function subscribe(topic) {
   }
 }
 
+
 async function subscribeLive(topic){
   try {
     const eventSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
@@ -52,7 +54,6 @@ async function subscribeLive(topic){
   } catch (err) {
     console.error('An error occurred:', err);
   }
-}
 
 function printHelp() {
   console.log(`
