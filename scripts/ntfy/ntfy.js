@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const base64 = require('base-64');
+const EventSource = require('eventsource');
 
 const API_URL = 'https://ntfy.sh';
 
@@ -39,9 +40,18 @@ async function subscribe(topic) {
   }
 }
 
-async function subscribeWithInterval(topic, interval = 5000) {
-  subscribe(topic);
-  setInterval(() => subscribe(topic), interval);
+async function subscribeLive(topic){
+  try {
+    const eventSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
+    eventSource.onmessage = (e) => {
+      const decodedData = JSON.parse(e.data);
+      const decodedMessage = atob(decodedData.message);
+      console.log('Decoded Message:', decodedMessage);
+    };
+    console.log('Subscribing to live updates...');
+  } catch (err) {
+    console.error('An error occurred:', err);
+  }
 }
 
 function printHelp() {
@@ -71,7 +81,7 @@ if (command === '--publish') {
   const messageJsonFile = process.argv[4];
   publish(topic, messageJsonFile);
 } else if (command === '--subscribe-live') {
-  subscribeWithInterval(topic);
+  subscribeLive(topic);
 } else if (command === '--subscribe') {
     subscribe(topic);
 } else if (command === '--help') {
