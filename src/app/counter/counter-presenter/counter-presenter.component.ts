@@ -25,7 +25,7 @@ export class CounterPresenterComponent implements OnInit, PresenterView {
         this.counter++;
       }
       if (counterSubscriptionEvent.participantName) {
-        console.log(counterSubscriptionEvent.participantName + "is listening.")
+        console.log(counterSubscriptionEvent.participantName + " is listening.")
       }
     });
   }
