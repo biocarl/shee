@@ -1,10 +1,13 @@
+const dotenv = require('dotenv');
+dotenv.config();
+//dotenv.config({ path: '.env.development' }); // for development or other specific env
 const axios = require('axios');
 const fs = require('fs');
 const base64 = require('base-64');
-
 const EventSource = require('eventsource');
 
-const API_URL = 'https://ntfy.sh';
+const API_URL = process.env.API_URL;
+
 
 async function publish(topic, messageJsonFile) {
   const message = JSON.parse(fs.readFileSync(messageJsonFile, 'utf8'));
@@ -58,9 +61,16 @@ async function subscribeLive(topic) {
 function printHelp() {
   console.log(`
 Usage:
-  node ntfy.js --publish <topic> <message.json>       Publish a message to a topic
-  node ntfy.js --subscribe <topic>                    Receive messages from a topic (one-time)
-  node ntfy.js --subscribe-live <topic>               Receive live updates of messages from a topic
+Publish message to presenter/client topic
+
+Note that the topic name is the channel name and presenter/client (with / delimiter) value (e.g. java-2022/presenter or java-2022/client)
+npm run publish -- <channel/audience> <message.json>
+Listen to client/presenter topic
+
+npm run subscribeLive -- <channel/audience>
+Retrieve last published event
+
+npm run subscribe -- <channel/audience>
 
 Options:
   node ntfy.js --help                                 Show this help message

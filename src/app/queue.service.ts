@@ -1,6 +1,7 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class QueueService {
   }
 
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void) {
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
+    const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
@@ -33,7 +34,7 @@ export class QueueService {
   }
 
   listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void) {
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
+    const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
@@ -57,10 +58,11 @@ export class QueueService {
       attach: ""
     }
 
-    this.http.post<any>('https://ntfy.sh', payload)
+    this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         console.log("Post request sent" + result)
       });
+
   }
 
   publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
@@ -72,10 +74,11 @@ export class QueueService {
       attach: ""
     }
 
-    this.http.post<any>('https://ntfy.sh', payload)
+    this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         console.log("Post request sent" + result)
       });
+
   }
 
   #encodeMessageToBase64(payload: any): string {
