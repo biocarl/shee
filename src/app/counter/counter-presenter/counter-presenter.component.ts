@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {QueueService} from "../../queue.service";
 import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
+import {QrCodeService} from "../../qr-code.service";
+import {GroupService} from "../../group.service";
 
 interface CounterClientSubscribeResponse {
   participantName: string;
@@ -15,8 +17,12 @@ interface CounterClientSubscribeResponse {
 })
 export class CounterPresenterComponent implements OnInit, PresenterView {
   counter: number = 0;
+  qrCodeUrl ?: string;
 
-  constructor(private queueService: QueueService) {
+  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService) {
+    this.qrCodeService.generateQrCode(`https://vag.app/${this.groupService.getGroupName()}`).then(url => {
+      this.qrCodeUrl = url;
+    });
   }
 
   ngOnInit(): void {
