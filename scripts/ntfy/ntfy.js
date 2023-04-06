@@ -3,14 +3,14 @@ dotenv.config();
 //dotenv.config({ path: '.env.development' }); // for development or other specific env
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path'); // Add this line
 const base64 = require('base-64');
 const EventSource = require('eventsource');
 
 const API_URL = process.env.API_URL;
 
-
 async function publish(topic, messageJsonFile) {
-  const message = JSON.parse(fs.readFileSync(messageJsonFile, 'utf8'));
+  const message = JSON.parse(fs.readFileSync(path.join(__dirname, messageJsonFile), 'utf8')); // Update this line
   const base64Message = base64.encode(JSON.stringify(message));
 
   try {
