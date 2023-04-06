@@ -18,6 +18,27 @@ const u = new URLSearchParams(myParams).toString();
 console.log(u);
 ```
 
+## ntfy.js script
+
+The ntfy script is located in the `/scripts/ntfy` folder. To use the script, navigate to the root directory of the project and run the following commands:
+
+After installing the modules, you can run the script in the following ways.
+(Alternatively you can also run the scripts from the `package.json` - but be aware that some arguments are expected. Set those in the run configuration)
+
+**Publish message to presenter/client topic**
+- Note that the topic name is the channel name and presenter/client (with `/` delimiter) value (e.g. `java-2022/presenter` or `java-2022/client`)
+```sh
+npm run publish -- <channel/audience> <message.json>
+```
+**Listen to client/presenter topic**
+```sh
+npm run subscribeLive -- <channel/audience>
+```
+
+**Retrieve last published event**
+```sh
+npm run subscribe -- <channel/audience>
+```
 
 ## Contributors 🎉
 - Tamayo ([@SETA1609)](https://github.com/SETA1609))  
