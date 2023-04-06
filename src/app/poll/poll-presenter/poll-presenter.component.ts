@@ -4,9 +4,6 @@ import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-respon
 import {QueueService} from "../../queue.service";
 import {PollClientSubscribeResponse} from "../poll-client-subscribe-response";
 import {PresenterMessage} from "../../presenter-message";
-import {QrCodeService} from "../../qr-code.service";
-import {ActivatedRoute} from "@angular/router";
-import {GroupService} from "../../group.service";
 
 @Component({
   selector: 'app-poll-presenter',
@@ -16,17 +13,8 @@ import {GroupService} from "../../group.service";
 export class PollPresenterComponent implements PresenterView, OnInit {
   questionEvent ?: PollPresenterSubscribeResponse;
   questionResponses ?: number[];
-  qrCodeUrl ?: string;
-  roomName: string;
 
-  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private route: ActivatedRoute, private groupService : GroupService
-  ) {
-    this.roomName = this.groupService.getGroupName();
-    this.route.queryParams.subscribe(params => {
-      this.qrCodeService.generateQrCode(`https://localhost:4200/${this.roomName}`).then(url => {
-        this.qrCodeUrl = url;
-      });
-    });
+  constructor(private queueService: QueueService) {
   }
 
   ngOnInit(): void {
