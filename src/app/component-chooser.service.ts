@@ -2,8 +2,8 @@ import {Injectable, ViewContainerRef} from '@angular/core';
 import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.component";
 import {PollClientComponent} from "./poll/poll-client/poll-client.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
-import {CounterPresenterComponent} from "./counter/counter-presenter/counter-presenter.component";
-import {CounterClientComponent} from "./counter/counter-client/counter-client.component";
+import {PairPresenterComponent} from "./pair/pair-presenter/pair-presenter.component";
+import {PairClientComponent} from "./pair/pair-client/pair-client.component";
 import {PresenterMessage} from "./presenter-message";
 
 @Injectable({
@@ -34,7 +34,7 @@ export class ComponentChooserService {
           pollPresenterRef.instance.initializeComponent(event);
           break
         case "counter" :
-          const counterRef = viewContainerRef.createComponent<CounterPresenterComponent>(CounterPresenterComponent);
+          const counterRef = viewContainerRef.createComponent<PairPresenterComponent>(PairPresenterComponent);
           counterRef.instance.initializeComponent(event);
           break;
         default :
@@ -50,7 +50,7 @@ export class ComponentChooserService {
           pollClientRef .instance.initializeComponent(event);
           break
         case "counter" :
-          const counterRef = viewContainerRef.createComponent<CounterClientComponent>(CounterClientComponent);
+          const counterRef = viewContainerRef.createComponent<PairClientComponent>(PairClientComponent);
           counterRef.instance.initializeComponent(event);
           break;
         default :

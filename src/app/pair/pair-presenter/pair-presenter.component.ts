@@ -12,10 +12,10 @@ interface CounterClientSubscribeResponse {
 
 @Component({
   selector: 'app-counter-presenter',
-  templateUrl: './counter-presenter.component.html',
-  styleUrls: ['./counter-presenter.component.css']
+  templateUrl: './pair-presenter.component.html',
+  styleUrls: ['./pair-presenter.component.css']
 })
-export class CounterPresenterComponent implements OnInit, PresenterView {
+export class PairPresenterComponent implements OnInit, PresenterView {
   counter: number = 0;
   qrCodeUrl ?: string;
 
