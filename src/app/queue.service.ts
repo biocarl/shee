@@ -1,6 +1,7 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
+import {PresenterMessage} from "./presenter-message";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,9 @@ import {HttpClient} from "@angular/common/http";
 export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
+  readonly questionTrigger: PresenterMessage = {
+    interaction: "questionRequest",
+    id: "sfhdfknvkfdhglhfglr!)§%/273548"};
 
   constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
   }

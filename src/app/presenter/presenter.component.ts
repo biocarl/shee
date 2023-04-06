@@ -16,6 +16,7 @@ import {PresenterMessage} from "../presenter-message";
 export class PresenterComponent implements OnInit {
   groupName: string | null = "";
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
+  private currentPresenterMessage?: PresenterMessage;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,11 +38,22 @@ export class PresenterComponent implements OnInit {
 
     // Listen to all presenter events for determining which component to choose
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+      this.currentPresenterMessage = presenterMessage;
       this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
                                                       presenterMessage.interaction, "presenter",presenterMessage);
     });
 
     // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
     this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
+
+    // Listen to ClientChannel, if student joins late and requests current question
+    this.queueService.listenToClientChannel<PresenterMessage>(clientMessage => {
+      console.log("Hallo")
+      console.log(clientMessage.id)
+      if(clientMessage.id === this.queueService.questionTrigger.id) {
+        this.queueService.publishMessageToPresenterChannel(this.currentPresenterMessage)
+        console.log("Hey")
+      }
+    })
   }
 }
