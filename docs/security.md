@@ -14,3 +14,5 @@ Let's see how we can protect the messages on the client topic. Put down simply -
 Cryptography comes to rescue here:  **Asymmetric encryption (with RSA)** ensuring that students can encrypt a message with a shared key (provided by the presenter) and can not decode it without the shared key. 
 In our case this means student A encrypts a message, but student B can't decrypt since he also only knows the shared key of the presenter. 
 Only the presenter had the private key and can decrypt the messages.
+
+Last step: How to make sure that the payload is actually from the presenter the client has paired with? You need to sign the message hash (sha) with the private key and recreate hash of payload and then verify on client side with public key.
