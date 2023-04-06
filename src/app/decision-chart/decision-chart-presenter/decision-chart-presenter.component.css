@@ -25,3 +25,16 @@
 .bar-value {
   color: white;
 }
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+h3 {
+  display: flex;
+  font-weight: bold;
+  justify-content: center;
+  align-content: center;
+}
