@@ -1,8 +1,8 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
-import {PresenterMessage} from "./presenter-message";
 import {ClientQuestionRequest} from "./client-question-request";
+import {PresenterMessage} from "./presenter-message";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class QueueService {
   readonly questionTrigger: ClientQuestionRequest = {
     requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
   };
+  currentPresenterMessage?: PresenterMessage;
 
   constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
   }
@@ -28,8 +29,10 @@ export class QueueService {
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
           // @ts-ignore
-          event.id = rawEvent.id;
-
+          if (!event.question_id) {
+            // @ts-ignore
+            event.question_id = rawEvent.id;
+          }
           // Run callback
           handlePresenterMessage(event);
         }
@@ -44,8 +47,6 @@ export class QueueService {
         () => {
           const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
           const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-          // @ts-ignore
-          event.id = rawEvent.id;
           // Run callback
           handleClientMessage(event);
         }

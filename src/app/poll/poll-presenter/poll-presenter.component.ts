@@ -24,7 +24,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
         return;
       }
 
-      if (this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.id) {
+      if (this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.question_id) {
         this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
       }
 

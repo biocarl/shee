@@ -1,5 +1,5 @@
 export interface PollPresenterSubscribeResponse {
-  id: string,
+  question_id: string;
   interaction: "poll",
   answers: string[],
   question: string;
