@@ -76,7 +76,27 @@ A sample message.json file is available in the scripts/ntfy folder. You can use 
 }
 
 const command = process.argv[2];
-const topic = process.argv[3];
+let topicBasename = process.argv[3];
+let components = topicBasename.split("/");
+let hasError = false;
+
+if(components.length != 2){
+  hasError = true;
+}
+
+let topic;
+if(components[1] === "presenter"){
+  topic =  components[0] + "_presenter_topic";
+} else if (components[1] === "client"){
+  topic = components[0] + "_presenter_client";
+}else{
+  hasError = true;
+}
+
+if(hasError){
+  console.error('Ungültige Eingabe. Verwenden Sie "--help", um Anweisungen zur Verwendung des Skripts anzuzeigen.');
+  return;
+}
 
 if (command === '--publish') {
   const messageJsonFile = process.argv[4];
