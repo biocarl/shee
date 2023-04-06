@@ -6,6 +6,8 @@ import {AnchorDirective} from "../anchor.directive";
 import {QueryToEventService} from "./query-to-event.service";
 import {ComponentChooserService} from "../component-chooser.service";
 import {PresenterMessage} from "../presenter-message";
+import {ClientComponent} from "../client/client.component";
+import {ClientQuestionRequest} from "../client-question-request";
 
 
 @Component({
@@ -47,12 +49,9 @@ export class PresenterComponent implements OnInit {
     this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
 
     // Listen to ClientChannel, if student joins late and requests current question
-    this.queueService.listenToClientChannel<PresenterMessage>(clientMessage => {
-      console.log("Hallo")
-      console.log(clientMessage.id)
-      if(clientMessage.id === this.queueService.questionTrigger.id) {
+    this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
+      if(clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
         this.queueService.publishMessageToPresenterChannel(this.currentPresenterMessage)
-        console.log("Hey")
       }
     })
   }
