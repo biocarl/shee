@@ -10,7 +10,7 @@
 
     <ng-template #selector>
       <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent?.timer !== undefined">
-        <div *ngIf="questionEvent!.timer> 0; else timeUp">
+        <div *ngIf="questionEvent!.timer!> 0; else timeUp">
           Timer: {{ questionEvent?.timer }}
         </div>
       </div>
