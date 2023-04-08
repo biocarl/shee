@@ -6,9 +6,9 @@
     "start": "ng serve --configuration development",
     "build": "ng build --configuration production --output-path docs --deploy-url /",
     "watch": "ng build --watch --configuration development",
-    "publish": "node scripts/ntfy/ntfy.js --publish ",
-    "subscribeLive": "node scripts/ntfy/ntfy.js --subscribe-live ",
-    "subscribe": "node scripts/ntfy/ntfy.js --subscribe ",
+    "publish": "node local/ntfy.js --publish ",
+    "subscribeLive": "node local/ntfy.js --subscribe-live ",
+    "subscribe": "node local/ntfy.js --subscribe ",
     "test": "ng test"
   },
   "private": true,
@@ -44,7 +44,6 @@
     "typescript": "~4.9.4"
   },
   "description": "The application consists of two main components\r - Client (where interactions with the participants happens)\r - Presenter (where the results are shown or new interactions are triggered)",
-  "main": "scripts/ntfy/ntfy.js",
   "directories": {
     "doc": "docs"
   },
