@@ -1,20 +1,19 @@
 const dotenv = require('dotenv');
 dotenv.config();
-//dotenv.config({ path: '.env.development' }); // for development or other specific env
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path'); // Add this line
 const base64 = require('base-64');
 const EventSource = require('eventsource');
-
-const API_URL = process.env.API_URL;
+// const NTFY_URL = "https://ntfy.sh"
+const NTFY_URL = "http://localhost:80"
 
 async function publish(topic, messageJsonFile) {
   const message = JSON.parse(fs.readFileSync(path.join(__dirname, messageJsonFile), 'utf8')); // Update this line
   const base64Message = base64.encode(JSON.stringify(message));
 
   try {
-    const response = await axios.post(API_URL, {
+    const response = await axios.post(NTFY_URL, {
       topic: topic,
       message: base64Message,
       title: 'Event published',
@@ -30,7 +29,7 @@ async function publish(topic, messageJsonFile) {
 
 async function subscribe(topic) {
   try {
-    const response = await axios.get(`https://ntfy.sh/${topic}/json?poll=1`);
+    const response = await axios.get(`${NTFY_URL}/${topic}/json?poll=1`);
     const base64Message = response.data.message;
 
     if (base64Message) {
@@ -47,7 +46,7 @@ async function subscribe(topic) {
 
 async function subscribeLive(topic) {
   try {
-    const eventSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
+    const eventSource = new EventSource(`${NTFY_URL}/${topic}/sse`);
     eventSource.onmessage = (e) => {
       const decodedData = JSON.parse(e.data);
       const decodedMessage = atob(decodedData.message);
