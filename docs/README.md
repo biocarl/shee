@@ -19,7 +19,7 @@ A collection of conventions/guidelines we agree on
 - There is a maximum amount of stories in parallel allowed to limit the number of simultaneous changes to the codebase
 
 ### In Review
-- Once you are finsihed with the story you can move the story in this column
+- Once you are finished with the story you can move the story in this column
   - all acceptance criteria are met
   - Everything is tested (manually at least)
   - A PR is open (maybe with some comments so the review knows what to look for)
