@@ -13,6 +13,8 @@ import { WaitComponent } from './wait/wait.component';
 import {AnchorDirective} from "./anchor.directive";
 import { CounterPresenterComponent } from './counter/counter-presenter/counter-presenter.component';
 import { CounterClientComponent } from './counter/counter-client/counter-client.component';
+import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -26,12 +28,15 @@ import { CounterClientComponent } from './counter/counter-client/counter-client.
     ClientComponent,
     WaitComponent,
     CounterPresenterComponent,
-    CounterClientComponent
+    CounterClientComponent,
+    ModuleInitializerComponent
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
