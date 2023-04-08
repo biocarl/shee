@@ -29,7 +29,7 @@ export class PairClientComponent implements ClientView {
 
 
     const message : CounterClientPublishRequest =  {
-      interaction: "counter",
+      interaction: "pair",
       participantName: this.participantService.getParticipantName()
     };
     this.queueService.publishMessageToClientChannel<CounterClientPublishRequest>(message);

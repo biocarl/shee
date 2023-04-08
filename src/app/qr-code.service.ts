@@ -9,5 +9,4 @@ export class QrCodeService {
   generateQrCode(input: string): Promise<string> {
     return QRCode.toDataURL(input);
   }
-
 }

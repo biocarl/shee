@@ -33,7 +33,7 @@ export class ComponentChooserService {
           const pollPresenterRef = viewContainerRef.createComponent<PollPresenterComponent>(PollPresenterComponent);
           pollPresenterRef.instance.initializeComponent(event);
           break
-        case "counter" :
+        case "pair" :
           const counterRef = viewContainerRef.createComponent<PairPresenterComponent>(PairPresenterComponent);
           counterRef.instance.initializeComponent(event);
           break;
@@ -49,7 +49,7 @@ export class ComponentChooserService {
           const pollClientRef = viewContainerRef.createComponent<PollClientComponent>(PollClientComponent);
           pollClientRef .instance.initializeComponent(event);
           break
-        case "counter" :
+        case "pair" :
           const counterRef = viewContainerRef.createComponent<PairClientComponent>(PairClientComponent);
           counterRef.instance.initializeComponent(event);
           break;

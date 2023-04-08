@@ -27,7 +27,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
-      if (counterSubscriptionEvent.interaction && counterSubscriptionEvent.interaction === "counter") {
+      if (counterSubscriptionEvent.interaction && counterSubscriptionEvent.interaction === "pair") {
         this.counter++;
       }
       if (counterSubscriptionEvent.participantName) {
@@ -36,6 +36,5 @@ export class PairPresenterComponent implements OnInit, PresenterView {
     });
   }
 
-  initializeComponent(data: PresenterMessage): void {
-  }
+  initializeComponent(data: PresenterMessage): void {}
 }
