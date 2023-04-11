@@ -19,6 +19,7 @@ export class QueueService {
         () => {
 
           const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+          console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
           const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
@@ -59,7 +60,7 @@ export class QueueService {
 
     this.http.post<any>('https://ntfy.sh', payload)
       .subscribe(result => {
-        console.log("Post request sent" + result)
+        console.log("Post request sent " + JSON.stringify(result));
       });
   }
 
@@ -74,7 +75,7 @@ export class QueueService {
 
     this.http.post<any>('https://ntfy.sh', payload)
       .subscribe(result => {
-        console.log("Post request sent" + result)
+        console.log("Post request sent" + JSON.stringify(result))
       });
   }
 
