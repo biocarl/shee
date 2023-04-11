@@ -39,7 +39,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     if(this.questionEvent?.timer){
       return this.questionEvent.timer > 0;
     }
-    return false;
+    return true;
   }
 
   initializeComponent(data: PresenterMessage): void {
