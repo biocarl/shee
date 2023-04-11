@@ -9,25 +9,26 @@
     <ng-container *ngIf="questionEvent?.answers; then selector"></ng-container>
 
     <ng-template #selector>
-      <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent?.timer !== undefined">
-        <div *ngIf="questionEvent!.timer> 0; else timeUp">
-          Timer: {{ questionEvent?.timer }}
+      <div *ngIf="questionEvent">
+        <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent.timer !== undefined">
+          <div *ngIf="questionEvent.timer > 0; else timeUp">
+            Timer: {{ questionEvent.timer }}
+          </div>
         </div>
-      </div>
 
-      <ng-template #timeUp>Time is up!</ng-template>
-      <div class=" v-questions content is-large
-      " [style.filter]="questionEvent?.timer === 0 ? 'grayscale(100%)' : 'none'">
-        <div
-          *ngFor="let answer of questionEvent?.answers; let i = index;"
-          (click)="voteForQuestion(i)"
-          class="v-question"
-          [style.pointer-events]="questionEvent?.timer === 0 ? 'none' : 'auto'"
-          [style.border-top-width]='i != 0 ? "3px" : "0"'
-        >
+        <ng-template #timeUp>Time is up!</ng-template>
+        <div class="v-questions content is-large"
+             [style.filter]="questionEvent.timer === 0 ? 'grayscale(100%)' : 'none'">
+          <div
+            *ngFor="let answer of questionEvent.answers; let i = index;"
+            (click)="voteForQuestion(i)"
+            class="v-question"
+            [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'"
+            [style.border-top-width]='i != 0 ? "3px" : "0"'>
     <span>
       {{answer}}
     </span>
+          </div>
         </div>
       </div>
     </ng-template>

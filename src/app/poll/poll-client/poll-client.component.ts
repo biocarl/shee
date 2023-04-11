@@ -13,34 +13,37 @@ import {ParticipantService} from "../../participant.service";
   styleUrls: ['./poll-client.component.css']
 })
 export class PollClientComponent implements ClientView {
-  questionEvent ? : PollPresenterSubscribeResponse;
+  questionEvent ?: PollPresenterSubscribeResponse;
   voted: boolean = false;
 
-
-  constructor(private groupService : GroupService, private queueService : QueueService, private participantService: ParticipantService) {}
+  constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
+  }
 
   voteForQuestion(voteSelectionIndex: number) {
-    if(!this.questionEvent?.answers) return
+    if (!this.questionEvent?.answers) return
     // You can't vote twice
     this.voted = true;
     this.groupService.hasQuestions = false;
 
     // handle vote
-    const voting : number[] = Array(this.questionEvent.answers.length).fill(0);
+    const voting: number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
-    const message : PollClientPublishRequest =  {
-        interaction: "poll",
-        question_id: this.questionEvent.id,
-        voting : voting,
-        participantName : this.participantService.getParticipantName()
-      };
+    const message: PollClientPublishRequest = {
+      interaction: "poll",
+      question_id: this.questionEvent.question_id,
+      voting: voting,
+      participantName: this.participantService.getParticipantName()
+    };
     this.queueService.publishMessageToClientChannel<PollClientPublishRequest>(message);
   }
 
-  initializeComponent(data : PresenterMessage) {
+  initializeComponent(data: PresenterMessage) {
     this.questionEvent = data as PollPresenterSubscribeResponse;
+    this.initializeTimer();
+  }
 
-    if (this.questionEvent.timer) {
+  private initializeTimer() {
+    if (this.questionEvent?.timer) {
       const timerInterval = setInterval(() => {
         if (this.questionEvent && this.questionEvent.timer) {
           this.questionEvent.timer -= 1;

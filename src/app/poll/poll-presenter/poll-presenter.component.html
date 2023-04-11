@@ -2,8 +2,8 @@
 <div *ngIf="questionEvent">
   <div *ngIf="questionEvent.question && questionEvent.answers; else wrongFormat">
 
-    <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent?.timer !== undefined">
-      <div *ngIf="questionEvent!.timer> 0; else timeUp">
+    <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent.timer !== undefined">
+      <div *ngIf="questionEvent.timer > 0; else timeUp">
         Timer: {{ questionEvent.timer }}
       </div>
     </div>
@@ -32,4 +32,6 @@
   <h4>It should look like this ->
     /roomname/presenter?interaction=poll&question=question&answers=answer1,answer2,answer3</h4>
 </ng-template>
+
+
 
