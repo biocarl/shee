@@ -19,27 +19,28 @@ export class ClientComponent implements OnInit {
 
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
 
-  viewContainerRef ? : ViewContainerRef;
+  viewContainerRef ?: ViewContainerRef;
 
   constructor(
     private route: ActivatedRoute,
-    private queueService : QueueService,
-    private groupService : GroupService,
-    private componentChooserService : ComponentChooserService,
+    private queueService: QueueService,
+    private groupService: GroupService,
+    private componentChooserService: ComponentChooserService,
     private participantService: ParticipantService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     // Retrieve route parameter /:group from url
-    this.route.paramMap.subscribe( params => {
+    this.route.paramMap.subscribe(params => {
       this.groupName = params.get("group");
-      if(this.groupName){
+      if (this.groupName) {
         this.groupService.setGroupName(this.groupName);
       }
     });
     this.route.queryParamMap.subscribe(params => {
       this.participantName = params.get("user");
-      if(this.participantName){
+      if (this.participantName) {
         this.participantService.setParticipantName(this.participantName);
       }
     })
@@ -49,9 +50,15 @@ export class ClientComponent implements OnInit {
     this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
 
     // Listen to all presenter messages and inject component into view accordingly
-    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage=> {
-      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
-        presenterMessage.interaction, "client",presenterMessage);
+    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
+        this.queueService.currentPresenterMessage = presenterMessage;
+        this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+          presenterMessage.interaction, "client", presenterMessage);
+      }
     });
+
+    // Request current question
+    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
 }

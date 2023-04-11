@@ -11,6 +11,8 @@ import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.compo
 import { ClientComponent } from './client/client.component';
 import { WaitComponent } from './wait/wait.component';
 import {AnchorDirective} from "./anchor.directive";
+import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
+import {FormsModule} from "@angular/forms";
 import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.component';
 import { PairClientComponent } from './pair/pair-client/pair-client.component';
 
@@ -25,13 +27,15 @@ import { PairClientComponent } from './pair/pair-client/pair-client.component';
     AnchorDirective,
     ClientComponent,
     WaitComponent,
+    ModuleInitializerComponent,
     PairPresenterComponent,
     PairClientComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
