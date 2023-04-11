@@ -40,6 +40,30 @@ npm run subscribeLive -- <channel/audience>
 npm run subscribe -- <channel/audience>
 ```
 
+# Running VAG.app
+
+## Development environment
+
+**To run VAG.app in a development environment, use the following command:**
+```sh
+ng serve --configuration development
+```
+
+## Production environment
+
+**To build VAG.app for production, use the following command:**
+```sh
+ng build --configuration production --output-path docs --deploy-url /
+```
+This command will build the application with the production configuration and output the build artifacts to the "docs" directory with a deploy URL of "/".
+Using Docker
+
+**VAG.app can also be deployed using Docker and the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command:**
+```sh
+docker-compose -f local-setup.yaml up
+```
+This command will start the application in a Docker container, which can be accessed through a web browser at http://localhost:4200.
+
 ## Contributors 🎉
 - Tamayo ([@SETA1609)](https://github.com/SETA1609))  
 - Bodo ([@Bohdoh](https://github.com/Bohdoh))
