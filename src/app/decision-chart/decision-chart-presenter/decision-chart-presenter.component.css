@@ -12,6 +12,13 @@
   background-color: #f0f0f0;
   height: 30px;
   position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  border-radius: 14px;
+  width: 60%;
+  margin: 0 auto;
 }
 .bar {
   background-color: #007bff;
@@ -21,6 +28,8 @@
   align-items: center;
   justify-content: center;
   transition: width 0.3s;
+  width: 60%;
+  border-radius: 5px;
 }
 .bar-value {
   color: white;
