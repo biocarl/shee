@@ -29,7 +29,7 @@
   justify-content: center;
   transition: width 0.3s;
   width: 60%;
-  border-radius: 5px;
+  border-radius: 14px;
 }
 .bar-value {
   color: white;
