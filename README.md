@@ -56,9 +56,10 @@ ng serve --configuration development
 ng build --configuration production --output-path docs --deploy-url /
 ```
 This command will build the application with the production configuration and output the build artifacts to the "docs" directory with a deploy URL of "/".
-Using Docker
 
-**VAG.app can also be deployed using Docker and the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command:**
+# Using Docker
+
+**VAG.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
 ```sh
 docker-compose -f local-setup.yaml up
 ```
