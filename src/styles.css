@@ -1,5 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+  --backgroundColor_light: #70AACD;
+  --backgroundColor_dark: #1D2331;
+  --headerTextColor_light: #000000;
+  --headerTextColor_dark: #ABABAB;
+  --titleColor_light: #000000;
+  --titleColor_dark: #ABABAB;
+  --textColor_light: #000000;
+  --textColor_dark: #ABABAB;
+  --menuColor_light: #000000;
+  --menuColor_dark: #ABABAB;
+  --buttonTextColor_light: white;
+  --buttonTextColor_dark: black;
+}
+
+/*
+// for dark-light-mode implementation
+  body.light {
+    --backgroundColor: var(--backgroundColor_light);
+    --headerTextColor: var(--headerTextColor_light);
+    --titleColor: var(--titleColor_light);
+    --textColor: var(--textColor_light);
+    --menuColor: var(--menuColor_light);
+    --buttonTextColor: var(--buttonTextColor_light);
+  }
+
+  body.dark {
+    --backgroundColor: var(--backgroundColor_dark);
+    --headerTextColor: var(--headerTextColor_dark);
+    --titleColor: var(--titleColor_dark);
+    --textColor: var(--textColor_dark);
+    --menuColor: var(--menuColor_dark);
+    --buttonTextColor: var(--buttonTextColor_dark);
+  }
+  */
+
 body {
   margin: 0;
   background-color: #f5f3ee;
