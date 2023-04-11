@@ -45,3 +45,34 @@ code {
   align-items: center;
   height: 100%;
 }
+
+.navbar{
+  background: #1D2331;
+  background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
+  width: 100%;
+  height: 125px;
+  background-repeat: repeat-x;
+  background-position: center top;
+}
+
+.navbar-start {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 78%;
+  margin: 0 auto;
+}
+.navbar-brand{
+  width: 12%;
+}
+.navbar-end{
+  display: flex;
+  justify-content: end;
+  align-items: start;
+  margin-top: 25px;
+  width: 10%;
+ }
+
+.title{
+  color: #ABABAB;
+}

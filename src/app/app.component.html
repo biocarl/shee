@@ -1,24 +1,56 @@
-<div class="v-nav" [class.small]="groupService.getGroupName()" [class.v-blue]="groupService.hasQuestions">
-    <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-1" >
-      <div class="v-container">
-        <h1><code>&lt;</code>{{groupService.getGroupName()}}<code>&gt;</code></h1>
-      </div>
-    </div>
-    <ng-template #NoGroup>
-      <div style="background:#f5f3ee">
-        <div class="v-container">
-          <div class="title is-1 heading">
+<!-- new navbar -->
+<div class="navbar">
+  <div class="navbar-brand"></div>
+  <div class="navbar-menu">
+
+
+    <div class="navbar-start is-justify-content-center">
+
+      <!-- roomname -->
+      <div class="navbar-item">
+        <div>
+          <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-1">
             <div>
-              <span class="v-abbreviation">V</span>irtual
-              <span class="v-abbreviation">A</span>udience
-              <span style="display: inline-flex; flex-direction: column">
+              <h1>{{groupService.getGroupName()}}</h1>
+            </div>
+          </div>
+          <ng-template #NoGroup>
+            <div style="background:#f5f3ee">
+              <div class="v-container">
+                <div class="title is-1 heading">
+                  <div>
+                    <span class="v-abbreviation">V</span>irtual
+                    <span class="v-abbreviation">A</span>udience
+                    <span style="display: inline-flex; flex-direction: column">
                <span style="white-space: pre"><img src="assets/guru_nice_transparent.png" alt="guru-nice" width="100px"></span>
                 <span> <span class="v-abbreviation">G</span>uru </span>
               </span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </ng-template>
         </div>
       </div>
-    </ng-template>
+    </div>
+
+    <!-- darkmodeswitch -->
+
+    <div class="navbar-end">
+      <div class="navbar-item is-center">
+
+        <span>
+          <div class="field">
+          <input id="switchExample" type="checkbox" name="switchExample"
+                 class="switch is-small">
+          <label for="switchExample"><i class="fa-solid fa-moon"></i></label>
+          </div>
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 <router-outlet></router-outlet>
