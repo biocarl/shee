@@ -9,5 +9,9 @@ export interface PresenterMessage {
    * @type {string}
    */
   interaction: string;
+  /**
+   * The ID of the question associated with the message.
+   * @type {string}
+   */
   question_id: string;
 }
