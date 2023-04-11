@@ -38,5 +38,19 @@ export class PollClientComponent implements ClientView {
 
   initializeComponent(data : PresenterMessage) {
     this.questionEvent = data as PollPresenterSubscribeResponse;
+    this.initializeTimer();
+  }
+
+  private initializeTimer() {
+    if (this.questionEvent?.timer) {
+      const timerInterval = setInterval(() => {
+        if (this.questionEvent && this.questionEvent.timer) {
+          this.questionEvent.timer -= 1;
+          if (this.questionEvent.timer <= 0) {
+            clearInterval(timerInterval);
+          }
+        }
+      }, 1000);
+    }
   }
 }
