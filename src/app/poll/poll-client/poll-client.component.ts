@@ -23,7 +23,7 @@ export class PollClientComponent implements ClientView {
    * @public
    * @type {PollPresenterSubscribeResponse | undefined}
    */
-  questionEvent ? : PollPresenterSubscribeResponse;
+  questionEvent?: PollPresenterSubscribeResponse;
   /**
    * A flag to indicate whether the user has already voted or not.
    * @public
@@ -50,20 +50,20 @@ export class PollClientComponent implements ClientView {
    * It sends the user's vote to the server via a message with type `PollClientPublishRequest`.
    */
   voteForQuestion(voteSelectionIndex: number) {
-    if(!this.questionEvent?.answers) return
+    if (!this.questionEvent?.answers) return
     // You can't vote twice
     this.voted = true;
     this.groupService.hasQuestions = false;
 
     // handle vote
-    const voting : number[] = Array(this.questionEvent.answers.length).fill(0);
+    const voting: number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
-    const message : PollClientPublishRequest =  {
-        interaction: "poll",
-        question_id: this.questionEvent.id,
-        voting : voting,
-        participantName : this.participantService.getParticipantName()
-      };
+    const message: PollClientPublishRequest = {
+      interaction: "poll",
+      question_id: this.questionEvent.question_id,
+      voting: voting,
+      participantName: this.participantService.getParticipantName()
+    };
     this.queueService.publishMessageToClientChannel<PollClientPublishRequest>(message);
   }
 

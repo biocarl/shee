@@ -40,7 +40,7 @@ export class ClientComponent implements OnInit {
    * The view container reference used to create and manipulate components dynamically.
    * @type {ViewContainerRef | undefined}
    */
-  viewContainerRef ?: ViewContainerRef;
+  viewContainerRef?: ViewContainerRef;
 
   /**
    * Creates a new instance of the ClientComponent.
@@ -57,8 +57,7 @@ export class ClientComponent implements OnInit {
     private groupService: GroupService,
     private componentChooserService: ComponentChooserService,
     private participantService: ParticipantService
-  ) {
-  }
+  ) {}
 
   /**
    * Initializes the component by subscribing to route and query parameter changes,
@@ -93,8 +92,14 @@ export class ClientComponent implements OnInit {
 
     // Listen to all presenter messages and inject component into view accordingly
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
-        presenterMessage.interaction, "client", presenterMessage);
+      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
+        this.queueService.currentPresenterMessage = presenterMessage;
+        this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+          presenterMessage.interaction, "client", presenterMessage);
+      }
     });
+
+    // Request current question
+    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
 }
