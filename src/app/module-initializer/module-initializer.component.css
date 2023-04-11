@@ -1,0 +1,42 @@
+h1 {
+  font-size: x-large;
+  padding: 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Colors all required fields */
+*:required {
+  background-color: #FFF4F2;
+}
+
+.module-select {
+  text-align: center;
+  font-weight: bold;
+}
+
+.p-description, input {
+  margin-left: 2em;
+  margin-right: 2em;
+  display: block;
+  width: calc(100% - 4em);
+}
+
+.p-description {
+  font-style: italic;
+  padding-bottom: 0.3em;
+  padding-top: 0.3em;
+}
+
+.p-name {
+  padding-left: 0.6em;
+  font-weight: bold;
+  text-transform: capitalize;
+  padding-bottom: 0.3em;
+  padding-top: 0.3em;
+}
+
+.center {
+  text-align: center;
+  padding: 2em;
+}

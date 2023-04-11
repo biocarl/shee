@@ -1,0 +1,28 @@
+<h1>Module Initializer</h1>
+<form *ngIf="modules">
+  <div class="center">
+    <label class="module-select" for="module-select">Select Module</label>
+    <br>
+    <select class="center" id="module-select" name="module-select" [(ngModel)]="selectedModuleString">
+      <option *ngFor="let module of modules" [value]="module.name">{{module.name}}</option>
+    </select>
+  </div>
+
+  <div *ngFor="let parameter of selectedModule(selectedModuleString).parameters">
+      <label [for]="parameter.name">
+
+        <div class="p-name">
+          {{parameter.name}}:
+        </div>
+        <div class="p-description">
+          {{parameter.description}}
+        </div>
+
+      </label>
+      <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value" [required]="parameter.required" />
+  </div>
+
+  <div class="center">
+    <a [routerLink]="['../../presenter']" [queryParams]="extractQueryParams()"><button type="button">Initialize Module</button></a>
+  </div>
+</form>
