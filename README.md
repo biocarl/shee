@@ -62,7 +62,6 @@ Using Docker
 ```sh
 docker-compose -f local-setup.yaml up
 ```
-This command will start the application in a Docker container, which can be accessed through a web browser at http://localhost:4200.
 
 ## Contributors 🎉
 - Tamayo ([@SETA1609)](https://github.com/SETA1609))  
