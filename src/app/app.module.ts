@@ -11,8 +11,8 @@ import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.compo
 import { ClientComponent } from './client/client.component';
 import { WaitComponent } from './wait/wait.component';
 import {AnchorDirective} from "./anchor.directive";
-import { CounterPresenterComponent } from './counter/counter-presenter/counter-presenter.component';
-import { CounterClientComponent } from './counter/counter-client/counter-client.component';
+import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.component';
+import { PairClientComponent } from './pair/pair-client/pair-client.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +25,8 @@ import { CounterClientComponent } from './counter/counter-client/counter-client.
     AnchorDirective,
     ClientComponent,
     WaitComponent,
-    CounterPresenterComponent,
-    CounterClientComponent
+    PairPresenterComponent,
+    PairClientComponent
   ],
   imports: [
     BrowserModule,
