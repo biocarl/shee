@@ -3,21 +3,54 @@ import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
 import {ClientQuestionRequest} from "./client-question-request";
 import {PresenterMessage} from "./presenter-message";
-
+/**
+ * A service for managing communication with the queue.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class QueueService {
+  /**
+   * Suffix to append to the group name to form the presenter topic
+   * @type {string}
+   * @private
+   */
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
+  /**
+   * Suffix to append to the group name to form the client topic
+   * @type {string}
+   * @private
+   */
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
+  /**
+   * A special request object holding a random string used to trigger the display of the current question to clients
+   * @type {ClientQuestionRequest}
+   * @readonly
+   */
   readonly questionTrigger: ClientQuestionRequest = {
     requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
   };
+  /**
+   * The current presenter message.
+   * @type {PresenterMessage | undefined}
+   */
   currentPresenterMessage?: PresenterMessage;
 
+  /**
+   * Creates a new instance of the `QueueService`.
+   *
+   * @constructor
+   * @param groupService The `GroupService` for retrieving the current group name
+   * @param zone The `NgZone` for running Angular change detection
+   * @param http The `HttpClient` for sending HTTP requests to the ntfy.sh API
+   */
   constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
   }
-
+  /**
+   * Listens to the presenter channel for messages.
+   * When a message is received, the provided callback function is invoked with the parsed message object.
+   * @param {Function} handlePresenterMessage - The callback function that handles the presenter messages.
+   */
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
@@ -41,6 +74,10 @@ export class QueueService {
     };
   }
 
+  /**
+   * Listens to the client channel for messages.
+   * @param {Function} handleClientMessage - The callback function that handles the client messages.
+   */
   listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
@@ -54,7 +91,10 @@ export class QueueService {
       )
     };
   }
-
+  /**
+   * Publishes a message to the client channel.
+   * @param {any} clientMessage - The message to be published to the client channel.
+   */
   publishMessageToClientChannel<Type>(clientMessage: Type) {
     const payload: EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
@@ -69,7 +109,13 @@ export class QueueService {
         console.log("Post request sent " + JSON.stringify(result));
       });
   }
-
+  /**
+   * Publishes a message to the presenter channel.
+   *
+   * @template Type - The type of the message to be published.
+   * @param {any} presenterMessage - The message to be published to the presenter channel.
+   * @returns {void}
+   */
   publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
     const payload: EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX,
@@ -85,16 +131,32 @@ export class QueueService {
       });
   }
 
+  /**
+   * Encodes a message to Base64.
+   *
+   * @param payload - The message to be encoded.
+   * @returns The encoded message.
+   */
   #encodeMessageToBase64(payload: any): string {
     // TODO Bind this properly to be {} at least
     return btoa(JSON.stringify(payload));
   }
 
+  /**
+   * Decodes a Base64 message.
+   *
+   * @param payloadMessage- The message to be decoded.
+   * @returns The decoded message.
+   */
   #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
     return JSON.parse(atob(payloadMessage));
   }
 }
 
+/**
+ * Interface for the response received when making a POST request to the backend.
+ * @interface
+ */
 interface EventResponse {
   id: string,
   topic: string,
@@ -107,6 +169,10 @@ interface EventResponse {
   }
 }
 
+/**
+ * Interface for the payload to be sent when making a POST request to the backend.
+ * @interface
+ */
 interface EventCreationRequest {
   topic: string,
   message: string,
