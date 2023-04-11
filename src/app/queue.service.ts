@@ -26,7 +26,7 @@ export class QueueService {
    */
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
   /**
-   * A special request object holding a random string used to trigger the display of the current question to clients
+   * A special request object holding a predefined string used to trigger the display of the current question to clients
    * @type {ClientQuestionRequest}
    * @readonly
    */
@@ -49,6 +49,7 @@ export class QueueService {
    */
   constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
   }
+
   /**
    * Listens to the presenter channel for messages.
    * When a message is received, the provided callback function is invoked with the parsed message object.
@@ -94,6 +95,7 @@ export class QueueService {
       )
     };
   }
+
   /**
    * Publishes a message to the client channel.
    * @param {any} clientMessage - The message to be published to the client channel.
@@ -112,6 +114,7 @@ export class QueueService {
         console.log("Post request sent " + JSON.stringify(result));
       });
   }
+
   /**
    * Publishes a message to the presenter channel.
    *
