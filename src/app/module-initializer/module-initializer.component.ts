@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 interface ModuleTypes {
-  modules : ModuleType[];
+  modules: ModuleType[];
 }
 
 interface ModuleType {
@@ -23,11 +23,14 @@ interface ModuleParameter {
   templateUrl: './module-initializer.component.html',
   styleUrls: ['./module-initializer.component.css']
 })
-export class ModuleInitializerComponent implements OnInit{
+export class ModuleInitializerComponent implements OnInit {
   modules ?: ModuleType[];
-  selectedModuleString : string = "poll";
+  selectedModuleString: string = "poll";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private router: Router,
+              private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.http.get<ModuleTypes>('assets/modules.json').subscribe(data => {
@@ -36,16 +39,24 @@ export class ModuleInitializerComponent implements OnInit{
     });
   }
 
-  selectedModule(selection : string) : ModuleType {
+  selectedModule(selection: string): ModuleType {
     return this.modules?.find(el => el.name === selection) as ModuleType;
   }
 
-  extractQueryParams() : Params {
+  extractQueryParams(): Params {
     return this.selectedModule(this.selectedModuleString).parameters
-      // @ts-ignore
-      .reduce((acc, current) => {acc[current.name] = current.value; return acc},
-      {
-      "interaction" : this.selectedModuleString
-      });
+      .reduce((acc, current) => {
+          // @ts-ignore
+          acc[current.name] = current.value;
+          return acc
+        },
+        {
+          "interaction": this.selectedModuleString
+        });
+  }
+
+  initializeModuleWithParams() {
+    const queryParams = this.extractQueryParams();
+    this.router.navigate(['../../presenter'], {queryParams, relativeTo: this.route}).then();
   }
 }
