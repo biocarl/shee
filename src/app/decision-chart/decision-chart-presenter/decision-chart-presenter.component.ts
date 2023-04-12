@@ -5,6 +5,8 @@ import {PresenterMessage} from "../../presenter-message";
 import {PollPresenterSubscribeResponse} from "../../poll/poll-presenter-subscribe-response";
 import {DecisionClientSubscribeResponse} from "../decision-client-subscribe-response";
 import {DecisionPresenterSubscribeResponse} from "../decision-presenter-subscribe-response";
+import {PairPresenterComponent} from "../../pair/pair-presenter/pair-presenter.component";
+import {PairClientComponent} from "../../pair/pair-client/pair-client.component";
 
 
 @Component({
@@ -26,7 +28,7 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
         return;
       }
 
-      if(this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.id) {
+      if(this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.question_id) {
         this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
       }
     });

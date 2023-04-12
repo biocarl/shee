@@ -1,5 +1,5 @@
 export interface DecisionPresenterSubscribeResponse {
-  id: string,
+  question_id: string,
   interaction: "decision",
   questions : string[]
 }

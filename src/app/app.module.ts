@@ -30,7 +30,7 @@ import { PairClientComponent } from './pair/pair-client/pair-client.component';
     ClientComponent,
     WaitComponent,
     DecisionChartClientComponent,
-    DecisionChartPresenterComponent
+    DecisionChartPresenterComponent,
     ModuleInitializerComponent,
     PairPresenterComponent,
     PairClientComponent
@@ -38,7 +38,8 @@ import { PairClientComponent } from './pair/pair-client/pair-client.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
