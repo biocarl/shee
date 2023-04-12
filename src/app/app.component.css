@@ -78,6 +78,20 @@ code {
 .title {
   color: #ABABAB;
 }
+.footer {
+  background-image: url('src/assets/SVG/Grafik_Footer_Client_desktop_dark.svg'); /* Hintergrundbild-URL hier einfügen */
+  background-repeat: repeat-x;
+  background-color: transparent;
+  background-position: center; /* Bildposition zentrieren */
+  position: fixed; /* Fixierte Position am unteren Bildschirmrand */
+  left: 0;
+  bottom: 0;
+  width: 100%; /* Breite auf 100% setzen */
+  height: 125px;
+}
+body{
+  background-color: transparent;
+}
 
 @media screen and (min-width: 0px) {
   .navbar, .navbar-menu, .navbar-start, .navbar-end {
