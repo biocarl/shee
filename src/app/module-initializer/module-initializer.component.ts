@@ -23,6 +23,12 @@ interface ModuleParameter {
   templateUrl: './module-initializer.component.html',
   styleUrls: ['./module-initializer.component.css']
 })
+/**
+ * The module initializer components offers a user interface for populating a presenter view.
+ * Access via following route /<groupName>/presenter/new
+ * @component
+ * @implements {OnInit}
+ */
 export class ModuleInitializerComponent implements OnInit{
   modules ?: ModuleType[];
   selectedModuleString : string = "poll";

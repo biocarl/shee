@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 /**
  * The no-group component displays a message indicating that the participant has not joined any group yet.
+ * Currently, this is shown when you visit the home route
  * @component
  */
 export class NoGroupComponent {
