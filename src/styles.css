@@ -34,7 +34,7 @@ body {
 }
 
 .v-message {
-  background-color: #f5f3ee;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
