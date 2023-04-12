@@ -1,0 +1,27 @@
+<div class="container">
+  <div *ngIf="voted;else showQuestion" class="v-message">
+    <div>
+      You voted
+    </div>
+    <img src="assets/thx.png" alt="thx-emoji" width="100px">
+  </div>
+  <ng-template #showQuestion>
+    <ng-container *ngIf="questionEvent?.questions; then selector"></ng-container>
+
+
+    <ng-template #selector>
+      <div class="v-questions content is-large">
+        <div
+          *ngFor="let question of questionEvent?.questions; let i = index;"
+          (click)="voteForQuestion(i)"
+          class="v-question"
+          [style.border-top-width]='i != 0 ? "3px" : "0"'
+        >
+    <span>
+      {{question}}
+    </span>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>
