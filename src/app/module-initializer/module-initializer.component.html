@@ -9,20 +9,21 @@
   </div>
 
   <div *ngFor="let parameter of selectedModule(selectedModuleString).parameters">
-      <label [for]="parameter.name">
+    <label [for]="parameter.name">
 
-        <div class="p-name">
-          {{parameter.name}}:
-        </div>
-        <div class="p-description">
-          {{parameter.description}}
-        </div>
+      <div class="p-name">
+        {{parameter.name}}:
+      </div>
+      <div class="p-description">
+        {{parameter.description}}
+      </div>
 
-      </label>
-      <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value" [required]="parameter.required" />
+    </label>
+    <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value"
+           [required]="parameter.required"/>
   </div>
 
   <div class="center">
-    <a [routerLink]="['../../presenter']" [queryParams]="extractQueryParams()"><button type="button">Initialize Module</button></a>
+    <button type="button" (click)="initializeModuleWithParams()">Initialize Module</button>
   </div>
 </form>

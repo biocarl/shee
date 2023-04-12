@@ -40,7 +40,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
   }
 
   private isInValidTimeRangeIfSet() {
-    if(this.questionEvent?.timer){
+    if(this.questionEvent?.timer !== undefined){
       return this.questionEvent.timer > 0;
     }
     return true;
