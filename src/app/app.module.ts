@@ -15,6 +15,8 @@ import {ModuleInitializerComponent} from "./module-initializer/module-initialize
 import {FormsModule} from "@angular/forms";
 import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.component';
 import { PairClientComponent } from './pair/pair-client/pair-client.component';
+import { BrainstormingClientComponent } from './brainstorming/brainstorming-client/brainstorming-client.component';
+import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-presenter/brainstorming-presenter.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { PairClientComponent } from './pair/pair-client/pair-client.component';
     WaitComponent,
     ModuleInitializerComponent,
     PairPresenterComponent,
-    PairClientComponent
+    PairClientComponent,
+    BrainstormingClientComponent,
+    BrainstormingPresenterComponent
   ],
   imports: [
     BrowserModule,
