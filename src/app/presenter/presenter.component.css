@@ -1,0 +1,12 @@
+.footer {
+  background-image: url('src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg'); /* Hintergrundbild-URL hier einfügen */
+  background-color: transparent;
+  background-repeat: repeat-x;
+  background-size: cover; /* Bildgröße anpassen */
+  background-position: top; /* Bildposition zentrieren */
+  position: fixed; /* Fixierte Position am unteren Bildschirmrand */
+  left: 0;
+  bottom: 0;
+  width: 100%; /* Breite auf 100% setzen */
+  height: 200px;
+}
