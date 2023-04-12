@@ -5,6 +5,7 @@ import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-respon
 import {PollClientPublishRequest} from "../poll-client-publish-request";
 import {ClientView} from "../../client-view";
 import {PresenterMessage} from "../../presenter-message";
+import {ParticipantService} from "../../participant.service";
 
 @Component({
   selector: 'app-vote-selector',
@@ -12,30 +13,45 @@ import {PresenterMessage} from "../../presenter-message";
   styleUrls: ['./poll-client.component.css']
 })
 export class PollClientComponent implements ClientView {
-  questionEvent ? : PollPresenterSubscribeResponse;
+  questionEvent ?: PollPresenterSubscribeResponse;
   voted: boolean = false;
 
-  constructor(private groupService : GroupService, private queueService : QueueService) {}
+  constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
+  }
 
   voteForQuestion(voteSelectionIndex: number) {
-    if(!this.questionEvent?.questions) return
+    if (!this.questionEvent?.answers) return
     // You can't vote twice
     this.voted = true;
     this.groupService.hasQuestions = false;
 
     // handle vote
-    const voting : number[] = Array(this.questionEvent.questions.length).fill(0);
+    const voting: number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
-    const message : PollClientPublishRequest =  {
-        interaction: "poll",
-        question_id: this.questionEvent.id,
-        voting : voting,
-        participant : "unknown" // TODO Not used for now
-      };
+    const message: PollClientPublishRequest = {
+      interaction: "poll",
+      question_id: this.questionEvent.question_id,
+      voting: voting,
+      participantName: this.participantService.getParticipantName()
+    };
     this.queueService.publishMessageToClientChannel<PollClientPublishRequest>(message);
   }
 
-  initializeComponent(data : PresenterMessage) {
+  initializeComponent(data: PresenterMessage) {
     this.questionEvent = data as PollPresenterSubscribeResponse;
+    this.initializeTimer();
+  }
+
+  private initializeTimer() {
+    if (this.questionEvent?.timer) {
+      const timerInterval = setInterval(() => {
+        if (this.questionEvent && this.questionEvent.timer) {
+          this.questionEvent.timer -= 1;
+          if (this.questionEvent.timer <= 0) {
+            clearInterval(timerInterval);
+          }
+        }
+      }, 1000);
+    }
   }
 }

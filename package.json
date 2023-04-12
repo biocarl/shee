@@ -6,6 +6,10 @@
     "start": "ng serve",
     "build": "ng build --output-path docs --deploy-url /",
     "watch": "ng build --watch --configuration development",
+    "publish": "node scripts/ntfy/ntfy.js --publish ",
+    "subscribeLive": "node scripts/ntfy/ntfy.js --subscribe-live ",
+    "subscribe": "node scripts/ntfy/ntfy.js --subscribe ",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
@@ -18,7 +22,11 @@
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "axios": "^1.3.4",
+    "base-64": "^1.0.0",
     "bulma": "^0.9.4",
+    "qrcode": "^1.5.1",
+    "eventsource": "^2.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -28,6 +36,7 @@
     "@angular/cli": "~15.2.0",
     "@angular/compiler-cli": "^15.2.0",
     "@types/jasmine": "~4.3.0",
+    "@types/qrcode": "^1.5.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
@@ -35,5 +44,13 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "~4.9.4"
-  }
+  },
+  "description": "The application consists of two main components\r - Client (where interactions with the participants happens)\r - Presenter (where the results are shown or new interactions are triggered)",
+  "main": "scripts/ntfy/ntfy.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

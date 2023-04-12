@@ -11,10 +11,12 @@ import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.compo
 import { ClientComponent } from './client/client.component';
 import { WaitComponent } from './wait/wait.component';
 import {AnchorDirective} from "./anchor.directive";
-import { CounterPresenterComponent } from './counter/counter-presenter/counter-presenter.component';
-import { CounterClientComponent } from './counter/counter-client/counter-client.component';
 import { DecisionChartClientComponent } from './decision-chart/decision-client/decision-chart-client.component';
 import { DecisionChartPresenterComponent } from './decision-chart/decision-chart-presenter/decision-chart-presenter.component';
+import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
+import {FormsModule} from "@angular/forms";
+import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.component';
+import { PairClientComponent } from './pair/pair-client/pair-client.component';
 
 @NgModule({
   declarations: [
@@ -27,10 +29,11 @@ import { DecisionChartPresenterComponent } from './decision-chart/decision-chart
     AnchorDirective,
     ClientComponent,
     WaitComponent,
-    CounterPresenterComponent,
-    CounterClientComponent,
     DecisionChartClientComponent,
     DecisionChartPresenterComponent
+    ModuleInitializerComponent,
+    PairPresenterComponent,
+    PairClientComponent
   ],
   imports: [
     BrowserModule,

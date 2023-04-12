@@ -1,6 +1,8 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
+import {ClientQuestionRequest} from "./client-question-request";
+import {PresenterMessage} from "./presenter-message";
 
 @Injectable({
   providedIn: 'root'
@@ -8,46 +10,53 @@ import {HttpClient} from "@angular/common/http";
 export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
+  readonly questionTrigger: ClientQuestionRequest = {
+    requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
+  };
+  currentPresenterMessage?: PresenterMessage;
 
-  constructor(private groupService : GroupService, private zone : NgZone, private http: HttpClient) { }
+  constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
+  }
 
-  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage : Type) => void) {
+  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
 
-          const rawEvent : EventResponse = JSON.parse(eventWrapper.data);
-          const event : Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+          const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+          console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
+          const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
           // @ts-ignore
-          event.id = rawEvent.id;
-
-
+          if (!event.question_id) {
+            // @ts-ignore
+            event.question_id = rawEvent.id;
+          }
           // Run callback
           handlePresenterMessage(event);
         }
       )
     };
   }
-  listenToClientChannel<Type>(handleClientMessage: (clientMessage : Type) => void) {
+
+  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void) {
     const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
     eventSource.onmessage = (eventWrapper) => {
       this.zone.run(
         () => {
-          const rawEvent : EventResponse = JSON.parse(eventWrapper.data);
-          const event : Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-          // @ts-ignore
-          event.id = rawEvent.id;
+          const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+          const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
           // Run callback
           handleClientMessage(event);
         }
       )
     };
   }
+
   publishMessageToClientChannel<Type>(clientMessage: Type) {
-    const payload :  EventCreationRequest = {
+    const payload: EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
       message: this.#encodeMessageToBase64(clientMessage),
       title: "Client event published",
@@ -57,12 +66,12 @@ export class QueueService {
 
     this.http.post<any>('https://ntfy.sh', payload)
       .subscribe(result => {
-        console.log("Post request sent" + result)
+        console.log("Post request sent " + JSON.stringify(result));
       });
-
   }
+
   publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
-    const payload :  EventCreationRequest = {
+    const payload: EventCreationRequest = {
       topic: this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX,
       message: this.#encodeMessageToBase64(presenterMessage),
       title: "Presenter event published",
@@ -72,16 +81,16 @@ export class QueueService {
 
     this.http.post<any>('https://ntfy.sh', payload)
       .subscribe(result => {
-        console.log("Post request sent" + result)
+        console.log("Post request sent" + JSON.stringify(result))
       });
   }
 
-  #encodeMessageToBase64(payload : any) : string{
+  #encodeMessageToBase64(payload: any): string {
     // TODO Bind this properly to be {} at least
     return btoa(JSON.stringify(payload));
   }
 
-  #decodeMessageFromBase64<Type>( payloadMessage : string) : Type{
+  #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
     return JSON.parse(atob(payloadMessage));
   }
 }
@@ -105,4 +114,3 @@ interface EventCreationRequest {
   tags: string[],
   attach: string,
 }
-

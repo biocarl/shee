@@ -1,0 +1,10 @@
+{
+  "interaction": "poll",
+  "answers": [
+    "What is your favorite color?",
+    "Do you prefer cats or dogs?",
+    "What is the meaning of life?",
+    "Hallo, das ist ein Test"
+  ],
+  "question": "What is this about?"
+}
