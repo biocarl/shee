@@ -19,19 +19,19 @@ export class DecisionChartClientComponent implements ClientView {
   constructor(private groupService : GroupService, private queueService : QueueService) {}
 
   voteForQuestion(voteSelectionIndex: number) {
-    if(!this.questionEvent?.questions) return
+    if(!this.questionEvent?.answers) return
     // You can't vote twice
     this.voted = true;
     this.groupService.hasQuestions = false;
 
     // handle vote
-    const voting : number[] = Array(this.questionEvent.questions.length).fill(0);
+    const voting : number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
     const message : DecisionClientPublishRequest =  {
       interaction: "decision",
       question_id: this.questionEvent.question_id,
       voting : voting,
-      participant : "unknown" // TODO Not used for now
+      participantName : "unknown" // TODO Not used for now
     };
     this.queueService.publishMessageToClientChannel<DecisionClientPublishRequest>(message);
   }

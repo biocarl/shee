@@ -2,11 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {PresenterView} from "../../presenter-view";
 import {QueueService} from "../../queue.service";
 import {PresenterMessage} from "../../presenter-message";
-import {PollPresenterSubscribeResponse} from "../../poll/poll-presenter-subscribe-response";
 import {DecisionClientSubscribeResponse} from "../decision-client-subscribe-response";
 import {DecisionPresenterSubscribeResponse} from "../decision-presenter-subscribe-response";
-import {PairPresenterComponent} from "../../pair/pair-presenter/pair-presenter.component";
-import {PairClientComponent} from "../../pair/pair-client/pair-client.component";
 
 
 @Component({
@@ -50,7 +47,7 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
 
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as DecisionPresenterSubscribeResponse;
-    this.questionResponses = Array(this.questionEvent.questions.length).fill(0);
+    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
 
   }
 

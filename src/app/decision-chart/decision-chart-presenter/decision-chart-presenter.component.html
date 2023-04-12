@@ -2,8 +2,8 @@
 <h3>Decision presenter</h3>
 <br>
 <div *ngIf="questionEvent && questionResponses" class="bar-chart">
-  <div *ngFor="let question of questionEvent.questions; let i = index" class="bar-chart-item">
-    <div class="bar-label container">{{question}}</div>
+  <div *ngFor="let answer of questionEvent.answers; let i = index" class="bar-chart-item">
+    <div class="bar-label container">{{answer}}</div>
     <div class="bar-container">
       <div class="bar" [style.width.%]="getPercentage(i)">
         <span class="bar-value">{{getPercentage(i) | number:'1.0-0'}}%</span>
