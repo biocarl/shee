@@ -15,9 +15,21 @@
   --buttonTextColor_dark: black;
 }
 
+html {
+  height: 100%;
+  background-color: var(--backgroundColor_dark) !important;
+  background-image: url("src/assets/SVG/Grafik_Background_stars.svg");
+  background-repeat: repeat-x;
+  background-position-y: 100px;
+}
+
 body {
+  background-image: url("src/assets/SVG/Grafik_Mond.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-position-y: -120px;
+
   margin: 0;
-  background-color: #f5f3ee;
 }
 
 .v-message {

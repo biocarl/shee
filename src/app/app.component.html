@@ -1,6 +1,6 @@
 <!-- new navbar -->
-<div class="navbar">
-  <div class="navbar-brand"></div>
+<div class="navbar is-mobile">
+  <div class="navbar-brand"><h1>TEst</h1></div>
   <div class="navbar-menu">
 
 
@@ -9,7 +9,7 @@
       <!-- roomname -->
       <div class="navbar-item">
         <div>
-          <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-1">
+          <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-3">
             <div>
               <h1>{{groupService.getGroupName()}}</h1>
             </div>
@@ -38,19 +38,16 @@
 
     <div class="navbar-end">
       <div class="navbar-item is-center">
-
         <span>
           <div class="field">
-          <input id="switchExample" type="checkbox" name="switchExample"
+          <input id="switchExample"  type="checkbox" name="switchExample"
                  class="switch is-small">
           <label for="switchExample"><i class="fa-solid fa-moon"></i></label>
           </div>
         </span>
       </div>
-
     </div>
-
   </div>
-
 </div>
+<footer></footer>
 <router-outlet></router-outlet>
