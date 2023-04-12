@@ -11,11 +11,6 @@ import {QueueService} from "../queue.service";
  * @Injectable
  */
 export class QueryToEventService {
-  /**
-   * Creates a new instance of the QueryToEventService.
-   * @constructor
-   * @param {QueueService} queueService The service for interacting with the presentation queue.
-   */
   constructor(private queueService : QueueService) { }
   /**
    * Retrieves query parameters from the URL and publishes them as a presenter event if they are valid.
@@ -34,13 +29,7 @@ export class QueryToEventService {
     }
   }
 
-  /**
-   * Converts the query parameters to a JSON object.
-   * @param {ParamMap} params The map of query parameters from the URL.
-   * @private
-   * @returns {PresenterMessageCreationRequest} The JSON object containing the query parameters.
-   */
-  retrieveQueryParamsAsJson(params : ParamMap) : PresenterMessageCreationRequest {
+  private retrieveQueryParamsAsJson(params : ParamMap) : PresenterMessageCreationRequest {
     return params.keys.reduce( (agg, key )=> {
         const value = params.get(key) ?? "";
         if(value.includes(",")){
@@ -67,4 +56,5 @@ interface PresenterMessageCreationRequest {
    * @type {string}
    */
   interaction: string;
+  // Here also other fields will be used but only defined during runtime (there TS does not complain)
 }

@@ -1,5 +1,4 @@
 /**
- * The interface for the poll client subscription response.
  * This interface defines the structure of the response received from a client for the "poll" interaction.
  * @interface
  */
@@ -10,14 +9,13 @@ export interface PollClientSubscribeResponse {
    */
   participantName: string;
   /**
-   * An array of integers representing the votes for each answer choice.
-   * Each entry in the array corresponds to an answer choice.
-   * @type {number[]}
-   */
+   * Each element in the array denotes an answer choice, for the selected choice the element is set to 1, otherwise 0.
+   * The length of the array must match the number of answer choices.
+  */
   voting: number[];
   /**
    * The ID of the question that the response is for.
    * @type {string}
    */
-  question_id: string;
+  question_id: string; // TODO refactor to questionId
 }

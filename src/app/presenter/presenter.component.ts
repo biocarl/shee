@@ -15,49 +15,25 @@ import {ClientQuestionRequest} from "../client-question-request";
   styleUrls: ['./presenter.component.css']
 })
 /**
- * The PresenterComponent is responsible for managing the presenter view and initializing the appropriate component
- * based on the presenter message.
+ * The presenter root component displays a specific client component based on the presenter's messages which
+ * are forwarded from the query parameters within this component.
  * @component
  * @implements {OnInit}
  */
 export class PresenterComponent implements OnInit {
-  /**
-   * The name of the current group.
-   * @type {string | null}
-   * @public
-   */
   groupName: string | null = "";
-  /**
-   * The anchor directive used to dynamically inject components into the view.
-   * @type {AnchorDirective}
-   */
+
+  // The anchor directive used to dynamically inject components into the view
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
 
-  /**
-   * Initializes a new instance of the PresenterComponent.
-   * @constructor
-   * @param {ActivatedRoute} route The route service for retrieving route parameters.
-   * @param {QueueService} queueService The service for interacting with the presentation queue.
-   * @param {GroupService} groupService The service for managing the group name.
-   * @param {QueryToEventService} queryToEventService The service for publishing query parameters as presenter events.
-   * @param {ComponentChooserService} componentChooserService The service for determining which component to inject.
-   */
   constructor(
     private route: ActivatedRoute,
     private queueService: QueueService,
     private groupService: GroupService,
     private queryToEventService: QueryToEventService,
     private componentChooserService: ComponentChooserService
-  ) {
-  }
+  ) {}
 
-  /**
-   * Initializes the component by setting the group name and listening to presenter messages.
-   * Also retrieves query parameters and publishes them as presenter events if valid.
-   * @public
-   * @returns {void}
-   * @memberof PresenterComponent
-   */
   ngOnInit(): void {
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe(params => {
@@ -67,7 +43,7 @@ export class PresenterComponent implements OnInit {
       }
     });
 
-    // Listen to all presenter events for determining which component to choose
+    // Listen to all presenter events for determining which component to choose based on interactionId
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
         this.queueService.currentPresenterMessage = presenterMessage;

@@ -1,4 +1,3 @@
-// Is the most general type (all other presenter events subscribe from this) - TODO: Introduce inheritance
 /**
  * Represents a presenter message.
  * @interface
@@ -13,5 +12,5 @@ export interface PresenterMessage {
    * The ID of the question associated with the message.
    * @type {string}
    */
-  question_id: string;
+  question_id: string; // TODO Refactor to questionID
 }

@@ -9,11 +9,6 @@ import {Injectable} from '@angular/core';
  * @Injectable
  */
 export class ParticipantService {
-  /**
-   * The name of the current participant. Default value: "Unknown".
-   * @private
-   * @type {string}
-   */
   private participantName: string = "Unknown";
 
   /**

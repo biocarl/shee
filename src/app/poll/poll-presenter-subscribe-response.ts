@@ -1,5 +1,4 @@
 /**
- * The interface for the poll presenter subscribe response.
  * This interface defines the structure of the response sent from the presenter for the "poll" interaction.
  * @interface
  */

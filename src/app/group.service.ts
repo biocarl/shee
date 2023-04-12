@@ -9,17 +9,7 @@ import { Injectable } from '@angular/core';
  * @Injectable
  */
 export class GroupService {
-  /**
-   * The name of the current group.
-   * @type {string}
-   * @private
-   */
   private groupName : string = "";
-  /**
-   * The state of questions in the group.
-   * @type {boolean}
-   * @public
-   */
   public hasQuestions: boolean = false;
 
   /**

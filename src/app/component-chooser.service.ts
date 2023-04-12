@@ -15,10 +15,6 @@ import {PresenterMessage} from "./presenter-message";
  * @Injectable
  */
 export class ComponentChooserService {
-  /**
-   * Creates an instance of ComponentChooserService.
-   * @constructor
-   */
   constructor() { }
 
   /**

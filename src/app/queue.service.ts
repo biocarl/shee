@@ -13,42 +13,15 @@ import {PresenterMessage} from "./presenter-message";
  * @Injectable
  */
 export class QueueService {
-  /**
-   * Suffix to append to the group name to form the presenter topic
-   * @type {string}
-   * @private
-   */
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
-  /**
-   * Suffix to append to the group name to form the client topic
-   * @type {string}
-   * @private
-   */
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
-  /**
-   * A special request object holding a predefined string used to trigger the display of the current question to clients
-   * @type {ClientQuestionRequest}
-   * @readonly
-   */
+   // A special request object holding a predefined string used to trigger the display of the current question to clients
   readonly questionTrigger: ClientQuestionRequest = {
     requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
   };
-  /**
-   * The current presenter message.
-   * @type {PresenterMessage | undefined}
-   */
   currentPresenterMessage?: PresenterMessage;
 
-  /**
-   * Creates a new instance of the `QueueService`.
-   *
-   * @constructor
-   * @param groupService The `GroupService` for retrieving the current group name
-   * @param zone The `NgZone` for running Angular change detection
-   * @param http The `HttpClient` for sending HTTP requests to the ntfy.sh API
-   */
-  constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
-  }
+  constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {}
 
   /**
    * Listens to the presenter channel for messages.
@@ -137,23 +110,11 @@ export class QueueService {
       });
   }
 
-  /**
-   * Encodes a message to Base64.
-   *
-   * @param payload - The message to be encoded.
-   * @returns The encoded message.
-   */
   #encodeMessageToBase64(payload: any): string {
     // TODO Bind this properly to be {} at least
     return btoa(JSON.stringify(payload));
   }
 
-  /**
-   * Decodes a Base64 message.
-   *
-   * @param payloadMessage- The message to be decoded.
-   * @returns The decoded message.
-   */
   #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
     return JSON.parse(atob(payloadMessage));
   }
