@@ -22,17 +22,21 @@ export class BrainstormingClientComponent implements ClientView{
   }
 
   sendIdea() {
-    if (!this.ideaEvent?.idea_id) return
+    console.log("test");
+    if (!this.ideaEvent?.question_id) return
+    console.log("test1");
+
     const idea: BrainstormingClientPublishRequest = {
       interaction: "brainstorming",
-      idea_id : this.ideaEvent.idea_id,
       idea_text: this.idea_text,
       participantName: this.participantService.getParticipantName()
     };
+    console.log(idea.idea_text);
     this.queueService.publishMessageToClientChannel<BrainstormingClientPublishRequest>(idea);
   }
 
   initializeComponent(data: PresenterMessage) {
+    console.log(JSON.stringify(data));
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
   }
 
