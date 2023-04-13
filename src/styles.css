@@ -27,7 +27,7 @@ html {
 body {
   background-image: url("src/assets/SVG/Grafik_Mond.svg");
   background-repeat: no-repeat;
-  background-position: calc(100% + 120px) 0;
+  background-position: calc(100% + 200px) 0;
   background-position-y: -120px;
   height: 100%;
   margin: 0;
