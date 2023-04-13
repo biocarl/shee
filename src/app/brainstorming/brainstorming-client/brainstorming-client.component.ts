@@ -16,17 +16,17 @@ import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish
 export class BrainstormingClientComponent implements ClientView{
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   openForIdeas: boolean = true;
+  idea_text: string = "";
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
   }
 
   sendIdea() {
-    let idea_text: string = "";
     if (!this.ideaEvent?.idea_id) return
     const idea: BrainstormingClientPublishRequest = {
       interaction: "brainstorming",
       idea_id : this.ideaEvent.idea_id,
-      idea_text: idea_text,
+      idea_text: this.idea_text,
       participantName: this.participantService.getParticipantName()
     };
     this.queueService.publishMessageToClientChannel<BrainstormingClientPublishRequest>(idea);
