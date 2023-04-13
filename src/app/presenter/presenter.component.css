@@ -1,5 +1,4 @@
-.footer {
-  background-image: url('src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg'); /* Hintergrundbild-URL hier einfügen */
+.footer-presenter {
   background-color: transparent;
   background-repeat: no-repeat;
   background-size: cover; /* Bildgröße anpassen */
