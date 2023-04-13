@@ -1,1 +1,14 @@
-<p>brainstorming-client works!</p>
+<div>
+  <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
+    <div>
+      Brainstorming has ended
+    </div>
+  </div>
+
+  <ng-template #showTextarea>
+    <form>
+      <input type="text" [(ngModel)]="idea_text" placeholder="Enter text">
+      <button type="button" (click)="sendIdea()">Send Idea</button>
+    </form>
+  </ng-template>
+</div>
