@@ -17,7 +17,7 @@
         </div>
 
         <ng-template #timeUp>Time is up!</ng-template>
-        <div class="v-questions content is-large"
+        <div class="v-questions"
              [style.filter]="questionEvent.timer === 0 ? 'grayscale(100%)' : 'none'">
           <div
             *ngFor="let answer of questionEvent.answers; let i = index;"
