@@ -17,6 +17,7 @@
     background-position: bottom;
   }
 }
+
 @media screen and (min-width: 768px) {
   .footer-presenter {
     background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
@@ -31,6 +32,7 @@
     background-position: bottom;
   }
 }
+
 @media screen and (min-width: 1824px) {
   .footer-presenter {
     background-position: bottom;

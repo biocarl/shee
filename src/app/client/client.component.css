@@ -1,4 +1,3 @@
-
 .footer-client {
   background-color: transparent;
   background-repeat: no-repeat;
@@ -18,6 +17,7 @@
     background-position: bottom;
   }
 }
+
 @media screen and (min-width: 768px) {
   .footer-client {
     background-image: url("src/assets/SVG/Grafik_Footer_Client_desktop_dark.svg");
@@ -32,6 +32,7 @@
     background-position: bottom;
   }
 }
+
 @media screen and (min-width: 1824px) {
   .footer-client {
     background-position: bottom;
