@@ -5,6 +5,8 @@ import {NotFoundComponent} from "./not-found/not-found.component";
 import {PairPresenterComponent} from "./pair/pair-presenter/pair-presenter.component";
 import {PairClientComponent} from "./pair/pair-client/pair-client.component";
 import {PresenterMessage} from "./presenter-message";
+import {BrainstormingPresenterComponent} from "./brainstorming/brainstorming-presenter/brainstorming-presenter.component";
+import {BrainstormingClientComponent} from "./brainstorming/brainstorming-client/brainstorming-client.component";
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +38,10 @@ export class ComponentChooserService {
         case "pair" :
           const counterRef = viewContainerRef.createComponent<PairPresenterComponent>(PairPresenterComponent);
           counterRef.instance.initializeComponent(event);
+          break
+        case "brainstorming" :
+          const brainstormingRef = viewContainerRef.createComponent<BrainstormingPresenterComponent>(BrainstormingPresenterComponent);
+          brainstormingRef.instance.initializeComponent(event);
           break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
@@ -52,6 +58,10 @@ export class ComponentChooserService {
         case "pair" :
           const counterRef = viewContainerRef.createComponent<PairClientComponent>(PairClientComponent);
           counterRef.instance.initializeComponent(event);
+          break
+        case "brainstorming" :
+          const brainstormingRef = viewContainerRef.createComponent<BrainstormingClientComponent>(BrainstormingClientComponent);
+          brainstormingRef.instance.initializeComponent(event);
           break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
