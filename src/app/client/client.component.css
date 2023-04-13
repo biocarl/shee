@@ -1,2 +1,40 @@
 
+.footer-client {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: cover; /* Bildgröße anpassen */
+  background-position: top; /* Bildposition zentrieren */
+  position: fixed; /* Fixierte Position am unteren Bildschirmrand */
+  left: 0;
+  bottom: 0;
+  width: 100%; /* Breite auf 100% setzen */
+  height: 400px;
+}
+
+@media screen and (max-width: 768px) {
+  .footer-client {
+    background-image: url("src/assets/SVG/Grafik_Footer_Client_dark.svg");
+    background-size: 100% auto;
+    background-position: bottom;
+  }
+}
+@media screen and (min-width: 768px) {
+  .footer-client {
+    background-image: url("src/assets/SVG/Grafik_Footer_Client_desktop_dark.svg");
+    background-size: 100% auto;
+    background-position: bottom;
+  }
+}
+
+@media screen and (min-width: 1700px) {
+  .footer-client {
+    background-size: 100% auto;
+    background-position: bottom;
+  }
+}
+@media screen and (min-width: 1824px) {
+  .footer-client {
+    background-position: bottom;
+  }
+}
 
