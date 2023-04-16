@@ -1,4 +1,4 @@
-# VAG.app
+# SHEE.app
 
 The application consists of two main components
 - Client (where interactions with the participants happens)
