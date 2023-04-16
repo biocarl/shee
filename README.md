@@ -42,7 +42,8 @@ npm run subscribe -- <channel/audience>
 
 # Running VAG.app
 
-## Development environment
+# 2 step Development environment
+## Step #1 ⬇️
 
 **To run VAG.app in a development environment, use the following command:**
 ```sh
@@ -52,12 +53,9 @@ ng serve --configuration development
 ## Production environment
 
 **To build VAG.app for production, use the following command:**
-```sh
-ng build --configuration production --output-path docs --deploy-url /
-```
-This command will build the application with the production configuration and output the build artifacts to the "docs" directory with a deploy URL of "/".
+## Step #2 ⬇️
 
-# Using Docker
+# Using Docker 🐳🏗️
 
 **VAG.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
 ```sh

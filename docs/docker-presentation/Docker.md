@@ -49,10 +49,21 @@
 
 ---
 
-
+* docker version: Gibt Informationen zur Docker-Installation und -Version aus.
+*  docker info: Gibt detaillierte Informationen zum aktuellen Docker-Setup aus.
+*  docker run: Startet einen neuen Container auf Basis eines Images.
+*  docker ps: Zeigt eine Liste der laufenden Docker-Container an.
 
 ---
 
+* docker stop: Stoppt einen oder mehrere Docker-Container.
+* docker rm: Löscht einen oder mehrere Docker-Container.
+* docker images: Zeigt eine Liste der verfügbaren Docker-Images an.
+* docker rmi: Löscht ein oder mehrere Docker-Images.
 
 
 ---
+* docker build: Erstellt ein Docker-Image aus einem Dockerfile.
+* docker pull: Lädt ein Docker-Image aus einem Remote-Repository herunter.
+* docker push: Veröffentlicht ein Docker-Image in einem Remote-Repository.
+* docker exec: Führt einen Befehl in einem laufenden Docker-Container aus.
