@@ -24,7 +24,8 @@ export class PollPresenterComponent implements PresenterView, OnInit {
         return;
       }
 
-      if (this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.id) {
+      if (this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.question_id
+          && this.isInValidTimeRangeIfSet()) {
         this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
       }
 
@@ -34,8 +35,29 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     });
   }
 
+  private isInValidTimeRangeIfSet() {
+    if(this.questionEvent?.timer !== undefined){
+      return this.questionEvent.timer > 0;
+    }
+    return true;
+  }
+
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as PollPresenterSubscribeResponse;
     this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
+    this.initializeTimer();
+  }
+
+  private initializeTimer() {
+    if (this.questionEvent?.timer) {
+      const timerInterval = setInterval(() => {
+        if (this.questionEvent && this.questionEvent.timer) {
+          this.questionEvent.timer -= 1;
+          if (this.questionEvent.timer <= 0) {
+            clearInterval(timerInterval);
+          }
+        }
+      }, 1000);
+    }
   }
 }

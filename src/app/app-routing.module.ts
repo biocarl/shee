@@ -4,12 +4,16 @@ import {NoGroupComponent} from "./no-group/no-group.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {PresenterComponent} from "./presenter/presenter.component";
 import {ClientComponent} from "./client/client.component";
+import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
 
 const routes: Routes = [
   {path: "", component: NoGroupComponent},
   {path: ":group", children: [
       {path: "" , component: ClientComponent},
-      {path: "presenter" , component: PresenterComponent},
+      {path: "presenter" , children: [
+          {path: "" , component: PresenterComponent},
+          {path: "new" , component: ModuleInitializerComponent},
+        ]},
     ]},
   {path: "**", component: NotFoundComponent},
 ];
