@@ -1,0 +1,75 @@
+#user-input{
+  position: fixed;
+  width: 604px;
+  height: 439px;
+
+  left: 50%; /* 50% vom linken Rand */
+  top: 60%; /* 50% vom oberen Rand */
+  transform: translate(-50%, -50%); /* Verschieben des Elements um 50% der eigenen Breite und Höhe */
+
+
+  background: var(--menuColor_dark);
+  border-radius: 53px;
+
+  font-family: 'Baloo', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 38px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #000000;
+}
+
+#cute-sheep{
+  position: absolute;
+  width: 341px;
+  height: 334px;
+
+  left: calc(50% - 350px); /* 50% vom linken Rand minus die Hälfte der Maskottchen-Breite */
+  top: calc(60% - 380px); /* 50% vom oberen Rand minus ein gewünschter Abstand zum Textfeld */
+
+}
+
+#send-button{
+  background: var(--menuColor_dark);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  width: 388px;
+  height: 84px;
+  position:fixed;
+ /*
+ <!-- TODO Code aufpassen -->
+ */
+  left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
+  top: calc(60% + 439px / 2 + 10px); /* 60% plus die Hälfte der Textfeldhöhe */
+  color: var(--textColor_dark);
+}
+
+#toast-sent{
+  position: fixed;
+  width: 149px;
+  height: 62px;
+  /*
+ <!-- TODO Code aufpassen -->
+ */
+  left: calc(50% - (149px/2));
+  top: calc(60% - 439px / 2 - 100px);
+
+  background: #64BF4D;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+
+  font-family: 'Baloo', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 38px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: var(--textColor_dark);
+}

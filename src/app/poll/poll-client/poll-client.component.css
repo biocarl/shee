@@ -5,6 +5,7 @@
   justify-content: space-evenly;
   background: #3f51b5 -webkit-gradient(linear, left top, left bottom, from(#0B72D9), to(#3f51b5)) no-repeat;
   color: whitesmoke;
+  opacity: 0.36;
 }
 
 .v-question {

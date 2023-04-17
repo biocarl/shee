@@ -40,26 +40,23 @@ npm run subscribeLive -- <channel/audience>
 npm run subscribe -- <channel/audience>
 ```
 
-# Running VAG.app
 
-# 2 step Development environment
-## Step #1 ⬇️
+
+## 2 step Development environment
+### Step #1 ⬇️
+
+## Using Docker 🐳🏗️
+
+**Shee.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
+```sh
+docker-compose -f local-setup.yaml up
+```
+
+### Step #2 ⬇️
 
 **To run VAG.app in a development environment, use the following command:**
 ```sh
 ng serve --configuration development
-```
-
-## Production environment
-
-**To build VAG.app for production, use the following command:**
-## Step #2 ⬇️
-
-# Using Docker 🐳🏗️
-
-**VAG.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
-```sh
-docker-compose -f local-setup.yaml up
 ```
 
 ## Contributors 🎉
