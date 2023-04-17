@@ -3,11 +3,12 @@
   background-repeat: no-repeat;
   background-size: cover; /* Bildgröße anpassen */
   background-position: top; /* Bildposition zentrieren */
-  position: fixed; /* Fixierte Position am unteren Bildschirmrand */
+  position: fixed;
   left: 0;
   bottom: 0;
   width: 100%; /* Breite auf 100% setzen */
-  height: 400px;
+  height: 30%;
+  z-index: -1;
 }
 
 @media screen and (max-width: 768px) {
@@ -15,6 +16,8 @@
     background-image: url("src/assets/SVG/Grafik_Footer_Client_dark.svg");
     background-size: 100% auto;
     background-position: bottom;
+    height: 100%;
+
   }
 }
 
