@@ -1,4 +1,4 @@
-.v-nav{
+.v-nav {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -15,10 +15,10 @@
 }
 
 .v-blue {
-  background:#0B72D9;
+  background: #0B72D9;
 }
 
-.v-container{
+.v-container {
   background-color: #F58B44;
   text-align: center;
   margin: 10px;
@@ -45,3 +45,85 @@ code {
   align-items: center;
   height: 100%;
 }
+
+.navbar {
+  background: transparent;
+  background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
+  width: 100%;
+  height: 125px;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+.navbar-start {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 78%;
+  margin: 0 auto;
+}
+
+.navbar-brand {
+  width: 12%;
+}
+
+.navbar-end {
+  display: flex;
+  justify-content: end;
+  align-items: start;
+  margin-top: 25px;
+  width: 10%;
+}
+
+.title {
+  color: #ABABAB;
+}
+
+body{
+  background-color: transparent;
+}
+
+@media screen and (min-width: 0px) {
+  .navbar, .navbar-menu, .navbar-start, .navbar-end {
+    align-items: stretch;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .navbar-menu {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0.5rem 0;
+  }
+}
+
+@media screen and (min-width: 0px) {
+  .navbar-item, .navbar-link {
+    align-items: center;
+    display: flex;
+    margin-bottom: 50px;
+  }
+}
+
+h1{
+  font-family: 'Baloo Bhaina', serif;font-size: 22px;
+}
+
+@media screen and (min-width: 1700px) {
+  .navbar {
+    background-size: 100% auto;
+    background-position: top;
+  }
+}
+@media screen and (min-width: 1824px) {
+  .navbar {
+    background-position: bottom;
+  }
+}
+
+
+
+

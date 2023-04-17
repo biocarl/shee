@@ -15,13 +15,25 @@
   --buttonTextColor_dark: black;
 }
 
+html {
+  height: 100%;
+  background-color: var(--backgroundColor_dark) !important;
+  background-image: url("src/assets/SVG/Grafik_Background_stars.svg");
+  background-repeat: repeat-x;
+  background-position-y: 100px;
+}
+
 body {
+  background-image: url("src/assets/SVG/Grafik_Mond.svg");
+  background-repeat: no-repeat;
+  background-position: calc(100% + 200px) 0;
+  background-position-y: -120px;
+  height: 100%;
   margin: 0;
-  background-color: #f5f3ee;
 }
 
 .v-message {
-  background-color: #f5f3ee;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
