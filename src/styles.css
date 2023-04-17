@@ -4,15 +4,15 @@
   --backgroundColor_light: #70AACD;
   --backgroundColor_dark: #1D2331;
   --headerTextColor_light: #000000;
-  --headerTextColor_dark: #ABABAB;
+  --headerTextColor_dark: #FFFFFF;
   --titleColor_light: #000000;
-  --titleColor_dark: #ABABAB;
+  --titleColor_dark: #FFFFFF;
   --textColor_light: #000000;
-  --textColor_dark: #ABABAB;
-  --menuColor_light: #000000;
+  --textColor_dark: #FFFFFF;
+  --menuColor_light: #ABABAB;
   --menuColor_dark: #ABABAB;
-  --buttonTextColor_light: white;
-  --buttonTextColor_dark: black;
+  --buttonTextColor_light: black;
+  --buttonTextColor_dark: white;
 }
 
 html {

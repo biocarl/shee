@@ -11,7 +11,7 @@
   background: var(--menuColor_dark);
   border-radius: 53px;
 
-  font-family: 'Baloo', serif;
+  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -20,7 +20,7 @@
   align-items: center;
   text-align: center;
 
-  color: #000000;
+  color: var(--textColor_dark);
 }
 
 #cute-sheep{
@@ -40,9 +40,11 @@
   width: 388px;
   height: 84px;
   position:fixed;
-  /*
-  <!-- TODO Code aufpassen -->
-  */
+  font-weight: 400;
+  font-size: 24px;
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+
   left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
   top: calc(55% + 349px / 2 + 10px); /* 60% plus die Hälfte der Textfeldhöhe */
   color: var(--textColor_dark);
@@ -52,17 +54,14 @@
   position: fixed;
   width: 149px;
   height: 62px;
-  /*
- <!-- TODO Code aufpassen -->
- */
+
   left: calc(50% - (149px/2));
   top: calc(58% - 349px / 2 - 100px);
 
   background: #64BF4D;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
-
-  font-family: 'Baloo', serif;
+  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -79,7 +78,7 @@
   height: 66px;
   left: calc(50% - (800px/2));
   top: calc(58% - 480px / 2 - 160px);
-
+color: var(--titleColor_dark);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
@@ -91,3 +90,5 @@
   justify-content: center;
 
 }
+
+::placeholder { color: var(--textColor_dark); }
