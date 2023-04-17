@@ -5,12 +5,17 @@
     </div>
   </div>
 
+
+
   <ng-template #showTextarea>
-    <div *ngIf="is_sent" > Sent!</div>
-    <div>{{ideaEvent?.question}}</div>
+    <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
+    <div id="question">{{ideaEvent?.question}}</div>
     <form>
-      <input type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea">
-      <button type="button" (click)="sendIdea()">Send Idea</button>
+
+      <!-- TODO implementiert richtige Variabel -->
+      <img *ngIf="true" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf" >
+      <input id="user-input"  type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea">
+      <button type="button" (click)="sendIdea()" id="send-button">Send</button>
     </form>
   </ng-template>
 </div>
