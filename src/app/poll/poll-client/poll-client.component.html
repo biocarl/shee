@@ -23,8 +23,7 @@
             *ngFor="let answer of questionEvent.answers; let i = index;"
             (click)="voteForQuestion(i)"
             class="v-question"
-            [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'"
-            [style.border-top-width]='i != 0 ? "3px" : "0"'>
+            [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'">
     <span>
       {{answer}}
     </span>
