@@ -25,7 +25,7 @@ Following groups (stay in the room to help each other out and create a shared un
   4. By the end of the day everyone should have a Pull Request open simiular to [this one](https://github.com/biocarl/vag/pull/1) (do not merge/rebase to master)
 
 - **(3)** Inception-Homework
-- Think about potential solutions (vag.app can provide) you could think of for the student types we've discussed (we will need this tomorrow in the morning)
+- Think about potential solutions (shee.app can provide) you could think of for the student types we've discussed (we will need this tomorrow in the morning)
 
 - **(4)** Get familiar with the codebase:
 
@@ -34,7 +34,7 @@ Following groups (stay in the room to help each other out and create a shared un
        - Understanding a large, legacy codebase
        - How do you dive into large code bases?
 
-- Our new codebase: [biocarl/vag](https://github.com/biocarl/vag)
+- Our new codebase: [biocarl/shee](https://github.com/biocarl/shee)
 
 - Some tips specific to this project
   - The obvious thing you always want to do is to run the application locally (clone/run Angular app)

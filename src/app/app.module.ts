@@ -11,6 +11,8 @@ import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.compo
 import { ClientComponent } from './client/client.component';
 import { WaitComponent } from './wait/wait.component';
 import {AnchorDirective} from "./anchor.directive";
+import { DecisionChartClientComponent } from './decision-chart/decision-client/decision-chart-client.component';
+import { DecisionChartPresenterComponent } from './decision-chart/decision-chart-presenter/decision-chart-presenter.component';
 import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
 import {FormsModule} from "@angular/forms";
 import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.component';
@@ -29,6 +31,8 @@ import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-p
     AnchorDirective,
     ClientComponent,
     WaitComponent,
+    DecisionChartClientComponent,
+    DecisionChartPresenterComponent,
     ModuleInitializerComponent,
     PairPresenterComponent,
     PairClientComponent,

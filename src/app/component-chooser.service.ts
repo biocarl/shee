@@ -7,6 +7,8 @@ import {PairClientComponent} from "./pair/pair-client/pair-client.component";
 import {PresenterMessage} from "./presenter-message";
 import {BrainstormingPresenterComponent} from "./brainstorming/brainstorming-presenter/brainstorming-presenter.component";
 import {BrainstormingClientComponent} from "./brainstorming/brainstorming-client/brainstorming-client.component";
+import {DecisionChartClientComponent} from "./decision-chart/decision-client/decision-chart-client.component";
+import {DecisionChartPresenterComponent} from "./decision-chart/decision-chart-presenter/decision-chart-presenter.component";
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +45,10 @@ export class ComponentChooserService {
           const brainstormingRef = viewContainerRef.createComponent<BrainstormingPresenterComponent>(BrainstormingPresenterComponent);
           brainstormingRef.instance.initializeComponent(event);
           break;
+        case "decision" :
+          const decisionPresenterRef = viewContainerRef.createComponent<DecisionChartPresenterComponent>(DecisionChartPresenterComponent);
+          decisionPresenterRef.instance.initializeComponent(event);
+          break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
           console.error("Error: No matching interaction id was found for " + interaction);
@@ -62,6 +68,10 @@ export class ComponentChooserService {
         case "brainstorming" :
           const brainstormingRef = viewContainerRef.createComponent<BrainstormingClientComponent>(BrainstormingClientComponent);
           brainstormingRef.instance.initializeComponent(event);
+          break;
+        case "decision" :
+          const decisionClientRef = viewContainerRef.createComponent<DecisionChartClientComponent>(DecisionChartClientComponent);
+          decisionClientRef.instance.initializeComponent(event);
           break;
         default :
           viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);

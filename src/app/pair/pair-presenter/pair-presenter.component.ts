@@ -20,7 +20,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   qrCodeUrl ?: string;
 
   constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService) {
-    this.qrCodeService.generateQrCode(`https://vag.app/${this.groupService.getGroupName()}`).then(url => {
+    this.qrCodeService.generateQrCode(`https://shee.app/${this.groupService.getGroupName()}`).then(url => {
       this.qrCodeUrl = url;
     });
   }
