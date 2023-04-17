@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="this.votingEvent.voting_in_progress; else openVoting">
   <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
     <div>
       Brainstorming has ended
@@ -12,5 +12,15 @@
       <input type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea">
       <button type="button" (click)="sendIdea()">Send Idea</button>
     </form>
+
   </ng-template>
 </div>
+  <ng-template #openVoting>
+<div *ngFor="let idea of votingEvent.ideas; let i = index;">
+  <button
+    (click)="voteForIdea(i)"
+    class="votingButton">
+    {{idea}}
+  </button>
+</div>
+  </ng-template>
