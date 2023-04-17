@@ -35,6 +35,19 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     });
   }
 
+  getPercentage(index: number): number {
+    if (!this.questionResponses) {
+      return 0;
+    }
+
+    const totalVotes = this.questionResponses.reduce((acc, curr) => acc + curr, 0);
+    if (totalVotes === 0) {
+      return 0;
+    }
+
+    return (this.questionResponses[index] / totalVotes) * 100;
+  }
+
   private isInValidTimeRangeIfSet() {
     if(this.questionEvent?.timer !== undefined){
       return this.questionEvent.timer > 0;
