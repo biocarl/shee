@@ -2,35 +2,30 @@
   position: fixed;
   width: 604px;
   height: 349px;
-
   left: 50%; /* 50% vom linken Rand */
   top: 55%; /* 50% vom oberen Rand */
   transform: translate(-50%, -50%); /* Verschieben des Elements um 50% der eigenen Breite und Höhe */
-
-
   background: var(--menuColor_dark);
   border-radius: 53px;
-
+  justify-content: center;
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
   line-height: 38px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-
+  flex-wrap: wrap;
   color: var(--textColor_dark);
+  padding:20px;
+  display: flex;
+  text-align: center;
 }
 
 #cute-sheep{
   position: absolute;
   width: 341px;
   height: 334px;
-
   left: calc(50% - 350px); /* 50% vom linken Rand minus die Hälfte der Maskottchen-Breite */
   top: calc(60% - 380px); /* 50% vom oberen Rand minus ein gewünschter Abstand zum Textfeld */
-
 }
 
 #send-button{
@@ -44,7 +39,6 @@
   font-size: 24px;
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-
   left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
   top: calc(55% + 349px / 2 + 10px); /* 60% plus die Hälfte der Textfeldhöhe */
   color: var(--textColor_dark);
@@ -54,10 +48,8 @@
   position: fixed;
   width: 149px;
   height: 62px;
-
   left: calc(50% - (149px/2));
   top: calc(58% - 349px / 2 - 100px);
-
   background: #64BF4D;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
@@ -72,6 +64,7 @@
   justify-content: center;
   color: var(--textColor_dark);
 }
+
 #question{
   position: absolute;
   width: 100%;
@@ -88,7 +81,22 @@
   text-align: center;
   justify-content: center;
   flex-wrap: wrap;
-
 }
 
-::placeholder { color: var(--textColor_dark); }
+::placeholder {
+  color: var(--textColor_dark);
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+}
+
+#user-input::placeholder {
+  text-align: center;
+}
+
+#user-input:focus::placeholder{
+  visibility: hidden;
+}
