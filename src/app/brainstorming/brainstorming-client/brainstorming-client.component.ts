@@ -6,6 +6,9 @@ import {GroupService} from "../../group.service";
 import {QueueService} from "../../queue.service";
 import {ParticipantService} from "../../participant.service";
 import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish-request";
+import {BrainstormingPresenterVotingSubscribeResponse} from "../brainstorming-presenter-voting-subscribe-response";
+import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-voting-publish-request";
+import {BrainstormingPresenterComponent} from "../brainstorming-presenter/brainstorming-presenter.component";
 
 
 @Component({
@@ -15,11 +18,28 @@ import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish
 })
 export class BrainstormingClientComponent implements ClientView {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
+  votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = true;
   idea_text: string = "";
   is_sent: boolean = false;
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
+  }
+
+  voteForIdea(voteSelectionIndex: number) {
+    if (!this.votingEvent?.ideas) return
+
+    // handle idea-vote
+    const voting: number[] = Array(this.votingEvent.ideas.length).fill(0);
+    voting[voteSelectionIndex] = 1;
+    const message: BrainstormigClientVotingPublishRequest = {
+      interaction: "brainstorming",
+      idea_voting: voting,
+      participantName: this.participantService.getParticipantName(),
+      question_id: this.votingEvent.question_id
+
+    };
+    this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
   }
 
   sendIdea() {
@@ -47,4 +67,6 @@ export class BrainstormingClientComponent implements ClientView {
 
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
   }
+
+  protected readonly BrainstormingPresenterComponent = BrainstormingPresenterComponent;
 }
