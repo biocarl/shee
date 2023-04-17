@@ -1,7 +1,8 @@
 <div>
   <ul>
-    <li *ngFor="let idea of ideaResponses">
-      {{idea}}
+    <li *ngFor="let idea of ideaResponses; let i = index">
+      {{idea.idea_text}}
+      <button (click)="deleteIdea(idea, i)">Löschen</button>
     </li>
   </ul>
   <button (click)="stopBrainstorming()"> Stop brainstorming</button>

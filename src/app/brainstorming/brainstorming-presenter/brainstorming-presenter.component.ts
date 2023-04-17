@@ -13,7 +13,7 @@ import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subs
 })
 export class BrainstormingPresenterComponent implements PresenterView, OnInit {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses : string[] = [];
+  ideaResponses : BrainstormingClientSubscribeResponse[] = [];
 
   constructor(private queueService: QueueService) {
   }
@@ -25,7 +25,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
         return;
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id) {
-        this.ideaResponses.push(brainstormingSubscriptionEvent.idea_text);
+        this.ideaResponses.push(brainstormingSubscriptionEvent);
       }
 
     });
@@ -40,4 +40,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
     */
   }
 
+  deleteIdea(idea: BrainstormingClientSubscribeResponse, index: number) {
+    this.ideaResponses.splice(index, 1);
+  }
 }
