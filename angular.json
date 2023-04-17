@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "vag-frontend": {
+    "shee-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/vag-frontend",
+            "outputPath": "dist/shee-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -61,10 +61,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "vag-frontend:build:production"
+              "browserTarget": "shee-frontend:build:production"
             },
             "development": {
-              "browserTarget": "vag-frontend:build:development"
+              "browserTarget": "shee-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +72,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "vag-frontend:build"
+            "browserTarget": "shee-frontend:build"
           }
         },
         "test": {
