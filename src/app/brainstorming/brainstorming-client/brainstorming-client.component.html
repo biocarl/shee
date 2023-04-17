@@ -6,6 +6,7 @@
   </div>
 
   <ng-template #showTextarea>
+    <div *ngIf="is_sent" > Sent!</div>
     <form>
       <input type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea">
       <button type="button" (click)="sendIdea()">Send Idea</button>
