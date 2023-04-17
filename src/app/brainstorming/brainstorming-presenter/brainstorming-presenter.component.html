@@ -1,0 +1,9 @@
+<div>
+  <div>{{ideaEvent?.question}}</div>
+  <ul>
+    <li *ngFor="let idea of ideaResponses">
+      {{idea}}
+    </li>
+  </ul>
+  <button (click)="stopBrainstorming()"> Stop brainstorming</button>
+</div>
