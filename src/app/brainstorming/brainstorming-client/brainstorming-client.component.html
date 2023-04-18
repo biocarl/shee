@@ -1,6 +1,6 @@
 <div *ngIf="votingEvent">
 
-  <div *ngIf="this.votingEvent?.voting_in_progress; else openVoting">
+  <div *ngIf="!this.votingEvent?.voting_in_progress; else openVoting">
     <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
       <div>
         Brainstorming has ended
