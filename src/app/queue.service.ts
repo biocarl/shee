@@ -2,6 +2,8 @@ import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
 import { environment } from '../environments/environment';
+import {ClientQuestionRequest} from "./client-question-request";
+import {PresenterMessage} from "./presenter-message";
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +11,10 @@ import { environment } from '../environments/environment';
 export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
+  readonly questionTrigger: ClientQuestionRequest = {
+    requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
+  };
+  currentPresenterMessage?: PresenterMessage;
 
   constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
   }
@@ -20,12 +26,15 @@ export class QueueService {
         () => {
 
           const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+          console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
           const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
           // @ts-ignore
-          event.id = rawEvent.id;
-
+          if (!event.question_id) {
+            // @ts-ignore
+            event.question_id = rawEvent.id;
+          }
           // Run callback
           handlePresenterMessage(event);
         }
@@ -60,9 +69,8 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        console.log("Post request sent" + result)
+        console.log("Post request sent " + JSON.stringify(result));
       });
-
   }
 
   publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
@@ -76,9 +84,8 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        console.log("Post request sent" + result)
+        console.log("Post request sent" + JSON.stringify(result))
       });
-
   }
 
   #encodeMessageToBase64(payload: any): string {

@@ -1,0 +1,41 @@
+{
+  "parameters" : [
+    {
+      "name" : "interaction",
+      "required" : true
+    }
+  ],
+  "modules" : [
+    {
+      "name" : "poll",
+      "description" : "This module best used if you want to get a quick feedback from the group about a specific topic with already defined opinions/answers.",
+      "category" : "general",
+      "parameters" : [
+        {
+          "name" : "question",
+          "description" : "The question asked, only shown in presenter view",
+          "value" : "What is the meaning of life?",
+          "required" : "true"
+        },
+        {
+          "name" : "answers",
+          "description" : "A set of options you want to provide for the presenters to vote on",
+          "value" : "Can't say ...,42,Its all about love!",
+          "required" : true
+        },
+        {
+          "name" : "timer",
+          "description" : "Publish a poll with a time constraint (in seconds). After elapsed time participant won't be able to vote anymore nor will the presenter accept voting results.",
+          "value" : "10",
+          "required" : false
+        }
+      ]
+    },
+    {
+      "name" : "pair",
+      "description" : "This module you should use if participants need to pair with the presenter instance. The view generates the amount of currently active participants and generates a QR code which encodes a valid participant link.",
+      "category" : "general",
+      "parameters" : []
+    }
+  ]
+}

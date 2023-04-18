@@ -1,4 +1,4 @@
-# VAG.app
+# SHEE.app
 
 The application consists of two main components
 - Client (where interactions with the participants happens)
@@ -8,7 +8,7 @@ Current client/presenter modules
 - [`poll`](src/app/poll) : Presenter triggers a poll which can be viewed and voted on by the participants
     - [Example URL](http://localhost:4200/java-2022/presenter?interaction=poll&questions=Why%20is%20the%20universe%20green%3F,%20What%20about%20the%20ocean,why%20today%3F) for presenter
     - [Example URL](http://localhost:4200/java-2022) for client
-- [`counter`](src/app/counter) : A simple Hello World module which counts how many participants are currently listenting to the presenter
+- [`counter`](src/app/pair) : A simple Hello World module which counts how many participants are currently listenting to the presenter
 
 ## Collection of useful things
 #### Convert json into url parameters (works in browser)
@@ -42,7 +42,8 @@ npm run subscribe -- <channel/audience>
 
 # Running VAG.app
 
-## Development environment
+# 2 step Development environment
+## Step #1 ⬇️
 
 **To run VAG.app in a development environment, use the following command:**
 ```sh
@@ -52,12 +53,9 @@ ng serve --configuration development
 ## Production environment
 
 **To build VAG.app for production, use the following command:**
-```sh
-ng build --configuration production --output-path docs --deploy-url /
-```
-This command will build the application with the production configuration and output the build artifacts to the "docs" directory with a deploy URL of "/".
+## Step #2 ⬇️
 
-# Using Docker
+# Using Docker 🐳🏗️
 
 ### Installing Docker on MAC
 
