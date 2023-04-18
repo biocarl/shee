@@ -28,11 +28,11 @@ You look with the sheep at the content on the Client site.
 --titleColor_light: #000000;
 --titleColor_dark: #ABABAB;
 --textColor_light: #000000;
---textColor_dark: #ABABAB;
+--textColor_dark: #FFFFFF;
 --menuColor_light: #000000;
---menuColor_dark: #ABABAB;
---buttonTextColor_light: white;
---buttonTextColor_dark: black;
+--menuColor_dark: #FFFFFF;
+--buttonTextColor_light: #000000;
+--buttonTextColor_dark: #FFFFFF;
 ```
 ## Button-Design
 Buttons have a box-shadow, rounded corners, color white, opacity 0.6
