@@ -20,7 +20,7 @@
       <textarea  id="user-input" [style.background-color]="bgColor"   type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea"></textarea>
       <button type="button" (click)="sendIdea()" id="send-button">Send</button>
 
-      <div>
+      <div class="color-selection">
       <input type="radio"  name="color" id="red" value="red" />
       <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
 
@@ -34,7 +34,7 @@
       <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
 
       <input type="radio"  name="color" id="orange" />
-      <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
+      <label for="orange"><span (click)="changeColor($event)"  class="orange"></span></label>
       </div>
     </form>
   </ng-template>

@@ -33,7 +33,7 @@ export class BrainstormingClientComponent implements ClientView {
   idea_text: string = "";
   is_sent: boolean = false;
   stickyColor: string = "#FFD707FF"
-  bgColor: string = "var(--menuColor_dark)";
+  bgColor: string = "#ffd707F";
 
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {

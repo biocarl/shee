@@ -1,12 +1,18 @@
+
+
+
+
 #user-input{
+
+  --user-input-width:250px;
+  --user-input-height:250px;
   position: fixed;
-  width: 604px;
-  height: 349px;
+  width: var(--user-input-width);
+  height: var(--user-input-height);
   left: 50%; /* 50% vom linken Rand */
   top: 55%; /* 50% vom oberen Rand */
   transform: translate(-50%, -50%); /* Verschieben des Elements um 50% der eigenen Breite und Höhe */
-  background: var(--menuColor_dark);
-  border-radius: 53px;
+  background-color: #FFD707FF;
   justify-content: center;
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
@@ -14,7 +20,7 @@
   font-size: 24px;
   line-height: 38px;
   flex-wrap: wrap;
-  color: var(--textColor_dark);
+  color: black;
   padding:20px;
   display: flex;
   text-align: center;
@@ -84,7 +90,7 @@
 }
 
 ::placeholder {
-  color: var(--textColor_dark);
+  color: black;
   text-align: center;
   position: absolute;
   top: 50%;
@@ -207,5 +213,17 @@ span.pink {
   background: #e03997;
 }
 
+textarea{
+  resize: none;
+}
+
+.color-selection {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  margin-top: 160px;
+  width: 100%;
+  top: calc(55% - (var(--user-input-height) / 2 - 40px)); /* Adjust the top value to position it above the textarea */
+}
 
 
