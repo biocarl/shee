@@ -3,4 +3,5 @@ export interface BrainstormingClientPublishRequest {
   idea_text: string,
   participantName: string;
   question_id: string;
+  stickyColor: string;
 }

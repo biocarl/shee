@@ -13,9 +13,29 @@
     <form>
 
       <!-- TODO replace "false" with dark mode variable  -->
-      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf" >
-      <textarea  id="user-input"   type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea"></textarea>
+      <img *ngIf="false" id="cute-sheep" ngSrc="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf"
+           height="286" width="284">
+
+
+      <textarea  id="user-input" [style.background-color]="bgColor"   type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea"></textarea>
       <button type="button" (click)="sendIdea()" id="send-button">Send</button>
+
+      <div>
+      <input type="radio" (click)="changeColor('red')" name="color" id="red" value="red" />
+      <label for="red"><span class="red"></span></label>
+
+      <input type="radio" (click)="changeColor('green')" name="color" id="green" />
+      <label for="green"><span class="green"></span></label>
+
+      <input type="radio" (click)="changeColor('yellow')" name="color" id="yellow" />
+      <label for="yellow"><span class="yellow"></span></label>
+
+      <input type="radio" (click)="changeColor('olive')" name="color" id="olive" />
+      <label for="olive"><span class="olive"></span></label>
+
+      <input type="radio" (click)="changeColor('orange')" name="color" id="orange" />
+      <label for="orange"><span class="orange"></span></label>
+      </div>
     </form>
   </ng-template>
 </div>

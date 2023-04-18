@@ -100,3 +100,112 @@
 #user-input:focus::placeholder{
   visibility: hidden;
 }
+
+
+* {
+  box-sizing: border-box;
+}
+
+input[type=radio] {
+  display: none;
+}
+
+input[type=radio]:checked + span {
+  transform: scale(1.25);
+}
+
+input[type=radio]:checked + span.red {
+  border: 2px solid #711313;
+}
+
+input[type=radio]:checked + span.orange {
+  border: 2px solid #873a08;
+}
+
+input[type=radio]:checked + span.yellow {
+  border: 2px solid #816102;
+}
+
+input[type=radio]:checked + span.olive {
+  border: 2px solid #505a0b;
+}
+
+input[type=radio]:checked + span.green {
+  border: 2px solid #0e4e1d;
+}
+
+input[type=radio]:checked + span.teal {
+  border: 2px solid #003633;
+}
+
+input[type=radio]:checked + span.blue {
+  border: 2px solid #103f62;
+}
+
+input[type=radio]:checked + span.violet {
+  border: 2px solid #321a64;
+}
+
+input[type=radio]:checked + span.purple {
+  border: 2px solid #501962;
+}
+
+input[type=radio]:checked + span.pink {
+  border: 2px solid #851554;
+}
+
+span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+span:hover {
+  transform: scale(1.25);
+}
+
+span.red {
+  background: #db2828;
+}
+
+span.orange {
+  background: #f2711c;
+}
+
+span.yellow {
+  background: #fbbd08;
+}
+
+span.olive {
+  background: #b5cc18;
+}
+
+span.green {
+  background: #21ba45;
+}
+
+span.teal {
+  background: #00b5ad;
+}
+
+span.blue {
+  background: #2185d0;
+}
+
+span.violet {
+  background: #6435c9;
+}
+
+span.purple {
+  background: #a333c8;
+}
+
+span.pink {
+  background: #e03997;
+}
+
+
+
