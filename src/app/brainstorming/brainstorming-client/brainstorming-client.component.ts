@@ -23,8 +23,10 @@ export class BrainstormingClientComponent implements ClientView {
   idea_text: string = "";
   is_sent: boolean = false;
   is_voted: boolean = false;
+  multi_vote_check: boolean [];
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
+    this.multi_vote_check = Array(this.votingEvent?.ideas.length).fill(false);
   }
 
   voteForIdea(voteSelectionIndex: number) {
@@ -41,8 +43,12 @@ export class BrainstormingClientComponent implements ClientView {
 
     };
     this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
-    if (this.votingEvent.single_choice)
-    this.is_voted = true;
+    if (this.votingEvent.single_choice) {
+      this.is_voted = true;
+    }else {
+      this.multi_vote_check[voteSelectionIndex] = true;
+    }
+
   }
 
   sendIdea() {

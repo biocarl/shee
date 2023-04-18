@@ -27,10 +27,12 @@
         </div>
       </div>
       <ng-template #timeUp>Time is up!</ng-template>
+
+
 <div *ngIf="!is_voted; else voted">
       <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
 
-        <button
+        <button [disabled]="multi_vote_check[i]"
           (click)="voteForIdea(i)"
           class="votingButton">
           {{idea}}
