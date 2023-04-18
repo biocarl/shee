@@ -1,17 +1,28 @@
 <div>
+  <div *ngIf="ideaEvent">
+    <div style="font-size: 3rem; text-align: center" *ngIf="ideaEvent.timer !== undefined">
+      <div *ngIf="ideaEvent.timer > 0; else timeUp">
+        Timer: {{ ideaEvent.timer }}
+      </div>
+    </div>
+    <ng-template #timeUp>Time is up!</ng-template>
+  </div>
   <div>{{ideaEvent?.question}}</div>
   <ul>
-    <li *ngFor="let idea of ideaResponses">
-      {{idea}}
+    <li *ngFor="let idea of ideaEvent?.ideas; let i = index;">
+      <span>{{idea}}</span>
+      <span *ngIf="votes"> {{votes[i]}}</span>
     </li>
   </ul>
-  <button (click)="stopBrainstorming()"> Stop brainstorming</button>
+  <button *ngIf="!voting_open" (click)="stopBrainstorming()"> Stop brainstorming</button>
   <form *ngIf="!voting_open">
     <select id="votingOption">
       <option value="oneVote">Each student has one vote</option>
       <option value="manyVotes">Each student has many votes</option>
     </select>
+    <label>Enter the duration of the timer in sec (Optional)</label>
+    <input type="number" min="1" [(ngModel)]="timerLength" placeholder="Enter Timer in sec" name="timer">
     <button type="button" (click)="startVoting()">Start Voting</button>
   </form>
-  <button *ngIf="voting_open" type = "button" (click)="stopVoting()">StopVoting</button>
+  <button *ngIf="voting_open" type="button" (click)="stopVoting()">StopVoting</button>
 </div>
