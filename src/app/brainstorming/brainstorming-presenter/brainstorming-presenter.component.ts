@@ -14,6 +14,9 @@ import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subs
 export class BrainstormingPresenterComponent implements PresenterView, OnInit {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   ideaResponses : BrainstormingClientSubscribeResponse[] = [];
+  timeRemaining: number = 0;
+  countdownTimer: any;
+  openForIdeas: boolean = true;
 
   constructor(private queueService: QueueService) {
   }
@@ -38,7 +41,26 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
   stopBrainstorming () : void{
    /* this.queueService.publishMessageToPresenterChannel()
     */
+    clearInterval(this.countdownTimer);
+    this.openForIdeas = false;
+    this.queueService.publishMessageToClientChannel({ openForIdeas: false });
   }
+
+  startBrainstorming(): void {
+    clearInterval(this.countdownTimer);
+    this.openForIdeas = true;
+    this.queueService.publishMessageToClientChannel({ openForIdeas: true });
+
+    if (this.timeRemaining > 0) {
+      this.countdownTimer = setInterval(() => {
+        this.timeRemaining--;
+        if (this.timeRemaining <= 0) {
+          this.stopBrainstorming();
+        }
+      }, 1000);
+    }
+  }
+
 
   deleteIdea(idea: BrainstormingClientSubscribeResponse, index: number) {
     this.ideaResponses.splice(index, 1);

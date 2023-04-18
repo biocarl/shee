@@ -19,6 +19,9 @@ export class BrainstormingClientComponent implements ClientView{
   idea_text: string = "";
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
+    this.queueService.listenToClientChannel<{ openForIdeas: boolean }>(message => {
+      this.openForIdeas = message.openForIdeas;
+    });
   }
 
   sendIdea() {

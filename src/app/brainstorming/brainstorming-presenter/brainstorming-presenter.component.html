@@ -5,5 +5,7 @@
       <button (click)="deleteIdea(idea, i)">Löschen</button>
     </li>
   </ul>
-  <button (click)="stopBrainstorming()"> Stop brainstorming</button>
-</div>
+  <input type="number" [(ngModel)]="timeRemaining" placeholder="Zeit in Sekunden">
+  <button (click)="startBrainstorming()">Start brainstorming</button>
+  <button (click)="stopBrainstorming()">Stop brainstorming</button>
+  <div *ngIf="timeRemaining > 0">Verbleibende Zeit: {{timeRemaining}}s</div></div>
