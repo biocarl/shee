@@ -15,7 +15,7 @@ import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish
 })
 export class BrainstormingClientComponent implements ClientView{
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
-  openForIdeas: boolean = true;
+  openForIdeas: boolean = false;
   idea_text: string = "";
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {

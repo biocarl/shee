@@ -16,7 +16,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
   ideaResponses : BrainstormingClientSubscribeResponse[] = [];
   timeRemaining: number = 0;
   countdownTimer: any;
-  openForIdeas: boolean = true;
+  openForIdeas: boolean = false;
 
   constructor(private queueService: QueueService) {
   }
@@ -65,4 +65,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
   deleteIdea(idea: BrainstormingClientSubscribeResponse, index: number) {
     this.ideaResponses.splice(index, 1);
   }
+
+
+
 }
