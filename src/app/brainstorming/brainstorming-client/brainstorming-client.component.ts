@@ -64,8 +64,22 @@ export class BrainstormingClientComponent implements ClientView {
   }
 
   initializeComponent(data: PresenterMessage) {
-
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
+    this.votingEvent = data as BrainstormingPresenterVotingSubscribeResponse;
+    this.initializeTimer();
+  }
+
+  private initializeTimer() {
+    if (this.votingEvent?.timer) {
+      const timerInterval = setInterval(() => {
+        if (this.votingEvent && this.votingEvent.timer) {
+          this.votingEvent.timer -= 1;
+          if (this.votingEvent.timer <= 0) {
+            clearInterval(timerInterval);
+          }
+        }
+      }, 1000);
+    }
   }
 
   protected readonly BrainstormingPresenterComponent = BrainstormingPresenterComponent;

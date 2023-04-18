@@ -1,26 +1,41 @@
-<div *ngIf="this.votingEvent.voting_in_progress; else openVoting">
-  <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
-    <div>
-      Brainstorming has ended
+<div *ngIf="votingEvent">
+
+  <div *ngIf="this.votingEvent?.voting_in_progress; else openVoting">
+    <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
+      <div>
+        Brainstorming has ended
+      </div>
     </div>
+
+
+    <ng-template #showTextarea>
+      <div *ngIf="is_sent"> Sent!</div>
+      <div>{{ideaEvent?.question}}</div>
+      <form>
+        <input type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea">
+        <button type="button" (click)="sendIdea()">Send Idea</button>
+      </form>
+
+    </ng-template>
   </div>
 
-  <ng-template #showTextarea>
-    <div *ngIf="is_sent" > Sent!</div>
-    <div>{{ideaEvent?.question}}</div>
-    <form>
-      <input type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea">
-      <button type="button" (click)="sendIdea()">Send Idea</button>
-    </form>
-
-  </ng-template>
-</div>
   <ng-template #openVoting>
-<div *ngFor="let idea of votingEvent.ideas; let i = index;">
-  <button
-    (click)="voteForIdea(i)"
-    class="votingButton">
-    {{idea}}
-  </button>
-</div>
+    <div *ngIf="votingEvent">
+      <div style="font-size: 3rem; text-align: center" *ngIf="votingEvent.timer !== undefined">
+        <div *ngIf="votingEvent.timer > 0; else timeUp">
+          Timer: {{ votingEvent.timer }}
+        </div>
+      </div>
+      <ng-template #timeUp>Time is up!</ng-template>
+
+      <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
+        <button
+          (click)="voteForIdea(i)"
+          class="votingButton">
+          {{idea}}
+        </button>
+      </div>
+    </div>
   </ng-template>
+</div>
+

@@ -5,4 +5,5 @@ export interface BrainstormingPresenterVotingSubscribeResponse {
   interaction: "brainstorming",
   ideas: string[],
   question: string;
+  timer: number;
 }
