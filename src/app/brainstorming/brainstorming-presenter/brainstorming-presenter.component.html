@@ -1,7 +1,7 @@
-<div>
-  <button (click)="stopBrainstorming()"> Stop brainstorming</button>
-</div>
 <script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
+<div>
+  <button class="button mb-3" (click)="stopBrainstorming()"> Stop brainstorming</button>
+</div>
 <div class="boundary columns is-multiline">
   <div class="post-it m-4 p-0 column is-one-fifth"
        (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
