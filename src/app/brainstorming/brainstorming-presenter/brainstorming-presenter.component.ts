@@ -15,7 +15,7 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
 export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   ideaResponses : string[] = [];
-  maxZIndex = 1;
+  maxZIndex = 20;
   chosenColor: string = "#FFD707FF";
 
   constructor(private queueService: QueueService) {
@@ -37,10 +37,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id) {
         this.ideaResponses.push(brainstormingSubscriptionEvent.idea_text);
-        console.log("Idea received:")
+        this.maxZIndex++;
       }
     });
-    this.maxZIndex = this.ideaResponses.length +1;
   }
 
   initializeComponent(data: PresenterMessage): void {
@@ -112,6 +111,10 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     if (i > -1) {
       this.ideaResponses.splice(i, 1,"");
     }
+  }
+
+  addDummy() {
+    this.ideaResponses.push("Student Idea nummer 2assssssssssssssssssssssssssssssssssss sssssssssssssssssssssssssssssssssssssssa!")
   }
 
 }

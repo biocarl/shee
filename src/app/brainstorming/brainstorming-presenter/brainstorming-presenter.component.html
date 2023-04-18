@@ -1,8 +1,9 @@
 <script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
 <div>
   <button class="button mb-3" (click)="stopBrainstorming()"> Stop brainstorming</button>
+  <button class="button mb-3" (click)="addDummy()"> Dummy</button>
 </div>
-<div class="boundary columns is-multiline">
+<div class="boundary columns is-multiline is-align-content-flex-start">
   <div class="post-it m-4 p-0 column is-one-fifth"
        (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
        cdkDrag
@@ -11,13 +12,13 @@
        [style.visibility]="ideaResponses[i] === '' ? 'hidden' : 'visible'">
     <div class="sticky"
          [ngStyle]="{'background': chosenColor}"
-         [style.z-index]="i+1">{{idea}}
+         >{{idea}}
     </div>
-    <div class="icon-container" [style.z-index]="i+1">
+    <div class="icon-container">
       <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
     </div>
-    <div class="top-tape" [style.z-index]="i+1"></div>
-    <div class="shadow" [style.z-index]="i"></div>
+    <div class="top-tape"></div>
+    <div class="shadow"></div>
   </div>
 </div>
