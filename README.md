@@ -59,6 +59,28 @@ This command will build the application with the production configuration and ou
 
 # Using Docker
 
+### Installing Docker on MAC
+
+Installing the Package Manager HOMEBREW for macOS:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+If your not sure whether you have a clean **homebrew** docker installation, use this command in terminal to delete your current docker installation:
+```sh
+brew remove docker
+```
+Install the docker application:
+```sh
+brew install --cask docker
+```
+Install the docker command line tools:
+```sh
+brew install docker
+```
+---
+
 **VAG.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
 ```sh
 docker-compose -f local-setup.yaml up
