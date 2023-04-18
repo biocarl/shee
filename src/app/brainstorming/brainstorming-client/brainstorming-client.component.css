@@ -1,11 +1,9 @@
-
-
-
-
-#user-input{
-
+:root {
   --user-input-width:250px;
   --user-input-height:250px;
+}
+
+#user-input{
   position: fixed;
   width: var(--user-input-width);
   height: var(--user-input-height);
@@ -221,9 +219,8 @@ textarea{
   display: flex;
   justify-content: center;
   position: absolute;
-  margin-top: 160px;
   width: 100%;
-  top: calc(55% - (var(--user-input-height) / 2 - 40px)); /* Adjust the top value to position it above the textarea */
+  top: calc(55% - (var(--user-input-height) / 2  + 10)); /* Adjust the top value to position it above the textarea */
 }
 
 
