@@ -12,20 +12,23 @@ import {ParticipantService} from "../../participant.service";
   templateUrl: './poll-client.component.html',
   styleUrls: ['./poll-client.component.css']
 })
+/**
+ * The PollClientComponent is used to display the different polling options and send the selected option to the presenter.
+ * @component
+ * @implements ClientView
+ */
 export class PollClientComponent implements ClientView {
-  questionEvent ?: PollPresenterSubscribeResponse;
-  voted: boolean = false;
+  questionEvent?: PollPresenterSubscribeResponse;
+  participantHasVoted: boolean = false;
 
-  constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
-  }
+  constructor(private groupService : GroupService, private queueService : QueueService, private participantService: ParticipantService) {}
 
-  voteForQuestion(voteSelectionIndex: number) {
+  publishVoteForParticipant(voteSelectionIndex: number) {
     if (!this.questionEvent?.answers) return
-    // You can't vote twice
-    this.voted = true;
+    // Participant can't vote twice
+    this.participantHasVoted = true;
     this.groupService.hasQuestions = false;
 
-    // handle vote
     const voting: number[] = Array(this.questionEvent.answers.length).fill(0);
     voting[voteSelectionIndex] = 1;
     const message: PollClientPublishRequest = {
@@ -37,7 +40,7 @@ export class PollClientComponent implements ClientView {
     this.queueService.publishMessageToClientChannel<PollClientPublishRequest>(message);
   }
 
-  initializeComponent(data: PresenterMessage) {
+  initializeComponent(data : PresenterMessage) {
     this.questionEvent = data as PollPresenterSubscribeResponse;
     this.initializeTimer();
   }

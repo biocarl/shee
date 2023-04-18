@@ -1,5 +1,5 @@
 <div>
-  <div *ngIf="voted;else showQuestion" class="v-message">
+  <div *ngIf="participantHasVoted;else showQuestion" class="v-message">
     <div>
       You voted
     </div>
@@ -21,7 +21,7 @@
              [style.filter]="questionEvent.timer === 0 ? 'grayscale(100%)' : 'none'">
           <div
             *ngFor="let answer of questionEvent.answers; let i = index;"
-            (click)="voteForQuestion(i)"
+            (click)="publishVoteForParticipant(i)"
             class="v-question"
             [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'">
     <span>
