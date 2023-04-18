@@ -82,8 +82,14 @@ export class BrainstormingClientComponent implements ClientView {
   }
 
 
-  changeColor(color: string) {
-    const colors = this.getColors();
-    this.bgColor = colors[color];
+  changeColor(event : MouseEvent) {
+    const element = event.target as HTMLElement;
+    console.log(getComputedStyle(element).getPropertyValue('background-color'));
+    this.bgColor = getComputedStyle(element).getPropertyValue('background-color');
   }
+
+  // changeColor(color: string) {
+  //   const colors = this.getColors();
+  //   this.bgColor = colors[color];
+  // }
 }

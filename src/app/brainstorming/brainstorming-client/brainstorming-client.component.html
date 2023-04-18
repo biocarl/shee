@@ -21,20 +21,20 @@
       <button type="button" (click)="sendIdea()" id="send-button">Send</button>
 
       <div>
-      <input type="radio" (click)="changeColor('red')" name="color" id="red" value="red" />
-      <label for="red"><span class="red"></span></label>
+      <input type="radio"  name="color" id="red" value="red" />
+      <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
 
-      <input type="radio" (click)="changeColor('green')" name="color" id="green" />
-      <label for="green"><span class="green"></span></label>
+      <input type="radio"  name="color" id="green" />
+      <label for="green"><span (click)="changeColor($event)" class="green"></span></label>
 
-      <input type="radio" (click)="changeColor('yellow')" name="color" id="yellow" />
-      <label for="yellow"><span class="yellow"></span></label>
+      <input type="radio"  name="color" id="yellow" />
+      <label for="yellow"><span (click)="changeColor($event)" class="yellow"></span></label>
 
-      <input type="radio" (click)="changeColor('olive')" name="color" id="olive" />
-      <label for="olive"><span class="olive"></span></label>
+      <input type="radio"  name="color" id="olive" />
+      <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
 
-      <input type="radio" (click)="changeColor('orange')" name="color" id="orange" />
-      <label for="orange"><span class="orange"></span></label>
+      <input type="radio"  name="color" id="orange" />
+      <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
       </div>
     </form>
   </ng-template>
