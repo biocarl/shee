@@ -40,16 +40,16 @@ export class PollPresenterComponent implements PresenterView, OnInit {
   }
 
   getPercentage(index: number): number {
-    if (!this.questionResponses) {
+    if (!this.accumulatedClientChoices) {
       return 0;
     }
 
-    const totalVotes = this.questionResponses.reduce((acc, curr) => acc + curr, 0);
+    const totalVotes = this.accumulatedClientChoices.reduce((acc, curr) => acc + curr, 0);
     if (totalVotes === 0) {
       return 0;
     }
 
-    return (this.questionResponses[index] / totalVotes) * 100;
+    return (this.accumulatedClientChoices[index] / totalVotes) * 100;
   }
 
   private isInValidTimeRangeIfSet() {
