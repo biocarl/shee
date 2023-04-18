@@ -19,22 +19,20 @@
   justify-content: center;
   align-content: center;
   cursor: pointer;
-  border:1px solid #ccc;
   padding: 1em;
   box-sizing: border-box;
   margin: 15px; /* Hinzugefügt für die Box */
   background-color: #ffffff; /* Hinzugefügt für die Box */
-  opacity: 0.36;
   border-radius: 30px;
-  /*box-shadow: 0px 4px 8px #007bff, 0px 0px 2px #007bff;*/
   font-family: 'ChunkFive', sans-serif;
+  transition: width 0.3s;
+  background-color: rgba(244,255,237,0.36);
 }
 
 .v-question span {
   font-size: 130%;
-  font-weight: bold;
-  opacity: 1;
-  color: Black;
+  color: white;
+  letter-spacing: 0.05em;
 }
 
 

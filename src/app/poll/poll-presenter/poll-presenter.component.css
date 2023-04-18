@@ -7,9 +7,11 @@
 
 h3 {
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   text-align: center;
   margin-bottom: 3em;
+  letter-spacing: 0.15em;
+  text-shadow: 1px 1px black;
 }
 
 h4{
@@ -27,6 +29,8 @@ h4{
 }
 .bar-label {
   margin-bottom: 5px;
+  color: #ABABAB;
+;
 }
 .bar-container {
   background-color: rgba(244,255,237,0.36);
@@ -39,6 +43,7 @@ h4{
   border-radius: 14px;
   width: 60%;
   margin: 0 auto;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 .bar {
   background-color: #ffffff;

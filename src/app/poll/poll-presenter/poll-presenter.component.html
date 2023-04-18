@@ -6,7 +6,9 @@
     <div class="bar-label container">{{answer}}</div>
     <div class="bar-container">
       <div class="bar" [style.width.%]="getPercentage(i)">
-        <span class="bar-value">{{getPercentage(i) | number:'1.0-0'}}%</span>
+        <div *ngIf="getPercentage(i) != 0">
+          <span class="bar-value">{{getPercentage(i) | number:'1.0-0'}}%</span>
+        </div>
       </div>
     </div>
   </div>
