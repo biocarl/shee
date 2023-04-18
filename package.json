@@ -9,8 +9,8 @@
     "publish": "node scripts/ntfy/ntfy.js --publish ",
     "subscribeLive": "node scripts/ntfy/ntfy.js --subscribe-live ",
     "subscribe": "node scripts/ntfy/ntfy.js --subscribe ",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "compodoc": "npx compodoc -p tsconfig.app.json"
   },
   "private": true,
   "dependencies": {
@@ -43,7 +43,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
-    "typescript": "~4.9.4"
+    "typescript": "~4.9.4",
+    "compodoc": "~0.0.41"
   },
   "description": "The application consists of two main components\r - Client (where interactions with the participants happens)\r - Presenter (where the results are shown or new interactions are triggered)",
   "main": "scripts/ntfy/ntfy.js",
