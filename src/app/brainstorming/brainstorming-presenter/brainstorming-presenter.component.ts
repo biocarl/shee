@@ -37,7 +37,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id) {
         this.ideaResponses.push(brainstormingSubscriptionEvent.idea_text);
-        this.maxZIndex++;
       }
     });
   }
@@ -104,7 +103,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     if (iconsElement) {
       iconsElement.style.zIndex = (this.maxZIndex +1).toString();
     }
-    console.log(this.maxZIndex)
   }
 
   hideIdea(i:number) {
@@ -113,8 +111,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     }
   }
 
-  addDummy() {
-    this.ideaResponses.push("Student Idea nummer 2assssssssssssssssssssssssssssssssssss sssssssssssssssssssssssssssssssssssssssa!")
+  trackByIndex(index: number): number {
+    return index;
   }
-
 }
