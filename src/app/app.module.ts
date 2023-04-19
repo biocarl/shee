@@ -19,6 +19,8 @@ import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.com
 import { PairClientComponent } from './pair/pair-client/pair-client.component';
 import { BrainstormingClientComponent } from './brainstorming/brainstorming-client/brainstorming-client.component';
 import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-presenter/brainstorming-presenter.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {ClipboardModule} from "@angular/cdk/clipboard";
 import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
@@ -45,7 +47,9 @@ import {NgOptimizedImage} from "@angular/common";
         AppRoutingModule,
         HttpClientModule,
         FormsModule,
-        NgOptimizedImage
+        NgOptimizedImage,
+        DragDropModule,
+        ClipboardModule
     ],
   providers: [],
   bootstrap: [AppComponent]
