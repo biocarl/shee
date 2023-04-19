@@ -19,8 +19,6 @@ import { PairPresenterComponent } from './pair/pair-presenter/pair-presenter.com
 import { PairClientComponent } from './pair/pair-client/pair-client.component';
 import { BrainstormingClientComponent } from './brainstorming/brainstorming-client/brainstorming-client.component';
 import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-presenter/brainstorming-presenter.component';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {ClipboardModule} from "@angular/cdk/clipboard";
 
 @NgModule({
   declarations: [
@@ -45,9 +43,7 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
-    DragDropModule,
-    ClipboardModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
