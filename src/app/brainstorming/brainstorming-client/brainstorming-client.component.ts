@@ -34,6 +34,8 @@ export class BrainstormingClientComponent implements ClientView {
   is_sent: boolean = false;
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
+  counter: number = 0;
+  characterCounterStyle: any = '';
 
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
@@ -92,8 +94,14 @@ export class BrainstormingClientComponent implements ClientView {
   //   this.bgColor = colors[color];
   // }
 
-  counter: number = 0;
-  updateCharacterCount() {
-    this.counter = this.idea_text.length
+
+  updateCharacterCount(event: any) {
+    const element = event.target as HTMLElement;
+    this.characterCounterStyle = getComputedStyle(element).getPropertyValue('color');
+    this.counter = event.target.value.length;
+
+    if (this.counter >= 280) {
+      this.characterCounterStyle = 'color: red;';
+    }
   }
 }

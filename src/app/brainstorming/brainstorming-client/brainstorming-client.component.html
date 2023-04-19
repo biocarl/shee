@@ -16,37 +16,41 @@
 
 
       <div id="textarea-container">
-        <textarea id="user-input" [style.background-color]="bgColor" type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea" (keyup)="updateCharacterCount()" [maxlength]="280"></textarea>
+        <textarea id="user-input" [style.background-color]="bgColor" type="text" [(ngModel)]="idea_text"
+                  placeholder="Enter text" name="idea" (keyup)="updateCharacterCount($event)"
+                  [maxlength]="280"></textarea>
+        <div id="character-counter" *ngIf="counter<280;else redfont" >{{ counter }}/280</div>
+
+        <ng-template #redfont> <div class="character-red-maxvalue" >{{ counter }}/280</div> </ng-template>
+
+
+        <button type="button" (click)="sendIdea()" id="send-button">Send</button>
+
+        <div class="color-selection">
+          <input type="radio" name="color" id="red" value="red"/>
+          <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
+
+          <input type="radio" name="color" id="green"/>
+          <label for="green"><span (click)="changeColor($event)" class="green"></span></label>
+
+          <input type="radio" name="color" id="yellow"/>
+          <label for="yellow"><span (click)="changeColor($event)" class="yellow"></span></label>
+
+          <input type="radio" name="color" id="olive"/>
+          <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
+
+          <input type="radio" name="color" id="orange"/>
+          <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
+
+          <input type="radio" name="color" id="blue"/>
+          <label for="blue"><span (click)="changeColor($event)" class="blue"></span></label>
+
+          <input type="radio" name="color" id="violet"/>
+          <label for="violet"><span (click)="changeColor($event)" class="violet"></span></label>
+
+        </div>
       </div>
-      <div id="character-counter">{{ counter }}/280</div>
 
-
-
-      <button type="button" (click)="sendIdea()" id="send-button">Send</button>
-
-      <div class="color-selection">
-        <input type="radio" name="color" id="red" value="red"/>
-        <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
-
-        <input type="radio" name="color" id="green"/>
-        <label for="green"><span (click)="changeColor($event)" class="green"></span></label>
-
-        <input type="radio" name="color" id="yellow"/>
-        <label for="yellow"><span (click)="changeColor($event)" class="yellow"></span></label>
-
-        <input type="radio" name="color" id="olive"/>
-        <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
-
-        <input type="radio" name="color" id="orange"/>
-        <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
-
-        <input type="radio" name="color" id="blue"/>
-        <label for="blue"><span (click)="changeColor($event)" class="blue"></span></label>
-
-        <input type="radio" name="color" id="violet"/>
-        <label for="violet"><span (click)="changeColor($event)" class="violet"></span></label>
-
-      </div>
     </form>
   </ng-template>
 </div>
