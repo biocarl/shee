@@ -13,4 +13,5 @@ export interface PresenterMessage {
    * @type {string}
    */
   question_id: string; // TODO Refactor to questionID
+  client_only?: boolean;
 }

@@ -4,7 +4,7 @@ import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
 import {QueueService} from "../../queue.service";
 import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subscribe-response";
-import {BrainstormingPresenterStartVotingRequest} from "../brainstorming-presenter-start-voting-request";
+import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
 import {v4 as uuidv4} from "uuid";
 import {CdkDragStart} from '@angular/cdk/drag-drop';
 
@@ -145,7 +145,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     const selectedOption = votingOption.value;
     let singleChoice: boolean = selectedOption === 'oneVote';
     let finalIdeas: string[] = this.ideaEvent.ideas.filter(idea => idea !== "");
-    const payload: BrainstormingPresenterStartVotingRequest = {
+    const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
@@ -161,13 +161,14 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
 
   stopVoting() {
     if (!this.ideaEvent?.question_id) return
-    const payload: BrainstormingPresenterStartVotingRequest = {
+    const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       ideas: this.ideaEvent.ideas,
       question: this.ideaEvent?.question,
       question_id: this.ideaEvent?.question_id,
       single_choice: false,
-      voting_in_progress: false
+      voting_in_progress: false,
+      client_only: true
     };
     this.voting_open = false;
     clearInterval(this.timerInterval)
