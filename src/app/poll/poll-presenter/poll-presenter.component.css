@@ -12,6 +12,7 @@ h3 {
   margin-bottom: 3em;
   letter-spacing: 0.15em;
   text-shadow: 1px 1px black;
+  font-size: 20px;
 }
 
 h4{
@@ -29,8 +30,7 @@ h4{
 }
 .bar-label {
   margin-bottom: 5px;
-  color: #ABABAB;
-;
+  color: var(--textColor_dark);;
 }
 .bar-container {
   background-color: rgba(244,255,237,0.36);
