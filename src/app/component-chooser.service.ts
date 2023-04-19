@@ -13,10 +13,23 @@ import {DecisionChartPresenterComponent} from "./decision-chart/decision-chart-p
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * The ComponentChooserService is responsible for dynamically injecting components into a given view container depending on the interaction and type.
+ * @class
+ * @Injectable
+ */
 export class ComponentChooserService {
-
   constructor() { }
 
+  /**
+   * Injects a component into the given view container depending on the interaction and type.
+   * @param {ViewContainerRef} viewContainerRef The reference to the view container where the component should be injected.
+   * @param {string} interaction The interaction id for the component to be injected.
+   * @param {string} type The type of the component, can be "client" or "presenter".
+   * @param {PresenterMessage} event The presenter message containing data to be passed into the component.
+   * @public
+   * @returns {void}
+   */
   injectComponent(viewContainerRef: ViewContainerRef, interaction : string, type: string, event: PresenterMessage) {
     if(!viewContainerRef){
       console.error("Error: Container ref is empty");

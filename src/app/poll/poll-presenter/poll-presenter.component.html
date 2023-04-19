@@ -12,9 +12,9 @@
 
     <h3>{{questionEvent.question}}</h3>
     <!--Show answers-->
-    <ul *ngIf="questionEvent && questionResponses">
+    <ul *ngIf="questionEvent && accumulatedClientChoices">
       <li *ngFor="let answer of questionEvent.answers; let i = index;">
-        <span class="badge" style="flex: 1">{{questionResponses[i]}}</span>
+        <span class="badge" style="flex: 1">{{accumulatedClientChoices[i]}}</span>
         <span style="flex: 8"> {{answer}} </span>
       </li>
     </ul>

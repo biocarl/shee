@@ -14,8 +14,16 @@ import {ClientQuestionRequest} from "../client-question-request";
   templateUrl: './presenter.component.html',
   styleUrls: ['./presenter.component.css']
 })
+/**
+ * The presenter root component displays a specific client component based on the presenter's messages which
+ * are forwarded from the query parameters within this component.
+ * @component
+ * @implements {OnInit}
+ */
 export class PresenterComponent implements OnInit {
   groupName: string | null = "";
+
+  // The anchor directive used to dynamically inject components into the view
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
 
   constructor(
@@ -24,9 +32,7 @@ export class PresenterComponent implements OnInit {
     private groupService: GroupService,
     private queryToEventService: QueryToEventService,
     private componentChooserService: ComponentChooserService
-  ) {
-  }
-
+  ) {}
 
   ngOnInit(): void {
     // Retrieve route parameter /:group from url
@@ -37,7 +43,7 @@ export class PresenterComponent implements OnInit {
       }
     });
 
-    // Listen to all presenter events for determining which component to choose
+    // Listen to all presenter events for determining which component to choose based on interactionId
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
         this.queueService.currentPresenterMessage = presenterMessage;
