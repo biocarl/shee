@@ -122,7 +122,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
 
   hideIdea(i:number) {
     if (i > -1) {
-      this.ideaResponses.splice(i, 1,"");
+      this.ideaEvent?.ideas.splice(i, 1,"");
     }
   }
 

@@ -21,18 +21,19 @@
   <button type="button" (click)="startVoting()">Start Voting</button>
 </form>
 <button *ngIf="voting_open" type="button" (click)="stopVoting()">StopVoting</button>
-
-<div class="boundary columns is-multiline is-align-content-flex-start">
+<br>
+<br>
+<div class="boundary columns is-multiline is-align-content-flex-start" *ngIf="ideaEvent">
   <div class="post-it m-4 p-0 column is-one-fifth"
        (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
        cdkDrag
-       *ngFor="let idea of ideaEvent?.ideas; let i=index; trackBy: trackByIndex"
+       *ngFor="let idea of ideaEvent.ideas; let i=index; trackBy: trackByIndex"
        cdkDragBoundary=".boundary"
-       [style.visibility]="ideaResponses[i] === '' ? 'hidden' : 'visible'">
+       [style.visibility]="ideaEvent.ideas && ideaEvent.ideas[i] === '' ? 'hidden' : 'visible'">
     <div class="sticky"
          [ngStyle]="{'background': chosenColor}"
          > <span>{{idea}}</span>
-      <span *ngIf="votes"> {{votes[i]}}</span>
+      <div *ngIf="votes"> 👍{{votes[i]}}</div>
     </div>
     <div class="icon-container">
       <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea" (click)="showCopiedMessage(copyMessage)"></i></a>
