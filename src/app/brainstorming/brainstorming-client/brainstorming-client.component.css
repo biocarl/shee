@@ -3,29 +3,37 @@
   position: fixed;
   width: var(--user-input-width);
   height: var(--user-input-height);
-  left: 50%; /* 50% vom linken Rand */
-  top: 55%; /* 50% vom oberen Rand */
-  transform: translate(-50%, -50%); /* Verschieben des Elements um 50% der eigenen Breite und Höhe */
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
   background-color: #FFD707FF;
   justify-content: center;
-  font-family: 'Baloo Bhaina', serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 38px;
-  flex-wrap: wrap;
-  color: black;
-  padding:20px;
+  font-size: 15px;
+  word-wrap: break-word;
+  color: rgb(0,0,0,0.87);
+  padding:30px 13px 28px 13px;
   display: flex;
   text-align: center;
   border-bottom-right-radius: 60px 5px;
+  line-height: 1.5;
+  font-weight: 550;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
 }
 
 #textarea-container:after {
   content: "";
   position:absolute;
   z-index: -1;
-  right:-0px; bottom:5px;
+  right:-0px; bottom:28px;
   width:200px;
   height: 25px;
   background: rgba(0, 0, 0, 0.2);
@@ -36,6 +44,7 @@
 #textarea-container{
   background-color: transparent;
 }
+
 #cute-sheep{
   position: absolute;
   width: 341px;
@@ -57,7 +66,7 @@
   font-style: normal;
   left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
   top: calc(55% + 349px / 2 + 10px); /* 60% plus die Hälfte der Textfeldhöhe */
-  color: var(--textColor_dark);
+  color: var(--buttonTextColor_dark);
 }
 
 #toast-sent{
@@ -78,7 +87,7 @@
   align-items: center;
   text-align: center;
   justify-content: center;
-  color: var(--textColor_dark);
+  color: var(--buttonTextColor_dark);
 }
 
 #question{
@@ -130,46 +139,6 @@ input[type=radio]:checked + span {
   transform: scale(1.25);
 }
 
-input[type=radio]:checked + span.red {
-  border: 2px solid #711313;
-}
-
-input[type=radio]:checked + span.orange {
-  border: 2px solid #873a08;
-}
-
-input[type=radio]:checked + span.yellow {
-  border: 2px solid #816102;
-}
-
-input[type=radio]:checked + span.olive {
-  border: 2px solid #505a0b;
-}
-
-input[type=radio]:checked + span.green {
-  border: 2px solid #0e4e1d;
-}
-
-input[type=radio]:checked + span.teal {
-  border: 2px solid #003633;
-}
-
-input[type=radio]:checked + span.blue {
-  border: 2px solid #103f62;
-}
-
-input[type=radio]:checked + span.violet {
-  border: 2px solid #321a64;
-}
-
-input[type=radio]:checked + span.purple {
-  border: 2px solid #501962;
-}
-
-input[type=radio]:checked + span.pink {
-  border: 2px solid #851554;
-}
-
 span {
   display: inline-block;
   width: 30px;
@@ -177,14 +146,19 @@ span {
   margin-right: 10px;
   margin-bottom: 10px;
   cursor: pointer;
+  transition: transform 0.1s ease-in-out;
 }
 
 span:hover {
   transform: scale(1.25);
 }
 
+span.active {
+  transform: scale(1.25);
+}
+
 span.red {
-  background: #db2828;
+  background: #fc3030;
 }
 
 span.orange {
@@ -212,7 +186,7 @@ span.blue {
 }
 
 span.violet {
-  background: #6435c9;
+  background: #7e43fd;
 }
 
 span.purple {
@@ -232,7 +206,7 @@ textarea{
   justify-content: center;
   position: absolute;
   width: 100%;
-  top: calc(39% - (var(--user-input-height) / 2)); /* Adjust the top value to position it above the textarea */
+  top: calc(29% - (var(--user-input-height) / 2)); /* Adjust the top value to position it above the textarea */
 }
 
 #character-counter {

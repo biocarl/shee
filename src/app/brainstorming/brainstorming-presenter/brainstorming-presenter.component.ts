@@ -15,8 +15,8 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
 export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   ideaResponses : string[] = [];
+  ideaColors: string[] = [];
   maxZIndex = 20;
-  chosenColor: string = "#FFD707FF";
 
   constructor(private queueService: QueueService) {
   }
@@ -37,6 +37,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id) {
         this.ideaResponses.push(brainstormingSubscriptionEvent.idea_text);
+        this.ideaColors.push(brainstormingSubscriptionEvent.stickyColor);
       }
     });
   }
@@ -55,7 +56,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     const maxHeight = element.clientHeight;
 
     let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 36; // Set a maximum font size
+    let maxFontSize = 50; // Set a maximum font size
     let fontSize = maxFontSize;
 
     // Apply the maximum font size

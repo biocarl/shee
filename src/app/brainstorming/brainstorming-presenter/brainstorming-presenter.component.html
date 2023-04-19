@@ -10,11 +10,12 @@
        cdkDragBoundary=".boundary"
        [style.visibility]="ideaResponses[i] === '' ? 'hidden' : 'visible'">
     <div class="sticky"
-         [ngStyle]="{'background': chosenColor}"
-         >{{idea}}
+         [style.background]="ideaColors[i]"
+    >{{idea}}
     </div>
     <div class="icon-container">
-      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea" (click)="showCopiedMessage(copyMessage)"></i></a>
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea"
+            (click)="showCopiedMessage(copyMessage)"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
       <span class="copied-message" #copyMessage>Copied to Clipboard</span>
     </div>

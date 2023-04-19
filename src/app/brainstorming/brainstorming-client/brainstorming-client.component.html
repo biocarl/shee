@@ -15,7 +15,7 @@
            height="286" width="284">
 
 
-      <div id="textarea-container">
+      <div id="textarea-container" class="is-flex">
         <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
                   [style.background-color]="bgColor"
                   [(ngModel)]="idea_text"
@@ -25,25 +25,25 @@
         <button type="button" (click)="sendIdea()" id="send-button">Send</button>
 
         <div class="color-selection">
-          <input type="radio" name="color" id="red" value="red"/>
+          <input type="radio" id="red" value="red"/>
           <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
 
-          <input type="radio" name="color" id="green"/>
+          <input type="radio" id="green"/>
           <label for="green"><span (click)="changeColor($event)" class="green"></span></label>
 
-          <input type="radio" name="color" id="yellow"/>
-          <label for="yellow"><span (click)="changeColor($event)" class="yellow"></span></label>
+          <input type="radio" id="yellow"/>
+          <label for="yellow"><span (click)="changeColor($event)" class="yellow active"></span></label>
 
-          <input type="radio" name="color" id="olive"/>
+          <input type="radio" id="olive"/>
           <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
 
-          <input type="radio" name="color" id="orange"/>
+          <input type="radio" id="orange"/>
           <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
 
-          <input type="radio" name="color" id="blue"/>
+          <input type="radio" id="blue"/>
           <label for="blue"><span (click)="changeColor($event)" class="blue"></span></label>
 
-          <input type="radio" name="color" id="violet"/>
+          <input type="radio" id="violet"/>
           <label for="violet"><span (click)="changeColor($event)" class="violet"></span></label>
 
         </div>

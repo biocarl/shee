@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewChecked, Component} from '@angular/core';
 import {ClientView} from "../../client-view";
 import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
@@ -14,7 +14,7 @@ import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish
   templateUrl: './brainstorming-client.component.html',
   styleUrls: ['./brainstorming-client.component.css']
 })
-export class BrainstormingClientComponent implements ClientView {
+export class BrainstormingClientComponent implements ClientView,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   openForIdeas: boolean = true;
   idea_text: string = "";
@@ -22,7 +22,14 @@ export class BrainstormingClientComponent implements ClientView {
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
 
-  constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
+  constructor(private groupService: GroupService,
+              private queueService: QueueService,
+              private participantService: ParticipantService) {
+  }
+
+  ngAfterViewChecked(): void {
+    const sticky = document.querySelector('#user-input');
+    this.resizeTextToFitContainer(sticky as HTMLElement);
   }
 
   sendIdea() {
@@ -52,6 +59,48 @@ export class BrainstormingClientComponent implements ClientView {
 
   changeColor(event : MouseEvent) {
     const element = event.target as HTMLElement;
+    const colorSpans = document.querySelectorAll('.color-selection span') as NodeListOf<HTMLElement>;
+
+    // Loop over all color spans to remove the 'active' class from their classList
+    colorSpans.forEach(span => {
+      if (span !== element) {
+        span.classList.remove('active');
+      }
+    });
+
+    // Add the 'active' class to the clicked element's classList
+    element.classList.add('active');
     this.bgColor = getComputedStyle(element).getPropertyValue('background-color');
+    this.stickyColor = getComputedStyle(element).getPropertyValue('background-color');
+  }
+
+  resizeTextToFitContainer(element: HTMLElement) {
+    const maxWidth = element.clientWidth;
+    const maxHeight = element.clientHeight;
+
+    let minFontSize = 5; // Set a minimum font size
+    let maxFontSize = 50; // Set a maximum font size
+    let fontSize = maxFontSize;
+
+    // Apply the maximum font size
+    element.style.fontSize = fontSize + 'px';
+
+    // Reduce the font size until the content fits or reaches the minimum size
+    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
+      fontSize--;
+      element.style.fontSize = fontSize + 'px';
+    }
+
+    // Increase the font size until the content overflows or reaches the maximum size
+    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+      fontSize++;
+      element.style.fontSize = fontSize + 'px';
+
+      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+        fontSize--;
+        element.style.fontSize = fontSize + 'px';
+        break;
+      }
+    }
   }
 }
