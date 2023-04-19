@@ -32,11 +32,12 @@
        [style.visibility]="ideaEvent.ideas && ideaEvent.ideas[i] === '' ? 'hidden' : 'visible'">
     <div class="sticky"
          [ngStyle]="{'background': chosenColor}"
-         > <span>{{idea}}</span>
+    ><span>{{idea}}</span>
       <div *ngIf="votes"> 👍{{votes[i]}}</div>
     </div>
     <div class="icon-container">
-      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea" (click)="showCopiedMessage(copyMessage)"></i></a>
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea"
+            (click)="showCopiedMessage(copyMessage)"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
       <span class="copied-message" #copyMessage>Copied to Clipboard</span>
     </div>

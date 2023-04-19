@@ -14,7 +14,8 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css']
 })
-export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
+
+export class BrainstormingPresenterComponent implements PresenterView, OnInit, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   voting_open: boolean = false;
   votes?: number[];
@@ -113,16 +114,16 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     }
 
     if (tapeElement) {
-      tapeElement.style.zIndex = (this.maxZIndex +1).toString();
+      tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
     }
     if (iconsElement) {
-      iconsElement.style.zIndex = (this.maxZIndex +1).toString();
+      iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
     }
   }
 
-  hideIdea(i:number) {
+  hideIdea(i: number) {
     if (i > -1) {
-      this.ideaEvent?.ideas.splice(i, 1,"");
+      this.ideaEvent?.ideas.splice(i, 1, "");
     }
   }
 
@@ -136,6 +137,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       element.style.opacity = '0';
     }, 1200);
   }
+
   startVoting(): void {
     if (!this.ideaEvent?.question_id) return
     const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
