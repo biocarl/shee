@@ -1,9 +1,24 @@
+<script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
 <div>
-  <div>{{ideaEvent?.question}}</div>
-  <ul>
-    <li *ngFor="let idea of ideaResponses">
-      {{idea}}
-    </li>
-  </ul>
-  <button (click)="stopBrainstorming()"> Stop brainstorming</button>
+  <button class="button mb-3" (click)="stopBrainstorming()"> Stop brainstorming</button>
+</div>
+<div class="boundary columns is-multiline is-align-content-flex-start">
+  <div class="post-it m-4 p-0 column is-one-fifth"
+       (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
+       cdkDrag
+       *ngFor="let idea of ideaResponses; let i=index; trackBy: trackByIndex"
+       cdkDragBoundary=".boundary"
+       [style.visibility]="ideaResponses[i] === '' ? 'hidden' : 'visible'">
+    <div class="sticky"
+         [ngStyle]="{'background': chosenColor}"
+         >{{idea}}
+    </div>
+    <div class="icon-container">
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea" (click)="showCopiedMessage(copyMessage)"></i></a>
+      <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
+      <span class="copied-message" #copyMessage>Copied to Clipboard</span>
+    </div>
+    <div class="top-tape"></div>
+    <div class="shadow"></div>
+  </div>
 </div>
