@@ -1,12 +1,9 @@
-<div *ngIf="votingEvent">
-
-  <div *ngIf="!this.votingEvent?.voting_in_progress; else openVoting">
-    <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
-      <div>
-        Brainstorming has ended
-      </div>
+<div *ngIf="votingEvent?.voting_in_progress===undefined; ">
+  <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
+    <div>
+      Brainstorming has ended
     </div>
-
+  </div>
   <ng-template #showTextarea>
     <div *ngIf="!valid_idea_text">No empty ideas!</div>
     <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
@@ -20,6 +17,13 @@
     </form>
 
   </ng-template>
+
+</div>
+
+<div *ngIf="votingEvent">
+
+  <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
+    Voting has been stopped
 </div>
 
 <ng-template #openVoting>
