@@ -1,5 +1,5 @@
 
-#user-input{
+#user-input,#textarea-container{
   position: fixed;
   width: var(--user-input-width);
   height: var(--user-input-height);
@@ -18,8 +18,24 @@
   padding:20px;
   display: flex;
   text-align: center;
+  border-bottom-right-radius: 60px 5px;
 }
 
+#textarea-container:after {
+  content: "";
+  position:absolute;
+  z-index: -1;
+  right:-0px; bottom:5px;
+  width:200px;
+  height: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow:2px 15px 5px rgba(0, 0, 0, 0.40);
+  transform: matrix(-1, -0.1, 0, 1, 0, 0);
+}
+
+#textarea-container{
+  background-color: transparent;
+}
 #cute-sheep{
   position: absolute;
   width: 341px;
@@ -216,18 +232,13 @@ textarea{
   justify-content: center;
   position: absolute;
   width: 100%;
-  top: calc(55% - (var(--user-input-height) / 2  + 10)); /* Adjust the top value to position it above the textarea */
-}
-
-.textarea-container {
-  position: absolute;
-  display: inline-block;
+  top: calc(39% - (var(--user-input-height) / 2)); /* Adjust the top value to position it above the textarea */
 }
 
 #character-counter {
   position: absolute;
-  bottom: 10px;
-  right: 20px;
+  bottom: -15%;
+  right: 40%;
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
