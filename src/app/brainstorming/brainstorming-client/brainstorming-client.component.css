@@ -223,4 +223,23 @@ textarea{
   top: calc(55% - (var(--user-input-height) / 2  + 10)); /* Adjust the top value to position it above the textarea */
 }
 
+.textarea-container {
+  position: absolute;
+  display: inline-block;
+}
+
+#character-counter {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
 

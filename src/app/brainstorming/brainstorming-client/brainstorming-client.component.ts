@@ -91,4 +91,9 @@ export class BrainstormingClientComponent implements ClientView {
   //   const colors = this.getColors();
   //   this.bgColor = colors[color];
   // }
+
+  counter: number = 0;
+  updateCharacterCount() {
+    this.counter = this.idea_text.length
+  }
 }
