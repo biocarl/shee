@@ -21,6 +21,7 @@ export class BrainstormingClientComponent implements ClientView {
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = true;
   idea_text: string = "";
+  valid_idea_text: boolean = true;
   is_sent: boolean = false;
   is_voted: boolean = false;
   multi_vote_check: boolean [];
@@ -54,6 +55,15 @@ export class BrainstormingClientComponent implements ClientView {
   sendIdea() {
 
     if (!this.ideaEvent?.question_id) return
+    if (this.idea_text == "") {
+      this.valid_idea_text = false
+      setTimeout(() => {
+        this.valid_idea_text = true
+      }, 1000)
+      return
+    } else {
+      this.valid_idea_text = true;
+    }
 
     const idea: BrainstormingClientPublishRequest = {
       interaction: "brainstorming",
