@@ -1,28 +1,45 @@
-<div>
-  <div *ngIf="ideaEvent">
-    <div style="font-size: 3rem; text-align: center" *ngIf="ideaEvent.timer !== undefined">
-      <div *ngIf="ideaEvent.timer > 0; else timeUp">
-        Timer: {{ ideaEvent.timer }}
-      </div>
+<script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
+<div *ngIf="ideaEvent">
+  <div style="font-size: 3rem; text-align: center" *ngIf="ideaEvent.timer !== undefined">
+    <div *ngIf="ideaEvent.timer > 0; else timeUp">
+      Timer: {{ ideaEvent.timer }}
     </div>
-    <ng-template #timeUp>Time is up!</ng-template>
   </div>
-  <div>{{ideaEvent?.question}}</div>
-  <ul>
-    <li *ngFor="let idea of ideaEvent?.ideas; let i = index;">
-      <span>{{idea}}</span>
+  <ng-template #timeUp>Time is up!</ng-template>
+</div>
+<div>{{ideaEvent?.question}}</div>
+<div>
+  <button class="button mb-3" (click)="stopBrainstorming()"> Stop brainstorming</button>
+</div>
+<form *ngIf="!voting_open">
+  <select id="votingOption">
+    <option value="oneVote">Each student has one vote</option>
+    <option value="manyVotes">Each student has many votes</option>
+  </select>
+  <label>Enter the duration of the timer in sec (Optional)</label>
+  <input type="number" min="1" [(ngModel)]="timerLength" placeholder="Enter Timer in sec" name="timer">
+  <button type="button" (click)="startVoting()">Start Voting</button>
+</form>
+<button *ngIf="voting_open" type="button" (click)="stopVoting()">StopVoting</button>
+
+<div class="boundary columns is-multiline is-align-content-flex-start">
+  <div class="post-it m-4 p-0 column is-one-fifth"
+       (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
+       cdkDrag
+       *ngFor="let idea of ideaEvent?.ideas; let i=index; trackBy: trackByIndex"
+       cdkDragBoundary=".boundary"
+       [style.visibility]="ideaResponses[i] === '' ? 'hidden' : 'visible'">
+    <div class="sticky"
+         [ngStyle]="{'background': chosenColor}"
+         > <span>{{idea}}</span>
       <span *ngIf="votes"> {{votes[i]}}</span>
-    </li>
-  </ul>
-  <button *ngIf="!voting_open" (click)="stopBrainstorming()"> Stop brainstorming</button>
-  <form *ngIf="!voting_open">
-    <select id="votingOption">
-      <option value="oneVote">Each student has one vote</option>
-      <option value="manyVotes">Each student has many votes</option>
-    </select>
-    <label>Enter the duration of the timer in sec (Optional)</label>
-    <input type="number" min="1" [(ngModel)]="timerLength" placeholder="Enter Timer in sec" name="timer">
-    <button type="button" (click)="startVoting()">Start Voting</button>
-  </form>
-  <button *ngIf="voting_open" type="button" (click)="stopVoting()">StopVoting</button>
+    </div>
+    <div class="icon-container">
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea" (click)="showCopiedMessage(copyMessage)"></i></a>
+      <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
+      <span class="copied-message" #copyMessage>Copied to Clipboard</span>
+    </div>
+    <div class="top-tape"></div>
+    <div class="shadow"></div>
+  </div>
 </div>

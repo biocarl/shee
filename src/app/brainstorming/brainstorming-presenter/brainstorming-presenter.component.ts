@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
@@ -6,6 +6,7 @@ import {QueueService} from "../../queue.service";
 import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subscribe-response";
 import {BrainstormingPresenterStartVotingRequest} from "../brainstorming-presenter-start-voting-request";
 import {v4 as uuidv4} from "uuid";
+import {CdkDragStart} from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -13,13 +14,23 @@ import {v4 as uuidv4} from "uuid";
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css']
 })
-export class BrainstormingPresenterComponent implements PresenterView, OnInit {
+export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   voting_open: boolean = false;
   votes?: number[];
   timerLength?: number;
+  maxZIndex = 20;
+  chosenColor: string = "#FFD707FF";
 
   constructor(private queueService: QueueService) {
+  }
+
+  ngAfterViewChecked(): void {
+    const stickies = document.querySelectorAll('.sticky');
+
+    stickies.forEach(sticky => {
+      this.resizeTextToFitContainer(sticky as HTMLElement);
+    });
   }
 
   ngOnInit(): void {
@@ -54,6 +65,77 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
      */
   }
 
+  resizeTextToFitContainer(element: HTMLElement) {
+    const maxWidth = element.clientWidth;
+    const maxHeight = element.clientHeight;
+
+    let minFontSize = 5; // Set a minimum font size
+    let maxFontSize = 36; // Set a maximum font size
+    let fontSize = maxFontSize;
+
+    // Apply the maximum font size
+    element.style.fontSize = fontSize + 'px';
+
+    // Reduce the font size until the content fits or reaches the minimum size
+    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
+      fontSize--;
+      element.style.fontSize = fontSize + 'px';
+    }
+
+    // Increase the font size until the content overflows or reaches the maximum size
+    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+      fontSize++;
+      element.style.fontSize = fontSize + 'px';
+
+      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+        fontSize--;
+        element.style.fontSize = fontSize + 'px';
+        break;
+      }
+    }
+  }
+
+  moveToTopLayerWhenDragged(event: CdkDragStart) {
+    const element = event.source.getRootElement();
+    const stickyElement = element.querySelector('.sticky') as HTMLElement;
+    const shadowElement = element.querySelector('.shadow') as HTMLElement;
+    const postItElement = stickyElement.parentElement;
+    const tapeElement = element.querySelector('.top-tape') as HTMLElement;
+    const iconsElement = element.querySelector('.icon-container') as HTMLElement;
+
+    if (stickyElement && stickyElement.parentElement && postItElement) {
+      postItElement.style.zIndex = (++this.maxZIndex).toString();
+      stickyElement.style.zIndex = (++this.maxZIndex).toString();
+    }
+
+    if (shadowElement) {
+      shadowElement.style.zIndex = (this.maxZIndex - 1).toString();
+    }
+
+    if (tapeElement) {
+      tapeElement.style.zIndex = (this.maxZIndex +1).toString();
+    }
+    if (iconsElement) {
+      iconsElement.style.zIndex = (this.maxZIndex +1).toString();
+    }
+  }
+
+  hideIdea(i:number) {
+    if (i > -1) {
+      this.ideaResponses.splice(i, 1,"");
+    }
+  }
+
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+  showCopiedMessage(element: HTMLElement) {
+    element.style.opacity = '1';
+    setTimeout(() => {
+      element.style.opacity = '0';
+    }, 1200);
+  }
   startVoting(): void {
     if (!this.ideaEvent?.question_id) return
     const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
@@ -101,4 +183,3 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit {
     }
   }
 }
-
