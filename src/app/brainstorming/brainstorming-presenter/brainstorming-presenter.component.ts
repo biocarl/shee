@@ -114,4 +114,11 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   trackByIndex(index: number): number {
     return index;
   }
+
+  showCopiedMessage(element: HTMLElement) {
+    element.style.opacity = '1';
+    setTimeout(() => {
+      element.style.opacity = '0';
+    }, 1200);
+  }
 }

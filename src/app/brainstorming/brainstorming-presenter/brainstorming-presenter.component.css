@@ -99,3 +99,18 @@
   transform: scale(1.2);
 }
 
+.copied-message {
+  position: absolute;
+  background-color: #f8f9fa;
+  padding: 0.25em 0.5em;
+  border: 1px solid #ced4da;
+  border-radius: 0.25em;
+  font-size: 0.75em;
+  top: -1.5em;
+  left: 47%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  display: inline-block;
+}
