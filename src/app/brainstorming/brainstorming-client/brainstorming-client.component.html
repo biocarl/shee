@@ -16,13 +16,11 @@
 
 
       <div id="textarea-container">
-        <textarea id="user-input" [style.background-color]="bgColor" type="text" [(ngModel)]="idea_text"
-                  placeholder="Enter text" name="idea" (keyup)="updateCharacterCount($event)"
+        <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
+                  [style.background-color]="bgColor"
+                  [(ngModel)]="idea_text"
                   [maxlength]="280"></textarea>
-        <div id="character-counter" *ngIf="counter<280;else redfont" >{{ counter }}/280</div>
-
-        <ng-template #redfont> <div class="character-red-maxvalue" >{{ counter }}/280</div> </ng-template>
-
+        <div id="character-counter" [style.color]="idea_text.length < 280 ? 'black' : 'red'" >{{ idea_text.length }}/280</div>
 
         <button type="button" (click)="sendIdea()" id="send-button">Send</button>
 
@@ -50,7 +48,6 @@
 
         </div>
       </div>
-
     </form>
   </ng-template>
 </div>

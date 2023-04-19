@@ -8,19 +8,6 @@ import {ParticipantService} from "../../participant.service";
 import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish-request";
 
 
-interface Colors {
-  [key: string]: string;
-  red: string;
-  orange: string;
-  yellow: string;
-  olive: string;
-  green: string;
-  teal: string;
-  blue: string;
-  violet: string;
-  purple: string;
-  pink: string;
-}
 
 @Component({
   selector: 'app-brainstorming-client',
@@ -34,15 +21,11 @@ export class BrainstormingClientComponent implements ClientView {
   is_sent: boolean = false;
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
-  counter: number = 0;
-  characterCounterStyle: any = '';
-
 
   constructor(private groupService: GroupService, private queueService: QueueService, private participantService: ParticipantService) {
   }
 
   sendIdea() {
-
     if (!this.ideaEvent?.question_id) return
 
     const idea: BrainstormingClientPublishRequest = {
@@ -64,44 +47,11 @@ export class BrainstormingClientComponent implements ClientView {
   }
 
   initializeComponent(data: PresenterMessage) {
-
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
   }
-
-  getColors(): Colors {
-    return {
-      red: '#db2828',
-      orange: '#f2711c',
-      yellow: '#fbbd08',
-      olive: '#b5cc18',
-      green: '#21ba45',
-      teal: '#00b5ad',
-      blue: '#2185d0',
-      violet: '#6435c9',
-      purple: '#a333c8',
-      pink: '#e03997'
-    };
-  }
-
 
   changeColor(event : MouseEvent) {
     const element = event.target as HTMLElement;
     this.bgColor = getComputedStyle(element).getPropertyValue('background-color');
-  }
-
-  // changeColor(color: string) {
-  //   const colors = this.getColors();
-  //   this.bgColor = colors[color];
-  // }
-
-
-  updateCharacterCount(event: any) {
-    const element = event.target as HTMLElement;
-    this.characterCounterStyle = getComputedStyle(element).getPropertyValue('color');
-    this.counter = event.target.value.length;
-
-    if (this.counter >= 280) {
-      this.characterCounterStyle = 'color: red;';
-    }
   }
 }
