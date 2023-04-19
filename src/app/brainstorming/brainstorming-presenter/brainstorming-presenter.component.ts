@@ -42,7 +42,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && !brainstormingSubscriptionEvent.idea_voting) {
         this.ideaEvent.ideas.push(brainstormingSubscriptionEvent.idea_text);
 
-      } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting) {
+      } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.voting_open) {
         this.votes = this.votes?.map((total, index) => total + brainstormingSubscriptionEvent.idea_voting[index])
       }
     });
@@ -167,7 +167,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       voting_in_progress: false
     };
     this.voting_open = false;
-    //TODO: implement the function from stopBrainstorming
+    this.queueService.publishMessageToPresenterChannel(payload);
   }
 
   private initializeTimer() {
