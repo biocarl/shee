@@ -36,6 +36,19 @@
       "description" : "This module you should use if participants need to pair with the presenter instance. The view generates the amount of currently active participants and generates a QR code which encodes a valid participant link.",
       "category" : "general",
       "parameters" : []
+    },
+    {
+      "name" : "brainstorming",
+      "description" : "This module best used if you want to get a quick brainstorming from the group about a specific topic.",
+      "category" : "general",
+      "parameters" : [
+        {
+          "name" : "question",
+          "description" : "The question asked",
+          "value" : "What do you think about pancakes with honey?",
+          "required" : "true"
+        }
+      ]
     }
   ]
 }
