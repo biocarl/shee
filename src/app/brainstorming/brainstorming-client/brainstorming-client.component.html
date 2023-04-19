@@ -20,7 +20,7 @@
                   [style.background-color]="bgColor"
                   [(ngModel)]="idea_text"
                   [maxlength]="280"></textarea>
-        <div id="character-counter" [style.color]="idea_text.length < 280 ? 'black' : 'red'" >{{ idea_text.length }}/280</div>
+        <div id="character-counter" [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'" >{{ idea_text.length }}/280</div>
 
         <button type="button" (click)="sendIdea()" id="send-button">Send</button>
 

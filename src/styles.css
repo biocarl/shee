@@ -2,7 +2,7 @@
 
 :root {
   --backgroundColor_light: #70AACD;
-  --backgroundColor_dark: #1D2331;
+  /*--backgroundColor_dark: #1D2331;*/
   --headerTextColor_light: #000000;
   --headerTextColor_dark: #FFFFFF;
   --titleColor_light: #000000;
