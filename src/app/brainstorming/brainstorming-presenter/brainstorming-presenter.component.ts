@@ -22,6 +22,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   timerLength?: number;
   maxZIndex = 20;
   chosenColor: string = "#FFD707FF";
+  private timerInterval: any;
 
   constructor(private queueService: QueueService) {
   }
@@ -169,17 +170,19 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       voting_in_progress: false
     };
     this.voting_open = false;
+    clearInterval(this.timerInterval)
+    this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
   }
 
   private initializeTimer() {
     if (this.ideaEvent?.timer) {
-      const timerInterval = setInterval(() => {
+      this.timerInterval = setInterval(() => {
         if (this.ideaEvent && this.ideaEvent.timer) {
           this.ideaEvent.timer -= 1;
           if (this.ideaEvent.timer <= 0) {
             this.stopVoting();
-            clearInterval(timerInterval);
+            clearInterval(this.timerInterval);
           }
         }
       }, 1000);
