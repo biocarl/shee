@@ -141,9 +141,10 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
     const selectedOption = votingOption.value;
     let singleChoice: boolean = selectedOption === 'oneVote';
+    let finalIdeas: string[] = this.ideaEvent.ideas.filter(idea => idea !== "");
     const payload: BrainstormingPresenterStartVotingRequest = {
       interaction: "brainstorming",
-      ideas: this.ideaEvent.ideas,
+      ideas: finalIdeas,
       question: this.ideaEvent?.question,
       question_id: uuidv4(),
       single_choice: singleChoice,
