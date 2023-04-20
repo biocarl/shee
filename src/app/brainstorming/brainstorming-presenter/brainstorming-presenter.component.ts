@@ -16,6 +16,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   ideaResponses : {text: string, color: string}[] = [];
   maxZIndex = 20;
+  stickyContentVisible: boolean = true;
 
   constructor(private queueService: QueueService) {
   }
@@ -119,5 +120,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     setTimeout(() => {
       element.style.opacity = '0';
     }, 1200);
+  }
+
+  toggleStickyVisibility(): void {
+    this.stickyContentVisible = !this.stickyContentVisible;
   }
 }
