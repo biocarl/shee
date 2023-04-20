@@ -13,8 +13,6 @@
   --menuColor_dark: #ABABAB;
   --buttonTextColor_light: black;
   --buttonTextColor_dark: white;
-  --user-input-width:250px; /*brainstorming user input textfield*/
-  --user-input-height:250px; /*brainstorming user input textfield*/
 }
 
 html {

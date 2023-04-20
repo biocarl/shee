@@ -22,7 +22,7 @@
                   [maxlength]="280"></textarea>
         <div id="character-counter" [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'" >{{ idea_text.length }}/280</div>
 
-        <button type="button" (click)="sendIdea()" id="send-button">Send</button>
+        <button type="button" (click)="sendIdea()" id="send-button" [disabled]="idea_text.trim().length===0">Send</button>
 
         <div class="color-selection">
           <input type="radio" id="red" value="red"/>

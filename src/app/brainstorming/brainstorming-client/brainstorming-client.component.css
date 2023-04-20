@@ -1,3 +1,7 @@
+:host{
+  --user-input-width:250px; /*brainstorming user input textfield*/
+  --user-input-height:250px; /*brainstorming user input textfield*/
+}
 
 #user-input,#textarea-container{
   position: fixed;
@@ -21,7 +25,7 @@
 
 textarea {
   border: none;
-  overflow: auto;
+  overflow: hidden;
   outline: none;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -67,6 +71,11 @@ textarea {
   left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
   top: calc(55% + 349px / 2 + 10px); /* 60% plus die Hälfte der Textfeldhöhe */
   color: var(--buttonTextColor_dark);
+  transition: opacity 0.1s ease-in-out;
+}
+
+#send-button:disabled {
+  opacity: 0;
 }
 
 #toast-sent{
