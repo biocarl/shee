@@ -1,21 +1,52 @@
-<div>
+<div *ngIf="votingEvent?.voting_in_progress===undefined; ">
   <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
     <div>
       Brainstorming has ended
     </div>
   </div>
-
-
-
   <ng-template #showTextarea>
+    <div *ngIf="!valid_idea_text">No empty ideas!</div>
     <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
     <div id="question">{{ideaEvent?.question}}</div>
     <form>
-
       <!-- TODO replace "false" with dark mode variable  -->
-      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf" >
-      <textarea  id="user-input"   type="text" [(ngModel)]="idea_text" placeholder="Enter text" name="idea"></textarea>
-      <button type="button" (click)="sendIdea()" id="send-button">Send</button>
+      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf">
+
+      <textarea type="text" id="user-input" [(ngModel)]="idea_text" placeholder="Enter text" name="idea"></textarea>
+      <button [disabled]="!valid_idea_text" id="send-button" type="button" (click)="sendIdea()">Send Idea</button>
     </form>
+
   </ng-template>
+
+</div>
+
+<div *ngIf="votingEvent">
+
+  <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
+    Voting has been stopped
+</div>
+
+<ng-template #openVoting>
+  <div *ngIf="votingEvent">
+    <div style="font-size: 3rem; text-align: center" *ngIf="votingEvent.timer !== undefined">
+      <div *ngIf="votingEvent.timer > 0; else timeUp">
+        Timer: {{ votingEvent.timer }}
+      </div>
+    </div>
+    <ng-template #timeUp>Time is up!</ng-template>
+
+
+    <div *ngIf="!is_voted; else voted">
+      <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
+
+        <button [disabled]="multi_vote_check[i]"
+                (click)="voteForIdea(i)"
+                class="votingButton">
+          {{idea}}
+        </button>
+      </div>
+    </div>
+    <ng-template #voted> Thanks for the vote!</ng-template>
+  </div>
+</ng-template>
 </div>
