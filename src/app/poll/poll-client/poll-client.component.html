@@ -1,7 +1,9 @@
 <div>
   <div *ngIf="participantHasVoted;else showQuestion" class="v-message">
     <div>
-      You voted
+      <span class="v-message-white">
+        You voted
+      </span>
     </div>
     <img src="assets/thx.png" alt="thx-emoji" width="100px">
   </div>
@@ -10,21 +12,20 @@
 
     <ng-template #selector>
       <div *ngIf="questionEvent">
-        <div style="font-size: 3rem; text-align: center" *ngIf="questionEvent.timer !== undefined">
+        <div class="timer" *ngIf="questionEvent.timer !== undefined">
           <div *ngIf="questionEvent.timer > 0; else timeUp">
             Timer: {{ questionEvent.timer }}
           </div>
         </div>
 
-        <ng-template #timeUp>Time is up!</ng-template>
-        <div class="v-questions content is-large"
+        <ng-template #timeUp><span class="timer">Time is up!</span></ng-template>
+        <div class="v-questions"
              [style.filter]="questionEvent.timer === 0 ? 'grayscale(100%)' : 'none'">
           <div
             *ngFor="let answer of questionEvent.answers; let i = index;"
             (click)="publishVoteForParticipant(i)"
             class="v-question"
-            [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'"
-            [style.border-top-width]='i != 0 ? "3px" : "0"'>
+            [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'">
     <span>
       {{answer}}
     </span>
