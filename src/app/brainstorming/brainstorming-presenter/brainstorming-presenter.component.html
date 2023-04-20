@@ -32,7 +32,10 @@
        [style.visibility]="ideaEvent.ideas && ideaEvent.ideas[i] === '' ? 'hidden' : 'visible'">
     <div class="sticky"
          [ngStyle]="{'background': chosenColor}"
-    ><span>{{idea}}</span>
+    ><span *ngIf="!isValidUrl(idea); else image">{{idea}}</span>
+      <ng-template #image>
+        <img src="{{idea}}" alt="img">
+      </ng-template>
       <div *ngIf="votes"> 👍{{votes[i]}}</div>
     </div>
     <div class="icon-container">
