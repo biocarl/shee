@@ -19,7 +19,8 @@ import {BrainstormingPresenterComponent} from "../brainstorming-presenter/brains
 export class BrainstormingClientComponent implements ClientView {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
-  openForIdeas: boolean = true;
+  openForIdeas: boolean = false;
+  isAfterBrainstorming: boolean = false;
   idea_text: string = "";
   valid_idea_text: boolean = true;
   is_sent: boolean = false;
@@ -85,6 +86,11 @@ export class BrainstormingClientComponent implements ClientView {
   initializeComponent(data: PresenterMessage) {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.votingEvent = data as BrainstormingPresenterVotingSubscribeResponse;
+    if (this.ideaEvent.openForIdeas) {
+      this.openForIdeas = true;
+    } else if (this.ideaEvent.openForIdeas === false)  {
+      this.isAfterBrainstorming = true;
+    }
     this.initializeTimer();
   }
 

@@ -4,5 +4,6 @@ export interface BrainstormingPresenterSubscribeResponse {
   ideas: string[],
   question: string,
   timer?: number,
-  voting_in_progress: boolean
+  voting_in_progress: boolean,
+  openForIdeas: boolean
 }

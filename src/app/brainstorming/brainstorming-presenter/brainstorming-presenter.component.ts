@@ -7,6 +7,7 @@ import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subs
 import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
 import {v4 as uuidv4} from "uuid";
 import {CdkDragStart} from '@angular/cdk/drag-drop';
+import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
 
 
 @Component({
@@ -18,6 +19,8 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
 export class BrainstormingPresenterComponent implements PresenterView, OnInit, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   voting_open: boolean = false;
+  openForideas: boolean = false;
+  isAfterBrainstorming : boolean = false;
   votes?: number[];
   timerLength?: number;
   maxZIndex = 20;
@@ -41,7 +44,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         console.error("Error: idea event was not populated by parent client component");
         return;
       }
-      if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && !brainstormingSubscriptionEvent.idea_voting) {
+      if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && !this.isAfterBrainstorming) {
         this.ideaEvent.ideas.push(brainstormingSubscriptionEvent.idea_text);
 
       } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.voting_open) {
@@ -57,14 +60,43 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     }
     if (this.ideaEvent.voting_in_progress) {
       this.voting_open = this.ideaEvent.voting_in_progress;
+      this.isAfterBrainstorming = true;
       this.votes = Array(this.ideaEvent.ideas.length).fill(0);
     }
     this.initializeTimer();
   }
 
+  startBrainstorming(): void {
+    if (!this.ideaEvent?.question_id) return
+    const payload: BrainstormingPresenterPublishRequest = {
+      openForIdeas: true,
+      interaction: "brainstorming",
+      question: this.ideaEvent?.question,
+      question_id: this.ideaEvent.question_id,
+      client_only: true
+    };
+    if (this.timerLength) {
+      payload.timer = this.timerLength;
+    }
+    this.queueService.publishMessageToPresenterChannel(payload);
+    this.openForideas = true;
+    this.isAfterBrainstorming = false;
+  }
+
   stopBrainstorming(): void {
-    /* this.queueService.publishMessageToPresenterChannel()
-     */
+    if (!this.ideaEvent?.question_id) return
+    const payload: BrainstormingPresenterPublishRequest = {
+      openForIdeas: false,
+      interaction: "brainstorming",
+      question: this.ideaEvent?.question,
+      question_id: this.ideaEvent.question_id,
+      client_only: true
+    };
+    clearInterval(this.timerInterval)
+    this.ideaEvent.timer = 0;
+    this.queueService.publishMessageToPresenterChannel(payload);
+    this.openForideas = false;
+    this.isAfterBrainstorming = true;
   }
 
   resizeTextToFitContainer(element: HTMLElement) {
@@ -171,6 +203,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       client_only: true
     };
     this.voting_open = false;
+    this.isAfterBrainstorming = true;
     clearInterval(this.timerInterval)
     this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
