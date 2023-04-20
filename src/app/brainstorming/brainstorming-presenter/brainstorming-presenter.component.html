@@ -8,13 +8,13 @@
        cdkDrag
        *ngFor="let idea of ideaResponses; let i=index; trackBy: trackByIndex"
        cdkDragBoundary=".boundary"
-       [style.visibility]="ideaResponses[i] === '' ? 'hidden' : 'visible'">
+       [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
     <div class="sticky"
-         [style.background]="ideaColors[i]"
-    >{{idea}}
+         [style.background]="ideaResponses[i].color"
+    >{{idea.text}}
     </div>
     <div class="icon-container">
-      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea"
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
             (click)="showCopiedMessage(copyMessage)"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
       <span class="copied-message" #copyMessage>Copied to Clipboard</span>

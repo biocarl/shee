@@ -84,7 +84,7 @@ textarea {
   width: 149px;
   height: 62px;
   left: calc(50% - (149px/2));
-  top: calc(58% - 349px / 2 - 100px);
+  top: calc(58% - 349px / 2 - 230px);
   background: #64BF4D;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;

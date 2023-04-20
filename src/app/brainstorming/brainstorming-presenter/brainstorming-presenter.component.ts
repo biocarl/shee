@@ -14,8 +14,7 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
 })
 export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses : string[] = [];
-  ideaColors: string[] = [];
+  ideaResponses : {text: string, color: string}[] = [];
   maxZIndex = 20;
 
   constructor(private queueService: QueueService) {
@@ -36,8 +35,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
         return;
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id) {
-        this.ideaResponses.push(brainstormingSubscriptionEvent.idea_text);
-        this.ideaColors.push(brainstormingSubscriptionEvent.stickyColor);
+        this.ideaResponses.push({text: brainstormingSubscriptionEvent.idea_text, color: brainstormingSubscriptionEvent.stickyColor});
       }
     });
   }
@@ -108,7 +106,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
 
   hideIdea(i:number) {
     if (i > -1) {
-      this.ideaResponses.splice(i, 1,"");
+      this.ideaResponses.splice(i, 1,{text:"",color:""});
     }
   }
 
