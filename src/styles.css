@@ -15,22 +15,26 @@
   --buttonTextColor_dark: white;
 }
 
-html {
+html.dark {
   height: 100%;
   background-color: var(--backgroundColor_dark) !important;
   background-image: url("src/assets/SVG/Grafik_Background_stars.svg");
   background-repeat: repeat-x;
   background-position-y: 100px;
 }
-
-body {
-  background-image: url("src/assets/SVG/Grafik_Mond.svg");
-  background-repeat: no-repeat;
-  background-position: calc(100% + 200px) 0;
-  background-position-y: -120px;
+html.light {
   height: 100%;
-  margin: 0;
+  background-color: var(--backgroundColor_light) !important;
 }
+
+/*body {*/
+/*  background-image: url("src/assets/SVG/Grafik_Mond.svg");*/
+/*  background-repeat: no-repeat;*/
+/*  background-position: calc(100% + 200px) 0;*/
+/*  background-position-y: -120px;*/
+/*  height: 100%;*/
+/*  margin: 0;*/
+/*}*/
 
 .v-message {
   background-color: transparent;
@@ -47,8 +51,8 @@ body {
   text-align: center;
 }
 
-/*
-// for dark-light-mode implementation
+
+
   body.light {
     --backgroundColor: var(--backgroundColor_light);
     --headerTextColor: var(--headerTextColor_light);
@@ -56,7 +60,14 @@ body {
     --textColor: var(--textColor_light);
     --menuColor: var(--menuColor_light);
     --buttonTextColor: var(--buttonTextColor_light);
+    background-image: url("src/assets/SVG/Grafik_Sonne.svg");
+    background-repeat: no-repeat;
+    background-position: calc(100% + 200px) 0;
+    background-position-y: -120px;
+    height: 100%;
+    margin: 0;
   }
+
 
   body.dark {
     --backgroundColor: var(--backgroundColor_dark);
@@ -65,5 +76,11 @@ body {
     --textColor: var(--textColor_dark);
     --menuColor: var(--menuColor_dark);
     --buttonTextColor: var(--buttonTextColor_dark);
+    background-image: url("src/assets/SVG/Grafik_Mond.svg");
+    background-repeat: no-repeat;
+    background-position: calc(100% + 200px) 0;
+    background-position-y: -120px;
+    height: 100%;
+    margin: 0;
   }
-  */
+
