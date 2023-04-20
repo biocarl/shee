@@ -73,6 +73,8 @@ export class ModeToggleService {
   toggleMode() {
     this.document.body.classList.toggle(Mode.LIGHT);
     this.document.body.classList.toggle(Mode.DARK);
+    this.document.documentElement.classList.toggle(Mode.LIGHT)
+    this.document.documentElement.classList.toggle(Mode.DARK)
     if (this.currentMode === Mode.LIGHT) {
       this.updateCurrentMode(Mode.DARK);
     } else {
