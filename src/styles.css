@@ -25,6 +25,9 @@ html.dark {
 html.light {
   height: 100%;
   background-color: var(--backgroundColor_light) !important;
+  background-image: url("src/assets/SVG/Grafik_Schwalben.svg");
+  background-repeat: no-repeat;
+  background-position-y: 100px;
 }
 
 /*body {*/
