@@ -24,29 +24,37 @@
 
   <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
     Voting has been stopped
-</div>
-
-<ng-template #openVoting>
-  <div *ngIf="votingEvent">
-    <div style="font-size: 3rem; text-align: center" *ngIf="votingEvent.timer !== undefined">
-      <div *ngIf="votingEvent.timer > 0; else timeUp">
-        Timer: {{ votingEvent.timer }}
-      </div>
-    </div>
-    <ng-template #timeUp>Time is up!</ng-template>
-
-
-    <div *ngIf="!is_voted; else voted">
-      <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
-
-        <button [disabled]="multi_vote_check[i]"
-                (click)="voteForIdea(i)"
-                class="votingButton">
-          {{idea}}
-        </button>
-      </div>
-    </div>
-    <ng-template #voted> Thanks for the vote!</ng-template>
   </div>
-</ng-template>
+
+  <ng-template #openVoting>
+    <div *ngIf="votingEvent">
+      <div style="font-size: 3rem; text-align: center" *ngIf="votingEvent.timer !== undefined">
+        <div *ngIf="votingEvent.timer > 0; else timeUp">
+          Timer: {{ votingEvent.timer }}
+        </div>
+      </div>
+      <ng-template #timeUp>Time is up!</ng-template>
+
+
+      <div *ngIf="!is_voted; else voted">
+        <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
+
+          <button [disabled]="multi_vote_check[i]"
+                  (click)="voteForIdea(i)"
+                  class="votingButton"
+                  *ngIf="!isValidUrl(idea); else image">
+            {{idea}}
+          </button>
+          <ng-template #image>
+            <button [disabled]="multi_vote_check[i]"
+                    (click)="voteForIdea(i)"
+                    class="votingButton">
+              <img src="{{idea}}" alt="img">
+            </button>
+          </ng-template>
+        </div>
+      </div>
+      <ng-template #voted> Thanks for the vote!</ng-template>
+    </div>
+  </ng-template>
 </div>

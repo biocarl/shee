@@ -99,4 +99,12 @@ export class BrainstormingClientComponent implements ClientView {
       }, 1000);
     }
   }
+  public isValidUrl(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
