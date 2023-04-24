@@ -9,27 +9,41 @@
   <button class="button mb-3" *ngIf="stage === 'brainstorming'" (click)="stopBrainstorming()">Stop brainstorming
   </button>
 </div>
-<ng-container *ngIf="stage === 'initial' || stage === 'afterBrainstorming'">
-  <div *ngIf="stage === 'initial'">
-    <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>
-    <input type="number" min="1" [(ngModel)]="timerLength_brainstorming" placeholder="Enter Timer in sec" name="timer">
-  </div>
-  <button class="button mb-3" (click)="startBrainstorming()">
-    {{stage === 'afterBrainstorming' ? 'Resume' : 'Start'}} brainstorming
-  </button>
+
+<!-- Stage: initial -->
+<ng-container *ngIf="stage === 'initial'">
+  <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
 </ng-container>
-<form *ngIf="stage === 'afterBrainstorming'">
-  <select id="votingOption">
-    <option value="oneVote">Each student has one vote</option>
-    <option value="manyVotes">Each student has many votes</option>
-  </select>
-  <label>Enter the duration of the timer for voting in sec (Optional)</label>
-  <input type="number" min="1" [(ngModel)]="timerLength_voting" placeholder="Enter Timer in sec" name="timer">
-  <button class="button mb-3" type="button" (click)="startVoting()">Start Voting</button>
-</form>
-<button class="button mb-3" *ngIf="stage === 'voting'" type="button" (click)="stopVoting()">StopVoting
-</button>
+
+<!-- Stage: afterBrainstorming -->
+<ng-container *ngIf="stage === 'afterBrainstorming'">
+  <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
+  <form>
+    <select id="votingOption">
+      <option value="oneVote">Each student has one vote</option>
+      <option value="manyVotes">Each student has many votes</option>
+    </select>
+    <label>Enter the duration of the timer for voting in sec (Optional)</label>
+    <input type="number" min="1" [(ngModel)]="timerLength_voting" placeholder="Enter Timer in sec" name="timer">
+    <button class="button mb-3" type="button" (click)="startVoting()">Start Voting</button>
+  </form>
+</ng-container>
+
+<!-- Stage: voting -->
+<button class="button mb-3" *ngIf="stage === 'voting'" type="button" (click)="stopVoting()">StopVoting</button>
+
+<!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
+<ng-template #brainstormingControls>
+  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>
+  <input type="number" min="1" [(ngModel)]="timerLength_brainstorming" placeholder="Enter Timer in sec" name="timer">
+  <button class="button mb-3" (click)="startBrainstorming()">
+    {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
+  </button>
+</ng-template>
+
 <br><br>
+
+<!-- Ideas into Stickies -->
 <div class="boundary columns is-multiline is-align-content-flex-start" *ngIf="ideaEvent">
   <div class="post-it m-4 p-0 column is-one-fifth" cdkDrag
        *ngFor="let idea of ideaEvent.ideas;let i=index;trackBy:trackByIndex" cdkDragBoundary=".boundary"

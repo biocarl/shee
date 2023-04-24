@@ -1,4 +1,3 @@
-
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
