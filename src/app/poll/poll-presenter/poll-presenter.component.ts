@@ -10,12 +10,16 @@ import {PresenterMessage} from "../../presenter-message";
   templateUrl: './poll-presenter.component.html',
   styleUrls: ['./poll-presenter.component.css']
 })
+/**
+ * The PollPresenterComponent displays the main question to answer,
+ * along with the different polling outcomes based on a defined set of options and the votes provided by the clients.
+ * @component
+ */
 export class PollPresenterComponent implements PresenterView, OnInit {
   questionEvent ?: PollPresenterSubscribeResponse;
-  questionResponses ?: number[];
+  accumulatedClientChoices ?: number[];
 
-  constructor(private queueService: QueueService) {
-  }
+  constructor(private queueService: QueueService) {}
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
@@ -24,15 +28,28 @@ export class PollPresenterComponent implements PresenterView, OnInit {
         return;
       }
 
-      if (this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.question_id
+      if (this.accumulatedClientChoices && pollSubscriptionEvent.question_id === this.questionEvent.question_id
           && this.isInValidTimeRangeIfSet()) {
-        this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
+        this.accumulatedClientChoices = this.accumulatedClientChoices.map((total, index) => total + pollSubscriptionEvent.voting[index]);
       }
 
       if (pollSubscriptionEvent.participantName) {
         console.log(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
       }
     });
+  }
+
+  getPercentage(index: number): number {
+    if (!this.accumulatedClientChoices) {
+      return 0;
+    }
+
+    const totalVotes = this.accumulatedClientChoices.reduce((acc, curr) => acc + curr, 0);
+    if (totalVotes === 0) {
+      return 0;
+    }
+
+    return (this.accumulatedClientChoices[index] / totalVotes) * 100;
   }
 
   private isInValidTimeRangeIfSet() {
@@ -44,7 +61,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
 
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as PollPresenterSubscribeResponse;
-    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
+    this.accumulatedClientChoices = Array(this.questionEvent.answers.length).fill(0);
     this.initializeTimer();
   }
 

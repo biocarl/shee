@@ -13,13 +13,16 @@ import {ParticipantService} from "../participant.service";
   templateUrl: './client.component.html',
   styleUrls: ['./client.component.css']
 })
+/**
+ * The client root component displays a specific client component based on the presenter's messages.
+ * @component
+ * @implements {OnInit}
+ */
 export class ClientComponent implements OnInit {
   groupName: string | null = "";
   participantName: string | null = "";
-
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
-
-  viewContainerRef ?: ViewContainerRef;
+  viewContainerRef?: ViewContainerRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,8 +30,7 @@ export class ClientComponent implements OnInit {
     private groupService: GroupService,
     private componentChooserService: ComponentChooserService,
     private participantService: ParticipantService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     // Retrieve route parameter /:group from url
@@ -44,14 +46,15 @@ export class ClientComponent implements OnInit {
         this.participantService.setParticipantName(this.participantName);
       }
     })
+
     this.viewContainerRef = this.anchor.viewContainerRef;
 
     // Show "waiting" while presenter has not initialized yet
     this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
 
-    // Listen to all presenter messages and inject component into view accordingly
+    // Listen to all presenter messages and inject component into view based on the interaction field
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
+      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id || presenterMessage.client_only) {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
           presenterMessage.interaction, "client", presenterMessage);

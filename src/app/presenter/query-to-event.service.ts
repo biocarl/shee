@@ -5,10 +5,19 @@ import {QueueService} from "../queue.service";
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * The QueryToEventService is used to retrieve query parameters from the URL and publish them as presenter events.
+ * @class
+ * @Injectable
+ */
 export class QueryToEventService {
-
   constructor(private queueService : QueueService) { }
-
+  /**
+   * Retrieves query parameters from the URL and publishes them as a presenter event if they are valid.
+   * @param {ParamMap} params The map of query parameters from the URL.
+   * @public
+   * @returns {void}
+   */
   publishIfValid(params: ParamMap) {
     const jsonPayload = this.retrieveQueryParamsAsJson(params);
 
@@ -20,7 +29,7 @@ export class QueryToEventService {
     }
   }
 
-  retrieveQueryParamsAsJson(params : ParamMap) : PresenterMessageCreationRequest {
+  private retrieveQueryParamsAsJson(params : ParamMap) : PresenterMessageCreationRequest {
     return params.keys.reduce( (agg, key )=> {
         const value = params.get(key) ?? "";
         if(value.includes(",")){
@@ -36,6 +45,16 @@ export class QueryToEventService {
   }
 }
 
+/**
+ * The interface for the presenter message creation request.
+ * This interface defines the structure of the JSON object created from the query parameters of the URL.
+ * @interface
+ */
 interface PresenterMessageCreationRequest {
+  /**
+   * The type of interaction being created.
+   * @type {string}
+   */
   interaction: string;
+  // Here also other fields will be used but only defined during runtime (there TS does not complain)
 }
