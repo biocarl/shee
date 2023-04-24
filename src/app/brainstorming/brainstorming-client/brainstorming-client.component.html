@@ -1,52 +1,85 @@
+<div *ngIf="!openForIdeas && votingEvent?.voting_in_progress===undefined && !isAfterBrainstorming">
+  Wait for the presenter to open the brainstorming
+</div>
 <div *ngIf="votingEvent?.voting_in_progress===undefined; ">
   <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
-    <div>
+    <div *ngIf="isAfterBrainstorming">
       Brainstorming has ended
     </div>
   </div>
   <ng-template #showTextarea>
-    <div *ngIf="!valid_idea_text">No empty ideas!</div>
-    <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
-    <div id="question">{{ideaEvent?.question}}</div>
     <form>
       <!-- TODO replace "false" with dark mode variable  -->
-      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf">
+      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf"
+           height="286" width="284">
+      <div class="positioning-wrapper">
+        <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
+        <div id="question">{{ideaEvent?.question}}</div>
+        <div class="color-selection">
+          <input type="radio" id="red" value="red"/>
+          <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
 
-      <textarea type="text" id="user-input" [(ngModel)]="idea_text" placeholder="Enter text" name="idea"></textarea>
-      <button [disabled]="!valid_idea_text" id="send-button" type="button" (click)="sendIdea()">Send Idea</button>
+          <input type="radio" id="green"/>
+          <label for="green"><span (click)="changeColor($event)" class="green"></span></label>
+
+          <input type="radio" id="yellow"/>
+          <label for="yellow"><span (click)="changeColor($event)" class="yellow active"></span></label>
+
+          <input type="radio" id="olive"/>
+          <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
+
+          <input type="radio" id="orange"/>
+          <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
+
+          <input type="radio" id="blue"/>
+          <label for="blue"><span (click)="changeColor($event)" class="blue"></span></label>
+
+          <input type="radio" id="violet"/>
+          <label for="violet"><span (click)="changeColor($event)" class="violet"></span></label>
+
+        </div>
+        <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
+                  [style.background-color]="bgColor"
+                  [(ngModel)]="idea_text"
+                  [maxlength]="280"></textarea>
+        <div id="character-counter"
+             [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ idea_text.length }}/280
+        </div>
+        <button [disabled]="idea_text.trim().length===0" id="send-button" type="button"
+                (click)="sendIdea()">Send Idea
+        </button>
+      </div>
     </form>
-
   </ng-template>
 
 </div>
 
 <div *ngIf="votingEvent">
-
   <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
     Voting has been stopped
-</div>
-
-<ng-template #openVoting>
-  <div *ngIf="votingEvent">
-    <div style="font-size: 3rem; text-align: center" *ngIf="votingEvent.timer !== undefined">
-      <div *ngIf="votingEvent.timer > 0; else timeUp">
-        Timer: {{ votingEvent.timer }}
-      </div>
-    </div>
-    <ng-template #timeUp>Time is up!</ng-template>
-
-
-    <div *ngIf="!is_voted; else voted">
-      <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
-
-        <button [disabled]="multi_vote_check[i]"
-                (click)="voteForIdea(i)"
-                class="votingButton">
-          {{idea}}
-        </button>
-      </div>
-    </div>
-    <ng-template #voted> Thanks for the vote!</ng-template>
   </div>
-</ng-template>
+
+  <ng-template #openVoting>
+    <div *ngIf="votingEvent">
+      <div style="font-size: 3rem; text-align: center" *ngIf="votingEvent.timer !== undefined">
+        <div *ngIf="votingEvent.timer > 0; else timeUp">
+          Timer: {{ votingEvent.timer }}
+        </div>
+      </div>
+      <ng-template #timeUp>Time is up!</ng-template>
+
+
+      <div *ngIf="!is_voted; else voted">
+        <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
+
+          <button [disabled]="multi_vote_check[i]"
+                  (click)="voteForIdea(i)"
+                  class="votingButton">
+            {{idea}}
+          </button>
+        </div>
+      </div>
+      <ng-template #voted> Thanks for the vote!</ng-template>
+    </div>
+  </ng-template>
 </div>

@@ -48,8 +48,9 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
         HttpClientModule,
         FormsModule,
         NgOptimizedImage,
-      DragDropModule,
-      ClipboardModule
+        DragDropModule,
+        ClipboardModule
+
     ],
   providers: [],
   bootstrap: [AppComponent]
