@@ -40,23 +40,48 @@ npm run subscribeLive -- <channel/audience>
 npm run subscribe -- <channel/audience>
 ```
 
+# Running VAG.app
 
-
-## 2 step Development environment
-### Step #1 ⬇️
-
-## Using Docker 🐳🏗️
-
-**Shee.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
-```sh
-docker-compose -f local-setup.yaml up
-```
-
-### Step #2 ⬇️
+# 2 step Development environment
+## Step #1 ⬇️
 
 **To run VAG.app in a development environment, use the following command:**
 ```sh
 ng serve --configuration development
+```
+
+## Production environment
+
+**To build VAG.app for production, use the following command:**
+## Step #2 ⬇️
+
+# Using Docker 🐳🏗️
+
+### Installing Docker on MAC
+
+Installing the Package Manager HOMEBREW for macOS:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+If your not sure whether you have a clean **homebrew** docker installation, use this command in terminal to delete your current docker installation:
+```sh
+brew remove docker
+```
+Install the docker application:
+```sh
+brew install --cask docker
+```
+Install the docker command line tools:
+```sh
+brew install docker
+```
+---
+
+**VAG.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
+```sh
+docker-compose -f local-setup.yaml up
 ```
 
 ## Contributors 🎉
