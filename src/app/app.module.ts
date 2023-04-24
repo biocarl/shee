@@ -21,7 +21,6 @@ import { BrainstormingClientComponent } from './brainstorming/brainstorming-clie
 import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-presenter/brainstorming-presenter.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from "@angular/cdk/clipboard";
-import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -47,7 +46,6 @@ import {NgOptimizedImage} from "@angular/common";
         AppRoutingModule,
         HttpClientModule,
         FormsModule,
-        NgOptimizedImage,
         DragDropModule,
         ClipboardModule
     ],

@@ -7,13 +7,12 @@
 
 
   <ng-template #showTextarea>
-    <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
     <form>
       <!-- TODO replace "false" with dark mode variable  -->
-      <img *ngIf="false" id="cute-sheep" ngSrc="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf"
+      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf"
            height="286" width="284">
-
-      <div id="textarea-container" class="is-flex">
+      <div class="positioning-wrapper">
+        <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
         <div id="question">{{ideaEvent?.question}}</div>
         <div class="color-selection">
           <input type="radio" id="red" value="red"/>
@@ -42,9 +41,12 @@
                   [style.background-color]="bgColor"
                   [(ngModel)]="idea_text"
                   [maxlength]="280"></textarea>
-        <div id="character-counter" [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'" >{{ idea_text.length }}/280</div>
+        <div id="character-counter"
+             [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ idea_text.length }}/280
+        </div>
 
-        <button type="button" (click)="sendIdea()" id="send-button" [disabled]="idea_text.trim().length===0">Send</button>
+        <button type="button" (click)="sendIdea()" id="send-button" [disabled]="idea_text.trim().length===0">Send
+        </button>
       </div>
     </form>
   </ng-template>
