@@ -16,12 +16,10 @@
 }
 
 .light {
-  border: 2px solid black;
-
+  border: 2px solid var(--menuColor_light);
 }
 
 .dark {
-
-  border: 2px solid black;
+  border: 4px solid var(--menuColor_dark);
   color: white;
 }
