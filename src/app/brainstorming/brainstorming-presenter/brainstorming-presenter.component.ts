@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
@@ -21,7 +21,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   stickyContentVisible: boolean = false;
   votes?: number[];
   timerLength_voting?: number;
-  chosenColor: string = "#FFD707FF";
   private timerInterval: any;
   timerLength_brainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
@@ -129,54 +128,12 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     }
   }
 
-  moveToTopLayerWhenDragged(event: CdkDragStart) {
-    const element = event.source.getRootElement();
-    const stickyElement = element.querySelector('.sticky') as HTMLElement;
-    const shadowElement = element.querySelector('.shadow') as HTMLElement;
-    const postItElement = stickyElement.parentElement;
-    const tapeElement = element.querySelector('.top-tape') as HTMLElement;
-    const iconsElement = element.querySelector('.icon-container') as HTMLElement;
-
-    if (stickyElement && stickyElement.parentElement && postItElement) {
-      postItElement.style.zIndex = (++this.maxZIndex).toString();
-      stickyElement.style.zIndex = (++this.maxZIndex).toString();
-    }
-
-    if (shadowElement) {
-      shadowElement.style.zIndex = (this.maxZIndex - 1).toString();
-    }
-
-    if (tapeElement) {
-      tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
-    }
-    if (iconsElement) {
-      iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
-    }
-  }
-
-  hideIdea(i: number) {
-    if (i > -1) {
-      this.ideaEvent?.ideas.splice(i, 1, "");
-    }
-  }
-
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  showCopiedMessage(element: HTMLElement) {
-    element.style.opacity = '1';
-    setTimeout(() => {
-      element.style.opacity = '0';
-    }, 1200);
-  }
-
   startVoting(): void {
     if (!this.ideaEvent?.question_id) return
     const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
     const selectedOption = votingOption.value;
     let singleChoice: boolean = selectedOption === 'oneVote';
-    let finalIdeas: string[] = this.ideaEvent.ideas.filter(idea => idea !== "");
+    let finalIdeas: string[] = this.ideaResponses.map(idea => idea.text).filter(idea => idea !== "");
     this.stage = 'voting';
     this.votes = Array(this.ideaEvent.ideas.length).fill(0);
     const payload: BrainstormingPresenterStatusVotingRequest = {
@@ -192,36 +149,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       payload.timer = this.timerLength_voting;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
-  }
-
-  resizeTextToFitContainer(element: HTMLElement) {
-    const maxWidth = element.clientWidth;
-    const maxHeight = element.clientHeight;
-
-    let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 50; // Set a maximum font size
-    let fontSize = maxFontSize;
-
-    // Apply the maximum font size
-    element.style.fontSize = fontSize + 'px';
-
-    // Reduce the font size until the content fits or reaches the minimum size
-    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
-      fontSize--;
-      element.style.fontSize = fontSize + 'px';
-    }
-
-    // Increase the font size until the content overflows or reaches the maximum size
-    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
-      fontSize++;
-      element.style.fontSize = fontSize + 'px';
-
-      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
-        fontSize--;
-        element.style.fontSize = fontSize + 'px';
-        break;
-      }
-    }
   }
 
   moveToTopLayerWhenDragged(event: CdkDragStart) {
@@ -269,6 +196,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   toggleStickyVisibility(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
   }
+
   stopVoting() {
     if (!this.ideaEvent?.question_id) return
     const payload: BrainstormingPresenterStatusVotingRequest = {

@@ -45,14 +45,16 @@
         <div id="character-counter"
              [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ idea_text.length }}/280
         </div>
-        <button [disabled]="!valid_idea_text" [disabled]="idea_text.trim().length===0" id="send-button" type="button" (click)="sendIdea()">Send Idea</button>
+        <button [disabled]="idea_text.trim().length===0" id="send-button" type="button"
+                (click)="sendIdea()">Send Idea
+        </button>
+      </div>
     </form>
   </ng-template>
 
 </div>
 
 <div *ngIf="votingEvent">
-
   <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
     Voting has been stopped
   </div>

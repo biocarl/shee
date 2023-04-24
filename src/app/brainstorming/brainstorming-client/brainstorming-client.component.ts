@@ -21,7 +21,6 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
   openForIdeas: boolean = false;
   isAfterBrainstorming: boolean = false;
   idea_text: string = "";
-  valid_idea_text: boolean = true;
   is_sent: boolean = false;
   is_voted: boolean = false;
   multi_vote_check: boolean [];
@@ -36,7 +35,9 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
 
   ngAfterViewChecked(): void {
     const sticky = document.querySelector('#user-input');
-    this.resizeTextToFitContainer(sticky as HTMLElement);
+    if(sticky) {
+      this.resizeTextToFitContainer(sticky as HTMLElement);
+    }
   }
 
   voteForIdea(voteSelectionIndex: number) {
