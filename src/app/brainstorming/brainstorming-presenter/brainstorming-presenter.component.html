@@ -14,7 +14,8 @@
 <div *ngIf="!openForIdeas && !voting_open">
   <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>
   <input type="number" min="1" [(ngModel)]="timerLength_brainstorming" placeholder="Enter Timer in sec" name="timer">
-  <button class="button mb-3"   (click)="startBrainstorming()"> Start brainstorming</button>
+  <button class="button mb-3"  *ngIf="!isAfterBrainstorming" (click)="startBrainstorming()"> Start brainstorming</button>
+  <button class="button mb-3" *ngIf="isAfterBrainstorming"  (click)="startBrainstorming()"> Resume brainstorming</button>
 </div>
 <form *ngIf="!voting_open && isAfterBrainstorming">
   <select id="votingOption">

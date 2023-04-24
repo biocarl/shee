@@ -5,7 +5,6 @@ import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presente
 import {QueueService} from "../../queue.service";
 import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subscribe-response";
 import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
-import {v4 as uuidv4} from "uuid";
 import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
 
@@ -47,13 +46,14 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && !this.isAfterBrainstorming) {
         this.ideaEvent.ideas.push(brainstormingSubscriptionEvent.idea_text);
+        console.log("hl")
 
       } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.voting_open) {
         this.votes = this.votes?.map((total, index) => total + brainstormingSubscriptionEvent.idea_voting[index])
       }
     });
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
-        if (response.client_only && this.voting_open && this.ideaEvent) {
+        if (response.client_only && (this.voting_open || this.openForIdeas) && this.ideaEvent) {
           this.ideaEvent.timer = response.timer;
           this.initializeTimer();
         }
@@ -66,19 +66,19 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     if (!this.ideaEvent.ideas) {
       this.ideaEvent.ideas = [];
     }
-    if (this.ideaEvent.openForIdeas) {
-      this.openForIdeas = true;
-    }
     this.initializeTimer();
   }
 
   startBrainstorming(): void {
     if (!this.ideaEvent?.question_id) return
+    this.openForIdeas = true
+    this.isAfterBrainstorming = false
     const payload: BrainstormingPresenterPublishRequest = {
       openForIdeas: true,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: uuidv4(),
+      question_id: this.ideaEvent.question_id,
+      client_only: true
     };
     if (this.timerLength_brainstorming) {
       payload.timer = this.timerLength_brainstorming;
@@ -97,8 +97,8 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     };
     clearInterval(this.timerInterval)
     this.ideaEvent.timer = 0;
-    this.queueService.publishMessageToPresenterChannel(payload);
     this.openForIdeas = false;
+    this.queueService.publishMessageToPresenterChannel(payload);
     this.isAfterBrainstorming = true;
   }
 
