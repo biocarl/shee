@@ -12,7 +12,7 @@ import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish
 @Component({
   selector: 'app-brainstorming-client',
   templateUrl: './brainstorming-client.component.html',
-  styleUrls: ['./brainstorming-client.component.css']
+  styleUrls: ['./brainstorming-client.component.css','../brainstorming.css']
 })
 export class BrainstormingClientComponent implements ClientView,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;

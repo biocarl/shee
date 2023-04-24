@@ -10,13 +10,13 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-brainstorming-presenter',
   templateUrl: './brainstorming-presenter.component.html',
-  styleUrls: ['./brainstorming-presenter.component.css']
+  styleUrls: ['./brainstorming-presenter.component.css','../brainstorming.css']
 })
 export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   ideaResponses : {text: string, color: string}[] = [];
   maxZIndex = 20;
-  stickyContentVisible: boolean = true;
+  stickyContentVisible: boolean = false;
 
   constructor(private queueService: QueueService) {
   }
