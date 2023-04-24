@@ -17,7 +17,7 @@ export class ModeToggleService {
    * contains the current active mode
    * avoid mutating it directly, instead use `updateCurrentMode`
    */
-  private currentMode: Mode = Mode.LIGHT;
+  currentMode: Mode = Mode.LIGHT;
 
   /**
    * BehaviorSubject that detects the mode changes

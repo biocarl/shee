@@ -46,6 +46,7 @@ html.light {
   text-align: center;
 }
 
+
 body.light {
   --background-color: var(--backgroundColor_light);
   --headerTextColor: var(--headerTextColor_light);
@@ -76,3 +77,79 @@ body.dark {
   margin: 0;
 }
 
+.navbar {
+  background-color: transparent;
+  width: 100%;
+  height: 125px;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+.navbar-light {
+  background-image: url("src/assets/SVG/Grafik_Header_Desktop_light.svg");
+
+}
+
+.navbar-dark {
+  background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
+
+  --background-color: var(--backgroundColor_dark);
+}
+
+.navbar-start {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.navbar-brand {
+  width: 10%;
+}
+
+.navbar-end {
+  display: flex;
+  justify-content: end;
+  align-items: start;
+  margin-top: 25px;
+  width: 10%;
+}
+
+@media screen and (min-width: 0px) {
+  .navbar, .navbar-menu, .navbar-start, .navbar-end {
+    align-items: stretch;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .navbar-menu {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0.5rem 0;
+  }
+}
+
+@media screen and (min-width: 0px) {
+  .navbar-item, .navbar-link {
+    align-items: center;
+    display: flex;
+    margin-bottom: 50px;
+  }
+}
+
+@media screen and (min-width: 1700px) {
+  .navbar {
+    background-size: 100% auto;
+    background-position: top;
+
+  }
+}
+@media screen and (min-width: 1824px) {
+  .navbar {
+    background-position: bottom;
+  }
+}
