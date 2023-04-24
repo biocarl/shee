@@ -46,7 +46,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && !this.isAfterBrainstorming) {
         this.ideaEvent.ideas.push(brainstormingSubscriptionEvent.idea_text);
-        console.log("hl")
 
       } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.voting_open) {
         this.votes = this.votes?.map((total, index) => total + brainstormingSubscriptionEvent.idea_voting[index])

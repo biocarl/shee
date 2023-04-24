@@ -24,9 +24,10 @@
   </select>
   <label>Enter the duration of the timer for voting in sec (Optional)</label>
   <input type="number" min="1" [(ngModel)]="timerLength_voting" placeholder="Enter Timer in sec" name="timer">
-  <button type="button" (click)="startVoting()">Start Voting</button>
+  <button class="button mb-3" type="button" (click)="startVoting()">Start Voting</button>
 </form>
-<button *ngIf="voting_open && isAfterBrainstorming" type="button" (click)="stopVoting()">StopVoting</button>
+<button class="button mb-3" *ngIf="voting_open && isAfterBrainstorming" type="button" (click)="stopVoting()">StopVoting</button>
+<!-- TODO remove the br when implementing css  -->
 <br>
 <br>
 <div class="boundary columns is-multiline is-align-content-flex-start" *ngIf="ideaEvent">
