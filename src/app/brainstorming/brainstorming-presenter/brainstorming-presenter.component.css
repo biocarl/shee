@@ -1,3 +1,6 @@
+div,label{
+  color: var(--textColor_dark);
+}
 
 .sticky {
   font-size: 15px;

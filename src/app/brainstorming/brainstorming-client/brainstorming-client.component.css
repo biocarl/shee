@@ -3,7 +3,9 @@
   --user-input-height:250px; /*brainstorming user input textfield*/
 }
 
-
+div{
+  color: var(--textColor_dark);
+}
 
 #user-input {
   background-color: #FFD707FF;
@@ -143,7 +145,6 @@ textarea {
   visibility: hidden;
 }
 
-
 * {
   box-sizing: border-box;
 }
@@ -264,7 +265,5 @@ textarea{
   color: rgb(0,0,0,0.87);
   transform: translate(0%,-60%);
 }
-
-
 
 

@@ -1,10 +1,71 @@
-<script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
-<div>
-  <button class="button mb-3" (click)="stopBrainstorming()"> Stop brainstorming</button>
+<ng-container *ngIf="ideaEvent">
+  <div style="font-size:3rem;text-align:center" *ngIf="ideaEvent.timer !== undefined">
+    <div *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
+  </div>
+  <ng-template #timeUp>Time is up!</ng-template>
+</ng-container>
+<div>{{ideaEvent?.question}}</div>
+
+<!-- Stage: initial -->
+<ng-container *ngIf="stage === 'initial'">
+  <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
+</ng-container>
+
+<!-- Stage: brainstorming -->
+<ng-container *ngIf="stage === 'brainstorming'">
+  <button class="button mb-3" (click)="stopBrainstorming()">Stop brainstorming</button>
+</ng-container>
+
+<!-- Stage: afterBrainstorming -->
+<ng-container *ngIf="stage === 'afterBrainstorming'">
+  <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
+  <form>
+    <select id="votingOption">
+      <option value="oneVote">Each student has one vote</option>
+      <option value="manyVotes">Each student has many votes</option>
+    </select>
+    <label>Enter the duration of the timer for voting in sec (Optional)</label>
+    <input type="number" min="1" [(ngModel)]="timerLength_voting" placeholder="Enter Timer in sec" name="timer">
+    <button class="button mb-3" type="button" (click)="startVoting()">Start Voting</button>
+  </form>
+</ng-container>
+
+<!-- Stage: voting -->
+<button class="button mb-3" *ngIf="stage === 'voting'" type="button" (click)="stopVoting()">StopVoting</button>
+
+<!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
+<ng-template #brainstormingControls>
+  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>
+  <input type="number" min="1" [(ngModel)]="timerLength_brainstorming" placeholder="Enter Timer in sec" name="timer">
+  <button class="button mb-3" (click)="startBrainstorming()">
+    {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
+  </button>
   <button class="button mb-3" (click)="toggleStickyVisibility()"><i class="fa-solid fa-eye-slash"></i></button>
+</ng-template>
 
+<br><br>
 
+<!-- Ideas into Stickies -->
+<div class="boundary columns is-multiline is-align-content-flex-start" *ngIf="ideaEvent">
+  <div class="post-it m-4 p-0 column is-one-fifth" cdkDrag
+       *ngFor="let idea of ideaEvent.ideas;let i=index;trackBy:trackByIndex" cdkDragBoundary=".boundary"
+       [style.visibility]="ideaEvent.ideas&&ideaEvent.ideas[i]===''?'hidden':'visible'"
+       (cdkDragStarted)="moveToTopLayerWhenDragged($event)">
+    <div class="sticky" [ngStyle]="{'background':chosenColor}"><span>{{idea}}</span>
+      <div *ngIf="votes">👍{{votes[i]}}</div>
+    </div>
+    <div class="icon-container">
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea"
+            (click)="showCopiedMessage(copyMessage)"></i></a>
+      <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
+      <span class="copied-message" #copyMessage>Copied to Clipboard</span>
+    </div>
+    <div class="top-tape"></div>
+    <div class="shadow"></div>
+  </div>
 </div>
+
+
 <div class="boundary columns is-multiline is-align-content-flex-start">
   <div class="post-it m-4 p-0 column is-one-fifth"
        (cdkDragStarted)="moveToTopLayerWhenDragged($event)"

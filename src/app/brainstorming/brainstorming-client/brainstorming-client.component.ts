@@ -6,30 +6,59 @@ import {GroupService} from "../../group.service";
 import {QueueService} from "../../queue.service";
 import {ParticipantService} from "../../participant.service";
 import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish-request";
-
+import {BrainstormingPresenterVotingSubscribeResponse} from "../brainstorming-presenter-voting-subscribe-response";
+import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-voting-publish-request";
 
 
 @Component({
   selector: 'app-brainstorming-client',
   templateUrl: './brainstorming-client.component.html',
-  styleUrls: ['./brainstorming-client.component.css','../brainstorming.css']
+  styleUrls: ['./brainstorming-client.component.css']
 })
 export class BrainstormingClientComponent implements ClientView,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
-  openForIdeas: boolean = true;
+  votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
+  openForIdeas: boolean = false;
+  isAfterBrainstorming: boolean = false;
   idea_text: string = "";
+  valid_idea_text: boolean = true;
   is_sent: boolean = false;
+  is_voted: boolean = false;
+  multi_vote_check: boolean [];
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
 
   constructor(private groupService: GroupService,
               private queueService: QueueService,
               private participantService: ParticipantService) {
+    this.multi_vote_check = Array(this.votingEvent?.ideas.length).fill(false);
   }
 
   ngAfterViewChecked(): void {
     const sticky = document.querySelector('#user-input');
     this.resizeTextToFitContainer(sticky as HTMLElement);
+  }
+
+  voteForIdea(voteSelectionIndex: number) {
+    if (!this.votingEvent?.ideas) return
+
+    // handle idea-vote
+    const voting: number[] = Array(this.votingEvent.ideas.length).fill(0);
+    voting[voteSelectionIndex] = 1;
+    const message: BrainstormigClientVotingPublishRequest = {
+      interaction: "brainstorming",
+      idea_voting: voting,
+      participantName: this.participantService.getParticipantName(),
+      question_id: this.votingEvent.question_id
+
+    };
+    this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
+    if (this.votingEvent.single_choice) {
+      this.is_voted = true;
+    }else {
+      this.multi_vote_check[voteSelectionIndex] = true;
+    }
+
   }
 
   sendIdea() {
@@ -55,6 +84,26 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
 
   initializeComponent(data: PresenterMessage) {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
+    this.votingEvent = data as BrainstormingPresenterVotingSubscribeResponse;
+    if (this.ideaEvent.openForIdeas) {
+      this.openForIdeas = true;
+    } else if (this.ideaEvent.openForIdeas === false)  {
+      this.isAfterBrainstorming = true;
+    }
+    this.initializeTimer();
+  }
+
+  private initializeTimer() {
+    if (this.votingEvent?.timer) {
+      const timerInterval = setInterval(() => {
+        if (this.votingEvent && this.votingEvent.timer) {
+          this.votingEvent.timer -= 1;
+          if (this.votingEvent.timer <= 0) {
+            clearInterval(timerInterval);
+          }
+        }
+      }, 1000);
+    }
   }
 
   changeColor(event : MouseEvent) {
