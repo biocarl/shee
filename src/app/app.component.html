@@ -7,10 +7,12 @@
       <div class="navbar-item">
         <div>
           <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-3">
-            <div>
-              <h1>{{groupService.getGroupName()}}</h1>
+            <div >
+              <h1><code>&lt;</code>{{groupService.getGroupName()}}<span style="color: red">{{envName}}</span><code>&gt;</code> </h1>
             </div>
           </div>
+
+
           <ng-template #NoGroup>
             <div style="background:#f5f3ee">
               <div class="v-container">
