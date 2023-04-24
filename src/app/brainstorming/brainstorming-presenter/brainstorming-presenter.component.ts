@@ -94,7 +94,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       client_only: true
     };
     clearInterval(this.timerInterval)
-    this.ideaEvent.timer = 0;
+    this.ideaEvent.timer = undefined;
     this.queueService.publishMessageToPresenterChannel(payload);
     this.stage = 'afterBrainstorming';
   }
@@ -221,6 +221,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
               this.stopVoting();
             } else if (this.stage === 'brainstorming') {
               this.stopBrainstorming();
+              this.ideaEvent.timer = 0;
             }
             clearInterval(this.timerInterval);
           }
