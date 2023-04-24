@@ -9,18 +9,20 @@
 </div>
 <div>{{ideaEvent?.question}}</div>
 <div>
-  <button class="button mb-3" *ngIf="openForideas && !voting_open" (click)="stopBrainstorming()"> Stop brainstorming</button>
+  <button class="button mb-3" *ngIf="openForIdeas && !voting_open" (click)="stopBrainstorming()"> Stop brainstorming</button>
 </div>
-<div>
-  <button class="button mb-3"  *ngIf="!openForideas && !voting_open" (click)="startBrainstorming()"> Start brainstorming</button>
+<div *ngIf="!openForIdeas && !voting_open">
+  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>
+  <input type="number" min="1" [(ngModel)]="timerLength_brainstorming" placeholder="Enter Timer in sec" name="timer">
+  <button class="button mb-3"   (click)="startBrainstorming()"> Start brainstorming</button>
 </div>
 <form *ngIf="!voting_open && isAfterBrainstorming">
   <select id="votingOption">
     <option value="oneVote">Each student has one vote</option>
     <option value="manyVotes">Each student has many votes</option>
   </select>
-  <label>Enter the duration of the timer in sec (Optional)</label>
-  <input type="number" min="1" [(ngModel)]="timerLength" placeholder="Enter Timer in sec" name="timer">
+  <label>Enter the duration of the timer for voting in sec (Optional)</label>
+  <input type="number" min="1" [(ngModel)]="timerLength_voting" placeholder="Enter Timer in sec" name="timer">
   <button type="button" (click)="startVoting()">Start Voting</button>
 </form>
 <button *ngIf="voting_open && isAfterBrainstorming" type="button" (click)="stopVoting()">StopVoting</button>

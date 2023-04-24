@@ -19,13 +19,14 @@ import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-p
 export class BrainstormingPresenterComponent implements PresenterView, OnInit, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   voting_open: boolean = false;
-  openForideas: boolean = false;
-  isAfterBrainstorming : boolean = false;
+  openForIdeas: boolean = false;
+  isAfterBrainstorming: boolean = false;
   votes?: number[];
-  timerLength?: number;
+  timerLength_voting?: number;
   maxZIndex = 20;
   chosenColor: string = "#FFD707FF";
   private timerInterval: any;
+  timerLength_brainstorming?: number;
 
   constructor(private queueService: QueueService) {
   }
@@ -63,6 +64,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       this.isAfterBrainstorming = true;
       this.votes = Array(this.ideaEvent.ideas.length).fill(0);
     }
+    if (this.ideaEvent.openForIdeas) {
+      this.openForIdeas = true;
+    }
     this.initializeTimer();
   }
 
@@ -72,15 +76,13 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       openForIdeas: true,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.question_id,
-      client_only: true
+      question_id: uuidv4(),
+      timer: this.timerLength_brainstorming
     };
-    if (this.timerLength) {
-      payload.timer = this.timerLength;
+    if (this.timerLength_voting) {
+      payload.timer = this.timerLength_voting;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
-    this.openForideas = true;
-    this.isAfterBrainstorming = false;
   }
 
   stopBrainstorming(): void {
@@ -95,7 +97,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     clearInterval(this.timerInterval)
     this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
-    this.openForideas = false;
+    this.openForIdeas = false;
     this.isAfterBrainstorming = true;
   }
 
@@ -185,8 +187,8 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       single_choice: singleChoice,
       voting_in_progress: true
     };
-    if (this.timerLength) {
-      payload.timer = this.timerLength;
+    if (this.timerLength_voting) {
+      payload.timer = this.timerLength_voting;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -215,7 +217,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         if (this.ideaEvent && this.ideaEvent.timer) {
           this.ideaEvent.timer -= 1;
           if (this.ideaEvent.timer <= 0) {
-            this.stopVoting();
+            this.voting_open ? this.stopVoting() : this.stopBrainstorming();
             clearInterval(this.timerInterval);
           }
         }
