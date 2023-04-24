@@ -26,6 +26,12 @@
     background-position: bottom;
     height: 100%;
   }
+  .footer-client.footer-client-light{
+    background-image: url("src/assets/SVG/Grafik_Footer_Client_mobile_light.svg");
+  }
+  .footer-client.footer-client-dark{
+    background-image: url("src/assets/SVG/Grafik_Footer_Client_dark.svg");
+  }
 }
 
 @media screen and (min-width: 768px) {
