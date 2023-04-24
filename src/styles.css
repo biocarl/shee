@@ -28,7 +28,8 @@ html.light {
   background-color: var(--backgroundColor_light);
   background-image: url("src/assets/SVG/Grafik_Schwalben.svg");
   background-repeat: no-repeat;
-  background-position-y: 100px;
+  background-position-y: 200px;
+  background-position-x: 280px;
 }
 
 .v-message {
@@ -56,8 +57,8 @@ body.light {
   --buttonTextColor: var(--buttonTextColor_light);
   background-image: url("src/assets/SVG/Grafik_Sonne.svg");
   background-repeat: no-repeat;
-  background-position: calc(100% + 200px) 0;
-  background-position-y: -120px;
+  background-position: calc(0% - 200px) 0;
+  background-position-y: -100px;
   height: 100%;
   margin: 0;
 }
@@ -87,12 +88,10 @@ body.dark {
 
 .navbar-light {
   background-image: url("src/assets/SVG/Grafik_Header_Desktop_light.svg");
-
 }
 
 .navbar-dark {
   background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
-
   --background-color: var(--backgroundColor_dark);
 }
 

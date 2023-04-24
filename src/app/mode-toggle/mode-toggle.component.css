@@ -5,7 +5,6 @@
   height: 40px;
   width: 40px;
   font-size: large;
-  background: var(--backgroundColor);
   padding: 0;
   margin: 10px;
   border-style: solid;
@@ -18,11 +17,11 @@
 
 .light {
   border: 2px solid black;
-  background: white;
+
 }
 
 .dark {
-  background: black;
+
   border: 2px solid black;
   color: white;
 }
