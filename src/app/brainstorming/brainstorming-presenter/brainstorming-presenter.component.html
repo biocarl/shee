@@ -14,9 +14,10 @@
        [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
     <div class="sticky"
          [style.background]="ideaResponses[i].color">
-    <ng-container *ngIf="stickyContentVisible">
-      {{idea.text}}
-    </ng-container>
+      <ng-container *ngIf="stickyContentVisible; else hiddenEye">
+        {{idea.text}}
+      </ng-container>
+      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i> </ng-template>
     </div>
     <div class="icon-container">
       <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
