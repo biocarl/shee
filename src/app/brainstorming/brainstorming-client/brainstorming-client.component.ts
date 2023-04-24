@@ -8,7 +8,6 @@ import {ParticipantService} from "../../participant.service";
 import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish-request";
 import {BrainstormingPresenterVotingSubscribeResponse} from "../brainstorming-presenter-voting-subscribe-response";
 import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-voting-publish-request";
-import {BrainstormingPresenterComponent} from "../brainstorming-presenter/brainstorming-presenter.component";
 
 
 @Component({
@@ -106,6 +105,4 @@ export class BrainstormingClientComponent implements ClientView {
       }, 1000);
     }
   }
-
-  protected readonly BrainstormingPresenterComponent = BrainstormingPresenterComponent;
 }

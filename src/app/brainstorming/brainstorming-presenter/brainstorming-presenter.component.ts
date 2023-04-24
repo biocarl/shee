@@ -8,6 +8,7 @@ import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presen
 import {v4 as uuidv4} from "uuid";
 import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
+import {BrainstormingPresenterVotingSubscribeResponse} from "../brainstorming-presenter-voting-subscribe-response";
 
 
 @Component({
@@ -52,17 +53,19 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         this.votes = this.votes?.map((total, index) => total + brainstormingSubscriptionEvent.idea_voting[index])
       }
     });
+    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
+        if (response.client_only && this.voting_open && this.ideaEvent) {
+          this.ideaEvent.timer = response.timer;
+          this.initializeTimer();
+        }
+      }
+    )
   }
 
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     if (!this.ideaEvent.ideas) {
       this.ideaEvent.ideas = [];
-    }
-    if (this.ideaEvent.voting_in_progress) {
-      this.voting_open = this.ideaEvent.voting_in_progress;
-      this.isAfterBrainstorming = true;
-      this.votes = Array(this.ideaEvent.ideas.length).fill(0);
     }
     if (this.ideaEvent.openForIdeas) {
       this.openForIdeas = true;
@@ -77,10 +80,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
       question_id: uuidv4(),
-      timer: this.timerLength_brainstorming
     };
-    if (this.timerLength_voting) {
-      payload.timer = this.timerLength_voting;
+    if (this.timerLength_brainstorming) {
+      payload.timer = this.timerLength_brainstorming;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -179,13 +181,17 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     const selectedOption = votingOption.value;
     let singleChoice: boolean = selectedOption === 'oneVote';
     let finalIdeas: string[] = this.ideaEvent.ideas.filter(idea => idea !== "");
+    this.voting_open = true;
+    this.isAfterBrainstorming = true;
+    this.votes = Array(this.ideaEvent.ideas.length).fill(0);
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
-      question_id: uuidv4(),
+      question_id: this.ideaEvent.question_id,
       single_choice: singleChoice,
-      voting_in_progress: true
+      voting_in_progress: true,
+      client_only: true
     };
     if (this.timerLength_voting) {
       payload.timer = this.timerLength_voting;
