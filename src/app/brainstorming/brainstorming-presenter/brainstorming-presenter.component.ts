@@ -8,7 +8,6 @@ import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presen
 import {v4 as uuidv4} from "uuid";
 import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
-import {BrainstormingPresenterVotingSubscribeResponse} from "../brainstorming-presenter-voting-subscribe-response";
 
 
 @Component({
