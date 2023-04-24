@@ -7,6 +7,9 @@ import {QueryToEventService} from "./query-to-event.service";
 import {ComponentChooserService} from "../component-chooser.service";
 import {PresenterMessage} from "../presenter-message";
 import {ClientQuestionRequest} from "../client-question-request";
+import {Subscription} from "rxjs";
+import {Mode} from "../mode-toggle/mode-toggle.model";
+import {ModeToggleService} from "../mode-toggle/mode-toggle.service";
 
 
 @Component({
@@ -26,13 +29,25 @@ export class PresenterComponent implements OnInit {
   // The anchor directive used to dynamically inject components into the view
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
 
+  mode: Mode;
+  Mode = Mode;
+  modeSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private queueService: QueueService,
     private groupService: GroupService,
     private queryToEventService: QueryToEventService,
-    private componentChooserService: ComponentChooserService
-  ) {}
+    private componentChooserService: ComponentChooserService,
+    private modeToggleService: ModeToggleService,
+  ) {
+    this.mode = modeToggleService.currentMode;
+    this.modeSubscription = modeToggleService.modeChanged$.subscribe(
+      (mode: Mode) => {
+        this.mode = mode;
+      }
+    );
+  }
 
   ngOnInit(): void {
     // Retrieve route parameter /:group from url
@@ -61,5 +76,8 @@ export class PresenterComponent implements OnInit {
         this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage)
       }
     })
+  }
+  ngOnDestroy() {
+    this.modeSubscription.unsubscribe();
   }
 }

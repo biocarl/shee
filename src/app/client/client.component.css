@@ -21,7 +21,16 @@
 }
 
 @media screen and (max-width: 768px) {
-  .footer-client {
+  .footer-client.footer-client-dark {
+    background-image: url("src/assets/SVG/Grafik_Footer_Client_dark.svg");
+    background-size: 100% auto;
+    background-position: bottom;
+    height: 100%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .footer-client.footer-client-light {
+    background-image: url("src/assets/SVG/Grafik_Footer_Client_mobile_light.svg");
     background-size: 100% auto;
     background-position: bottom;
     height: 100%;
