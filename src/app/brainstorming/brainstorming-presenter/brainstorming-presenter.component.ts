@@ -4,8 +4,8 @@ import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
 import {QueueService} from "../../queue.service";
 import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subscribe-response";
-import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
 import {CdkDragStart} from '@angular/cdk/drag-drop';
+import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
 import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
 
 
@@ -14,13 +14,13 @@ import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-p
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css']
 })
-
-export class BrainstormingPresenterComponent implements PresenterView, OnInit, AfterViewChecked {
+export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
+  ideaResponses : {text: string, color: string}[] = [];
+  maxZIndex = 20;
+  stickyContentVisible: boolean = false;
   votes?: number[];
   timerLength_voting?: number;
-  maxZIndex = 20;
-  chosenColor: string = "#FFD707FF";
   private timerInterval: any;
   timerLength_brainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
@@ -44,7 +44,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         return;
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
-        this.ideaEvent.ideas.push(brainstormingSubscriptionEvent.idea_text);
+        this.ideaResponses.push({text: brainstormingSubscriptionEvent.idea_text, color: brainstormingSubscriptionEvent.stickyColor});
 
       } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting') {
         this.votes = this.votes?.map((total, index) => total + brainstormingSubscriptionEvent.idea_voting[index])
@@ -58,7 +58,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       }
     });
   }
-
 
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
@@ -129,6 +128,29 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     }
   }
 
+  startVoting(): void {
+    if (!this.ideaEvent?.question_id) return
+    const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
+    const selectedOption = votingOption.value;
+    let singleChoice: boolean = selectedOption === 'oneVote';
+    let finalIdeas: string[] = this.ideaResponses.map(idea => idea.text).filter(idea => idea !== "");
+    this.stage = 'voting';
+    this.votes = Array(this.ideaEvent.ideas.length).fill(0);
+    const payload: BrainstormingPresenterStatusVotingRequest = {
+      interaction: "brainstorming",
+      ideas: finalIdeas,
+      question: this.ideaEvent?.question,
+      question_id: this.ideaEvent.question_id,
+      single_choice: singleChoice,
+      voting_in_progress: true,
+      client_only: true
+    };
+    if (this.timerLength_voting) {
+      payload.timer = this.timerLength_voting;
+    }
+    this.queueService.publishMessageToPresenterChannel(payload);
+  }
+
   moveToTopLayerWhenDragged(event: CdkDragStart) {
     const element = event.source.getRootElement();
     const stickyElement = element.querySelector('.sticky') as HTMLElement;
@@ -147,16 +169,16 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     }
 
     if (tapeElement) {
-      tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
+      tapeElement.style.zIndex = (this.maxZIndex +1).toString();
     }
     if (iconsElement) {
-      iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
+      iconsElement.style.zIndex = (this.maxZIndex +1).toString();
     }
   }
 
-  hideIdea(i: number) {
+  hideIdea(i:number) {
     if (i > -1) {
-      this.ideaEvent?.ideas.splice(i, 1, "");
+      this.ideaResponses.splice(i, 1,{text:"",color:""});
     }
   }
 
@@ -171,27 +193,8 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     }, 1200);
   }
 
-  startVoting(): void {
-    if (!this.ideaEvent?.question_id) return
-    const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
-    const selectedOption = votingOption.value;
-    let singleChoice: boolean = selectedOption === 'oneVote';
-    let finalIdeas: string[] = this.ideaEvent.ideas.filter(idea => idea !== "");
-    this.stage = 'voting';
-    this.votes = Array(this.ideaEvent.ideas.length).fill(0);
-    const payload: BrainstormingPresenterStatusVotingRequest = {
-      interaction: "brainstorming",
-      ideas: finalIdeas,
-      question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.question_id,
-      single_choice: singleChoice,
-      voting_in_progress: true,
-      client_only: true
-    };
-    if (this.timerLength_voting) {
-      payload.timer = this.timerLength_voting;
-    }
-    this.queueService.publishMessageToPresenterChannel(payload);
+  toggleStickyVisibility(): void {
+    this.stickyContentVisible = !this.stickyContentVisible;
   }
 
   stopVoting() {

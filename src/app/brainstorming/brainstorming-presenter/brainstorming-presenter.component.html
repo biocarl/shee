@@ -14,11 +14,13 @@
 <!-- Stage: brainstorming -->
 <ng-container *ngIf="stage === 'brainstorming'">
   <button class="button mb-3" (click)="stopBrainstorming()">Stop brainstorming</button>
+  <ng-container *ngTemplateOutlet="hideButton"></ng-container>
 </ng-container>
 
 <!-- Stage: afterBrainstorming -->
 <ng-container *ngIf="stage === 'afterBrainstorming'">
   <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
+  <ng-container *ngTemplateOutlet="hideButton"></ng-container>
   <form>
     <select id="votingOption">
       <option value="oneVote">Each student has one vote</option>
@@ -31,7 +33,10 @@
 </ng-container>
 
 <!-- Stage: voting -->
-<button class="button mb-3" *ngIf="stage === 'voting'" type="button" (click)="stopVoting()">StopVoting</button>
+<ng-container *ngIf="stage === 'voting'">
+<button class="button mb-3"  type="button" (click)="stopVoting()">StopVoting</button>
+<ng-container *ngTemplateOutlet="hideButton"></ng-container>
+</ng-container>
 
 <!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
 <ng-template #brainstormingControls>
@@ -40,21 +45,32 @@
   <button class="button mb-3" (click)="startBrainstorming()">
     {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
   </button>
+  </ng-template>
+
+<ng-template #hideButton>
+  <button class="button mb-3" (click)="toggleStickyVisibility()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
 <br><br>
 
 <!-- Ideas into Stickies -->
-<div class="boundary columns is-multiline is-align-content-flex-start" *ngIf="ideaEvent">
-  <div class="post-it m-4 p-0 column is-one-fifth" cdkDrag
-       *ngFor="let idea of ideaEvent.ideas;let i=index;trackBy:trackByIndex" cdkDragBoundary=".boundary"
-       [style.visibility]="ideaEvent.ideas&&ideaEvent.ideas[i]===''?'hidden':'visible'"
-       (cdkDragStarted)="moveToTopLayerWhenDragged($event)">
-    <div class="sticky" [ngStyle]="{'background':chosenColor}"><span>{{idea}}</span>
-      <div *ngIf="votes">👍{{votes[i]}}</div>
+<div class="boundary columns is-multiline is-align-content-flex-start">
+  <div class="post-it m-4 p-0 column is-one-fifth"
+       (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
+       cdkDrag
+       *ngFor="let idea of ideaResponses; let i=index; trackBy: trackByIndex"
+       cdkDragBoundary=".boundary"
+       [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
+    <div class="sticky"
+         [style.background]="ideaResponses[i].color">
+      <ng-container *ngIf="stickyContentVisible; else hiddenEye">
+        {{idea.text}}
+        <div *ngIf="votes">👍{{votes[i]}}</div>
+      </ng-container>
+      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i> </ng-template>
     </div>
     <div class="icon-container">
-      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea"
+      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
             (click)="showCopiedMessage(copyMessage)"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
       <span class="copied-message" #copyMessage>Copied to Clipboard</span>
