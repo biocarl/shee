@@ -15,13 +15,14 @@ import {PresenterMessage} from "./presenter-message";
 export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
-   // A special request object holding a predefined string used to trigger the display of the current question to clients
+  // A special request object holding a predefined string used to trigger the display of the current question to clients
   readonly questionTrigger: ClientQuestionRequest = {
     requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
   };
   currentPresenterMessage?: PresenterMessage;
 
-  constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {}
+  constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
+  }
 
   /**
    * Listens to the presenter channel for messages.
@@ -112,11 +113,19 @@ export class QueueService {
 
   #encodeMessageToBase64(payload: any): string {
     // TODO Bind this properly to be {} at least
-    return btoa(JSON.stringify(payload));
+    return this.#utf8ToBase64(JSON.stringify(payload));
   }
 
   #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
-    return JSON.parse(atob(payloadMessage));
+    return  JSON.parse(this.#base64ToUtf8(payloadMessage));
+  }
+
+  #utf8ToBase64(str: string): string {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
+  }
+
+  #base64ToUtf8(base64: string): string {
+    return decodeURIComponent(Array.prototype.map.call(atob(base64), (c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
   }
 }
 
