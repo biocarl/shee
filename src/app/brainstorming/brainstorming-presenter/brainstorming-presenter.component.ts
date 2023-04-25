@@ -234,4 +234,15 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       }, 1000);
     }
   }
+
+
+
+  public isValidUrl(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

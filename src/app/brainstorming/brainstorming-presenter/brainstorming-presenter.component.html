@@ -1,6 +1,9 @@
-<ng-container *ngIf="ideaEvent">
-  <div style="font-size:3rem;text-align:center" *ngIf="ideaEvent.timer !== undefined">
-    <div *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
+<script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
+<div *ngIf="ideaEvent">
+  <div style="font-size: 3rem; text-align: center" *ngIf="ideaEvent.timer !== undefined">
+    <div *ngIf="ideaEvent.timer > 0; else timeUp">
+      Timer: {{ ideaEvent.timer }}
+    </div>
   </div>
   <ng-template #timeUp>Time is up!</ng-template>
 </ng-container>
@@ -64,7 +67,12 @@
     <div class="sticky"
          [style.background]="ideaResponses[i].color">
       <ng-container *ngIf="stickyContentVisible; else hiddenEye">
+        <ng-container *ngIf="!isValidUrl(idea); else image">
         {{idea.text}}
+        </ng-container>
+        <ng-template #image>
+          <img src="{{idea.text}}" alt="image posted by user">
+        </ng-template>
         <div *ngIf="votes">👍{{votes[i]}}</div>
       </ng-container>
       <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i> </ng-template>
