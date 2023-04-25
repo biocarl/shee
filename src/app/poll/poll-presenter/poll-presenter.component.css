@@ -30,7 +30,6 @@ h4{
 }
 .bar-label {
   margin-bottom: 5px;
-  color: var(--textColor_dark);;
 }
 .bar-container {
   background-color: rgba(244,255,237,0.36);
@@ -46,7 +45,7 @@ h4{
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 .bar {
-  background-color: #ffffff;
+  background-color: var(--backgroundColor_light);
   height: 100%;
   position: relative;
   display: flex;

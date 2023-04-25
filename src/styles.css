@@ -110,9 +110,11 @@ body.dark {
 .navbar-end {
   display: flex;
   justify-content: end;
-  align-items: start;
+  align-items: end;
   margin-top: 25px;
   width: 10%;
+  position:relative;
+  left:30px;
 }
 
 @media screen and (min-width: 0px) {
@@ -152,6 +154,22 @@ body.dark {
     background-position: bottom;
   }
 }
+@media screen and (max-width: 1023px){
 
+  .navbar-menu {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0.5rem 0;
+  }
+}
+
+@media screen and (min-width: 0px){
+    .navbar, .navbar-menu, .navbar-start, .navbar-end {
+      align-items: stretch;
+      display: flex;
+      flex-grow: 1;
+      flex-shrink: 0;
+    }
+}
 
 

@@ -30,9 +30,6 @@ code {
   align-items: center;
   height: 100%;
 }
-.title {
-  color: #ABABAB;
-}
 body{
   background-color: transparent;
 }
@@ -40,6 +37,22 @@ h1{
   font-family: 'ChunkFive', serif;font-size: 22px;
 }
 
+@media screen and (max-width: 1023px){
+  .navbar-menu {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0.5rem 0;
+  }
+}
+
+@media screen and (min-width: 0px){
+  .navbar, .navbar-menu, .navbar-start, .navbar-end {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+}
 
 
 
