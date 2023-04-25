@@ -135,7 +135,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     let singleChoice: boolean = selectedOption === 'oneVote';
     let finalIdeas: string[] = this.ideaResponses.map(idea => idea.text).filter(idea => idea !== "");
     this.stage = 'voting';
-    this.votes = Array(this.ideaEvent.ideas.length).fill(0);
+    this.votes = Array(finalIdeas.length).fill(0);
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       ideas: finalIdeas,
