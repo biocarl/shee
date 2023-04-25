@@ -41,14 +41,14 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
     BrainstormingClientComponent,
     BrainstormingPresenterComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    DragDropModule,
-    ClipboardModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        DragDropModule,
+        ClipboardModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
