@@ -39,6 +39,7 @@ html.light {
   justify-content: flex-start;
   height: 85vh;
   align-items: center;
+  color: var(--textColor);
 }
 
 .v-message > * {
@@ -46,7 +47,6 @@ html.light {
   font-weight: bold;
   text-align: center;
 }
-
 
 body.light {
   --background-color: var(--backgroundColor_light);
@@ -149,27 +149,9 @@ body.dark {
 
   }
 }
+
 @media screen and (min-width: 1824px) {
   .navbar {
     background-position: bottom;
   }
 }
-@media screen and (max-width: 1023px){
-
-  .navbar-menu {
-    background-color: transparent;
-    box-shadow: none;
-    padding: 0.5rem 0;
-  }
-}
-
-@media screen and (min-width: 0px){
-    .navbar, .navbar-menu, .navbar-start, .navbar-end {
-      align-items: stretch;
-      display: flex;
-      flex-grow: 1;
-      flex-shrink: 0;
-    }
-}
-
-

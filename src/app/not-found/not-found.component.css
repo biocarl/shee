@@ -1,6 +1,6 @@
 div{
   padding-top: 70px;
-  color: white;
+  color: var(--textColor);
   font-weight: lighter;
 }
 

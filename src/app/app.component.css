@@ -1,38 +1,43 @@
 .v-abbreviation {
   font-weight: 700;
-  color: #3f51b5;
-  color: whitesmoke;
 }
+
 .v-blue {
   background: #0B72D9;
 }
+
 .v-container {
-  background-color: #F58B44;
   text-align: center;
   margin: 10px;
   padding: 5px;
   border-radius: 25px;
   border: 5px solid black;
 }
+
 h1 {
   text-align: center;
   margin: 0;
   padding: 0;
+  color: var(--headerTextColor);
 }
+
 code {
   background-color: transparent;
   font-weight: bold;
   padding: 0.25em;
 }
+
 .heading {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100%;
 }
+
 body{
   background-color: transparent;
 }
+
 h1{
   font-family: 'ChunkFive', serif;font-size: 22px;
 }
