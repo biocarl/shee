@@ -8,5 +8,7 @@ services:
     volumes:
       - /var/cache/ntfy:/var/cache/ntfy
       - /etc/ntfy:/etc/ntfy
+      - ./server.yaml:/etc/ntfy/server.yml
     ports:
         - 80:80
+ # never change a running system
