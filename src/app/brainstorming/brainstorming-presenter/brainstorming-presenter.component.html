@@ -1,9 +1,6 @@
-<script src="https://kit.fontawesome.com/876162a540.js" crossorigin="anonymous"></script>
-<div *ngIf="ideaEvent">
-  <div style="font-size: 3rem; text-align: center" *ngIf="ideaEvent.timer !== undefined">
-    <div *ngIf="ideaEvent.timer > 0; else timeUp">
-      Timer: {{ ideaEvent.timer }}
-    </div>
+<ng-container *ngIf="ideaEvent">
+  <div style="font-size:3rem;text-align:center" *ngIf="ideaEvent.timer !== undefined">
+    <div *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
   </div>
   <ng-template #timeUp>Time is up!</ng-template>
 </ng-container>
@@ -37,8 +34,8 @@
 
 <!-- Stage: voting -->
 <ng-container *ngIf="stage === 'voting'">
-<button class="button mb-3"  type="button" (click)="stopVoting()">StopVoting</button>
-<ng-container *ngTemplateOutlet="hideButton"></ng-container>
+  <button class="button mb-3" type="button" (click)="stopVoting()">StopVoting</button>
+  <ng-container *ngTemplateOutlet="hideButton"></ng-container>
 </ng-container>
 
 <!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
@@ -48,10 +45,11 @@
   <button class="button mb-3" (click)="startBrainstorming()">
     {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
   </button>
-  </ng-template>
+</ng-template>
 
 <ng-template #hideButton>
-  <button class="button mb-3" (click)="toggleStickyVisibility()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
+  <button class="button mb-3" (click)="toggleStickyVisibility()"><i
+    [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
 <br><br>
@@ -67,15 +65,15 @@
     <div class="sticky"
          [style.background]="ideaResponses[i].color">
       <ng-container *ngIf="stickyContentVisible; else hiddenEye">
-        <ng-container *ngIf="!isValidUrl(idea); else image">
-        {{idea.text}}
+        <ng-container *ngIf="!isValidUrl(idea.text); else image">
+          {{idea.text}}
         </ng-container>
         <ng-template #image>
           <img src="{{idea.text}}" alt="image posted by user">
         </ng-template>
         <div *ngIf="votes">👍{{votes[i]}}</div>
       </ng-container>
-      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i> </ng-template>
+      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i></ng-template>
     </div>
     <div class="icon-container">
       <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
@@ -87,3 +85,4 @@
     <div class="shadow"></div>
   </div>
 </div>
+
