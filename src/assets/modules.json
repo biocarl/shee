@@ -47,6 +47,12 @@
           "description" : "The question asked",
           "value" : "What do you think about pancakes with honey?",
           "required" : "true"
+        },
+        {
+          "name" : "ideas",
+          "description" : "A set of the first ideas you want to provide",
+          "value" : "Nutella and bananas are the way!,Yes!,To much gluten :(",
+          "required" : false
         }
       ]
     },

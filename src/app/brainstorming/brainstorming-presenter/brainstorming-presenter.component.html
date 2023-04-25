@@ -45,7 +45,10 @@
   <button class="button mb-3" (click)="startBrainstorming()">
     {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
   </button>
+
   </ng-template>
+
+  <button [disabled]="stage=='voting'" class="button" (click)="addStickie()">add Stickie</button>
 
 <ng-template #hideButton>
   <button class="button mb-3" (click)="toggleStickyVisibility()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
@@ -61,19 +64,35 @@
        *ngFor="let idea of ideaResponses; let i=index; trackBy: trackByIndex"
        cdkDragBoundary=".boundary"
        [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
+
     <div class="sticky"
          [style.background]="ideaResponses[i].color">
-      <ng-container *ngIf="stickyContentVisible; else hiddenEye">
-        {{idea.text}}
-        <div *ngIf="votes">👍{{votes[i]}}</div>
+      <ng-container *ngIf="editing && (editableSticky==i); else displayIdea">
+          <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
+          [(ngModel)]="editedIdea"
+          [maxlength]="280"></textarea>
+        <div id="character-counter" [style.color]="editedIdea.length < 280 ? 'var(--textColor_dark)' : 'red'" >{{ editedIdea.length }}/280</div>
+        <button [disabled]="editedIdea==''" class="button is-rounded" (click)="saveIdea(i)">Save</button>
       </ng-container>
+      <ng-template #displayIdea>
+        <ng-container  *ngIf="stickyContentVisible; else hiddenEye">
+          {{idea.text}}
+          <div *ngIf="votes">👍{{votes[i]}}</div>
+        </ng-container>
+      </ng-template>
+
       <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i> </ng-template>
     </div>
     <div class="icon-container">
       <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
             (click)="showCopiedMessage(copyMessage)"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
+      <a> <i class="fa-solid fa-pen fa-xs" (click)="toggleEditMode(i)"></i></a>
       <span class="copied-message" #copyMessage>Copied to Clipboard</span>
+
+
+
+
     </div>
     <div class="top-tape"></div>
     <div class="shadow"></div>

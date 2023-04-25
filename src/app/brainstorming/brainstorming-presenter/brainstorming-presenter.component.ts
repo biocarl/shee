@@ -24,7 +24,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   private timerInterval: any;
   timerLength_brainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
-
+  editing: boolean = false;
+  editableSticky?:number;
+  editedIdea: string = "";
 
   constructor(private queueService: QueueService) {
   }
@@ -46,7 +48,10 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
         this.ideaResponses.push({text: brainstormingSubscriptionEvent.idea_text, color: brainstormingSubscriptionEvent.stickyColor});
 
-      } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting') {
+      } else if (
+        this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id &&
+        brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting'
+      ) {
         let voteIndex = 0;
         this.ideaResponses.forEach((idea, index) => {
           if (idea.text !== '' && this.votes) {
@@ -234,4 +239,28 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       }, 1000);
     }
   }
+
+  addStickie() {
+    this.ideaResponses.push({text: "new idea", color: "yellow"});
+    this.editing = !this.editing;
+    if (this.ideaEvent){
+      this.editableSticky = this.ideaResponses.length-1;
+    }
+
+  }
+
+  toggleEditMode(index: number) {
+    this.editing = true;
+    this.editableSticky=index;
+    if (this.ideaEvent){
+      this.editedIdea=this.ideaResponses[index].text;
+    }
+  }
+
+  saveIdea(index: number) {
+    this.ideaResponses[index].text=this.editedIdea;
+    this.editing = false;
+    this.editedIdea="";
+  }
+
 }
