@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {GroupService} from "./group.service";
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import {GroupService} from "./group.service";
  * @component
  */
 export class AppComponent{
+  envName = environment.name;
   /**
    * Creates a new instance of the AppComponent class.
    * @constructor
