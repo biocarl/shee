@@ -38,16 +38,29 @@
           <label for="violet"><span (click)="changeColor($event)" class="violet"></span></label>
 
         </div>
+        <div>
         <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
                   [style.background-color]="bgColor"
                   [(ngModel)]="idea_text"
-                  [maxlength]="280"></textarea>
-        <div id="character-counter"
-             [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ idea_text.length }}/280
+                  [maxlength]="maxLength"
+                  (ngModelChange)="checkForImgUrl($event)"></textarea>
+          <div id="character-counter"
+               [style.color]="idea_text.length < maxLength ? 'var(--textColor_dark)' : 'red'">{{ idea_text.length }}
+            /{{maxLength}}
+          </div>
+          <button  (click)="switchTextArea()"> Switch to {{stage}}</button>
         </div>
-        <button [disabled]="idea_text.trim().length===0" id="send-button" type="button"
+        <button *ngIf="!isPictureTextField; else pictureButton" [disabled]="idea_text.trim().length===0 " id="send-button"
+                type="button"
                 (click)="sendIdea()">Send Idea
         </button>
+        <ng-template #pictureButton>
+          <button (click)="checkIfTextIsImage(idea_text)">check Url</button>
+          <button [disabled]="idea_text.trim().length===0 || isNotAnImage" id="send-button2" type="button"
+                  (click)="sendIdea()">Send Picture
+          </button>
+        </ng-template>
+
       </div>
     </form>
   </ng-template>
@@ -57,7 +70,7 @@
 <div *ngIf="votingEvent">
   <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
     Voting has been stopped
-</div>
+  </div>
 
   <ng-template #openVoting>
     <div *ngIf="votingEvent">

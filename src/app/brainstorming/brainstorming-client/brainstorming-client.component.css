@@ -266,4 +266,25 @@ textarea{
   transform: translate(0%,-60%);
 }
 
+#send-button2{
+  background: var(--menuColor_dark);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  width: 388px;
+  height: 84px;
+  position:fixed;
+  font-weight: 400;
+  font-size: 24px;
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
+  top: calc(100% + 84px); /* 100% + Buttonhöhe */
+  color: var(--buttonTextColor_dark);
+  transition: opacity 0.1s ease-in-out;
+}
+
+#send-button2:disabled {
+  opacity: 0;
+}
+
 

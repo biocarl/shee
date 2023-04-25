@@ -15,7 +15,7 @@ import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-vot
   templateUrl: './brainstorming-client.component.html',
   styleUrls: ['./brainstorming-client.component.css']
 })
-export class BrainstormingClientComponent implements ClientView,AfterViewChecked {
+export class BrainstormingClientComponent implements ClientView, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = false;
@@ -26,6 +26,10 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
   multi_vote_check: boolean [];
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
+  isPictureTextField: boolean = false;
+  maxLength: number = 280;
+  isNotAnImage: boolean = true;
+  stage: string = 'picture';
 
   constructor(private groupService: GroupService,
               private queueService: QueueService,
@@ -35,7 +39,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
 
   ngAfterViewChecked(): void {
     const sticky = document.querySelector('#user-input');
-    if(sticky) {
+    if (sticky) {
       this.resizeTextToFitContainer(sticky as HTMLElement);
     }
   }
@@ -56,7 +60,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
     if (this.votingEvent.single_choice) {
       this.is_voted = true;
-    }else {
+    } else {
       this.multi_vote_check[voteSelectionIndex] = true;
     }
 
@@ -88,7 +92,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     this.votingEvent = data as BrainstormingPresenterVotingSubscribeResponse;
     if (this.ideaEvent.openForIdeas) {
       this.openForIdeas = true;
-    } else if (this.ideaEvent.openForIdeas === false)  {
+    } else if (this.ideaEvent.openForIdeas === false) {
       this.isAfterBrainstorming = true;
     }
     this.initializeTimer();
@@ -107,7 +111,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     }
   }
 
-  changeColor(event : MouseEvent) {
+  changeColor(event: MouseEvent) {
     const element = event.target as HTMLElement;
     const colorSpans = document.querySelectorAll('.color-selection span') as NodeListOf<HTMLElement>;
 
@@ -162,4 +166,36 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
       return false;
     }
   }
+
+  public switchTextArea(): void {
+    if (this.isPictureTextField == false) {
+      this.isPictureTextField = true;
+      this.maxLength = 1000;
+      this.stage = 'text';
+    } else {
+      this.isPictureTextField = false;
+      this.maxLength = 280;
+      this.stage = 'picture;'
+    }
+  }
+
+  public checkIfTextIsImage(url: string) {
+    const img = new Image();
+    img.src = url;
+    this.isNotAnImage = !img.complete && !(img.naturalWidth !== 0);
+  }
+
+  public isImage2(url: string): boolean {
+    const img = new Image();
+    img.src = url;
+    return img.complete && img.naturalWidth !== 0;
+  }
+
+
+  public checkForImgUrl(event: Event) {
+
+    this.isNotAnImage = !this.isImage2((<HTMLInputElement>event.target).value);
+
+  }
+
 }
