@@ -65,7 +65,7 @@
     <div class="sticky"
          [style.background]="ideaResponses[i].color">
       <ng-container *ngIf="stickyContentVisible; else hiddenEye">
-        <ng-container *ngIf="!isValidUrl(idea.text); else image">
+        <ng-container *ngIf="!isValidImageUrl(idea.text); else image">
           {{idea.text}}
         </ng-container>
         <ng-template #image>

@@ -154,7 +154,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     }
   }
 
-  public isValidUrl(url: string): boolean {
+  public isValidImageUrl(url: string): boolean {
     try {
       new URL(url);
       return true;

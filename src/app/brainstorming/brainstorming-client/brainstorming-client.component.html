@@ -75,7 +75,7 @@
           <button [disabled]="multi_vote_check[i]"
                   (click)="voteForIdea(i)"
                   class="votingButton"
-                  *ngIf="!isValidUrl(idea); else image">
+                  *ngIf="!isValidImageUrl(idea); else image">
             {{idea}}
           </button>
           <ng-template #image>

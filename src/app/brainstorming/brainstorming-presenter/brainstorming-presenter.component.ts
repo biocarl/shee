@@ -235,9 +235,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     }
   }
 
-
-
-  public isValidUrl(url: string): boolean {
+  public isValidImageUrl(url: string): boolean {
     try {
       new URL(url);
       return true;
