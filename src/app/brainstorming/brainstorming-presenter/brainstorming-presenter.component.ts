@@ -47,7 +47,13 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
         this.ideaResponses.push({text: brainstormingSubscriptionEvent.idea_text, color: brainstormingSubscriptionEvent.stickyColor});
 
       } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting') {
-        this.votes = this.votes?.map((total, index) => total + brainstormingSubscriptionEvent.idea_voting[index])
+        let voteIndex = 0;
+        this.ideaResponses.forEach((idea, index) => {
+          if (idea.text !== '' && this.votes) {
+            this.votes[index] += brainstormingSubscriptionEvent.idea_voting[voteIndex];
+            voteIndex++;
+          }
+        })
       }
     });
 
@@ -61,9 +67,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
 
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
-    if (!this.ideaEvent.ideas) {
-      this.ideaEvent.ideas = [];
-    }
     this.initializeTimer();
   }
 
@@ -135,7 +138,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     let singleChoice: boolean = selectedOption === 'oneVote';
     let finalIdeas: string[] = this.ideaResponses.map(idea => idea.text).filter(idea => idea !== "");
     this.stage = 'voting';
-    this.votes = Array(finalIdeas.length).fill(0);
+    this.votes = Array(this.ideaResponses.length).fill(0);
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       ideas: finalIdeas,
@@ -201,7 +204,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     if (!this.ideaEvent?.question_id) return
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
-      ideas: this.ideaEvent.ideas,
       question: this.ideaEvent?.question,
       question_id: this.ideaEvent?.question_id,
       single_choice: false,

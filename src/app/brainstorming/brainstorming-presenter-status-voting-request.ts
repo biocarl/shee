@@ -1,6 +1,6 @@
 export interface BrainstormingPresenterStatusVotingRequest {
   interaction: "brainstorming",
-  ideas: string[],
+  ideas?: string[],
   question: string,
   question_id: string,
   single_choice: boolean,
