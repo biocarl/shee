@@ -10,7 +10,6 @@ h3 {
   text-align: center;
   margin-bottom: 3em;
   letter-spacing: 0.15em;
-  text-shadow: 1px 1px black;
   font-size: 20px;
   color: var(--textColor);
 }
