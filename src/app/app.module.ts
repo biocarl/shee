@@ -20,6 +20,8 @@ import { PairClientComponent } from './pair/pair-client/pair-client.component';
 import { BrainstormingClientComponent } from './brainstorming/brainstorming-client/brainstorming-client.component';
 import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-presenter/brainstorming-presenter.component';
 import {ModeToggleModule} from "./mode-toggle/mode-toggle.module";
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {ClipboardModule} from "@angular/cdk/clipboard";
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import {ModeToggleModule} from "./mode-toggle/mode-toggle.module";
         AppRoutingModule,
         HttpClientModule,
         FormsModule,
-        ModeToggleModule
+        ModeToggleModule,
+        DragDropModule,
+        ClipboardModule
     ],
   providers: [],
   bootstrap: [AppComponent]

@@ -69,7 +69,7 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     // Listen to all presenter messages and inject component into view based on the interaction field
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
+      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id || presenterMessage.client_only) {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
           presenterMessage.interaction, "client", presenterMessage);

@@ -1,23 +1,62 @@
-#user-input{
-  position: fixed;
-  width: 604px;
-  height: 349px;
-  left: 50%; /* 50% vom linken Rand */
-  top: 55%; /* 50% vom oberen Rand */
-  transform: translate(-50%, -50%); /* Verschieben des Elements um 50% der eigenen Breite und Höhe */
-  background: var(--menuColor_dark);
-  border-radius: 53px;
-  justify-content: center;
-  font-family: 'Baloo Bhaina', serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 38px;
-  flex-wrap: wrap;
+:host{
+  --user-input-width:250px; /*brainstorming user input textfield*/
+  --user-input-height:250px; /*brainstorming user input textfield*/
+}
+
+div{
   color: var(--textColor_dark);
-  padding:20px;
-  display: flex;
+}
+
+#user-input {
+  background-color: #FFD707FF;
+  color: rgb(0,0,0,0.87);
+  font-size: 15px;
+  word-wrap: break-word;
+  padding:30px 13px 28px 13px;
   text-align: center;
+  border-bottom-right-radius: 60px 5px;
+  line-height: 1.5;
+  font-weight: 550;
+  transition: background-color 0.1s ease-in-out;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.positioning-wrapper {
+  position: fixed;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  width: var(--user-input-width);
+  height: var(--user-input-height);
+}
+
+textarea {
+  border: none;
+  overflow: hidden;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.positioning-wrapper:after {
+  content: "";
+  position:absolute;
+  z-index: -1;
+  right:0; bottom:15px;
+  width:200px;
+  height: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow:2px 15px 5px rgba(0, 0, 0, 0.40);
+  transform: matrix(-1, -0.1, 0, 1, 0, 0);
 }
 
 #cute-sheep{
@@ -30,7 +69,7 @@
 
 #send-button{
   background: var(--menuColor_dark);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
   width: 388px;
   height: 84px;
@@ -40,18 +79,23 @@
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
-  top: calc(55% + 349px / 2 + 10px); /* 60% plus die Hälfte der Textfeldhöhe */
-  color: var(--textColor_dark);
+  top: calc(100% + 84px); /* 100% + Buttonhöhe */
+  color: var(--buttonTextColor_dark);
+  transition: opacity 0.1s ease-in-out;
+}
+
+#send-button:disabled {
+  opacity: 0;
 }
 
 #toast-sent{
-  position: fixed;
+  position: absolute;
   width: 149px;
   height: 62px;
   left: calc(50% - (149px/2));
-  top: calc(58% - 349px / 2 - 100px);
+  top: calc(-160px);
   background: #64BF4D;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
@@ -62,14 +106,14 @@
   align-items: center;
   text-align: center;
   justify-content: center;
-  color: var(--textColor_dark);
+  color: var(--buttonTextColor_dark);
 }
 
 #question{
   position: absolute;
   width: 100%;
   height: 66px;
-  top: calc(58% - 480px / 2 - 160px);
+  bottom: calc(var(--user-input-height) + 30px);
   color: var(--titleColor_dark);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
@@ -84,7 +128,7 @@
 }
 
 ::placeholder {
-  color: var(--textColor_dark);
+  color: black;
   text-align: center;
   position: absolute;
   top: 50%;
@@ -100,3 +144,126 @@
 #user-input:focus::placeholder{
   visibility: hidden;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+input[type=radio] {
+  display: none;
+}
+
+input[type=radio]:checked + span {
+  transform: scale(1.25);
+}
+
+span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+span:hover {
+  transform: scale(1.25);
+}
+
+span.active {
+  transform: scale(1.25);
+}
+
+span.red {
+  background: #fc3030;
+}
+
+span.orange {
+  background: #f2711c;
+}
+
+span.yellow {
+  background: #FFD707FF;
+}
+
+span.olive {
+  background: #b5cc18;
+}
+
+span.green {
+  background: #21ba45;
+}
+
+span.teal {
+  background: #00b5ad;
+}
+
+span.blue {
+  background: #2185d0;
+}
+
+span.violet {
+  background: #7e43fd;
+}
+
+span.purple {
+  background: #a333c8;
+}
+
+span.pink {
+  background: #e03997;
+}
+
+textarea{
+  resize: none;
+}
+
+.color-selection {
+  display:flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  position: absolute;
+  top:-37px; /* height of span 30px + 7px spacing above textfield*/
+  left:-10px; /*whole div is 30*7+10x6px wide = 270px or 20px bigger than the textfield -> -10px to center;*/
+}
+
+#character-counter {
+  position: absolute;
+  bottom: -15%;
+  right: 40%;
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  text-align:center;
+  font-size: 50px;
+  color: rgb(0,0,0,0.87);
+  transform: translate(0%,-60%);
+}
+::-moz-placeholder { /* Firefox 19+ */
+  text-align:center;
+  font-size: 50px;
+  color: rgb(0,0,0,0.87);
+  transform: translate(0%,-60%);
+}
+:-ms-input-placeholder { /* IE 10+ */
+  text-align:center;
+  font-size: 50px;
+  color: rgb(0,0,0,0.87);
+  transform: translate(0%,-60%);
+}
+:-moz-placeholder { /* Firefox 18- */
+  text-align:center;
+  font-size: 50px;
+  color: rgb(0,0,0,0.87);
+  transform: translate(0%,-60%);
+}
+
+

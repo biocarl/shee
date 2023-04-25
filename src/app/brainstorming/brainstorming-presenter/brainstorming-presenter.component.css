@@ -1,0 +1,121 @@
+div,label{
+  color: var(--textColor_dark);
+}
+
+.sticky {
+  font-size: 15px;
+  text-align: center;
+  padding:30px 13px 28px 13px;
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  width: 250px;
+  height:250px;
+  word-wrap: break-word;
+  border-bottom-right-radius: 60px 5px;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  font-weight: 550;
+  color: rgb(0,0,0,0.87);
+}
+
+.sticky:active,
+.post-it.cdk-drag-dragging > .sticky {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.post-it {
+  position: relative;
+  width: 250px;
+  height:250px;
+  z-index:2;
+}
+
+.shadow {
+  content: "";
+  position:absolute;
+  z-index:1;
+  right:-0px; bottom:20px;
+  width:200px;
+  height: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow:2px 15px 5px rgba(0, 0, 0, 0.40);
+  transform: matrix(-1, -0.1, 0, 1, 0, 0);
+}
+
+.boundary {
+  margin-left: 2.5vw;
+  margin-right: 2.5vw;
+  width: 95vw;
+  max-width: 100%;
+  min-height: 100%;
+  border: dotted #ccc 2px;
+  z-index: -2;
+}
+
+.top-tape {
+  position: absolute;
+  z-index: 2;
+  height: 2.5em;
+  transform: translateX(15%);
+  top: -18px;
+  width: 12em;
+  background-color: #dbd8be;
+  opacity: 0.7;
+}
+
+.top-tape:before, .top-tape:after {
+  content: " ";
+  position: absolute;
+  background-size: 100% calc(100% / 10);
+  height: 100%;
+  --width:3px;
+  width: var(--width);
+}
+
+.top-tape:before {
+  background-image: linear-gradient(-135deg, #dbd8be 50%, transparent 0);
+  left: calc(0px - var(--width));
+}
+
+.top-tape:after {
+  background-image: linear-gradient(45deg, #dbd8be 50%, transparent 0);
+  right: calc(0px - var(--width));
+}
+
+.icon-container {
+  position: relative;
+  bottom: 25px;
+  left: 8px;
+  display: flex;
+}
+
+.icon-container a {
+  margin-right: 25px;
+  color: black;
+  z-index:2;
+}
+
+.icon-container a:hover i {
+  transform: scale(1.2);
+}
+
+.copied-message {
+  position: absolute;
+  background-color: #f8f9fa;
+  padding: 0.25em 0.5em;
+  border: 1px solid #ced4da;
+  border-radius: 0.25em;
+  font-size: 0.75em;
+  top: -1.5em;
+  left: 47%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  display: inline-block;
+}
