@@ -1,5 +1,5 @@
 <!-- new navbar -->
-<div class="navbar is-mobile">
+<div class="navbar is-mobile" [ngClass]="{'navbar-light': mode === Mode.LIGHT, 'navbar-dark': mode === Mode.DARK}">
   <div class="navbar-menu">
     <div class="navbar-brand"></div>
     <div class="navbar-start is-justify-content-center">
@@ -34,17 +34,9 @@
     </div>
     <!-- darkmodeswitch -->
     <div class="navbar-end">
-      <!-- is gonna be implemented later!
       <div class="navbar-item is-center">
-        <span>
-          <div class="field">
-          <input id="switchExample"  type="checkbox" name="switchExample"
-                 class="switch is-small">
-          <label for="switchExample"><i class="fa-solid fa-moon"></i></label>
-          </div>
-        </span>
+        <app-mode-toggle></app-mode-toggle>
       </div>
-      -->
     </div>
   </div>
 </div>
