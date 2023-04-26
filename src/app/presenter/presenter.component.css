@@ -10,9 +10,25 @@
   height: 400px;
 }
 
+.footer-presenter.footer-presenter-dark {
+  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
+}
+
+/* Stile für Light Mode */
+.footer-presenter.footer-presenter-light {
+  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_light.svg");
+}
+
 @media screen and (max-width: 768px) {
-  .footer-presenter {
+  .footer-presenter.footer-presenter-dark {
     background-image: url("src/assets/SVG/Grafik_Footer_Presenter_dark.svg");
+    background-size: 100% auto;
+    background-position: bottom;
+  }
+}
+@media screen and (max-width: 768px) {
+  .footer-presenter.footer-presenter-light {
+    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_mobile_light.svg");
     background-size: 100% auto;
     background-position: bottom;
   }
@@ -20,7 +36,6 @@
 
 @media screen and (min-width: 768px) {
   .footer-presenter {
-    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
     background-size: 100% auto;
     background-position: bottom;
   }

@@ -15,21 +15,21 @@
   --buttonTextColor_dark: white;
 }
 
-html {
+html.dark {
   height: 100%;
-  background-color: var(--backgroundColor_dark) !important;
+  background-color: var(--backgroundColor_dark);
   background-image: url("src/assets/SVG/Grafik_Background_stars.svg");
   background-repeat: repeat-x;
   background-position-y: 100px;
 }
 
-body {
-  background-image: url("src/assets/SVG/Grafik_Mond.svg");
-  background-repeat: no-repeat;
-  background-position: calc(100% + 200px) 0;
-  background-position-y: -120px;
+html.light {
   height: 100%;
-  margin: 0;
+  background-color: var(--backgroundColor_light);
+  background-image: url("src/assets/SVG/Grafik_Schwalben.svg");
+  background-repeat: no-repeat;
+  background-position-y: 200px;
+  background-position-x: 280px;
 }
 
 .v-message {
@@ -39,6 +39,7 @@ body {
   justify-content: flex-start;
   height: 85vh;
   align-items: center;
+  color: var(--textColor);
 }
 
 .v-message > * {
@@ -47,23 +48,110 @@ body {
   text-align: center;
 }
 
-/*
-// for dark-light-mode implementation
-  body.light {
-    --backgroundColor: var(--backgroundColor_light);
-    --headerTextColor: var(--headerTextColor_light);
-    --titleColor: var(--titleColor_light);
-    --textColor: var(--textColor_light);
-    --menuColor: var(--menuColor_light);
-    --buttonTextColor: var(--buttonTextColor_light);
-  }
+body.light {
+  --background-color: var(--backgroundColor_light);
+  --headerTextColor: var(--headerTextColor_light);
+  --titleColor: var(--titleColor_light);
+  --textColor: var(--textColor_light);
+  --menuColor: var(--menuColor_light);
+  --buttonTextColor: var(--buttonTextColor_light);
+  background-image: url("src/assets/SVG/Grafik_Sonne.svg");
+  background-repeat: no-repeat;
+  background-position: calc(0% - 200px) 0;
+  background-position-y: -100px;
+  height: 100%;
+  margin: 0;
+}
 
-  body.dark {
-    --backgroundColor: var(--backgroundColor_dark);
-    --headerTextColor: var(--headerTextColor_dark);
-    --titleColor: var(--titleColor_dark);
-    --textColor: var(--textColor_dark);
-    --menuColor: var(--menuColor_dark);
-    --buttonTextColor: var(--buttonTextColor_dark);
+body.dark {
+  --background-color: var(--backgroundColor_dark);
+  --headerTextColor: var(--headerTextColor_dark);
+  --titleColor: var(--titleColor_dark);
+  --textColor: var(--textColor_dark);
+  --menuColor: var(--menuColor_dark);
+  --buttonTextColor: var(--buttonTextColor_dark);
+  background-image: url("src/assets/SVG/Grafik_Mond.svg");
+  background-repeat: no-repeat;
+  background-position: calc(100% + 200px) 0;
+  background-position-y: -120px;
+  height: 100%;
+  margin: 0;
+}
+
+.navbar {
+  background-color: transparent !important;
+  width: 100%;
+  height: 125px;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+.navbar-light {
+  background-image: url("src/assets/SVG/Grafik_Header_Desktop_light.svg");
+}
+
+.navbar-dark {
+  background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
+  --background-color: var(--backgroundColor_dark);
+}
+
+.navbar-start {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.navbar-brand {
+  width: 10%;
+}
+
+.navbar-end {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  margin-top: 25px;
+  width: 10%;
+  position:relative;
+  left:30px;
+}
+
+@media screen and (min-width: 0px) {
+  .navbar, .navbar-menu, .navbar-start, .navbar-end {
+    align-items: stretch;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
   }
-  */
+}
+
+@media screen and (max-width: 1023px) {
+  .navbar-menu {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0.5rem 0;
+  }
+}
+
+@media screen and (min-width: 0px) {
+  .navbar-item, .navbar-link {
+    align-items: center;
+    display: flex;
+    margin-bottom: 50px;
+  }
+}
+
+@media screen and (min-width: 1700px) {
+  .navbar {
+    background-size: 100% auto;
+    background-position: top;
+
+  }
+}
+
+@media screen and (min-width: 1824px) {
+  .navbar {
+    background-position: bottom;
+  }
+}
