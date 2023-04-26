@@ -20,6 +20,7 @@ import { PairClientComponent } from './pair/pair-client/pair-client.component';
 import { BrainstormingClientComponent } from './brainstorming/brainstorming-client/brainstorming-client.component';
 import { BrainstormingPresenterComponent } from './brainstorming/brainstorming-presenter/brainstorming-presenter.component';
 import {ModeToggleModule} from "./mode-toggle/mode-toggle.module";
+import {NgOptimizedImage} from "@angular/common";
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from "@angular/cdk/clipboard";
 
@@ -48,8 +49,10 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
         HttpClientModule,
         FormsModule,
         ModeToggleModule,
+        NgOptimizedImage,
         DragDropModule,
         ClipboardModule
+
     ],
   providers: [],
   bootstrap: [AppComponent]
