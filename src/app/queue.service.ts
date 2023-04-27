@@ -113,13 +113,15 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-
+    if (!environment.production) {
+      const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+      console.log(`${timestamp} Trying to send Post to client channel:`, payload);
+      console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
+    }
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         if (!environment.production) {
-          const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-          console.log(`${timestamp}Post request sent:`, result);
-          console.log("Decoded Message: " , this.#decodeMessageFromBase64(result.message))
+          console.log("Post to client channel successful.")
         }
       });
   }
@@ -139,13 +141,15 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-
+    if (!environment.production) {
+      const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+      console.log(`${timestamp} Trying to send Post to presenter channel:`, payload);
+      console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
+    }
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         if (!environment.production) {
-          const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-          console.log(`${timestamp} Post request sent:`, result);
-          console.log("Decoded Message: " , this.#decodeMessageFromBase64(result.message))
+        console.log("Post to presenter channel successful.")
         }
       });
   }
