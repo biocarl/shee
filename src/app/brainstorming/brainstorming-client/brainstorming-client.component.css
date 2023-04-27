@@ -108,6 +108,9 @@ textarea {
   justify-content: center;
   color: var(--buttonTextColor_dark);
   z-index: 2;
+  opacity: 0;
+  animation: fadeInOut 1s;
+  animation-fill-mode: forwards;
 }
 
 #question{
@@ -264,4 +267,17 @@ textarea{
   transform: translate(0%,-60%);
 }
 
-
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
