@@ -121,7 +121,7 @@ export class QueueService {
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         if (!environment.production) {
-          console.log("Post to client channel successful.")
+          console.log("Post to client channel successful.",result)
         }
       });
   }
@@ -149,7 +149,7 @@ export class QueueService {
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         if (!environment.production) {
-        console.log("Post to presenter channel successful.")
+        console.log("Post to presenter channel successful.",result)
         }
       });
   }
