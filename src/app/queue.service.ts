@@ -30,28 +30,39 @@ export class QueueService {
    * When a message is received, the provided callback function is invoked with the parsed message object.
    * @param {Function} handlePresenterMessage - The callback function that handles the presenter messages.
    */
-  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void) {
-    const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
-    eventSource.onmessage = (eventWrapper) => {
-      this.zone.run(
-        () => {
+  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
+      eventSource.onopen = () => {
+        resolve();
+      };
+      eventSource.onerror = (error) => {
+        reject(error);
+      };
+      eventSource.onmessage = (eventWrapper) => {
+        this.zone.run(
+          () => {
 
-          const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-          console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
-          const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+            if(environment.production) {
+              console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
+            }
+            const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
 
-          // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
-          // @ts-ignore
-          if (!event.question_id) {
+            // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
             // @ts-ignore
-            event.question_id = rawEvent.id;
+            if (!event.question_id) {
+              // @ts-ignore
+              event.question_id = rawEvent.id;
+            }
+            // Run callback
+            handlePresenterMessage(event);
           }
-          // Run callback
-          handlePresenterMessage(event);
-        }
-      )
-    };
+        )
+      };
+    });
   }
+
 
   /**
    * Listens to the client channel for messages.
@@ -88,7 +99,9 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        console.log("Post request sent " + JSON.stringify(result));
+        if(environment.production) {
+          console.log("Post request sent " + JSON.stringify(result));
+        }
       });
   }
 
@@ -110,7 +123,9 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        console.log("Post request sent" + JSON.stringify(result))
+        if(environment.production) {
+          console.log("Post request sent" + JSON.stringify(result))
+        }
       });
   }
 
