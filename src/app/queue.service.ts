@@ -47,7 +47,7 @@ export class QueueService {
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
             if (!environment.production) {
               const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-              console.log(`${timestamp} Received client message:`, rawEvent);
+              console.log(`${timestamp} Received presenter message:`, rawEvent);
               console.log(`Decoded message:`, event);
             }
 
@@ -144,7 +144,7 @@ export class QueueService {
       .subscribe(result => {
         if (!environment.production) {
           const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-          console.log(`${timestamp}Post request sent:`, result);
+          console.log(`${timestamp} Post request sent:`, result);
           console.log("Decoded Message: " , this.#decodeMessageFromBase64(result.message))
         }
       });
