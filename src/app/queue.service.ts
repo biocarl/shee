@@ -1,7 +1,7 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
-import { environment } from '../environments/environment';
+import {environment} from '../environments/environment';
 import {ClientQuestionRequest} from "./client-question-request";
 import {PresenterMessage} from "./presenter-message";
 
@@ -44,7 +44,7 @@ export class QueueService {
           () => {
 
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-            if(environment.production) {
+            if (!environment.production) {
               console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
             }
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
@@ -68,20 +68,28 @@ export class QueueService {
    * Listens to the client channel for messages.
    * @param {Function} handleClientMessage - The callback function that handles the client messages.
    */
-  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void) {
-    const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
-    eventSource.onmessage = (eventWrapper) => {
-      this.zone.run(
-        () => {
-          const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-          const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-          // @ts-ignore
-          event.id = rawEvent.id;
-          // Run callback
-          handleClientMessage(event);
-        }
-      )
-    };
+  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void):Promise <void> {
+    return new Promise((resolve, reject) => {
+      const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
+      eventSource.onopen = () => {
+        resolve();
+      };
+      eventSource.onerror = (error) => {
+        reject(error);
+      };
+      eventSource.onmessage = (eventWrapper) => {
+        this.zone.run(
+          () => {
+            const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+            const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            // @ts-ignore
+            event.id = rawEvent.id;
+            // Run callback
+            handleClientMessage(event);
+          }
+        )
+      };
+    });
   }
 
   /**
@@ -99,7 +107,7 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        if(environment.production) {
+        if (!environment.production) {
           console.log("Post request sent " + JSON.stringify(result));
         }
       });
@@ -123,7 +131,7 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        if(environment.production) {
+        if (!environment.production) {
           console.log("Post request sent" + JSON.stringify(result))
         }
       });
@@ -135,7 +143,7 @@ export class QueueService {
   }
 
   #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
-    return  JSON.parse(this.#base64ToUtf8(payloadMessage));
+    return JSON.parse(this.#base64ToUtf8(payloadMessage));
   }
 
   #utf8ToBase64(str: string): string {

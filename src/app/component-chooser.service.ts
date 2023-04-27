@@ -45,7 +45,7 @@ export class ComponentChooserService {
     // clean container before injection
     viewContainerRef.clear();
 
-    if(environment.production) {
+    if(!environment.production) {
       console.log(`Start injecting ${type} component for interaction: ${interaction}`);
     }
     if(type === "presenter"){
@@ -53,28 +53,28 @@ export class ComponentChooserService {
         case "poll" :
           const pollPresenterRef = viewContainerRef.createComponent<PollPresenterComponent>(PollPresenterComponent);
           pollPresenterRef.instance.initializeComponent(event);
-          if(environment.production) {
+          if(!environment.production) {
             console.log(`End injecting ${type} component for interaction: ${interaction}`);
           }
           break
         case "pair" :
           const counterRef = viewContainerRef.createComponent<PairPresenterComponent>(PairPresenterComponent);
           counterRef.instance.initializeComponent(event);
-            if(environment.production) {
+            if(!environment.production) {
               console.log(`End injecting ${type} component for interaction: ${interaction}`);
             }
           break
         case "brainstorming" :
           const brainstormingRef = viewContainerRef.createComponent<BrainstormingPresenterComponent>(BrainstormingPresenterComponent);
           brainstormingRef.instance.initializeComponent(event);
-              if(environment.production) {
+              if(!environment.production) {
                 console.log(`End injecting ${type} component for interaction: ${interaction}`);
               }
           break;
         case "decision" :
           const decisionPresenterRef = viewContainerRef.createComponent<DecisionChartPresenterComponent>(DecisionChartPresenterComponent);
           decisionPresenterRef.instance.initializeComponent(event);
-                if(environment.production) {
+                if(!environment.production) {
                   console.log(`End injecting ${type} component for interaction: ${interaction}`);
                 }
           break;
@@ -89,28 +89,28 @@ export class ComponentChooserService {
         case "poll" :
           const pollClientRef = viewContainerRef.createComponent<PollClientComponent>(PollClientComponent);
           pollClientRef .instance.initializeComponent(event);
-          if(environment.production) {
+          if(!environment.production) {
             console.log(`End injecting ${type} component for interaction: ${interaction}`);
           }
           break
         case "pair" :
           const counterRef = viewContainerRef.createComponent<PairClientComponent>(PairClientComponent);
           counterRef.instance.initializeComponent(event);
-            if(environment.production) {
+            if(!environment.production) {
               console.log(`End injecting ${type} component for interaction: ${interaction}`);
             }
           break
         case "brainstorming" :
           const brainstormingRef = viewContainerRef.createComponent<BrainstormingClientComponent>(BrainstormingClientComponent);
           brainstormingRef.instance.initializeComponent(event);
-              if(environment.production) {
+              if(!environment.production) {
                 console.log(`End injecting ${type} component for interaction: ${interaction}`);
               }
           break;
         case "decision" :
           const decisionClientRef = viewContainerRef.createComponent<DecisionChartClientComponent>(DecisionChartClientComponent);
           decisionClientRef.instance.initializeComponent(event);
-                if(environment.production) {
+                if(!environment.production) {
                   console.log(`End injecting ${type} component for interaction: ${interaction}`);
                 }
           break;
