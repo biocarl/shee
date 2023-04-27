@@ -111,8 +111,7 @@ textarea {
 
 #question{
   position: absolute;
-  width: 100%;
-  height: 66px;
+  width: 80vw;
   bottom: calc(var(--user-input-height) + 30px);
   color: var(--titleColor_dark);
   font-family: 'Baloo Bhaina', serif;
@@ -120,11 +119,9 @@ textarea {
   font-weight: 400;
   font-size: 32px;
   line-height: 64px;
-  display: flex;
-  align-items: center;
   text-align: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 ::placeholder {

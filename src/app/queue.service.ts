@@ -34,6 +34,10 @@ export class QueueService {
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
+        if (!environment.production) {
+          const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+          console.log(`${timestamp} Listener for presenter channel initialized.`);
+        }
         resolve();
       };
       eventSource.onerror = (error) => {
@@ -46,7 +50,7 @@ export class QueueService {
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
             if (!environment.production) {
-              const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+              const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
               console.log(`${timestamp} Received presenter message:`, rawEvent);
               console.log(`Decoded message:`, event);
             }
@@ -75,6 +79,10 @@ export class QueueService {
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
+        if (!environment.production) {
+          const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+          console.log(`${timestamp} Listener for client channel initialized.`);
+        }
         resolve();
       };
       eventSource.onerror = (error) => {
@@ -86,7 +94,7 @@ export class QueueService {
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
             if (!environment.production) {
-              const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+              const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
               console.log(`${timestamp} Received client message:`, rawEvent);
               console.log(`Decoded message:`, event);
             }
@@ -114,7 +122,7 @@ export class QueueService {
       attach: ""
     }
     if (!environment.production) {
-      const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+      const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
       console.log(`${timestamp} Trying to send Post to client channel:`, payload);
       console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
     }
@@ -142,7 +150,7 @@ export class QueueService {
       attach: ""
     }
     if (!environment.production) {
-      const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+      const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
       console.log(`${timestamp} Trying to send Post to presenter channel:`, payload);
       console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
     }
