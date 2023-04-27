@@ -44,10 +44,13 @@ export class QueueService {
           () => {
 
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-            if (!environment.production) {
-              console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
-            }
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            if (!environment.production) {
+              const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+              console.log(`${timestamp} Received client message:`, rawEvent);
+              console.log(`Decoded message:`, event);
+            }
+
 
             // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
             // @ts-ignore
@@ -82,6 +85,12 @@ export class QueueService {
           () => {
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            if (!environment.production) {
+              const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+              console.log(`${timestamp} Received client message:`, rawEvent);
+              console.log(`Decoded message:`, event);
+            }
+
             // @ts-ignore
             event.id = rawEvent.id;
             // Run callback
@@ -108,7 +117,9 @@ export class QueueService {
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         if (!environment.production) {
-          console.log("Post request sent " + JSON.stringify(result));
+          const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+          console.log(`${timestamp}Post request sent:`, result);
+          console.log("Decoded Message: " , this.#decodeMessageFromBase64(result.message))
         }
       });
   }
@@ -132,7 +143,9 @@ export class QueueService {
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
         if (!environment.production) {
-          console.log("Post request sent" + JSON.stringify(result))
+          const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+          console.log(`${timestamp}Post request sent:`, result);
+          console.log("Decoded Message: " , this.#decodeMessageFromBase64(result.message))
         }
       });
   }
