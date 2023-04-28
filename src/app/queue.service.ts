@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from '../environments/environment';
 import {ClientQuestionRequest} from "./client-question-request";
 import {PresenterMessage} from "./presenter-message";
+import {LoggerService} from "./logger.service";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,10 @@ export class QueueService {
   };
   currentPresenterMessage?: PresenterMessage;
 
-  constructor(private groupService: GroupService, private zone: NgZone, private http: HttpClient) {
+  constructor(private groupService: GroupService,
+              private zone: NgZone,
+              private http: HttpClient,
+              private log: LoggerService) {
   }
 
   /**
@@ -34,13 +38,11 @@ export class QueueService {
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
-        if (!environment.production) {
-          const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-          console.log(`${timestamp} Listener for presenter channel initialized.`);
-        }
+        this.log.toConsole("Listener for presenter channel initialized.")
         resolve();
       };
       eventSource.onerror = (error) => {
+        this.log.toConsole("Failed to initialize listener for presenter channel.",error);
         reject(error);
       };
       eventSource.onmessage = (eventWrapper) => {
@@ -49,11 +51,7 @@ export class QueueService {
 
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-            if (!environment.production) {
-              const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-              console.log(`${timestamp} Received presenter message:`, rawEvent);
-              console.log(`Decoded message:`, event);
-            }
+              this.log.toConsole("Received presenter message:", rawEvent);
 
 
             // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
@@ -79,13 +77,11 @@ export class QueueService {
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
-        if (!environment.production) {
-          const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-          console.log(`${timestamp} Listener for client channel initialized.`);
-        }
+        this.log.toConsole("Listener for client channel initialized.");
         resolve();
       };
       eventSource.onerror = (error) => {
+        this.log.toConsole("Failed to initialize listener for client channel.",error);
         reject(error);
       };
       eventSource.onmessage = (eventWrapper) => {
@@ -93,11 +89,7 @@ export class QueueService {
           () => {
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-            if (!environment.production) {
-              const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-              console.log(`${timestamp} Received client message:`, rawEvent);
-              console.log(`Decoded message:`, event);
-            }
+            this.log.toConsole("Received client message:", rawEvent);
 
             // @ts-ignore
             event.id = rawEvent.id;
@@ -121,16 +113,12 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-    if (!environment.production) {
-      const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-      console.log(`${timestamp} Trying to send Post to client channel:`, payload);
-      console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
-    }
+
+    this.log.toConsole("Trying to send Post to client channel:", payload);
+
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        if (!environment.production) {
-          console.log("Post to client channel successful.",result)
-        }
+          this.log.toConsole("Post to client channel earlier was successful.",result)
       });
   }
 
@@ -149,16 +137,12 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-    if (!environment.production) {
-      const timestamp = `${new Date().toLocaleTimeString()}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
-      console.log(`${timestamp} Trying to send Post to presenter channel:`, payload);
-      console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
-    }
+
+    this.log.toConsole("Trying to send Post to presenter channel:", payload);
+
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        if (!environment.production) {
-        console.log("Post to presenter channel successful.",result)
-        }
+          this.log.toConsole("Post to presenter channel earlier was successful.",result)
       });
   }
 

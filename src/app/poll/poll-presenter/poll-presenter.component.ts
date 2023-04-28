@@ -4,6 +4,7 @@ import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-respon
 import {QueueService} from "../../queue.service";
 import {PollClientSubscribeResponse} from "../poll-client-subscribe-response";
 import {PresenterMessage} from "../../presenter-message";
+import {LoggerService} from "../../logger.service";
 
 @Component({
   selector: 'app-poll-presenter',
@@ -19,7 +20,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
   questionEvent ?: PollPresenterSubscribeResponse;
   accumulatedClientChoices ?: number[];
 
-  constructor(private queueService: QueueService) {}
+  constructor(private queueService: QueueService,private log: LoggerService) {}
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
@@ -34,7 +35,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
       }
 
       if (pollSubscriptionEvent.participantName) {
-        console.log(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
+        this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
       }
     });
   }

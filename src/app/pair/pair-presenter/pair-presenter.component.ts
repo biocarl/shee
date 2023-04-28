@@ -4,6 +4,7 @@ import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {QrCodeService} from "../../qr-code.service";
 import {GroupService} from "../../group.service";
+import {LoggerService} from "../../logger.service";
 
 /**
  * This interface defines the structure of the client message sent to the presenter for the "pair" interaction.
@@ -29,7 +30,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   connectedParticipants: number = 0;
   qrCodeUrl ?: string;
 
-  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService) {
+  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService,private log: LoggerService) {
     this.qrCodeService.generateQrCode(`https://shee.app/${this.groupService.getGroupName()}`).then(url => {
       this.qrCodeUrl = url;
     });
@@ -41,7 +42,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
         this.connectedParticipants++;
       }
       if (counterSubscriptionEvent.participantName) {
-        console.log(counterSubscriptionEvent.participantName + " is listening.")
+        this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.")
       }
     });
   }
