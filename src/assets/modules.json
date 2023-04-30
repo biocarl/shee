@@ -35,7 +35,14 @@
       "name" : "pair",
       "description" : "This module you should use if participants need to pair with the presenter instance. The view generates the amount of currently active participants and generates a QR code which encodes a valid participant link.",
       "category" : "general",
-      "parameters" : []
+      "parameters" : [
+        {
+          "name" : "anonymity",
+          "description" : "As a presenter you can ask for a username when generating the pairing link. Decide between 'public' or 'anonymous'",
+          "value" : "public",
+          "required" : false
+        }
+      ]
     },
     {
       "name" : "brainstorming",

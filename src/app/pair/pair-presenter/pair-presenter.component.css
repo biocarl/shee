@@ -2,3 +2,14 @@
   color: var(--textColor);
 }
 
+img{
+  width: 17vw;
+}
+
+.is-public {
+  color: var(--textColor);
+}
+
+.is-public span {
+  color: indianred;
+}
