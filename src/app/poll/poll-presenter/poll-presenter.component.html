@@ -11,6 +11,18 @@
         </div>
       </div>
     </div>
+    <div class="hidden">
+      <div class="voted">
+       <span *ngFor="let user of accumulatedClientChoices[i].users">
+         {{user}}
+       </span>
+      </div>
+      <div class="diff">
+        <span *ngFor="let userMissing of getMissingUsers(accumulatedClientChoices[i].users)">
+           {{userMissing}}
+        </span>
+      </div>
+    </div>
     <ng-template #timeUp>Time is up!</ng-template>
   </div>
 </div>

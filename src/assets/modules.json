@@ -14,13 +14,13 @@
         {
           "name" : "question",
           "description" : "The question asked, only shown in presenter view",
-          "value" : "What is the meaning of life?",
+          "value" : "What is your status on Task 1?",
           "required" : "true"
         },
         {
           "name" : "answers",
           "description" : "A set of options you want to provide for the presenters to vote on",
-          "value" : "Can't say ...,42,Its all about love!",
+          "value" : "Done ✅,Help needed \uD83C\uDD98,Ready to help ⛑️",
           "required" : true
         },
         {
@@ -35,7 +35,14 @@
       "name" : "pair",
       "description" : "This module you should use if participants need to pair with the presenter instance. The view generates the amount of currently active participants and generates a QR code which encodes a valid participant link.",
       "category" : "general",
-      "parameters" : []
+      "parameters" : [
+        {
+          "name" : "anonymity",
+          "description" : "As a presenter you can ask for a username when generating the pairing link. Decide between 'public' or 'anonymous'",
+          "value" : "public",
+          "required" : false
+        }
+      ]
     },
     {
       "name" : "brainstorming",
