@@ -4,6 +4,7 @@ import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-respon
 import {QueueService} from "../../queue.service";
 import {PollClientSubscribeResponse} from "../poll-client-subscribe-response";
 import {PresenterMessage} from "../../presenter-message";
+import {addCookie, getCookieValueFor} from "../../cookie-utlis";
 
 @Component({
   selector: 'app-poll-presenter',
@@ -99,26 +100,14 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     this.userHistory.clear();
   }
   initUsersFromCookies(users : Set<string>){
-    const userCookies = this.getCookie("users");
+    const userCookies = getCookieValueFor("users");
     if(userCookies){
-      userCookies.split("|").forEach(user => users.add(user));
+      userCookies.split("|").forEach((user: string) => users.add(user));
     }
   }
 
   addUserToUserHistory(user : string){
     this.userHistory.add(user);
-    document.cookie = "users="+Array.from(this.userHistory).join("|") + ";";
-  }
-
-  getCookie(name : string){
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2)
-    {
-
-      // @ts-ignore
-      return parts.pop().split(';').shift();
-    }
-    return null;
+    addCookie("users",Array.from(this.userHistory).join("|"));
   }
 }

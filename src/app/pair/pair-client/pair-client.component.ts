@@ -19,7 +19,7 @@ interface CounterPresenterSubscribeResponse {
  */
 interface CounterClientPublishRequest {
   interaction: string,
-  participantName: string
+  participantName ?: string
   // Here you could for example send an external IP (salted hash) to ensure (on presenter side)
   // that no one is sending a request twice
 }

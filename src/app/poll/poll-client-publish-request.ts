@@ -12,7 +12,7 @@ voting : number[],
 /**
 The name of the participant who submitted the vote.
 */
-participantName : string,
+participantName? : string,
 /**
 The ID of the poll question being answered.
 */
