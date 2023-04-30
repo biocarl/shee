@@ -83,6 +83,21 @@ brew install docker
 ```
 ---
 
+## Debugging Angular Apps
+### How to access the module in the Developer tools?
+- As an example for the `poll-presenter` component (assumes there is only one such component in the dom)
+- Here you either can access or trigger a method manually
+```javascript
+ng.getComponent(document.getElementsByTagName("app-poll-presenter")[0])
+```
+
+
+## Special notes
+### Polling user management
+- For now, if you want to flush the stored user, run the following command in the Developer Tools console
+```javascript
+ng.getComponent(document.getElementsByTagName("app-poll-presenter")[0]).clearUserHistory();
+```
 
 ## Contributors 🎉
 - Tamayo ([@SETA1609)](https://github.com/SETA1609))  
