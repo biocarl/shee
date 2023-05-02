@@ -26,7 +26,7 @@
         {
           "name" : "timer",
           "description" : "Publish a poll with a time constraint (in seconds). After elapsed time participant won't be able to vote anymore nor will the presenter accept voting results.",
-          "value" : "10",
+          "value" : "7000",
           "required" : false
         }
       ]
