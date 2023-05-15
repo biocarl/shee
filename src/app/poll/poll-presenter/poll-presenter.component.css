@@ -68,3 +68,20 @@ h4{
   align-content: center;
   color: var(--textColor);
 }
+
+.bar-container:hover + .hidden {
+  display: block;
+  text-align: center;
+  padding: 0.5em;
+}
+.hidden {
+  display: none;
+}
+
+.voted {
+  color: darkgreen;
+}
+.diff {
+  color: indianred;
+}
+

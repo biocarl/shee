@@ -14,9 +14,9 @@ import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-p
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css']
 })
-export class BrainstormingPresenterComponent implements PresenterView, OnInit,AfterViewChecked {
+export class BrainstormingPresenterComponent implements PresenterView, OnInit, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses : {text: string, color: string}[] = [];
+  ideaResponses: { text: string, color: string, hasVisibleContent: boolean }[] = [];
   maxZIndex = 20;
   stickyContentVisible: boolean = false;
   votes?: number[];
@@ -24,7 +24,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   private timerInterval: any;
   timerLength_brainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
-
+  editing: boolean = false;
+  editableSticky?: number;
+  editedIdea: string = "";
 
   constructor(private queueService: QueueService) {
   }
@@ -44,9 +46,16 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
         return;
       }
       if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
-        this.ideaResponses.push({text: brainstormingSubscriptionEvent.idea_text, color: brainstormingSubscriptionEvent.stickyColor});
+        this.ideaResponses.push({
+          text: brainstormingSubscriptionEvent.idea_text,
+          color: brainstormingSubscriptionEvent.stickyColor,
+          hasVisibleContent: this.stickyContentVisible
+        });
 
-      } else if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting') {
+      } else if (
+        this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id &&
+        brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting'
+      ) {
         let voteIndex = 0;
         this.ideaResponses.forEach((idea, index) => {
           if (idea.text !== '' && this.votes) {
@@ -68,6 +77,13 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.initializeTimer();
+    this.ideaEvent.ideas.map(
+      (idea, index) => {
+        if (this.ideaEvent) {
+          this.ideaResponses.push({text: idea, color: "#ffd707ff", hasVisibleContent: true});
+        }
+      }
+    )
   }
 
   startBrainstorming(): void {
@@ -106,7 +122,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     const maxHeight = element.clientHeight;
 
     let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 36; // Set a maximum font size
+    let maxFontSize = 50; // Set a maximum font size
     let fontSize = maxFontSize;
 
     // Apply the maximum font size
@@ -172,16 +188,16 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     }
 
     if (tapeElement) {
-      tapeElement.style.zIndex = (this.maxZIndex +1).toString();
+      tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
     }
     if (iconsElement) {
-      iconsElement.style.zIndex = (this.maxZIndex +1).toString();
+      iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
     }
   }
 
-  hideIdea(i:number) {
+  hideIdea(i: number) {
     if (i > -1) {
-      this.ideaResponses.splice(i, 1,{text:"",color:""});
+      this.ideaResponses.splice(i, 1, {text: "", color: "", hasVisibleContent: false});
     }
   }
 
@@ -196,9 +212,15 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
     }, 1200);
   }
 
-  toggleStickyVisibility(): void {
+  toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
+    this.ideaResponses.forEach(
+      idea => {
+        idea.hasVisibleContent = this.stickyContentVisible;
+      }
+    )
   }
+
 
   stopVoting() {
     if (!this.ideaEvent?.question_id) return
@@ -234,4 +256,28 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit,Af
       }, 1000);
     }
   }
+
+  addStickie() {
+    this.ideaResponses.push({text: "new idea", color: "#ffd707ff", hasVisibleContent: true});
+    this.editing = !this.editing;
+    if (this.ideaEvent) {
+      this.editableSticky = this.ideaResponses.length - 1;
+    }
+
+  }
+
+  toggleEditMode(index: number) {
+    this.editing = true;
+    this.editableSticky = index;
+    if (this.ideaEvent) {
+      this.editedIdea = this.ideaResponses[index].text;
+    }
+  }
+
+  saveIdea(index: number) {
+    this.ideaResponses[index].text = this.editedIdea;
+    this.editing = false;
+    this.editedIdea = "";
+  }
+
 }

@@ -5,6 +5,7 @@ import {PresenterMessage} from "../../presenter-message";
 import {QrCodeService} from "../../qr-code.service";
 import {GroupService} from "../../group.service";
 import {LoggerService} from "../../logger.service";
+import {PairPresenterSubscribeResponse} from "../pair-presenter-subscribe-response";
 
 /**
  * This interface defines the structure of the client message sent to the presenter for the "pair" interaction.
@@ -29,12 +30,9 @@ interface CounterClientSubscribeResponse {
 export class PairPresenterComponent implements OnInit, PresenterView {
   connectedParticipants: number = 0;
   qrCodeUrl ?: string;
+  isPublic: boolean = false;
 
-  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService,private log: LoggerService) {
-    this.qrCodeService.generateQrCode(`https://shee.app/${this.groupService.getGroupName()}`).then(url => {
-      this.qrCodeUrl = url;
-    });
-  }
+  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService) {}
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
@@ -47,5 +45,16 @@ export class PairPresenterComponent implements OnInit, PresenterView {
     });
   }
 
-  initializeComponent(data: PresenterMessage): void {}
+  initializeComponent(data: PresenterMessage): void {
+    const presenterMessage = data as PairPresenterSubscribeResponse;
+    if(presenterMessage.anonymity === "public"){
+      this.isPublic = true;
+    }
+
+    let url = `https://shee.app/${this.groupService.getGroupName()}`;
+
+    this.qrCodeService.generateQrCode(url).then(url => {
+      this.qrCodeUrl = url;
+    });
+  }
 }
