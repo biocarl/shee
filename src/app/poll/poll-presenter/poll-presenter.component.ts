@@ -22,7 +22,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
 
   accumulatedClientChoices ?: Array<{count: number, users: Array<string>}>;
   userHistory: Set<string> = new Set();
-  constructor(private queueService: QueueService) {}
+  constructor(private queueService: QueueService,private log: LoggerService) {}
 
 
 

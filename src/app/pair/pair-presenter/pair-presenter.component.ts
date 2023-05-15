@@ -32,7 +32,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   qrCodeUrl ?: string;
   isPublic: boolean = false;
 
-  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService) {}
+  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService, private log: LoggerService) {}
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
