@@ -4,6 +4,7 @@ import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-respon
 import {QueueService} from "../../queue.service";
 import {PollClientSubscribeResponse} from "../poll-client-subscribe-response";
 import {PresenterMessage} from "../../presenter-message";
+import {LoggerService} from "../../logger.service";
 import {addCookie, getCookieValueFor} from "../../cookie-utlis";
 
 @Component({
@@ -18,9 +19,11 @@ import {addCookie, getCookieValueFor} from "../../cookie-utlis";
  */
 export class PollPresenterComponent implements PresenterView, OnInit {
   questionEvent ?: PollPresenterSubscribeResponse;
+
   accumulatedClientChoices ?: Array<{count: number, users: Array<string>}>;
   userHistory: Set<string> = new Set();
   constructor(private queueService: QueueService) {}
+
 
 
   ngOnInit(): void {
@@ -45,7 +48,8 @@ export class PollPresenterComponent implements PresenterView, OnInit {
       }
 
       if (pollSubscriptionEvent.participantName) {
-        console.log(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
+
+        this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
         this.addUserToUserHistory(pollSubscriptionEvent.participantName);
       }
     });
