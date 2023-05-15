@@ -49,7 +49,7 @@ export class PresenterComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe(params => {
       this.groupName = params.get("group");
@@ -59,7 +59,7 @@ export class PresenterComponent implements OnInit {
     });
 
     // Listen to all presenter events for determining which component to choose based on interactionId
-    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+    await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
@@ -67,15 +67,15 @@ export class PresenterComponent implements OnInit {
       }
     });
 
-    // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
-    this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
-
     // Listen to ClientChannel, if student joins late and requests current question
-    this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
+    await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
       if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
         this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage)
       }
     })
+
+    // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
+    this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
   }
   ngOnDestroy() {
     this.modeSubscription.unsubscribe();

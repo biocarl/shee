@@ -23,7 +23,7 @@ import {Subscription} from "rxjs";
  */
 export class ClientComponent implements OnInit, OnDestroy {
   groupName: string | null = "";
-  participantName: string | null = "";
+  participantName ?: string = "";
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
   viewContainerRef?: ViewContainerRef;
   mode: Mode;
@@ -55,12 +55,8 @@ export class ClientComponent implements OnInit, OnDestroy {
         this.groupService.setGroupName(this.groupName);
       }
     });
-    this.route.queryParamMap.subscribe(params => {
-      this.participantName = params.get("user");
-      if (this.participantName) {
-        this.participantService.setParticipantName(this.participantName);
-      }
-    })
+
+    this.participantName = this.participantService.getParticipantName();
 
     this.viewContainerRef = this.anchor.viewContainerRef;
 
