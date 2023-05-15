@@ -6,13 +6,12 @@
 }
 
 h3 {
-  color: white;
   font-weight: normal;
   text-align: center;
   margin-bottom: 3em;
   letter-spacing: 0.15em;
-  text-shadow: 1px 1px black;
   font-size: 20px;
+  color: var(--textColor);
 }
 
 h4{
@@ -25,13 +24,15 @@ h4{
   display: flex;
   flex-direction: column;
 }
+
 .bar-chart-item {
   margin-bottom: 10px;
 }
+
 .bar-label {
   margin-bottom: 5px;
-  color: var(--textColor_dark);;
 }
+
 .bar-container {
   background-color: rgba(244,255,237,0.36);
   height: 30px;
@@ -45,8 +46,8 @@ h4{
   margin: 0 auto;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
+
 .bar {
-  background-color: #ffffff;
   height: 100%;
   position: relative;
   display: flex;
@@ -56,12 +57,31 @@ h4{
   width: 60%;
   border-radius: 14px;
 }
+
 .bar-value {
-  color: black;
+  color: var(--textColor);
 }
 
 .container {
   display: flex;
   justify-content: center;
   align-content: center;
+  color: var(--textColor);
 }
+
+.bar-container:hover + .hidden {
+  display: block;
+  text-align: center;
+  padding: 0.5em;
+}
+.hidden {
+  display: none;
+}
+
+.voted {
+  color: darkgreen;
+}
+.diff {
+  color: indianred;
+}
+

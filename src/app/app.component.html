@@ -1,5 +1,5 @@
 <!-- new navbar -->
-<div class="navbar is-mobile">
+<div class="navbar is-mobile" [ngClass]="{'navbar-light': mode === Mode.LIGHT, 'navbar-dark': mode === Mode.DARK}">
   <div class="navbar-menu">
     <div class="navbar-brand"></div>
     <div class="navbar-start is-justify-content-center">
@@ -7,10 +7,12 @@
       <div class="navbar-item">
         <div>
           <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-3">
-            <div>
-              <h1>{{groupService.getGroupName()}}</h1>
+            <div >
+              <h1><code>&lt;</code>{{groupService.getGroupName()}}<span style="color: red">{{envName}}</span><code>&gt;</code> </h1>
             </div>
           </div>
+
+
           <ng-template #NoGroup>
             <div style="background:#f5f3ee">
               <div class="v-container">
@@ -32,17 +34,9 @@
     </div>
     <!-- darkmodeswitch -->
     <div class="navbar-end">
-      <!-- is gonna be implemented later!
       <div class="navbar-item is-center">
-        <span>
-          <div class="field">
-          <input id="switchExample"  type="checkbox" name="switchExample"
-                 class="switch is-small">
-          <label for="switchExample"><i class="fa-solid fa-moon"></i></label>
-          </div>
-        </span>
+        <app-mode-toggle></app-mode-toggle>
       </div>
-      -->
     </div>
   </div>
 </div>

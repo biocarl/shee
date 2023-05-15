@@ -3,15 +3,7 @@ import {ClientView} from "../../client-view";
 import {QueueService} from "../../queue.service";
 import {PresenterMessage} from "../../presenter-message";
 import {ParticipantService} from "../../participant.service";
-
-/**
- * This interface defines the structure of the "pair" interaction request emitted by the presenter.
- * @interface
- */
-interface CounterPresenterSubscribeResponse {
-  // Currently no fields needed from presenter side for pairing
-  // later we will e.g. send security relevant information like a public key in the payload
-}
+import {PairPresenterSubscribeResponse} from "../pair-presenter-subscribe-response";
 
 /**
  * This interface defines the structure of the client message sent to the presenter for the "pair" interaction.
@@ -19,7 +11,7 @@ interface CounterPresenterSubscribeResponse {
  */
 interface CounterClientPublishRequest {
   interaction: string,
-  participantName: string
+  participantName ?: string
   // Here you could for example send an external IP (salted hash) to ensure (on presenter side)
   // that no one is sending a request twice
 }
@@ -38,11 +30,26 @@ export class PairClientComponent implements ClientView {
   constructor(private queueService : QueueService, private participantService: ParticipantService) {}
 
   initializeComponent(data: PresenterMessage): void {
-    // Currently not needed/used
-    const counterRequestFromPresenter : CounterPresenterSubscribeResponse = data as CounterPresenterSubscribeResponse;
+    const counterRequestFromPresenter = data as PairPresenterSubscribeResponse;
 
-    // We simply return a alive signal and a participant if set
-    const message : CounterClientPublishRequest =  {
+    if(counterRequestFromPresenter.anonymity === "public" && !this.participantService.getParticipantName()){
+      this.participantService.setParticipantName(this.promptUsername());
+    }
+
+    this.emitPairingFinalized();
+  }
+
+  private promptUsername() {
+    // TODO This should be extracted into a module which handles the username before this module is inflated
+    let promptResponse: string | null = "";
+    while (!promptResponse || promptResponse === "") {
+      promptResponse = prompt("Your name, pls ☺️", "")
+    }
+    return promptResponse;
+  }
+
+  private emitPairingFinalized() {
+    const message: CounterClientPublishRequest = {
       interaction: "pair",
       participantName: this.participantService.getParticipantName()
     };

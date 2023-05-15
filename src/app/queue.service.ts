@@ -1,6 +1,7 @@
 import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
+import {environment} from '../environments/environment';
 import {ClientQuestionRequest} from "./client-question-request";
 import {PresenterMessage} from "./presenter-message";
 
@@ -29,45 +30,75 @@ export class QueueService {
    * When a message is received, the provided callback function is invoked with the parsed message object.
    * @param {Function} handlePresenterMessage - The callback function that handles the presenter messages.
    */
-  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void) {
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
-    eventSource.onmessage = (eventWrapper) => {
-      this.zone.run(
-        () => {
+  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
+      eventSource.onopen = () => {
+        resolve();
+      };
+      eventSource.onerror = (error) => {
+        reject(error);
+      };
+      eventSource.onmessage = (eventWrapper) => {
+        this.zone.run(
+          () => {
 
-          const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-          console.log("listenToPresenterChannel received this: " + JSON.stringify(rawEvent));
-          const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+            const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            if (!environment.production) {
+              const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+              console.log(`${timestamp} Received presenter message:`, rawEvent);
+              console.log(`Decoded message:`, event);
+            }
 
-          // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
-          // @ts-ignore
-          if (!event.question_id) {
+
+            // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
             // @ts-ignore
-            event.question_id = rawEvent.id;
+            if (!event.question_id) {
+              // @ts-ignore
+              event.question_id = rawEvent.id;
+            }
+            // Run callback
+            handlePresenterMessage(event);
           }
-          // Run callback
-          handlePresenterMessage(event);
-        }
-      )
-    };
+        )
+      };
+    });
   }
+
 
   /**
    * Listens to the client channel for messages.
    * @param {Function} handleClientMessage - The callback function that handles the client messages.
    */
-  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void) {
-    const eventSource = new EventSource(`https://ntfy.sh/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
-    eventSource.onmessage = (eventWrapper) => {
-      this.zone.run(
-        () => {
-          const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-          const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-          // Run callback
-          handleClientMessage(event);
-        }
-      )
-    };
+  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void):Promise <void> {
+    return new Promise((resolve, reject) => {
+      const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
+      eventSource.onopen = () => {
+        resolve();
+      };
+      eventSource.onerror = (error) => {
+        reject(error);
+      };
+      eventSource.onmessage = (eventWrapper) => {
+        this.zone.run(
+          () => {
+            const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
+            const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
+            if (!environment.production) {
+              const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+              console.log(`${timestamp} Received client message:`, rawEvent);
+              console.log(`Decoded message:`, event);
+            }
+
+            // @ts-ignore
+            event.id = rawEvent.id;
+            // Run callback
+            handleClientMessage(event);
+          }
+        )
+      };
+    });
   }
 
   /**
@@ -82,10 +113,16 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-
-    this.http.post<any>('https://ntfy.sh', payload)
+    if (!environment.production) {
+      const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+      console.log(`${timestamp} Trying to send Post to client channel:`, payload);
+      console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
+    }
+    this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        console.log("Post request sent " + JSON.stringify(result));
+        if (!environment.production) {
+          console.log("Post to client channel successful.",result)
+        }
       });
   }
 
@@ -104,10 +141,16 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-
-    this.http.post<any>('https://ntfy.sh', payload)
+    if (!environment.production) {
+      const timestamp = `${new Date().toLocaleTimeString("en-US", { hour12: false })}.${String(new Date().getMilliseconds()).padStart(3, "0")}`;
+      console.log(`${timestamp} Trying to send Post to presenter channel:`, payload);
+      console.log("Decoded Message: " , this.#decodeMessageFromBase64(payload.message))
+    }
+    this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        console.log("Post request sent" + JSON.stringify(result))
+        if (!environment.production) {
+        console.log("Post to presenter channel successful.",result)
+        }
       });
   }
 
@@ -117,7 +160,7 @@ export class QueueService {
   }
 
   #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
-    return  JSON.parse(this.#base64ToUtf8(payloadMessage));
+    return JSON.parse(this.#base64ToUtf8(payloadMessage));
   }
 
   #utf8ToBase64(str: string): string {

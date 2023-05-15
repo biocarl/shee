@@ -7,6 +7,9 @@ import {QueryToEventService} from "./query-to-event.service";
 import {ComponentChooserService} from "../component-chooser.service";
 import {PresenterMessage} from "../presenter-message";
 import {ClientQuestionRequest} from "../client-question-request";
+import {Subscription} from "rxjs";
+import {Mode} from "../mode-toggle/mode-toggle.model";
+import {ModeToggleService} from "../mode-toggle/mode-toggle.service";
 
 
 @Component({
@@ -26,15 +29,27 @@ export class PresenterComponent implements OnInit {
   // The anchor directive used to dynamically inject components into the view
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
 
+  mode: Mode;
+  Mode = Mode;
+  modeSubscription: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private queueService: QueueService,
     private groupService: GroupService,
     private queryToEventService: QueryToEventService,
-    private componentChooserService: ComponentChooserService
-  ) {}
+    private componentChooserService: ComponentChooserService,
+    private modeToggleService: ModeToggleService,
+  ) {
+    this.mode = modeToggleService.currentMode;
+    this.modeSubscription = modeToggleService.modeChanged$.subscribe(
+      (mode: Mode) => {
+        this.mode = mode;
+      }
+    );
+  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe(params => {
       this.groupName = params.get("group");
@@ -44,7 +59,7 @@ export class PresenterComponent implements OnInit {
     });
 
     // Listen to all presenter events for determining which component to choose based on interactionId
-    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+    await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
@@ -52,14 +67,17 @@ export class PresenterComponent implements OnInit {
       }
     });
 
-    // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
-    this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
-
     // Listen to ClientChannel, if student joins late and requests current question
-    this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
+    await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
       if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
         this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage)
       }
     })
+
+    // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
+    this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
+  }
+  ngOnDestroy() {
+    this.modeSubscription.unsubscribe();
   }
 }

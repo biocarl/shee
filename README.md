@@ -40,6 +40,65 @@ npm run subscribeLive -- <channel/audience>
 npm run subscribe -- <channel/audience>
 ```
 
+# Running VAG.app
+
+## 2 step Development environment
+### Step #1 ⬇️
+
+**To run VAG.app in a development environment, use the following command:**
+```sh
+ng serve --configuration development
+```
+
+
+### Step #2 ⬇️
+
+#### Using Docker 🐳🏗️
+
+**VAG.app can also be deployed localy using the ntfy api Docker-Image with the docker-compose file named "local-setup.yaml". To deploy the application using Docker, run the following command (for dev enviroment only):**
+```sh
+docker-compose -f local-setup.yaml up
+```
+
+
+### Installing Docker on MAC
+
+Installing the Package Manager HOMEBREW for macOS:
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+If your not sure whether you have a clean **homebrew** docker installation, use this command in terminal to delete your current docker installation:
+```sh
+brew remove docker
+```
+Install the docker application:
+```sh
+brew install --cask docker
+```
+Install the docker command line tools:
+```sh
+brew install docker
+```
+---
+
+## Debugging Angular Apps
+### How to access the module in the Developer tools?
+- As an example for the `poll-presenter` component (assumes there is only one such component in the dom)
+- Here you either can access or trigger a method manually
+```javascript
+ng.getComponent(document.getElementsByTagName("app-poll-presenter")[0])
+```
+
+
+## Special notes
+### Polling user management
+- For now, if you want to flush the stored user, run the following command in the Developer Tools console
+```javascript
+ng.getComponent(document.getElementsByTagName("app-poll-presenter")[0]).clearUserHistory();
+```
+
 ## Contributors 🎉
 - Tamayo ([@SETA1609)](https://github.com/SETA1609))  
 - Bodo ([@Bohdoh](https://github.com/Bohdoh))

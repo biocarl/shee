@@ -22,30 +22,29 @@
   padding: 1em;
   box-sizing: border-box;
   margin: 15px; /* Hinzugefügt für die Box */
-  background-color: #ffffff; /* Hinzugefügt für die Box */
   border-radius: 30px;
   font-family: 'ChunkFive', sans-serif;
   transition: width 0.3s;
   background-color: rgba(244,255,237,0.36);
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: var(--textColor);
 }
 
 .v-question span {
   font-size: 130%;
-  color: var(--textColor_dark);
   letter-spacing: 0.05em;
 }
 
 .v-message-white {
   font-size: 130%;
-  color: var(--textColor_dark);
   letter-spacing: 0.05em;
+  color: var(--textColor);
 }
 
 .timer{
   font-size: 2rem;
   text-align: center;
-  color: var(--textColor_dark);
+  color: var(--textColor);
 }
 
 

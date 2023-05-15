@@ -1,40 +1,47 @@
 .footer-presenter {
   background-color: transparent;
   background-repeat: no-repeat;
-  background-size: cover; /* Bildgröße anpassen */
-  background-position: top; /* Bildposition zentrieren */
-  position: fixed; /* Fixierte Position am unteren Bildschirmrand */
+  background-size: cover;
+  background-position: bottom;
+  position: fixed;
   left: 0;
   bottom: 0;
-  width: 100%; /* Breite auf 100% setzen */
-  height: 400px;
+  width: 100%;
+  height: 15vh;
 }
 
+.footer-presenter.footer-presenter-dark {
+  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
+}
+
+/* Stile für Light Mode */
+.footer-presenter.footer-presenter-light {
+  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_light.svg");
+}
+
+/*
+// No need for seperate assets?
 @media screen and (max-width: 768px) {
-  .footer-presenter {
+  .footer-presenter.footer-presenter-dark {
     background-image: url("src/assets/SVG/Grafik_Footer_Presenter_dark.svg");
-    background-size: 100% auto;
-    background-position: bottom;
+  }
+  .footer-presenter.footer-presenter-light {
+    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_mobile_light.svg");
   }
 }
+*/
+
 
 @media screen and (min-width: 768px) {
   .footer-presenter {
-    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
     background-size: 100% auto;
     background-position: bottom;
   }
 }
 
-@media screen and (min-width: 1700px) {
+@media screen and (min-width: 1500px) {
   .footer-presenter {
     background-size: 100% auto;
-    background-position: bottom;
-  }
-}
-
-@media screen and (min-width: 1824px) {
-  .footer-presenter {
     background-position: bottom;
   }
 }
