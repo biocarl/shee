@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,6 @@ import {Subject} from "rxjs";
 export class GroupService {
   private groupName : string = "";
   public hasQuestions: boolean = false;
-  public groupNameChanged: Subject<string> = new Subject<string>();
 
   /**
    * Returns the name of the current group.
@@ -24,14 +22,12 @@ export class GroupService {
   }
 
   /**
-   * Sets the name of the current group and emits an event to notify subscribers of the change.
-   * @param {string} name - The new name of the current group.
+   * Sets the name of the current group.
+   * @param {string} name The new name of the current group.
    * @public
    * @returns {void}
    */
-  setGroupName(name: string) {
+  setGroupName(name:string){
     this.groupName = name;
-    this.groupNameChanged.next(this.groupName);
   }
-
 }
