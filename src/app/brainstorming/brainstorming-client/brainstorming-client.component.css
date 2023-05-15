@@ -93,7 +93,7 @@ textarea {
   width: 149px;
   height: 62px;
   left: calc(50% - (149px/2));
-  bottom: -15%;
+  top: calc(-160px);
   background: #64BF4D;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
@@ -107,15 +107,12 @@ textarea {
   text-align: center;
   justify-content: center;
   color: var(--buttonTextColor_dark);
-  z-index: 2;
-  opacity: 0;
-  animation: fadeInOut 1s;
-  animation-fill-mode: forwards;
 }
 
 #question{
   position: absolute;
-  width: 80vw;
+  width: 100%;
+  height: 66px;
   bottom: calc(var(--user-input-height) + 30px);
   color: var(--titleColor_dark);
   font-family: 'Baloo Bhaina', serif;
@@ -123,9 +120,11 @@ textarea {
   font-weight: 400;
   font-size: 32px;
   line-height: 64px;
+  display: flex;
+  align-items: center;
   text-align: center;
-  left: 50%;
-  transform: translateX(-50%);
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 ::placeholder {
@@ -267,17 +266,4 @@ textarea{
   transform: translate(0%,-60%);
 }
 
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+

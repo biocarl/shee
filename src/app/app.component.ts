@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {GroupService} from "./group.service";
 import { Mode } from './mode-toggle/mode-toggle.model';
 import {Subscription} from "rxjs";
@@ -26,19 +26,14 @@ export class AppComponent implements OnDestroy{
   mode: Mode;
   Mode = Mode;
   private modeSubscription: Subscription;
-  constructor(protected groupService: GroupService, private modeToggleService: ModeToggleService,private cdr: ChangeDetectorRef) {
+  constructor(protected groupService: GroupService, private modeToggleService: ModeToggleService) {
     this.mode = this.modeToggleService.currentMode;
 
     this.modeSubscription = this.modeToggleService.modeChanged$.subscribe(mode => {
       this.mode = mode;
     });
-
-    this.groupService.groupNameChanged.subscribe(() => {
-      this.cdr.detectChanges();
-    });
   }
   ngOnDestroy() {
     this.modeSubscription.unsubscribe();
-    this.groupService.groupNameChanged.unsubscribe();
   }
 }

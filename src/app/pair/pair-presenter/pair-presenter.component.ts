@@ -4,7 +4,6 @@ import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {QrCodeService} from "../../qr-code.service";
 import {GroupService} from "../../group.service";
-import {LoggerService} from "../../logger.service";
 import {PairPresenterSubscribeResponse} from "../pair-presenter-subscribe-response";
 
 /**
@@ -40,7 +39,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
         this.connectedParticipants++;
       }
       if (counterSubscriptionEvent.participantName) {
-        this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.")
+        console.log(counterSubscriptionEvent.participantName + " is listening.")
       }
     });
   }
