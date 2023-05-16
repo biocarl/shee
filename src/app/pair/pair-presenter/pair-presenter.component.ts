@@ -4,6 +4,7 @@ import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {QrCodeService} from "../../qr-code.service";
 import {GroupService} from "../../group.service";
+import {LoggerService} from "../../logger.service";
 import {PairPresenterSubscribeResponse} from "../pair-presenter-subscribe-response";
 
 /**
@@ -31,7 +32,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   qrCodeUrl ?: string;
   isPublic: boolean = false;
 
-  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService) {}
+  constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService, private log: LoggerService) {}
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
@@ -39,7 +40,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
         this.connectedParticipants++;
       }
       if (counterSubscriptionEvent.participantName) {
-        console.log(counterSubscriptionEvent.participantName + " is listening.")
+        this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.")
       }
     });
   }

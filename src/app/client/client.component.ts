@@ -10,6 +10,7 @@ import {ParticipantService} from "../participant.service";
 import {Mode} from "../mode-toggle/mode-toggle.model";
 import {ModeToggleService} from "../mode-toggle/mode-toggle.service";
 import {Subscription} from "rxjs";
+import {LoggerService} from "../logger.service";
 
 @Component({
   selector: 'app-client',
@@ -37,6 +38,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     private componentChooserService: ComponentChooserService,
     private participantService: ParticipantService,
     private modeToggleService: ModeToggleService,
+    private log: LoggerService
 
   ) {
     this.mode = modeToggleService.currentMode;
@@ -73,7 +75,8 @@ export class ClientComponent implements OnInit, OnDestroy {
     });
 
     // Request current question
-    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
+   this.log.toConsole("Requested current question")
+   this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
   ngOnDestroy() {
     this.modeSubscription.unsubscribe();
