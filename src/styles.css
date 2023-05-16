@@ -117,6 +117,10 @@ body.dark {
   left:30px;
 }
 
+.group-name {
+  margin-bottom: 50px;
+}
+
 @media screen and (min-width: 0px) {
   .navbar, .navbar-menu, .navbar-start, .navbar-end {
     align-items: stretch;
@@ -138,15 +142,13 @@ body.dark {
   .navbar-item, .navbar-link {
     align-items: center;
     display: flex;
-    margin-bottom: 50px;
-  }
+    }
 }
 
 @media screen and (min-width: 1700px) {
   .navbar {
     background-size: 100% auto;
     background-position: top;
-
   }
 }
 

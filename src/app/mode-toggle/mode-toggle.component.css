@@ -1,6 +1,5 @@
 .container-toggle{
-  transform: scale(0.5);
-  margin-bottom: 30px;
+  transform: scale(0.5) translateY(-80px);
 }
 
 .toggle-btn-container span {
