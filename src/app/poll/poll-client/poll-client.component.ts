@@ -33,7 +33,7 @@ export class PollClientComponent implements ClientView {
     voting[voteSelectionIndex] = 1;
     const message: PollClientPublishRequest = {
       interaction: "poll",
-      question_id: this.questionEvent.question_id,
+      question_id: this.questionEvent.questionID,
       voting: voting,
       participantName: this.participantService.getParticipantName()
     };

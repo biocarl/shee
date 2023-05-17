@@ -7,7 +7,7 @@ export interface PollPresenterSubscribeResponse {
    * The unique ID of the poll question.
    * @type {string}
    */
-  question_id: string,
+  questionID: string,
   /**
    * The type of interaction, in this case set to "poll".
    * @type {string}

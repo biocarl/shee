@@ -1,7 +1,7 @@
-<div *ngIf="!openForIdeas && votingEvent?.voting_in_progress===undefined && !isAfterBrainstorming">
+<div *ngIf="!openForIdeas && votingEvent?.votingInProgress===undefined && !isAfterBrainstorming">
   Wait for the presenter to open the brainstorming
 </div>
-<div *ngIf="votingEvent?.voting_in_progress===undefined; ">
+<div *ngIf="votingEvent?.votingInProgress===undefined; ">
   <div *ngIf="!openForIdeas;else showTextarea" class="v-message">
     <div *ngIf="isAfterBrainstorming">
       Brainstorming has ended
@@ -55,7 +55,7 @@
 </div>
 
 <div *ngIf="votingEvent">
-  <div *ngIf="this.votingEvent?.voting_in_progress===false; else openVoting">
+  <div *ngIf="this.votingEvent?.votingInProgress===false; else openVoting">
     Voting has been stopped
   </div>
 

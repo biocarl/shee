@@ -53,12 +53,11 @@ export class QueueService {
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
               this.log.toConsole("Received presenter message:", rawEvent);
 
-
             // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
             // @ts-ignore
-            if (!event.question_id) {
+            if (!event.questionID) {
               // @ts-ignore
-              event.question_id = rawEvent.id;
+              event.questionID = rawEvent.id;
             }
             // Run callback
             handlePresenterMessage(event);
