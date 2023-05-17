@@ -12,6 +12,6 @@ export interface PresenterMessage {
    * The ID of the question associated with the message.
    * @type {string}
    */
-  question_id: string; // TODO Refactor to questionID
-  client_only?: boolean;
+  questionID: string;
+  clientOnly?: boolean;
 }

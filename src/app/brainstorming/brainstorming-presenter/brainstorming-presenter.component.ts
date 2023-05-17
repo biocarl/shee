@@ -45,7 +45,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         console.error("Error: idea event was not populated by parent client component");
         return;
       }
-      if (this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
+      if (this.ideaEvent.questionID == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
         this.ideaResponses.push({
           text: brainstormingSubscriptionEvent.idea_text,
           color: brainstormingSubscriptionEvent.stickyColor,
@@ -53,7 +53,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         });
 
       } else if (
-        this.ideaEvent.question_id == brainstormingSubscriptionEvent.question_id &&
+        this.ideaEvent.questionID == brainstormingSubscriptionEvent.question_id &&
         brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting'
       ) {
         let voteIndex = 0;
@@ -87,13 +87,13 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   }
 
   startBrainstorming(): void {
-    if (!this.ideaEvent?.question_id) return
+    if (!this.ideaEvent?.questionID) return
     this.stage = 'brainstorming';
     const payload: BrainstormingPresenterPublishRequest = {
       openForIdeas: true,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.question_id,
+      question_id: this.ideaEvent.questionID,
       client_only: true
     };
     if (this.timerLength_brainstorming) {
@@ -103,12 +103,12 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   }
 
   stopBrainstorming(): void {
-    if (!this.ideaEvent?.question_id) return
+    if (!this.ideaEvent?.questionID) return
     const payload: BrainstormingPresenterPublishRequest = {
       openForIdeas: false,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.question_id,
+      question_id: this.ideaEvent.questionID,
       client_only: true
     };
     clearInterval(this.timerInterval)
@@ -148,7 +148,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   }
 
   startVoting(): void {
-    if (!this.ideaEvent?.question_id) return
+    if (!this.ideaEvent?.questionID) return
     const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
     const selectedOption = votingOption.value;
     let singleChoice: boolean = selectedOption === 'oneVote';
@@ -159,7 +159,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       interaction: "brainstorming",
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.question_id,
+      question_id: this.ideaEvent.questionID,
       single_choice: singleChoice,
       voting_in_progress: true,
       client_only: true
@@ -223,11 +223,11 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
 
 
   stopVoting() {
-    if (!this.ideaEvent?.question_id) return
+    if (!this.ideaEvent?.questionID) return
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent?.question_id,
+      question_id: this.ideaEvent?.questionID,
       single_choice: false,
       voting_in_progress: false,
       client_only: true

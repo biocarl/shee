@@ -23,37 +23,53 @@ export class ParticipantService {
    * @returns {string} The name of the participant.
    */
   getParticipantName(): string | undefined {
-    if(!this.participantName){
-
-      // Option 1: Try to retrieve from URL
-      let participant : string | undefined | null =  this.activatedRoute.snapshot.queryParamMap.get("user");
-      if (participant && participant !== "") {
-         this.setParticipantName(participant); // also updates the route
-         return this.participantName;
-      }
-
-      // Option 2:  Try to retrieve from cookies
-      participant = getCookieValueFor("user");
-      if(participant && participant !== ""){
-        this.setParticipantName(participant); // also updates the route
-        return this.participantName;
-      }
+    if(!this.participantName) {
+      this.getParticipantNameFromUrlOrCookie();
     }
-
     return this.participantName;
   }
 
   /**
-   * Sets the name of the current participant and updates query params
+   * Retrieves the name of the current participant from the URL or Cookie.
+   * @public
+   * @returns {string | undefined} The name of the participant.
+   */
+  private getParticipantNameFromUrlOrCookie():string | undefined {
+    const participantNameFromUrl = this.getParticipantFromUrl();
+    if(participantNameFromUrl){
+      return participantNameFromUrl;
+    }
+
+    const participantNameFromCookie = this.getParticipantFromCookie();
+    if(participantNameFromCookie){
+      return participantNameFromCookie;
+    }
+    return undefined;
+  }
+
+  /**
+   * Sets the name of the current participant, updates query params and saves the name in a cookie. The Name is overwritten if it already exists.
    * @param {string} name The name to set for the participant.
    * @public
    * @returns {void}
    */
   setParticipantName(name: string) {
     this.participantName = name;
+    this.updateUrlWithParticipantName(name);
+    this.saveParticipantNameToCookie(name);
+  }
 
-    // A: Persist user in url
-    const queryParams: Params = { user: name };
+  private getParticipantFromUrl():string | null{
+      return this.activatedRoute.snapshot.queryParamMap.get("user");
+  }
+
+  private getParticipantFromCookie():string | null{
+    const participantName = getCookieValueFor("user");
+    return participantName && participantName !== '' ? participantName : null;
+  }
+
+  private updateUrlWithParticipantName(name: string): void{
+    const queryParams: Params =  {user: name};
     this.router.navigate(
       [],
       {
@@ -61,9 +77,9 @@ export class ParticipantService {
         queryParams: queryParams,
         queryParamsHandling: 'merge',
       });
+  }
 
-
-    // B: Persist user in cookies (overwrite)
-    addCookie("user",this.participantName);
+  private saveParticipantNameToCookie(name: string):void {
+    addCookie("user",name);
   }
 }

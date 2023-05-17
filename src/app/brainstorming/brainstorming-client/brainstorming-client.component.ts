@@ -50,11 +50,11 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
       interaction: "brainstorming",
       idea_voting: voting,
       participantName: this.participantService.getParticipantName(),
-      question_id: this.votingEvent.question_id
+      question_id: this.votingEvent.questionID
 
     };
     this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
-    if (this.votingEvent.single_choice) {
+    if (this.votingEvent.singleChoice) {
       this.is_voted = true;
     }else {
       this.multi_vote_check[voteSelectionIndex] = true;
@@ -63,13 +63,13 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
   }
 
   sendIdea() {
-    if (!this.ideaEvent?.question_id) return
+    if (!this.ideaEvent?.questionID) return
 
     const idea: BrainstormingClientPublishRequest = {
       interaction: "brainstorming",
       idea_text: this.idea_text,
       participantName: this.participantService.getParticipantName(),
-      question_id: this.ideaEvent.question_id,
+      question_id: this.ideaEvent.questionID,
       stickyColor: this.stickyColor
     };
 

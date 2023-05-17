@@ -33,7 +33,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
         return;
       }
 
-      if (this.accumulatedClientChoices && pollSubscriptionEvent.question_id === this.questionEvent.question_id
+      if (this.accumulatedClientChoices && pollSubscriptionEvent.question_id === this.questionEvent.questionID
           && this.isInValidTimeRangeIfSet()) {
 
         this.accumulatedClientChoices = this.accumulatedClientChoices.map(

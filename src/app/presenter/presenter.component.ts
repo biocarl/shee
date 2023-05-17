@@ -60,7 +60,7 @@ export class PresenterComponent implements OnInit {
 
     // Listen to all presenter events for determining which component to choose based on interactionId
     await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      if (presenterMessage.question_id !== this.queueService.currentPresenterMessage?.question_id) {
+      if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID) {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
           presenterMessage.interaction, "presenter", presenterMessage);

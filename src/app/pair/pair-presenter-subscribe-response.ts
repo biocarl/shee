@@ -7,6 +7,6 @@ export interface PairPresenterSubscribeResponse {
   // and potentially we need to introduce two separate dtos for presenter and client side
   interaction: "poll",
   anonymity: "anonymous"| "public";
-  question_id: string; // TODO Refactor to questionID
-  client_only?: boolean;
+  questionID: string; // TODO Refactor to questionID
+  clientOnly?: boolean;
 }
