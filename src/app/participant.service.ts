@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {addCookie, getCookieValueFor} from "./cookie-utlis";
+import {LoggerService} from "./logger.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class ParticipantService {
   private participantName ? : string;
 
   constructor(private router: Router,
-              private activatedRoute: ActivatedRoute) {}
+              private activatedRoute: ActivatedRoute,
+              private log:LoggerService) {}
 
   /**
    * Retrieves the name of the current participant. When no name is found, name is retrieved from URL or Cookie.
@@ -46,6 +48,10 @@ export class ParticipantService {
       return participantNameFromCookie!;
     }
     return undefined;
+  }
+
+  private isValidName(name: string | null | undefined): boolean {
+    return name !== undefined && name !== '' && name !== null;
   }
 
   /**
