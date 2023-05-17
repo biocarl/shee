@@ -14,13 +14,12 @@ export class ParticipantService {
   private participantName ? : string;
 
   constructor(private router: Router,
-              private activatedRoute: ActivatedRoute) {
-  }
+              private activatedRoute: ActivatedRoute) {}
 
   /**
-   * Retrieves the name of the current participant.
+   * Retrieves the name of the current participant. When no name is found, name is retrieved from URL or Cookie.
    * @public
-   * @returns {string} The name of the participant.
+   * @returns {string | undefined} The name of the participant.
    */
   getParticipantName(): string | undefined {
     if(!this.participantName) {
