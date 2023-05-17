@@ -35,13 +35,15 @@ export class ParticipantService {
    */
   private getParticipantNameFromUrlOrCookie():string | undefined {
     const participantNameFromUrl = this.getParticipantFromUrl();
-    if(participantNameFromUrl){
-      return participantNameFromUrl;
+    if(this.isValidName(participantNameFromUrl)){
+      this.setParticipantName(participantNameFromUrl!);
+      return participantNameFromUrl!;
     }
 
     const participantNameFromCookie = this.getParticipantFromCookie();
-    if(participantNameFromCookie){
-      return participantNameFromCookie;
+    if(this.isValidName(participantNameFromCookie)){
+      this.setParticipantName(participantNameFromCookie!);
+      return participantNameFromCookie!;
     }
     return undefined;
   }
