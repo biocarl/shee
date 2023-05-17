@@ -23,21 +23,8 @@
         </span>
       </div>
     </div>
-    <ng-template #timeUp>Time is up!</ng-template>
   </div>
 </div>
-
-<!--How to use the presenter-->
-<ng-template #wrongFormat>
-  <h4>Enter a valid url that includes params for question and answers.</h4>
-  <!-- show missing components in ulr -->
-  <div *ngIf="questionEvent">
-    <h4 *ngIf="!questionEvent.question">You forgot the <strong>question</strong>!</h4>
-    <h4 *ngIf="!questionEvent.answers">You forgot the <strong>answers</strong>!</h4>
-  </div>
-  <h4>It should look like this ->
-    /roomname/presenter?interaction=poll&question=question&answers=answer1,answer2,answer3</h4>
-</ng-template>
 
 
 

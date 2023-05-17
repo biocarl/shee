@@ -48,7 +48,5 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as DecisionPresenterSubscribeResponse;
     this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
-
   }
-
 }

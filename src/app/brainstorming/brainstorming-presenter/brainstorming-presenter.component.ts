@@ -221,7 +221,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     )
   }
 
-
   stopVoting() {
     if (!this.ideaEvent?.questionID) return
     const payload: BrainstormingPresenterStatusVotingRequest = {
@@ -263,7 +262,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     if (this.ideaEvent) {
       this.editableSticky = this.ideaResponses.length - 1;
     }
-
   }
 
   toggleEditMode(index: number) {
@@ -279,5 +277,4 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     this.editing = false;
     this.editedIdea = "";
   }
-
 }

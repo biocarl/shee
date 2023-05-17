@@ -42,7 +42,6 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
 
   voteForIdea(voteSelectionIndex: number) {
     if (!this.votingEvent?.ideas) return
-
     // handle idea-vote
     const voting: number[] = Array(this.votingEvent.ideas.length).fill(0);
     voting[voteSelectionIndex] = 1;

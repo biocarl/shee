@@ -80,6 +80,7 @@ export class ClientComponent implements OnInit, OnDestroy {
    this.log.toConsole("Requested current question")
    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
+
   ngOnDestroy() {
     this.modeSubscription.unsubscribe();
   }
