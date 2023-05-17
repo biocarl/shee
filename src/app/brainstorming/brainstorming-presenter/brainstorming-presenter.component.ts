@@ -20,9 +20,9 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   maxZIndex = 20;
   stickyContentVisible: boolean = false;
   votes?: number[];
-  timerLength_voting?: number;
+  timerLengthVoting?: number;
   private timerInterval: any;
-  timerLength_brainstorming?: number;
+  timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
   editing: boolean = false;
   editableSticky?: number;
@@ -45,21 +45,21 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
         console.error("Error: idea event was not populated by parent client component");
         return;
       }
-      if (this.ideaEvent.questionID == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
+      if (this.ideaEvent.questionID == brainstormingSubscriptionEvent.questionID && this.stage === 'brainstorming') {
         this.ideaResponses.push({
-          text: brainstormingSubscriptionEvent.idea_text,
+          text: brainstormingSubscriptionEvent.ideaText,
           color: brainstormingSubscriptionEvent.stickyColor,
           hasVisibleContent: this.stickyContentVisible
         });
 
       } else if (
-        this.ideaEvent.questionID == brainstormingSubscriptionEvent.question_id &&
-        brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting'
+        this.ideaEvent.questionID == brainstormingSubscriptionEvent.questionID &&
+        brainstormingSubscriptionEvent.ideaVoting && this.stage === 'voting'
       ) {
         let voteIndex = 0;
         this.ideaResponses.forEach((idea, index) => {
           if (idea.text !== '' && this.votes) {
-            this.votes[index] += brainstormingSubscriptionEvent.idea_voting[voteIndex];
+            this.votes[index] += brainstormingSubscriptionEvent.ideaVoting[voteIndex];
             voteIndex++;
           }
         })
@@ -67,7 +67,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     });
 
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
-      if (response.client_only && (this.stage === 'voting' || this.stage === 'brainstorming') && this.ideaEvent) {
+      if (response.clientOnly && (this.stage === 'voting' || this.stage === 'brainstorming') && this.ideaEvent) {
         this.ideaEvent.timer = response.timer;
         this.initializeTimer();
       }
@@ -93,11 +93,11 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       openForIdeas: true,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.questionID,
-      client_only: true
+      questionID: this.ideaEvent.questionID,
+      clientOnly: true
     };
-    if (this.timerLength_brainstorming) {
-      payload.timer = this.timerLength_brainstorming;
+    if (this.timerLengthBrainstorming) {
+      payload.timer = this.timerLengthBrainstorming;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -108,8 +108,8 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       openForIdeas: false,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.questionID,
-      client_only: true
+      questionID: this.ideaEvent.questionID,
+      clientOnly: true
     };
     clearInterval(this.timerInterval)
     this.ideaEvent.timer = undefined;
@@ -159,13 +159,13 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       interaction: "brainstorming",
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.questionID,
-      single_choice: singleChoice,
-      voting_in_progress: true,
-      client_only: true
+      questionID: this.ideaEvent.questionID,
+      singleChoice: singleChoice,
+      votingInProgress: true,
+      clientOnly: true
     };
-    if (this.timerLength_voting) {
-      payload.timer = this.timerLength_voting;
+    if (this.timerLengthVoting) {
+      payload.timer = this.timerLengthVoting;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -227,10 +227,10 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent?.questionID,
-      single_choice: false,
-      voting_in_progress: false,
-      client_only: true
+      questionID: this.ideaEvent?.questionID,
+      singleChoice: false,
+      votingInProgress: false,
+      clientOnly: true
     };
     this.stage = 'afterBrainstorming';
     clearInterval(this.timerInterval)

@@ -17,5 +17,5 @@ export interface PollClientSubscribeResponse {
    * The ID of the question that the response is for.
    * @type {string}
    */
-  question_id: string; // TODO refactor to questionId
+  questionID: string;
 }

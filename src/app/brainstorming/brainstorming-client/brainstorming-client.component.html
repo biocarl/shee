@@ -13,7 +13,7 @@
       <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf"
            height="286" width="284">
       <div class="positioning-wrapper">
-        <div *ngIf="is_sent" id="toast-sent"> Sent!</div>
+        <div *ngIf="isSent" id="toast-sent"> Sent!</div>
         <div id="question">{{ideaEvent?.question}}</div>
         <div class="color-selection">
           <input type="radio" id="red" value="red"/>
@@ -40,12 +40,12 @@
         </div>
         <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
                   [style.background-color]="bgColor"
-                  [(ngModel)]="idea_text"
+                  [(ngModel)]="ideaText"
                   [maxlength]="280"></textarea>
         <div id="character-counter"
-             [style.color]="idea_text.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ idea_text.length }}/280
+             [style.color]="ideaText.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ ideaText.length }}/280
         </div>
-        <button [disabled]="idea_text.trim().length===0" id="send-button" type="button"
+        <button [disabled]="ideaText.trim().length===0" id="send-button" type="button"
                 (click)="sendIdea()">Send Idea
         </button>
       </div>
@@ -69,10 +69,10 @@
       <ng-template #timeUp>Time is up!</ng-template>
 
 
-      <div *ngIf="!is_voted; else voted">
+      <div *ngIf="!isVoted; else voted">
         <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
 
-          <button [disabled]="multi_vote_check[i]"
+          <button [disabled]="multiVoteCheck[i]"
                   (click)="voteForIdea(i)"
                   class="votingButton">
             {{idea}}
