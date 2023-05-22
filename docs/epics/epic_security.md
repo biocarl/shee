@@ -1,12 +1,10 @@
-# First steps into security
+# Epic: Security
 As a trainer I want to make sure that the public Internet can't read the published messages.
 One solution would he to come up with a shared password (between students and trainers).
-
 
 This is called **symmetric encryption** because you need the same password for encoding and decoding.
 This would lock out the whole wide internet since every client and present message can be only read if you know the password. 
 This is still not enough - we are now safe on the outside but not the inside. 
-
 
 A curious student may still use the password to encode all messages landing on the client/presenter topics even though they are only meant for the trainer.
 
