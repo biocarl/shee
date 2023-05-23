@@ -67,17 +67,20 @@ export class ClientComponent implements OnInit, OnDestroy {
 
     // Listen to all presenter messages and inject component into view based on the interaction field
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly) {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
           presenterMessage.interaction, "client", presenterMessage);
       }
+
     });
 
     // Request current question
    this.log.toConsole("Requested current question")
    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
+
   ngOnDestroy() {
     this.modeSubscription.unsubscribe();
   }

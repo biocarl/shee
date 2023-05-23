@@ -1,6 +1,6 @@
 export interface BrainstormigClientVotingPublishRequest {
   interaction: "brainstorming",
-  idea_voting: number[],
+  ideaVoting: number[],
   participantName?: string,
-  question_id: string
+  questionID: string
 }

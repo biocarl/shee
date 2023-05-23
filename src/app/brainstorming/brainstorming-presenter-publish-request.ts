@@ -1,8 +1,8 @@
 export interface BrainstormingPresenterPublishRequest {
   interaction: "brainstorming",
   question: string,
-  question_id: string,
+  questionID: string,
   timer?: number,
-  client_only?: boolean,
+  clientOnly?: boolean,
   openForIdeas: boolean
 }

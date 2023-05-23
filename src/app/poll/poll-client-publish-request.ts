@@ -16,5 +16,5 @@ participantName? : string,
 /**
 The ID of the poll question being answered.
 */
-question_id: string
+questionID: string
 }

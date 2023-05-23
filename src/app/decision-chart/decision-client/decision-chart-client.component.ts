@@ -29,7 +29,7 @@ export class DecisionChartClientComponent implements ClientView {
     voting[voteSelectionIndex] = 1;
     const message : DecisionClientPublishRequest =  {
       interaction: "decision",
-      question_id: this.questionEvent.questionID,
+      questionID: this.questionEvent.questionID,
       voting : voting,
       participantName : "unknown" // TODO Not used for now
     };

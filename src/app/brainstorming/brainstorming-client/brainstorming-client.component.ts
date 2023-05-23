@@ -20,17 +20,17 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = false;
   isAfterBrainstorming: boolean = false;
-  idea_text: string = "";
-  is_sent: boolean = false;
-  is_voted: boolean = false;
-  multi_vote_check: boolean [];
+  ideaText: string = "";
+  isSent: boolean = false;
+  isVoted: boolean = false;
+  multiVoteCheck: boolean [];
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
 
   constructor(private groupService: GroupService,
               private queueService: QueueService,
               private participantService: ParticipantService) {
-    this.multi_vote_check = Array(this.votingEvent?.ideas.length).fill(false);
+    this.multiVoteCheck = Array(this.votingEvent?.ideas.length).fill(false);
   }
 
   ngAfterViewChecked(): void {
@@ -42,22 +42,20 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
 
   voteForIdea(voteSelectionIndex: number) {
     if (!this.votingEvent?.ideas) return
-
     // handle idea-vote
     const voting: number[] = Array(this.votingEvent.ideas.length).fill(0);
     voting[voteSelectionIndex] = 1;
     const message: BrainstormigClientVotingPublishRequest = {
       interaction: "brainstorming",
-      idea_voting: voting,
+      ideaVoting: voting,
       participantName: this.participantService.getParticipantName(),
-      question_id: this.votingEvent.questionID
-
+      questionID: this.votingEvent.questionID
     };
     this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
     if (this.votingEvent.singleChoice) {
-      this.is_voted = true;
+      this.isVoted = true;
     }else {
-      this.multi_vote_check[voteSelectionIndex] = true;
+      this.multiVoteCheck[voteSelectionIndex] = true;
     }
 
   }
@@ -67,19 +65,19 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
 
     const idea: BrainstormingClientPublishRequest = {
       interaction: "brainstorming",
-      idea_text: this.idea_text,
+      ideaText: this.ideaText,
       participantName: this.participantService.getParticipantName(),
-      question_id: this.ideaEvent.questionID,
+      questionID: this.ideaEvent.questionID,
       stickyColor: this.stickyColor
     };
 
     this.queueService.publishMessageToClientChannel<BrainstormingClientPublishRequest>(idea);
 
-    this.idea_text = "";
-    this.is_sent = true;
+    this.ideaText = "";
+    this.isSent = true;
 
     setTimeout(() => {
-      this.is_sent = false
+      this.isSent = false
     }, 1000)
   }
 

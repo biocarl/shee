@@ -25,7 +25,7 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
         return;
       }
 
-      if(this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.questionID) {
+      if(this.questionResponses && pollSubscriptionEvent.questionID === this.questionEvent.questionID) {
         this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
       }
     });
@@ -48,7 +48,5 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as DecisionPresenterSubscribeResponse;
     this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
-
   }
-
 }
