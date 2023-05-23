@@ -52,14 +52,17 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   }
 
   private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
-    if (this.ideaEvent &&
-      this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID) {
+    if (this.isMatchingQuestion(brainstormingSubscriptionEvent)) {
       if (this.stage === 'brainstorming') {
         this.addBrainstormingIdea(brainstormingSubscriptionEvent);
       } else if (this.stage === 'voting') {
         this.updateVotes(brainstormingSubscriptionEvent);
       }
     }
+  }
+
+  private isMatchingQuestion(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): boolean {
+    return !!(this.ideaEvent && this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID);
   }
 
   private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
@@ -69,7 +72,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       hasVisibleContent: this.stickyContentVisible
     });
   }
-
 
   private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
     let voteIndex = 0;
@@ -81,7 +83,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     });
   }
 
-
   private subscribeToPresenterChannel(): void {
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
       this.handlePresenterChannelEvent(response);
@@ -89,21 +90,23 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   }
 
   private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
-    if (this.ideaEvent &&
-      response.clientOnly &&
-      (this.stage === 'voting' || this.stage === 'brainstorming')) {
+    if (this.hasVotingStarted(response)){
       this.updateTimer(response);
       this.initializeTimer();
     }
   }
 
+private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
+  return !!(this.ideaEvent &&
+    response.clientOnly &&
+    (this.stage === 'voting' || this.stage === 'brainstorming'))
+}
 
   private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
     if (this.ideaEvent) {
       this.ideaEvent.timer = response.timer;
     }
   }
-
 
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
@@ -151,7 +154,6 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   resizeTextToFitContainer(selector: string) {
     const stickies: NodeListOf<HTMLElement> = document.querySelectorAll(selector);
     stickies.forEach(element => {
-
 
       const maxWidth = element.clientWidth;
       const maxHeight = element.clientHeight;
