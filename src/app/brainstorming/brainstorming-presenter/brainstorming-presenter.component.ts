@@ -32,47 +32,78 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   }
 
   ngAfterViewChecked(): void {
-    const stickies = document.querySelectorAll('.sticky');
-
-    stickies.forEach(sticky => {
-      this.resizeTextToFitContainer(sticky as HTMLElement);
-    });
+    this.resizeTextToFitContainer('.sticky');
   }
 
   ngOnInit(): void {
+    this.subscribeToClientChannel();
+    this.subscribeToPresenterChannel();
+  }
+
+  private subscribeToClientChannel(): void {
     this.queueService.listenToClientChannel<BrainstormingClientSubscribeResponse>(brainstormingSubscriptionEvent => {
       if (!this.ideaEvent) {
         console.error("Error: idea event was not populated by parent client component");
         return;
       }
-      if (this.ideaEvent.questionID == brainstormingSubscriptionEvent.questionID && this.stage === 'brainstorming') {
-        this.ideaResponses.push({
-          text: brainstormingSubscriptionEvent.ideaText,
-          color: brainstormingSubscriptionEvent.stickyColor,
-          hasVisibleContent: this.stickyContentVisible
-        });
+      this.handleClientChannelEvent(brainstormingSubscriptionEvent);
 
-      } else if (
-        this.ideaEvent.questionID == brainstormingSubscriptionEvent.questionID &&
-        brainstormingSubscriptionEvent.ideaVoting && this.stage === 'voting'
-      ) {
-        let voteIndex = 0;
-        this.ideaResponses.forEach((idea, index) => {
-          if (idea.text !== '' && this.votes) {
-            this.votes[index] += brainstormingSubscriptionEvent.ideaVoting[voteIndex];
-            voteIndex++;
-          }
-        })
-      }
     });
+  }
 
-    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
-      if (response.clientOnly && (this.stage === 'voting' || this.stage === 'brainstorming') && this.ideaEvent) {
-        this.ideaEvent.timer = response.timer;
-        this.initializeTimer();
+  private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
+    if (this.ideaEvent &&
+      this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID) {
+      if (this.stage === 'brainstorming') {
+        this.addBrainstormingIdea(brainstormingSubscriptionEvent);
+      } else if (this.stage === 'voting') {
+        this.updateVotes(brainstormingSubscriptionEvent);
+      }
+    }
+  }
+
+  private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    this.ideaResponses.push({
+      text: brainstormingSubscriptionEvent.ideaText,
+      color: brainstormingSubscriptionEvent.stickyColor,
+      hasVisibleContent: this.stickyContentVisible
+    });
+  }
+
+
+  private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    let voteIndex = 0;
+    this.ideaResponses.forEach((idea, index) => {
+      if (idea.text !== '' && this.votes) {
+        this.votes[index] += brainstormingSubscriptionEvent.ideaVoting[voteIndex];
+        voteIndex++;
       }
     });
   }
+
+
+  private subscribeToPresenterChannel(): void {
+    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
+      this.handlePresenterChannelEvent(response);
+    });
+  }
+
+  private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
+    if (this.ideaEvent &&
+      response.clientOnly &&
+      (this.stage === 'voting' || this.stage === 'brainstorming')) {
+      this.updateTimer(response);
+      this.initializeTimer();
+    }
+  }
+
+
+  private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
+    if (this.ideaEvent) {
+      this.ideaEvent.timer = response.timer;
+    }
+  }
+
 
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
@@ -117,34 +148,39 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
     this.stage = 'afterBrainstorming';
   }
 
-  resizeTextToFitContainer(element: HTMLElement) {
-    const maxWidth = element.clientWidth;
-    const maxHeight = element.clientHeight;
+  resizeTextToFitContainer(selector: string) {
+    const stickies: NodeListOf<HTMLElement> = document.querySelectorAll(selector);
+    stickies.forEach(element => {
 
-    let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 50; // Set a maximum font size
-    let fontSize = maxFontSize;
 
-    // Apply the maximum font size
-    element.style.fontSize = fontSize + 'px';
+      const maxWidth = element.clientWidth;
+      const maxHeight = element.clientHeight;
 
-    // Reduce the font size until the content fits or reaches the minimum size
-    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
-      fontSize--;
-      element.style.fontSize = fontSize + 'px';
-    }
+      let minFontSize = 5; // Set a minimum font size
+      let maxFontSize = 50; // Set a maximum font size
+      let fontSize = maxFontSize;
 
-    // Increase the font size until the content overflows or reaches the maximum size
-    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
-      fontSize++;
+      // Apply the maximum font size
       element.style.fontSize = fontSize + 'px';
 
-      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+      // Reduce the font size until the content fits or reaches the minimum size
+      while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
         fontSize--;
         element.style.fontSize = fontSize + 'px';
-        break;
       }
-    }
+
+      // Increase the font size until the content overflows or reaches the maximum size
+      while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+        fontSize++;
+        element.style.fontSize = fontSize + 'px';
+
+        if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+          fontSize--;
+          element.style.fontSize = fontSize + 'px';
+          break;
+        }
+      }
+    });
   }
 
   startVoting(): void {
