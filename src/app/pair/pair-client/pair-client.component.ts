@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
-import {ClientView} from "../../client-view";
 import {QueueService} from "../../queue.service";
 import {PresenterMessage} from "../../presenter-message";
 import {ParticipantService} from "../../participant.service";
 import {PairPresenterSubscribeResponse} from "../pair-presenter-subscribe-response";
+import {View} from "../../view";
 
 /**
  * This interface defines the structure of the client message sent to the presenter for the "pair" interaction.
@@ -24,9 +24,9 @@ interface CounterClientPublishRequest {
 /**
  * The pair client component is used to signal and display a successful pairing on client side.
  * @component
- * @implements ClientView
+ * @implements View
  */
-export class PairClientComponent implements ClientView {
+export class PairClientComponent implements View {
   constructor(private queueService : QueueService, private participantService: ParticipantService) {}
 
   initializeComponent(data: PresenterMessage): void {

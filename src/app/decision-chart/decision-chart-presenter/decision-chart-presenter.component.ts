@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {PresenterView} from "../../presenter-view";
 import {QueueService} from "../../queue.service";
 import {PresenterMessage} from "../../presenter-message";
 import {DecisionClientSubscribeResponse} from "../decision-client-subscribe-response";
 import {DecisionPresenterSubscribeResponse} from "../decision-presenter-subscribe-response";
+import {View} from "../../view";
 
 
 @Component({
@@ -11,7 +11,7 @@ import {DecisionPresenterSubscribeResponse} from "../decision-presenter-subscrib
   templateUrl: './decision-chart-presenter.component.html',
   styleUrls: ['./decision-chart-presenter.component.css']
 })
-export class DecisionChartPresenterComponent implements OnInit, PresenterView {
+export class DecisionChartPresenterComponent implements OnInit, View {
   questionEvent ? : DecisionPresenterSubscribeResponse;
   questionResponses ? : number[];
 

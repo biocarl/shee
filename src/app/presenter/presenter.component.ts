@@ -62,7 +62,7 @@ export class PresenterComponent implements OnInit {
     await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID) {
         this.queueService.currentPresenterMessage = presenterMessage;
-        this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+        this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
           presenterMessage.interaction, "presenter", presenterMessage);
       }
     });

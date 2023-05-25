@@ -69,7 +69,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly) {
         this.queueService.currentPresenterMessage = presenterMessage;
-        this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+        this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
           presenterMessage.interaction, "client", presenterMessage);
       }
     });

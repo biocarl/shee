@@ -3,9 +3,9 @@ import {GroupService} from "../../group.service";
 import {QueueService} from "../../queue.service";
 import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-response";
 import {PollClientPublishRequest} from "../poll-client-publish-request";
-import {ClientView} from "../../client-view";
 import {PresenterMessage} from "../../presenter-message";
 import {ParticipantService} from "../../participant.service";
+import {View} from "../../view";
 
 @Component({
   selector: 'app-vote-selector',
@@ -15,9 +15,9 @@ import {ParticipantService} from "../../participant.service";
 /**
  * The PollClientComponent is used to display the different polling options and send the selected option to the presenter.
  * @component
- * @implements ClientView
+ * @implements View
  */
-export class PollClientComponent implements ClientView {
+export class PollClientComponent implements View {
   questionEvent?: PollPresenterSubscribeResponse;
   participantHasVoted: boolean = false;
 

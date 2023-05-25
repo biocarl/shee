@@ -1,5 +1,4 @@
 import {AfterViewChecked, Component} from '@angular/core';
-import {ClientView} from "../../client-view";
 import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
 import {GroupService} from "../../group.service";
@@ -8,6 +7,7 @@ import {ParticipantService} from "../../participant.service";
 import {BrainstormingClientPublishRequest} from "../brainstorming-client-publish-request";
 import {BrainstormingPresenterVotingSubscribeResponse} from "../brainstorming-presenter-voting-subscribe-response";
 import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-voting-publish-request";
+import {View} from "../../view";
 
 
 @Component({
@@ -15,7 +15,7 @@ import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-vot
   templateUrl: './brainstorming-client.component.html',
   styleUrls: ['./brainstorming-client.component.css']
 })
-export class BrainstormingClientComponent implements ClientView,AfterViewChecked {
+export class BrainstormingClientComponent implements View,AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = false;
