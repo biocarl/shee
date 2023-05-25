@@ -39,7 +39,6 @@ export class ClientComponent implements OnInit, OnDestroy {
     private participantService: ParticipantService,
     private modeToggleService: ModeToggleService,
     private log: LoggerService
-
   ) {
     this.mode = modeToggleService.currentMode;
     this.modeSubscription = modeToggleService.modeChanged$.subscribe(
@@ -50,31 +49,10 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Retrieve route parameter /:group from url
-    this.route.paramMap.subscribe(params => {
-      this.groupName = params.get("group");
-      if (this.groupName) {
-        this.groupService.setGroupName(this.groupName);
-      }
-    });
-
-    this.participantName = this.participantService.getParticipantName();
-
-    this.viewContainerRef = this.anchor.viewContainerRef;
-
-    // Show "waiting" while presenter has not initialized yet
-    this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
-
-    // Listen to all presenter messages and inject component into view based on the interaction field
-    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-
-      this.handlePresenterMessageAndInjectComponent(presenterMessage);
-
-    });
-
-    // Request current question
-   this.log.toConsole("Requested current question")
-   this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
+    this.setVariables();
+    this.listenToPresenter();
+    this.log.toConsole("Requested current question")
+    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
 
   ngOnDestroy() {
