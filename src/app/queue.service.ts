@@ -36,7 +36,7 @@ export class QueueService {
    * @param callingMethod
    */
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void, callingMethod?: string): Promise<void> {
-    this.log.toConsole(`Method ${callingMethod} started listenToPresenterChannel method.`);
+    this.log.toConsole(`${callingMethod} started listenToPresenterChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
