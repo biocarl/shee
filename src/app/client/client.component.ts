@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
@@ -22,7 +22,7 @@ import {LoggerService} from "../logger.service";
  * @component
  * @implements {OnInit}
  */
-export class ClientComponent implements OnInit, OnDestroy {
+export class ClientComponent implements OnInit {
   groupName: string | null = "";
   participantName ?: string = "";
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
@@ -48,6 +48,19 @@ export class ClientComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngOnInit(): void {
+    this.setParticipantAndGroupNames();
+    this.setWaitComponent();
+    this.listenToPresenter();
+    this.log.toConsole("Requested current question")
+    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
+  }
+
+  private setParticipantAndGroupNames() {
+    this.setGroupNameFromRouteParam();
+    this.participantName = this.participantService.getParticipantName();
+  }
+
   private setGroupNameFromRouteParam() {
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe(params => {
@@ -58,9 +71,7 @@ export class ClientComponent implements OnInit, OnDestroy {
     });
   }
 
-  private setVariables() {
-    this.setGroupNameFromRouteParam();
-    this.participantName = this.participantService.getParticipantName();
+  private setWaitComponent() {
     this.viewContainerRef = this.anchor.viewContainerRef;
     this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
   }
@@ -71,26 +82,15 @@ export class ClientComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.setVariables();
-    this.listenToPresenter();
-    this.log.toConsole("Requested current question")
-    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
-  }
-
-  ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
-  }
-
-  private isDifferentQuestionOrClientOnly(presenterMessage: PresenterMessage) {
-    return !!(presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly);
-  }
-
   private handlePresenterMessageAndInjectComponent(presenterMessage: PresenterMessage) {
     if (this.isDifferentQuestionOrClientOnly(presenterMessage)) {
       this.queueService.currentPresenterMessage = presenterMessage;
       this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
         presenterMessage.interaction, "client", presenterMessage);
     }
+  }
+
+  private isDifferentQuestionOrClientOnly(presenterMessage: PresenterMessage) {
+    return !!(presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly);
   }
 }

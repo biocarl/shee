@@ -35,12 +35,29 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService, private log: LoggerService) {}
 
   ngOnInit(): void {
-    this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
-      this.handleCounterSubscriptionEvent(counterSubscriptionEvent);
+    this.subscribeToClientChannel();
+  }
+
+  initializeComponent(data: PresenterMessage): void {
+    const presenterMessage = data as PairPresenterSubscribeResponse;
+    if(presenterMessage.anonymity === "public"){
+      this.isPublic = true;
+    }
+
+    let url = `https://shee.app/${this.groupService.getGroupName()}`;
+
+    this.qrCodeService.generateQrCode(url).then(url => {
+      this.qrCodeUrl = url;
     });
   }
 
-  private handleCounterSubscriptionEvent(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+  private subscribeToClientChannel(){
+    this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
+      this.handleClientChannelEvent(counterSubscriptionEvent);
+    });
+  }
+
+  private handleClientChannelEvent(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
     this.incrementConnectedParticipants(counterSubscriptionEvent);
     this.logParticipantListening(counterSubscriptionEvent);
   }
@@ -57,16 +74,5 @@ export class PairPresenterComponent implements OnInit, PresenterView {
     }
   }
 
-  initializeComponent(data: PresenterMessage): void {
-    const presenterMessage = data as PairPresenterSubscribeResponse;
-    if(presenterMessage.anonymity === "public"){
-      this.isPublic = true;
-    }
 
-    let url = `https://shee.app/${this.groupService.getGroupName()}`;
-
-    this.qrCodeService.generateQrCode(url).then(url => {
-      this.qrCodeUrl = url;
-    });
-  }
 }

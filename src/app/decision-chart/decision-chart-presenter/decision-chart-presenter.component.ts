@@ -18,8 +18,21 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
   constructor(private queueService: QueueService) {
   }
 
-  private isIdMatch(pollID: string, questionEventID: string): boolean {
-    return pollID === questionEventID;
+  ngOnInit(): void {
+    this.subscribeToClientChannel()
+  }
+
+  initializeComponent(data: PresenterMessage): void {
+    this.questionEvent = data as DecisionPresenterSubscribeResponse;
+    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
+  }
+
+  private subscribeToClientChannel():void {
+    this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
+      return this.questionEvent ?
+        this.updateQuestionResponses(pollSubscriptionEvent.questionID, this.questionEvent.questionID, pollSubscriptionEvent) :
+        this.handleErrorResponse();
+    });
   }
 
   private updateQuestionResponses(pollID: string, questionEventID: string, pollSubscriptionEvent: DecisionClientSubscribeResponse):void {
@@ -28,23 +41,15 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
     }
   }
 
+  private isIdMatch(pollID: string, questionEventID: string): boolean {
+    return pollID === questionEventID;
+  }
+
   private handleErrorResponse():void {
     if (!this.questionEvent) {
       console.error("Error: question event was not populated by parent client component");
       return;
     }
-  }
-
-  private listenToClientChannelUpdate():void {
-    this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
-      return this.questionEvent ?
-        this.updateQuestionResponses(pollSubscriptionEvent.questionID, this.questionEvent.questionID, pollSubscriptionEvent) :
-        this.handleErrorResponse();
-    });
-  }
-
-  ngOnInit(): void {
-    this.listenToClientChannelUpdate()
   }
 
   getPercentage(index: number): number {
@@ -58,10 +63,5 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
     }
 
     return (this.questionResponses[index] / totalVotes) * 100;
-  }
-
-  initializeComponent(data: PresenterMessage): void {
-    this.questionEvent = data as DecisionPresenterSubscribeResponse;
-    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
   }
 }

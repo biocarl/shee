@@ -31,13 +31,25 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   constructor(private queueService: QueueService) {
   }
 
+   ngOnInit(): void {
+    this.subscribeToClientChannel();
+    this.subscribeToPresenterChannel();
+  }
+
   ngAfterViewChecked(): void {
     this.resizeTextToFitContainer('.sticky');
   }
 
-  ngOnInit(): void {
-    this.subscribeToClientChannel();
-    this.subscribeToPresenterChannel();
+  initializeComponent(data: PresenterMessage): void {
+    this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
+    this.initializeTimer();
+    this.ideaEvent.ideas.map(
+      (idea, index) => {
+        if (this.ideaEvent) {
+          this.ideaResponses.push({text: idea, color: "#ffd707ff", hasVisibleContent: true});
+        }
+      }
+    )
   }
 
   private subscribeToClientChannel(): void {
@@ -106,18 +118,6 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
     if (this.ideaEvent) {
       this.ideaEvent.timer = response.timer;
     }
-  }
-
-  initializeComponent(data: PresenterMessage): void {
-    this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
-    this.initializeTimer();
-    this.ideaEvent.ideas.map(
-      (idea, index) => {
-        if (this.ideaEvent) {
-          this.ideaResponses.push({text: idea, color: "#ffd707ff", hasVisibleContent: true});
-        }
-      }
-    )
   }
 
   startBrainstorming(): void {
