@@ -43,6 +43,7 @@ export class ComponentChooserService {
   }
 
   loadComponentIntoView(viewContainerRef: ViewContainerRef, interaction: string, type: string, event: PresenterMessage) {
+    this.log.toConsole("Entered loadComponentIntoView()");
     if (!this.validate(viewContainerRef, interaction, type)) {return;}
 
     this.clearViewContainer(viewContainerRef);

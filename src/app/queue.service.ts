@@ -35,6 +35,7 @@ export class QueueService {
    * @param {Function} handlePresenterMessage - The callback function that handles the presenter messages.
    */
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void): Promise<void> {
+    this.log.toConsole("Trying to open listener for presenter channel");
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
@@ -73,6 +74,7 @@ export class QueueService {
    * @param {Function} handleClientMessage - The callback function that handles the client messages.
    */
   listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void):Promise <void> {
+    this.log.toConsole("Trying to open listener for client channel");
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
