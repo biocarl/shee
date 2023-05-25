@@ -36,13 +36,25 @@ export class PairPresenterComponent implements OnInit, PresenterView {
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
-      if (counterSubscriptionEvent.interaction && counterSubscriptionEvent.interaction === "pair") {
-        this.connectedParticipants++;
-      }
-      if (counterSubscriptionEvent.participantName) {
-        this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.")
-      }
+      this.handleCounterSubscriptionEvent(counterSubscriptionEvent);
     });
+  }
+
+  private handleCounterSubscriptionEvent(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    this.incrementConnectedParticipants(counterSubscriptionEvent);
+    this.logParticipantListening(counterSubscriptionEvent);
+  }
+
+  private incrementConnectedParticipants(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    if (counterSubscriptionEvent.interaction === "pair") {
+      this.connectedParticipants++;
+    }
+  }
+
+  private logParticipantListening(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    if (counterSubscriptionEvent.participantName) {
+      this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.");
+    }
   }
 
   initializeComponent(data: PresenterMessage): void {
