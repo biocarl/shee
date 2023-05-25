@@ -64,14 +64,14 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
           }
         })
       }
-    });
+    },"BrainstormingPresenterComponent.ngOnInit");
 
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
       if (response.client_only && (this.stage === 'voting' || this.stage === 'brainstorming') && this.ideaEvent) {
         this.ideaEvent.timer = response.timer;
         this.initializeTimer();
       }
-    },"brainstorming-presenter.component.ts");
+    },"BrainstormingPresenterComponent.ngOnInit");
   }
 
   initializeComponent(data: PresenterMessage): void {

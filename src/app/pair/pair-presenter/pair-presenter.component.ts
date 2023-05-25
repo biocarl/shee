@@ -42,7 +42,7 @@ export class PairPresenterComponent implements OnInit, View {
       if (counterSubscriptionEvent.participantName) {
         this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.")
       }
-    });
+    },"PairPresenterComponent.ngOnInit");
   }
 
   initializeComponent(data: PresenterMessage): void {

@@ -28,7 +28,7 @@ export class DecisionChartPresenterComponent implements OnInit, View {
       if(this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.questionID) {
         this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
       }
-    });
+    },"DecisionChartPresenterComponent.ngOnInit");
   }
 
   getPercentage(index: number): number {

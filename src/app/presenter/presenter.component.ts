@@ -65,14 +65,14 @@ export class PresenterComponent implements OnInit {
         this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
           presenterMessage.interaction, "presenter", presenterMessage);
       }
-    },"presenter.component.ts");
+    },"PresenterComponent.ngOnInit");
 
     // Listen to ClientChannel, if student joins late and requests current question
     await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
       if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
         this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage)
       }
-    })
+    },"PresenterComponent.ngOnInit")
 
     // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
     this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);

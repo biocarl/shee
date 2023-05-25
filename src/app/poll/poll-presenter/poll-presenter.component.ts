@@ -52,7 +52,7 @@ export class PollPresenterComponent implements View, OnInit {
         this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
         this.addUserToUserHistory(pollSubscriptionEvent.participantName);
       }
-    });
+    },"PollPresenterComponent.ngOnInit");
 
     this.initUsersFromCookies(this.userHistory);
   }

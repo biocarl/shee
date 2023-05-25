@@ -72,7 +72,7 @@ export class ClientComponent implements OnInit, OnDestroy {
         this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
           presenterMessage.interaction, "client", presenterMessage);
       }
-    });
+    },'ClientComponent.ngOnInit');
 
     // Request current question
    this.log.toConsole("Requested current question")
