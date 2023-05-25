@@ -33,9 +33,10 @@ export class QueueService {
    * Listens to the presenter channel for messages.
    * When a message is received, the provided callback function is invoked with the parsed message object.
    * @param {Function} handlePresenterMessage - The callback function that handles the presenter messages.
+   * @param callingMethod
    */
-  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void): Promise<void> {
-    this.log.toConsole("Trying to open listener for presenter channel");
+  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void, callingMethod?: string): Promise<void> {
+    this.log.toConsole(`Method ${callingMethod} started listenToPresenterChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {

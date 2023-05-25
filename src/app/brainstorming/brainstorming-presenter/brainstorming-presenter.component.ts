@@ -71,7 +71,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
         this.ideaEvent.timer = response.timer;
         this.initializeTimer();
       }
-    });
+    },"brainstorming-presenter.component.ts");
   }
 
   initializeComponent(data: PresenterMessage): void {

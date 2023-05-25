@@ -65,7 +65,7 @@ export class PresenterComponent implements OnInit {
         this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
           presenterMessage.interaction, "presenter", presenterMessage);
       }
-    });
+    },"presenter.component.ts");
 
     // Listen to ClientChannel, if student joins late and requests current question
     await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
