@@ -48,6 +48,29 @@ export class ClientComponent implements OnInit, OnDestroy {
     );
   }
 
+  private setGroupNameFromRouteParam() {
+    // Retrieve route parameter /:group from url
+    this.route.paramMap.subscribe(params => {
+      this.groupName = params.get("group");
+      if (this.groupName) {
+        this.groupService.setGroupName(this.groupName);
+      }
+    });
+  }
+
+  private setVariables() {
+    this.setGroupNameFromRouteParam();
+    this.participantName = this.participantService.getParticipantName();
+    this.viewContainerRef = this.anchor.viewContainerRef;
+    this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
+  }
+
+  private listenToPresenter() {
+    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+      this.handlePresenterMessageAndInjectComponent(presenterMessage);
+    });
+  }
+
   ngOnInit(): void {
     this.setVariables();
     this.listenToPresenter();
