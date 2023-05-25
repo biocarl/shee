@@ -24,39 +24,54 @@ export class PollPresenterComponent implements PresenterView, OnInit {
   userHistory: Set<string> = new Set();
   constructor(private queueService: QueueService,private log: LoggerService) {}
 
-
-
   ngOnInit(): void {
     this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
-      if (!this.questionEvent) {
-        console.error("Error: question event was not populated by parent client component");
-        return;
-      }
-
-      if (this.accumulatedClientChoices && pollSubscriptionEvent.questionID === this.questionEvent.questionID
-          && this.isInValidTimeRangeIfSet()) {
-
-        this.accumulatedClientChoices = this.accumulatedClientChoices.map(
-          (totalChoiceResult, index)  => {
-            const obj = structuredClone(totalChoiceResult); // You work with references here and need a deepClone on top
-            if(pollSubscriptionEvent.voting[index] != 0){
-              obj.count += pollSubscriptionEvent.voting[index];
-              obj.users.push(pollSubscriptionEvent.participantName);
-            }
-            return obj;}
-        );
-      }
-
-      if (pollSubscriptionEvent.participantName) {
-
-        this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
-        this.addUserToUserHistory(pollSubscriptionEvent.participantName);
-      }
+      this.handlePollSubscriptionEvent(pollSubscriptionEvent);
     });
 
     this.initUsersFromCookies(this.userHistory);
   }
 
+  private handlePollSubscriptionEvent(pollSubscriptionEvent: PollClientSubscribeResponse): void {
+    if (!this.questionEvent) {
+      console.error("Error: question event was not populated by parent client component");
+      return;
+    }
+
+    if (this.canUpdatePollChoices(pollSubscriptionEvent)) {
+      this.updateClientChoices(pollSubscriptionEvent);
+    }
+
+    if (pollSubscriptionEvent.participantName) {
+      this.logParticipantVote(pollSubscriptionEvent);
+      this.addUserToUserHistory(pollSubscriptionEvent.participantName);
+    }
+  }
+
+  private canUpdatePollChoices(pollSubscriptionEvent: PollClientSubscribeResponse): boolean {
+    return !!(
+      this.accumulatedClientChoices &&
+      pollSubscriptionEvent.questionID === this.questionEvent?.questionID &&
+      this.isInValidTimeRangeIfSet()
+    );
+  }
+
+  private updateClientChoices(pollSubscriptionEvent: PollClientSubscribeResponse): void {
+    this.accumulatedClientChoices = this.accumulatedClientChoices?.map((totalChoiceResult, index) => {
+      const obj = structuredClone(totalChoiceResult); // You work with references here and need a deepClone on top
+      if (pollSubscriptionEvent.voting[index] !== 0) {
+        obj.count += pollSubscriptionEvent.voting[index];
+        obj.users.push(pollSubscriptionEvent.participantName);
+      }
+      return obj;
+    });
+  }
+
+  private logParticipantVote(pollSubscriptionEvent: PollClientSubscribeResponse): void {
+    const votedAnswer = this.questionEvent?.answers[pollSubscriptionEvent.voting.indexOf(1)];
+    this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + votedAnswer);
+  }
+ 
   getPercentage(index: number): number {
     if (!this.accumulatedClientChoices) {
       return 0;
