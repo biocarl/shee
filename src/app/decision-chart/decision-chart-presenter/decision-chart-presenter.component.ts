@@ -18,17 +18,33 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
   constructor(private queueService: QueueService) {
   }
 
-  ngOnInit(): void {
-    this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
-      if(!this.questionEvent){
-        console.error("Error: question event was not populated by parent client component");
-        return;
-      }
+  private isIdMatch(pollID: string, questionEventID: string): boolean {
+    return pollID === questionEventID;
+  }
 
-      if(this.questionResponses && pollSubscriptionEvent.questionID === this.questionEvent.questionID) {
-        this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
-      }
+  private updateQuestionResponses(pollID: string, questionEventID: string, pollSubscriptionEvent: DecisionClientSubscribeResponse):void {
+    if (this.questionResponses && this.isIdMatch(pollID, questionEventID)) {
+      this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
+    }
+  }
+
+  private handleErrorResponse():void {
+    if (!this.questionEvent) {
+      console.error("Error: question event was not populated by parent client component");
+      return;
+    }
+  }
+
+  private listenToClientChannelUpdate():void {
+    this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
+      return this.questionEvent ?
+        this.updateQuestionResponses(pollSubscriptionEvent.questionID, this.questionEvent.questionID, pollSubscriptionEvent) :
+        this.handleErrorResponse();
     });
+  }
+
+  ngOnInit(): void {
+    this.listenToClientChannelUpdate()
   }
 
   getPercentage(index: number): number {
