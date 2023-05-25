@@ -12,11 +12,11 @@ import {DecisionPresenterSubscribeResponse} from "../decision-presenter-subscrib
   styleUrls: ['./decision-chart-presenter.component.css']
 })
 export class DecisionChartPresenterComponent implements OnInit, PresenterView {
-  questionEvent ? : DecisionPresenterSubscribeResponse;
-  questionResponses ? : number[];
+  questionEvent ?: DecisionPresenterSubscribeResponse;
+  questionResponses ?: number[];
 
-  constructor(private queueService: QueueService) {}
-
+  constructor(private queueService: QueueService) {
+  }
 
   ngOnInit(): void {
     this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
@@ -43,7 +43,6 @@ export class DecisionChartPresenterComponent implements OnInit, PresenterView {
 
     return (this.questionResponses[index] / totalVotes) * 100;
   }
-
 
   initializeComponent(data: PresenterMessage): void {
     this.questionEvent = data as DecisionPresenterSubscribeResponse;
