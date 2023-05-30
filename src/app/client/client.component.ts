@@ -48,12 +48,11 @@ export class ClientComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.setParticipantAndGroupNames();
+  async ngOnInit(): Promise<void> {
+    await this.setParticipantAndGroupNames();
     this.setWaitComponent();
-    this.listenToPresenter();
-    this.log.toConsole("Requested current question")
-    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
+    this.requestLastMessage();
+    this.subscribeToPresenterChannel();
   }
 
   private setParticipantAndGroupNames() {
@@ -76,21 +75,40 @@ export class ClientComponent implements OnInit {
     this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
   }
 
-  private listenToPresenter() {
+  private subscribeToPresenterChannel() {
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      this.handlePresenterMessageAndInjectComponent(presenterMessage);
+      if (this.isNewQuestionOrClientOnly(presenterMessage)) {
+        this.queueService.currentPresenterMessage = presenterMessage;
+        this.loadComponent(presenterMessage);
+      }
     },'ClientComponent.ngOnInit');
   }
 
-  private handlePresenterMessageAndInjectComponent(presenterMessage: PresenterMessage) {
-    if (this.isDifferentQuestionOrClientOnly(presenterMessage)) {
-      this.queueService.currentPresenterMessage = presenterMessage;
-      this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
-        presenterMessage.interaction, "client", presenterMessage);
-    }
+  private loadComponent(presenterMessage: PresenterMessage) {
+    this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
+      presenterMessage.interaction, "client", presenterMessage);
   }
 
-  private isDifferentQuestionOrClientOnly(presenterMessage: PresenterMessage) {
+  private isNewQuestionOrClientOnly(presenterMessage: PresenterMessage) {
     return !!(presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly);
+  }
+
+  private requestLastMessage() {
+    this.log.toConsole("Requested current question.");
+    this.queueService.requestCachedMessages<PresenterMessage>((presenterMessage, timestamp: number) => {
+      this.adjustTimer(presenterMessage,timestamp);
+        this.loadComponent(presenterMessage);
+    });
+  }
+
+  private adjustTimer(presenterMessage: PresenterMessage, timestamp: number) {
+    if (presenterMessage.timer) {
+      let timeDifference = Math.floor(Date.now() / 1000) - timestamp;
+      if (presenterMessage.timer - timeDifference > 0) {
+        presenterMessage.timer -= timeDifference;
+      } else {
+        presenterMessage.timer = 0;
+      }
+    }
   }
 }

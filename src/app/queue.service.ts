@@ -2,7 +2,6 @@ import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from '../environments/environment';
-import {ClientQuestionRequest} from "./client-question-request";
 import {PresenterMessage} from "./presenter-message";
 import {LoggerService} from "./logger.service";
 
@@ -17,10 +16,6 @@ import {LoggerService} from "./logger.service";
 export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
-  // A special request object holding a predefined string used to trigger the display of the current question to clients
-  readonly questionTrigger: ClientQuestionRequest = {
-    requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
-  };
   currentPresenterMessage?: PresenterMessage;
 
   constructor(private groupService: GroupService,
@@ -146,6 +141,36 @@ export class QueueService {
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
           this.log.toConsole("Post to presenter channel earlier was successful.",result)
+      });
+  }
+
+  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type,timestamp:number) => void): void {
+    const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/json?poll=1&since=all`
+    this.log.toConsole(url);
+    fetch(url)
+      .then(response => response.text())
+      .then(text => {
+        // If the response is empty, log a message and return early
+        if (!text.trim()) {
+          this.log.toConsole('No cached messages returned from server');
+          return;
+        }
+
+        // Split the text by newlines to separate each JSON object
+        let jsonStrings = text.trim().split('\n');
+
+        // Get the last JSON object (the newest message)
+        let lastJsonString = jsonStrings[jsonStrings.length - 1];
+
+        // Parse the last JSON object
+        let newestMessage = JSON.parse(lastJsonString);
+
+        this.log.toConsole('Newest Message:', newestMessage);
+        const event: Type = this.#decodeMessageFromBase64<Type>(newestMessage.message);
+        handleCachedMessage(event,newestMessage.time);
+      })
+      .catch((error) => {
+        this.log.toConsole('Error retrieving cached Messages:', error);
       });
   }
 

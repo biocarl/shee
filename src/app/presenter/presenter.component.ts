@@ -6,7 +6,6 @@ import {AnchorDirective} from "../anchor.directive";
 import {QueryToEventService} from "./query-to-event.service";
 import {ComponentChooserService} from "../component-chooser.service";
 import {PresenterMessage} from "../presenter-message";
-import {ClientQuestionRequest} from "../client-question-request";
 import {Subscription} from "rxjs";
 import {Mode} from "../mode-toggle/mode-toggle.model";
 import {ModeToggleService} from "../mode-toggle/mode-toggle.service";
@@ -52,7 +51,6 @@ export class PresenterComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.retrieveRouteParameter();
     await this.subscribeToPresenterChannel();
-    await this.subscribeToClientChannel();
     this.publishQueryParamAsPresenterEvent();
   }
 
@@ -75,14 +73,6 @@ export class PresenterComponent implements OnInit {
           "presenter",
           presenterMessage
         );
-      }
-    },"PresenterComponent.ngOnInit");
-  }
-
-  private async subscribeToClientChannel(): Promise<void> {
-    await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
-      if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
-        this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage);
       }
     },"PresenterComponent.ngOnInit");
   }
