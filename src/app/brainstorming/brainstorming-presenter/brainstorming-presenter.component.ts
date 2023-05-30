@@ -1,5 +1,4 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
-import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
 import {QueueService} from "../../queue.service";
@@ -7,6 +6,7 @@ import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subs
 import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
 import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
+import {View} from "../../view";
 
 
 @Component({
@@ -14,7 +14,7 @@ import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-p
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css']
 })
-export class BrainstormingPresenterComponent implements PresenterView, OnInit, AfterViewChecked {
+export class BrainstormingPresenterComponent implements View, OnInit, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   ideaResponses: { text: string, color: string, hasVisibleContent: boolean }[] = [];
   maxZIndex = 20;
@@ -60,7 +60,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
       }
       this.handleClientChannelEvent(brainstormingSubscriptionEvent);
 
-    });
+    },"BrainstormingPresenterComponent.ngOnInit");
   }
 
   private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
@@ -98,7 +98,7 @@ export class BrainstormingPresenterComponent implements PresenterView, OnInit, A
   private subscribeToPresenterChannel(): void {
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
       this.handlePresenterChannelEvent(response);
-    });
+    },"BrainstormingPresenterComponent.ngOnInit");
   }
 
   private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {

@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {QueueService} from "../../queue.service";
-import {PresenterView} from "../../presenter-view";
 import {PresenterMessage} from "../../presenter-message";
 import {QrCodeService} from "../../qr-code.service";
 import {GroupService} from "../../group.service";
 import {LoggerService} from "../../logger.service";
 import {PairPresenterSubscribeResponse} from "../pair-presenter-subscribe-response";
+import {View} from "../../view";
 
 /**
  * This interface defines the structure of the client message sent to the presenter for the "pair" interaction.
@@ -25,9 +25,9 @@ interface CounterClientSubscribeResponse {
  * The pair presenter component is used to emit a pairing signal to all clients and
  * shows a QR code for quickly connecting with the appropriate channel
  * @component
- * @implements ClientView
+ * @implements View
  */
-export class PairPresenterComponent implements OnInit, PresenterView {
+export class PairPresenterComponent implements OnInit, View {
   connectedParticipants: number = 0;
   qrCodeUrl ?: string;
   isPublic: boolean = false;
@@ -54,7 +54,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   private subscribeToClientChannel(){
     this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
       this.handleClientChannelEvent(counterSubscriptionEvent);
-    });
+    },"PairPresenterComponent.ngOnInit");
   }
 
   private handleClientChannelEvent(counterSubscriptionEvent: CounterClientSubscribeResponse): void {

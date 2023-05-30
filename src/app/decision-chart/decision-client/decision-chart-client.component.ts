@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import {GroupService} from "../../group.service";
 import {QueueService} from "../../queue.service";
 import {PresenterMessage} from "../../presenter-message";
-import {ClientView} from "../../client-view";
 import {DecisionPresenterSubscribeResponse} from "../decision-presenter-subscribe-response";
 import {DecisionClientPublishRequest} from "../decision-client-publish-request";
+import {View} from "../../view";
 
 
 @Component({
@@ -12,7 +12,7 @@ import {DecisionClientPublishRequest} from "../decision-client-publish-request";
   templateUrl: './decision-chart-client.component.html',
   styleUrls: ['./decision-chart-client.component.css']
 })
-export class DecisionChartClientComponent implements ClientView {
+export class DecisionChartClientComponent implements View {
   questionEvent ? : DecisionPresenterSubscribeResponse;
   voted: boolean = false;
 

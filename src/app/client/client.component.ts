@@ -79,13 +79,13 @@ export class ClientComponent implements OnInit {
   private listenToPresenter() {
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       this.handlePresenterMessageAndInjectComponent(presenterMessage);
-    });
+    },'ClientComponent.ngOnInit');
   }
 
   private handlePresenterMessageAndInjectComponent(presenterMessage: PresenterMessage) {
     if (this.isDifferentQuestionOrClientOnly(presenterMessage)) {
       this.queueService.currentPresenterMessage = presenterMessage;
-      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+      this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
         presenterMessage.interaction, "client", presenterMessage);
     }
   }

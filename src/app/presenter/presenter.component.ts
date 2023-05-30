@@ -69,14 +69,14 @@ export class PresenterComponent implements OnInit {
     await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID) {
         this.queueService.currentPresenterMessage = presenterMessage;
-        this.componentChooserService.injectComponent(
+        this.componentChooserService.loadComponentIntoView(
           this.anchor.viewContainerRef,
           presenterMessage.interaction,
           "presenter",
           presenterMessage
         );
       }
-    });
+    },"PresenterComponent.ngOnInit");
   }
 
   private async subscribeToClientChannel(): Promise<void> {
@@ -84,7 +84,7 @@ export class PresenterComponent implements OnInit {
       if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
         this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage);
       }
-    });
+    },"PresenterComponent.ngOnInit");
   }
 
   private publishQueryParamAsPresenterEvent(): void {

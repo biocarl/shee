@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {PresenterView} from "../../presenter-view";
 import {PollPresenterSubscribeResponse} from "../poll-presenter-subscribe-response";
 import {QueueService} from "../../queue.service";
 import {PollClientSubscribeResponse} from "../poll-client-subscribe-response";
 import {PresenterMessage} from "../../presenter-message";
 import {LoggerService} from "../../logger.service";
 import {addCookie, getCookieValueFor} from "../../cookie-utlis";
+import {View} from "../../view";
 
 @Component({
   selector: 'app-poll-presenter',
@@ -17,10 +17,10 @@ import {addCookie, getCookieValueFor} from "../../cookie-utlis";
  * along with the different polling outcomes based on a defined set of options and the votes provided by the clients.
  * @component
  */
-export class PollPresenterComponent implements PresenterView, OnInit {
-  questionEvent ?: PollPresenterSubscribeResponse;
+export class PollPresenterComponent implements View, OnInit {
+  questionEvent?: PollPresenterSubscribeResponse;
 
-  accumulatedClientChoices ?: Array<{ count: number, users: Array<string> }>;
+  accumulatedClientChoices?: Array<{ count: number, users: Array<string> }>;
   userHistory: Set<string> = new Set();
 
   constructor(private queueService: QueueService, private log: LoggerService) {
@@ -40,7 +40,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
   private subscribeToClientChannel() {
     this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
       this.handlePollSubscriptionEvent(pollSubscriptionEvent);
-    });
+    },"PollPresenterComponent.ngOnInit");
   }
 
   private handlePollSubscriptionEvent(pollSubscriptionEvent: PollClientSubscribeResponse): void {
