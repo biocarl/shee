@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {QueueService} from "../queue.service";
 import {GroupService} from "../group.service";
@@ -85,7 +85,7 @@ export class ClientComponent implements OnInit {
   private handlePresenterMessageAndInjectComponent(presenterMessage: PresenterMessage) {
     if (this.isDifferentQuestionOrClientOnly(presenterMessage)) {
       this.queueService.currentPresenterMessage = presenterMessage;
-      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+      this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
         presenterMessage.interaction, "client", presenterMessage);
     }
   }
