@@ -48,12 +48,11 @@ export class ClientComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.setParticipantAndGroupNames();
+  async ngOnInit(): Promise<void> {
+    await this.setParticipantAndGroupNames();
     this.setWaitComponent();
-    this.listenToPresenter();
-    this.log.toConsole("Requested current question")
-    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
+    this.requestLastMessage();
+    this.subscribeToPresenterChannel();
   }
 
   private setParticipantAndGroupNames() {
@@ -76,21 +75,28 @@ export class ClientComponent implements OnInit {
     this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
   }
 
-  private listenToPresenter() {
+  private subscribeToPresenterChannel() {
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      this.handlePresenterMessageAndInjectComponent(presenterMessage);
+      if (this.isNewQuestionOrClientOnly(presenterMessage)) {
+        this.queueService.currentPresenterMessage = presenterMessage;
+        this.injectComponent(presenterMessage);
+      }
     });
   }
 
-  private handlePresenterMessageAndInjectComponent(presenterMessage: PresenterMessage) {
-    if (this.isDifferentQuestionOrClientOnly(presenterMessage)) {
-      this.queueService.currentPresenterMessage = presenterMessage;
-      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
-        presenterMessage.interaction, "client", presenterMessage);
-    }
+  private injectComponent(presenterMessage: PresenterMessage) {
+    this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+      presenterMessage.interaction, "client", presenterMessage);
   }
 
-  private isDifferentQuestionOrClientOnly(presenterMessage: PresenterMessage) {
+  private isNewQuestionOrClientOnly(presenterMessage: PresenterMessage) {
     return !!(presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly);
+  }
+
+  private requestLastMessage() {
+    this.log.toConsole("Requested current question.");
+    this.queueService.requestCachedMessages<PresenterMessage>(presenterMessage => {
+      this.injectComponent(presenterMessage);
+    });
   }
 }

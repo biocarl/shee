@@ -145,6 +145,34 @@ export class QueueService {
       });
   }
 
+  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type) => void): void {
+    const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/json?poll=1&since=all`
+    fetch(url)
+      .then(response => response.text())
+      .then(text => {
+        // If the response is empty, log a message and return early
+        if (!text.trim()) {
+          this.log.toConsole('No cached messages returned from server');
+          return;
+        }
+
+        // Split the text by newlines to separate each JSON object
+        let jsonStrings = text.trim().split('\n');
+
+        // Get the last JSON object (the newest message)
+        let lastJsonString = jsonStrings[jsonStrings.length - 1];
+
+        // Parse the last JSON object
+        let newestMessage = JSON.parse(lastJsonString);
+
+        this.log.toConsole('Newest Message:', newestMessage);
+        handleCachedMessage(newestMessage);
+      })
+      .catch((error) => {
+        this.log.toConsole('Error retrieving cached Messages:', error);
+      });
+  }
+
   #encodeMessageToBase64(payload: any): string {
     // TODO Bind this properly to be {} at least
     return this.#utf8ToBase64(JSON.stringify(payload));
