@@ -76,7 +76,7 @@ export class QueueService {
    * @param {string} [callingMethod] - The name of the Method that called this method.
    */
   listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void,callingMethod?: string):Promise <void> {
-    this.log.toConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToPresenterChannel method.`);
+    this.log.toConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToClientChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
