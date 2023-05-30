@@ -85,7 +85,7 @@ export class ClientComponent implements OnInit {
   }
 
   private loadComponent(presenterMessage: PresenterMessage) {
-    this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+    this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
       presenterMessage.interaction, "client", presenterMessage);
   }
 
