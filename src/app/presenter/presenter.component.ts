@@ -67,14 +67,14 @@ export class PresenterComponent implements OnInit {
     await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID) {
         this.queueService.currentPresenterMessage = presenterMessage;
-        this.componentChooserService.injectComponent(
+        this.componentChooserService.loadComponentIntoView(
           this.anchor.viewContainerRef,
           presenterMessage.interaction,
           "presenter",
           presenterMessage
         );
       }
-    });
+    },"PresenterComponent.ngOnInit");
   }
 
   private publishQueryParamAsPresenterEvent(): void {

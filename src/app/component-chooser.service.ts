@@ -1,7 +1,6 @@
-import {Injectable, ViewContainerRef} from '@angular/core';
+import {ComponentRef, Injectable, Type, ViewContainerRef} from '@angular/core';
 import {PollPresenterComponent} from "./poll/poll-presenter/poll-presenter.component";
 import {PollClientComponent} from "./poll/poll-client/poll-client.component";
-import {NotFoundComponent} from "./not-found/not-found.component";
 import {PairPresenterComponent} from "./pair/pair-presenter/pair-presenter.component";
 import {PairClientComponent} from "./pair/pair-client/pair-client.component";
 import {PresenterMessage} from "./presenter-message";
@@ -14,6 +13,7 @@ import {
   DecisionChartPresenterComponent
 } from "./decision-chart/decision-chart-presenter/decision-chart-presenter.component";
 import {LoggerService} from "./logger.service";
+import {View} from "./view";
 
 @Injectable({
   providedIn: 'root'
@@ -24,87 +24,62 @@ import {LoggerService} from "./logger.service";
  * @Injectable
  */
 export class ComponentChooserService {
+
+  private typeMap: Record<string,Record<string,Type<View>>> = {
+    presenter: {
+      poll: PollPresenterComponent,
+      pair: PairPresenterComponent,
+      brainstorming: BrainstormingPresenterComponent,
+      decision: DecisionChartPresenterComponent
+    },
+    client: {
+      poll: PollClientComponent,
+      pair: PairClientComponent,
+      brainstorming: BrainstormingClientComponent,
+      decision: DecisionChartClientComponent
+    }
+  }
   constructor(private log: LoggerService) {
   }
 
-  /**
-   * Injects a component into the given view container depending on the interaction and type.
-   * @param {ViewContainerRef} viewContainerRef The reference to the view container where the component should be injected.
-   * @param {string} interaction The interaction id for the component to be injected.
-   * @param {string} type The type of the component, can be "client" or "presenter".
-   * @param {PresenterMessage} event The presenter message containing data to be passed into the component.
-   * @public
-   * @returns {void}
-   */
-  injectComponent(viewContainerRef: ViewContainerRef, interaction: string, type: string, event: PresenterMessage) {
+  loadComponentIntoView(viewContainerRef: ViewContainerRef, interaction: string, type: string, event: PresenterMessage) {
+    this.log.toConsole("Entered loadComponentIntoView()");
+    if (!this.validate(viewContainerRef, interaction, type)) {return;}
+
+    this.clearViewContainer(viewContainerRef);
+    this.injectSelectedComponent(viewContainerRef, interaction, type, event);
+  }
+
+  private validate(viewContainerRef: ViewContainerRef, interaction: string, type: string): boolean {
     if (!viewContainerRef) {
-      console.error("Error: Container ref is empty");
-      return;
+      this.logError("Container ref is empty");
+      return false;
     }
 
-    if (type != "client" && type != "presenter") {
-      viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
-      console.error("Error: No matching interaction id was found for " + interaction);
+    if (!(type in this.typeMap) || !(interaction in this.typeMap[type])) {
+      this.logError("No matching interaction id was found for " + interaction);
+      return false;
     }
 
-    // clean container before injection
+    return true;
+  }
+
+  private clearViewContainer(viewContainerRef: ViewContainerRef): void {
     viewContainerRef.clear();
+  }
 
+  private injectSelectedComponent(viewContainerRef: ViewContainerRef, interaction: string, type: string, event: PresenterMessage): void {
     this.log.toConsole(`Start injecting ${type} component for interaction: ${interaction}`);
-    if (type === "presenter") {
-      switch (interaction) {
-        case "poll" :
-          const pollPresenterRef = viewContainerRef.createComponent<PollPresenterComponent>(PollPresenterComponent);
-          pollPresenterRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break
-        case "pair" :
-          const counterRef = viewContainerRef.createComponent<PairPresenterComponent>(PairPresenterComponent);
-          counterRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break
-        case "brainstorming" :
-          const brainstormingRef = viewContainerRef.createComponent<BrainstormingPresenterComponent>(BrainstormingPresenterComponent);
-          brainstormingRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break;
-        case "decision" :
-          const decisionPresenterRef = viewContainerRef.createComponent<DecisionChartPresenterComponent>(DecisionChartPresenterComponent);
-          decisionPresenterRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break;
-        default :
-          viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
-          console.error("Error: No matching interaction id was found for " + interaction);
-      }
-    }
 
-    if (type === "client") {
-      switch (interaction) {
-        case "poll" :
-          const pollClientRef = viewContainerRef.createComponent<PollClientComponent>(PollClientComponent);
-          pollClientRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break
-        case "pair" :
-          const counterRef = viewContainerRef.createComponent<PairClientComponent>(PairClientComponent);
-          counterRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break
-        case "brainstorming" :
-          const brainstormingRef = viewContainerRef.createComponent<BrainstormingClientComponent>(BrainstormingClientComponent);
-          brainstormingRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break;
-        case "decision" :
-          const decisionClientRef = viewContainerRef.createComponent<DecisionChartClientComponent>(DecisionChartClientComponent);
-          decisionClientRef.instance.initializeComponent(event);
-          this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
-          break;
-        default :
-          viewContainerRef.createComponent<NotFoundComponent>(NotFoundComponent);
-          console.error("Error: No matching interaction id was found for " + interaction);
-            }
-      }
+    const component = this.typeMap[type][interaction];
+    const ref: ComponentRef<View> = viewContainerRef.createComponent(component);
+
+    ref.instance.initializeComponent(event);
+
+    this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
+  }
+
+  private logError(message: string): void {
+    console.error("Error: " + message);
   }
 }

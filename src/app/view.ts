@@ -1,10 +1,7 @@
 import {PresenterMessage} from "./presenter-message";
 
-/**
- * The PresenterView interface represents the common methods used to initialize a presenter view.
- * @interface
- */
-export interface PresenterView {
+
+export interface View {
   /**
    * Initializes the presenter view with the given data.
    * @param {PresenterMessage} data The presenter message data.

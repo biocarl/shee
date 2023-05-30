@@ -28,8 +28,10 @@ export class QueueService {
    * Listens to the presenter channel for messages.
    * When a message is received, the provided callback function is invoked with the parsed message object.
    * @param {Function} handlePresenterMessage - The callback function that handles the presenter messages.
+   * @param {string} [callingMethod] - The name of the Method that called this method.
    */
-  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void): Promise<void> {
+  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void, callingMethod?: string): Promise<void> {
+    this.log.toConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToPresenterChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
@@ -66,8 +68,10 @@ export class QueueService {
   /**
    * Listens to the client channel for messages.
    * @param {Function} handleClientMessage - The callback function that handles the client messages.
+   * @param {string} [callingMethod] - The name of the Method that called this method.
    */
-  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void):Promise <void> {
+  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void,callingMethod?: string):Promise <void> {
+    this.log.toConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToClientChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {

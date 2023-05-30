@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {LoggerService} from "../logger.service";
 
 interface ModuleTypes {
   modules: ModuleType[];
@@ -35,13 +36,14 @@ export class ModuleInitializerComponent implements OnInit{
 
   constructor(private http: HttpClient,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private log: LoggerService) {
   }
 
   ngOnInit(): void {
     this.http.get<ModuleTypes>('assets/modules.json').subscribe(data => {
       this.modules = data.modules;
-      console.log(this.modules);
+      this.log.toConsole("Module initializer modules: ",this.modules);
     });
   }
 

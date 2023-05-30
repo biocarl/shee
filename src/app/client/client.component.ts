@@ -81,7 +81,7 @@ export class ClientComponent implements OnInit {
         this.queueService.currentPresenterMessage = presenterMessage;
         this.loadComponent(presenterMessage);
       }
-    });
+    },'ClientComponent.ngOnInit');
   }
 
   private loadComponent(presenterMessage: PresenterMessage) {
