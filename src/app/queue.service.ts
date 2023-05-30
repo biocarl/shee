@@ -17,10 +17,6 @@ import {LoggerService} from "./logger.service";
 export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = "_presenter_topic";
   private CLIENT_TOPIC_SUFFIX: string = "_client_topic";
-  // A special request object holding a predefined string used to trigger the display of the current question to clients
-  readonly questionTrigger: ClientQuestionRequest = {
-    requestTrigger: "sfhdfknvkfdhglhfglr!)§%/273548"
-  };
   currentPresenterMessage?: PresenterMessage;
 
   constructor(private groupService: GroupService,
