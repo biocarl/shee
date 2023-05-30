@@ -6,7 +6,6 @@ import {AnchorDirective} from "../anchor.directive";
 import {QueryToEventService} from "./query-to-event.service";
 import {ComponentChooserService} from "../component-chooser.service";
 import {PresenterMessage} from "../presenter-message";
-import {ClientQuestionRequest} from "../client-question-request";
 import {Subscription} from "rxjs";
 import {Mode} from "../mode-toggle/mode-toggle.model";
 import {ModeToggleService} from "../mode-toggle/mode-toggle.service";

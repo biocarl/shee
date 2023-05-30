@@ -79,12 +79,12 @@ export class ClientComponent implements OnInit {
     this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (this.isNewQuestionOrClientOnly(presenterMessage)) {
         this.queueService.currentPresenterMessage = presenterMessage;
-        this.injectComponent(presenterMessage);
+        this.loadComponent(presenterMessage);
       }
     });
   }
 
-  private injectComponent(presenterMessage: PresenterMessage) {
+  private loadComponent(presenterMessage: PresenterMessage) {
     this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
       presenterMessage.interaction, "client", presenterMessage);
   }
@@ -95,8 +95,20 @@ export class ClientComponent implements OnInit {
 
   private requestLastMessage() {
     this.log.toConsole("Requested current question.");
-    this.queueService.requestCachedMessages<PresenterMessage>(presenterMessage => {
-      this.injectComponent(presenterMessage);
+    this.queueService.requestCachedMessages<PresenterMessage>((presenterMessage, timestamp: number) => {
+      this.adjustTimer(presenterMessage,timestamp);
+        this.loadComponent(presenterMessage);
     });
+  }
+
+  private adjustTimer(presenterMessage: PresenterMessage, timestamp: number) {
+    if (presenterMessage.timer) {
+      let timeDifference = Math.floor(Date.now() / 1000) - timestamp;
+      if (presenterMessage.timer - timeDifference > 0) {
+        presenterMessage.timer -= timeDifference;
+      } else {
+        presenterMessage.timer = 0;
+      }
+    }
   }
 }

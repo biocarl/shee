@@ -14,4 +14,5 @@ export interface PresenterMessage {
    */
   questionID: string;
   clientOnly?: boolean;
+  timer?: number;
 }

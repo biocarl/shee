@@ -2,7 +2,6 @@ import {Injectable, NgZone} from '@angular/core';
 import {GroupService} from "./group.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from '../environments/environment';
-import {ClientQuestionRequest} from "./client-question-request";
 import {PresenterMessage} from "./presenter-message";
 import {LoggerService} from "./logger.service";
 
@@ -141,8 +140,9 @@ export class QueueService {
       });
   }
 
-  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type) => void): void {
-    const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/json?poll=1&since=all`
+  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type,timestamp:number) => void): void {
+    const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/json?poll=1&since=all`
+    this.log.toConsole(url);
     fetch(url)
       .then(response => response.text())
       .then(text => {
@@ -162,7 +162,8 @@ export class QueueService {
         let newestMessage = JSON.parse(lastJsonString);
 
         this.log.toConsole('Newest Message:', newestMessage);
-        handleCachedMessage(newestMessage);
+        const event: Type = this.#decodeMessageFromBase64<Type>(newestMessage.message);
+        handleCachedMessage(event,newestMessage.time);
       })
       .catch((error) => {
         this.log.toConsole('Error retrieving cached Messages:', error);
