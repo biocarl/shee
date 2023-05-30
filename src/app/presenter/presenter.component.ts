@@ -51,8 +51,8 @@ export class PresenterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.retrieveRouteParameter();
-    await this.listenToPresenterChannel();
-    await this.listenToClientChannel();
+    await this.subscribeToPresenterChannel();
+    await this.subscribeToClientChannel();
     this.publishQueryParamAsPresenterEvent();
   }
 
@@ -65,7 +65,7 @@ export class PresenterComponent implements OnInit {
     });
   }
 
-  private async listenToPresenterChannel(): Promise<void> {
+  private async subscribeToPresenterChannel(): Promise<void> {
     await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID) {
         this.queueService.currentPresenterMessage = presenterMessage;
@@ -79,7 +79,7 @@ export class PresenterComponent implements OnInit {
     });
   }
 
-  private async listenToClientChannel(): Promise<void> {
+  private async subscribeToClientChannel(): Promise<void> {
     await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
       if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
         this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage);

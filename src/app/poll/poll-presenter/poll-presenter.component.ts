@@ -20,16 +20,27 @@ import {addCookie, getCookieValueFor} from "../../cookie-utlis";
 export class PollPresenterComponent implements PresenterView, OnInit {
   questionEvent ?: PollPresenterSubscribeResponse;
 
-  accumulatedClientChoices ?: Array<{count: number, users: Array<string>}>;
+  accumulatedClientChoices ?: Array<{ count: number, users: Array<string> }>;
   userHistory: Set<string> = new Set();
-  constructor(private queueService: QueueService,private log: LoggerService) {}
+
+  constructor(private queueService: QueueService, private log: LoggerService) {
+  }
 
   ngOnInit(): void {
+    this.subscribeToClientChannel();
+    this.initUsersFromCookies(this.userHistory);
+  }
+
+  initializeComponent(data: PresenterMessage): void {
+    this.questionEvent = data as PollPresenterSubscribeResponse;
+    this.accumulatedClientChoices = Array(this.questionEvent.answers.length).fill({count: 0, users: []});
+    this.initializeTimer();
+  }
+
+  private subscribeToClientChannel() {
     this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
       this.handlePollSubscriptionEvent(pollSubscriptionEvent);
     });
-
-    this.initUsersFromCookies(this.userHistory);
   }
 
   private handlePollSubscriptionEvent(pollSubscriptionEvent: PollClientSubscribeResponse): void {
@@ -48,6 +59,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     }
   }
 
+// TODO: better name & ask Carl about !!
   private canUpdatePollChoices(pollSubscriptionEvent: PollClientSubscribeResponse): boolean {
     return !!(
       this.accumulatedClientChoices &&
@@ -71,7 +83,7 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     const votedAnswer = this.questionEvent?.answers[pollSubscriptionEvent.voting.indexOf(1)];
     this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + votedAnswer);
   }
- 
+
   getPercentage(index: number): number {
     if (!this.accumulatedClientChoices) {
       return 0;
@@ -86,16 +98,10 @@ export class PollPresenterComponent implements PresenterView, OnInit {
   }
 
   private isInValidTimeRangeIfSet() {
-    if(this.questionEvent?.timer !== undefined){
+    if (this.questionEvent?.timer !== undefined) {
       return this.questionEvent.timer > 0;
     }
     return true;
-  }
-
-  initializeComponent(data: PresenterMessage): void {
-    this.questionEvent = data as PollPresenterSubscribeResponse;
-    this.accumulatedClientChoices = Array(this.questionEvent.answers.length).fill({count: 0, users: []});
-    this.initializeTimer();
   }
 
   private initializeTimer() {
@@ -111,22 +117,23 @@ export class PollPresenterComponent implements PresenterView, OnInit {
     }
   }
 
-  getMissingUsers(currentUsers: Array<string>){
+  getMissingUsers(currentUsers: Array<string>) {
     return Array.from(this.userHistory).filter((x => !currentUsers.includes(x)));
   }
 
-  clearUserHistory(){
+  clearUserHistory() {
     this.userHistory.clear();
   }
-  initUsersFromCookies(users : Set<string>){
+
+  initUsersFromCookies(users: Set<string>) {
     const userCookies = getCookieValueFor("users");
-    if(userCookies){
+    if (userCookies) {
       userCookies.split("|").forEach((user: string) => users.add(user));
     }
   }
 
-  addUserToUserHistory(user : string){
+  addUserToUserHistory(user: string) {
     this.userHistory.add(user);
-    addCookie("users",Array.from(this.userHistory).join("|"));
+    addCookie("users", Array.from(this.userHistory).join("|"));
   }
 }
