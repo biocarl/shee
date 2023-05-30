@@ -15,7 +15,7 @@ import {BrainstormigClientVotingPublishRequest} from "../brainstormig-client-vot
   templateUrl: './brainstorming-client.component.html',
   styleUrls: ['./brainstorming-client.component.css']
 })
-export class BrainstormingClientComponent implements ClientView,AfterViewChecked {
+export class BrainstormingClientComponent implements ClientView, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = false;
@@ -34,11 +34,9 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
   }
 
   ngAfterViewChecked(): void {
-    const sticky = document.querySelector('#user-input');
-    if(sticky) {
-      this.resizeTextToFitContainer(sticky as HTMLElement);
-    }
+    this.resizeTextToFitContainer('#user-input');
   }
+
 
   voteForIdea(voteSelectionIndex: number) {
     if (!this.votingEvent?.ideas) return
@@ -54,7 +52,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
     if (this.votingEvent.singleChoice) {
       this.isVoted = true;
-    }else {
+    } else {
       this.multiVoteCheck[voteSelectionIndex] = true;
     }
 
@@ -86,7 +84,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     this.votingEvent = data as BrainstormingPresenterVotingSubscribeResponse;
     if (this.ideaEvent.openForIdeas) {
       this.openForIdeas = true;
-    } else if (this.ideaEvent.openForIdeas === false)  {
+    } else if (this.ideaEvent.openForIdeas === false) {
       this.isAfterBrainstorming = true;
     }
     this.initializeTimer();
@@ -105,7 +103,7 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     }
   }
 
-  changeColor(event : MouseEvent) {
+  changeColor(event: MouseEvent) {
     const element = event.target as HTMLElement;
     const colorSpans = document.querySelectorAll('.color-selection span') as NodeListOf<HTMLElement>;
 
@@ -122,32 +120,35 @@ export class BrainstormingClientComponent implements ClientView,AfterViewChecked
     this.stickyColor = getComputedStyle(element).getPropertyValue('background-color');
   }
 
-  resizeTextToFitContainer(element: HTMLElement) {
-    const maxWidth = element.clientWidth;
-    const maxHeight = element.clientHeight;
+  resizeTextToFitContainer(selector: string) {
+    const sticky: HTMLElement | null = document.querySelector(selector);
+    if (sticky) {
+      const maxWidth = sticky.clientWidth;
+      const maxHeight = sticky.clientHeight;
 
-    let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 50; // Set a maximum font size
-    let fontSize = maxFontSize;
+      let minFontSize = 5; // Set a minimum font size
+      let maxFontSize = 50; // Set a maximum font size
+      let fontSize = maxFontSize;
 
-    // Apply the maximum font size
-    element.style.fontSize = fontSize + 'px';
+      // Apply the maximum font size
+      sticky.style.fontSize = fontSize + 'px';
 
-    // Reduce the font size until the content fits or reaches the minimum size
-    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
-      fontSize--;
-      element.style.fontSize = fontSize + 'px';
-    }
-
-    // Increase the font size until the content overflows or reaches the maximum size
-    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
-      fontSize++;
-      element.style.fontSize = fontSize + 'px';
-
-      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+      // Reduce the font size until the content fits or reaches the minimum size
+      while ((sticky.scrollHeight > maxHeight || sticky.scrollWidth > maxWidth) && fontSize > minFontSize) {
         fontSize--;
-        element.style.fontSize = fontSize + 'px';
-        break;
+        sticky.style.fontSize = fontSize + 'px';
+      }
+
+      // Increase the font size until the content overflows or reaches the maximum size
+      while ((sticky.scrollHeight <= maxHeight && sticky.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+        fontSize++;
+        sticky.style.fontSize = fontSize + 'px';
+
+        if (sticky.scrollHeight > maxHeight || sticky.scrollWidth > maxWidth) {
+          fontSize--;
+          sticky.style.fontSize = fontSize + 'px';
+          break;
+        }
       }
     }
   }

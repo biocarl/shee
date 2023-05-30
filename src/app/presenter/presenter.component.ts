@@ -50,34 +50,45 @@ export class PresenterComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // Retrieve route parameter /:group from url
+    await this.retrieveRouteParameter();
+    await this.subscribeToPresenterChannel();
+    await this.subscribeToClientChannel();
+    this.publishQueryParamAsPresenterEvent();
+  }
+
+  private async retrieveRouteParameter(): Promise<void> {
     this.route.paramMap.subscribe(params => {
       this.groupName = params.get("group");
       if (this.groupName) {
         this.groupService.setGroupName(this.groupName);
       }
     });
+  }
 
-    // Listen to all presenter events for determining which component to choose based on interactionId
+  private async subscribeToPresenterChannel(): Promise<void> {
     await this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
       if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID) {
         this.queueService.currentPresenterMessage = presenterMessage;
-        this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
-          presenterMessage.interaction, "presenter", presenterMessage);
+        this.componentChooserService.injectComponent(
+          this.anchor.viewContainerRef,
+          presenterMessage.interaction,
+          "presenter",
+          presenterMessage
+        );
       }
     });
+  }
 
-    // Listen to ClientChannel, if student joins late and requests current question
+  private async subscribeToClientChannel(): Promise<void> {
     await this.queueService.listenToClientChannel<ClientQuestionRequest>(clientMessage => {
       if (clientMessage.requestTrigger === this.queueService.questionTrigger.requestTrigger) {
-        this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage)
+        this.queueService.publishMessageToPresenterChannel(this.queueService.currentPresenterMessage);
       }
-    })
+    });
+  }
 
-    // Retrieve query parameter ?param1=value1&param2=... from url and publish as presenter event
+  private publishQueryParamAsPresenterEvent(): void {
     this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
   }
-  ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
-  }
+
 }

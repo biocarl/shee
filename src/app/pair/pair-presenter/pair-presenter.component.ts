@@ -35,14 +35,7 @@ export class PairPresenterComponent implements OnInit, PresenterView {
   constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService, private log: LoggerService) {}
 
   ngOnInit(): void {
-    this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
-      if (counterSubscriptionEvent.interaction && counterSubscriptionEvent.interaction === "pair") {
-        this.connectedParticipants++;
-      }
-      if (counterSubscriptionEvent.participantName) {
-        this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.")
-      }
-    });
+    this.subscribeToClientChannel();
   }
 
   initializeComponent(data: PresenterMessage): void {
@@ -57,4 +50,29 @@ export class PairPresenterComponent implements OnInit, PresenterView {
       this.qrCodeUrl = url;
     });
   }
+
+  private subscribeToClientChannel(){
+    this.queueService.listenToClientChannel<CounterClientSubscribeResponse>(counterSubscriptionEvent => {
+      this.handleClientChannelEvent(counterSubscriptionEvent);
+    });
+  }
+
+  private handleClientChannelEvent(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    this.incrementConnectedParticipants(counterSubscriptionEvent);
+    this.logParticipantListening(counterSubscriptionEvent);
+  }
+
+  private incrementConnectedParticipants(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    if (counterSubscriptionEvent.interaction === "pair") {
+      this.connectedParticipants++;
+    }
+  }
+
+  private logParticipantListening(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    if (counterSubscriptionEvent.participantName) {
+      this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.");
+    }
+  }
+
+
 }
