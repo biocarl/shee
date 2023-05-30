@@ -20,9 +20,9 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
   maxZIndex = 20;
   stickyContentVisible: boolean = false;
   votes?: number[];
-  timerLength_voting?: number;
+  timerLengthVoting?: number;
   private timerInterval: any;
-  timerLength_brainstorming?: number;
+  timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
   editing: boolean = false;
   editableSticky?: number;
@@ -31,47 +31,13 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
   constructor(private queueService: QueueService) {
   }
 
-  ngAfterViewChecked(): void {
-    const stickies = document.querySelectorAll('.sticky');
-
-    stickies.forEach(sticky => {
-      this.resizeTextToFitContainer(sticky as HTMLElement);
-    });
+   ngOnInit(): void {
+    this.subscribeToClientChannel();
+    this.subscribeToPresenterChannel();
   }
 
-  ngOnInit(): void {
-    this.queueService.listenToClientChannel<BrainstormingClientSubscribeResponse>(brainstormingSubscriptionEvent => {
-      if (!this.ideaEvent) {
-        console.error("Error: idea event was not populated by parent client component");
-        return;
-      }
-      if (this.ideaEvent.questionID == brainstormingSubscriptionEvent.question_id && this.stage === 'brainstorming') {
-        this.ideaResponses.push({
-          text: brainstormingSubscriptionEvent.idea_text,
-          color: brainstormingSubscriptionEvent.stickyColor,
-          hasVisibleContent: this.stickyContentVisible
-        });
-
-      } else if (
-        this.ideaEvent.questionID == brainstormingSubscriptionEvent.question_id &&
-        brainstormingSubscriptionEvent.idea_voting && this.stage === 'voting'
-      ) {
-        let voteIndex = 0;
-        this.ideaResponses.forEach((idea, index) => {
-          if (idea.text !== '' && this.votes) {
-            this.votes[index] += brainstormingSubscriptionEvent.idea_voting[voteIndex];
-            voteIndex++;
-          }
-        })
-      }
-    },"BrainstormingPresenterComponent.ngOnInit");
-
-    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
-      if (response.client_only && (this.stage === 'voting' || this.stage === 'brainstorming') && this.ideaEvent) {
-        this.ideaEvent.timer = response.timer;
-        this.initializeTimer();
-      }
-    },"BrainstormingPresenterComponent.ngOnInit");
+  ngAfterViewChecked(): void {
+    this.resizeTextToFitContainer('.sticky');
   }
 
   initializeComponent(data: PresenterMessage): void {
@@ -86,6 +52,74 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     )
   }
 
+  private subscribeToClientChannel(): void {
+    this.queueService.listenToClientChannel<BrainstormingClientSubscribeResponse>(brainstormingSubscriptionEvent => {
+      if (!this.ideaEvent) {
+        console.error("Error: idea event was not populated by parent client component");
+        return;
+      }
+      this.handleClientChannelEvent(brainstormingSubscriptionEvent);
+
+    },"BrainstormingPresenterComponent.ngOnInit");
+  }
+
+  private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
+    if (this.isMatchingQuestion(brainstormingSubscriptionEvent)) {
+      if (this.stage === 'brainstorming') {
+        this.addBrainstormingIdea(brainstormingSubscriptionEvent);
+      } else if (this.stage === 'voting') {
+        this.updateVotes(brainstormingSubscriptionEvent);
+      }
+    }
+  }
+
+  private isMatchingQuestion(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): boolean {
+    return !!(this.ideaEvent && this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID);
+  }
+
+  private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    this.ideaResponses.push({
+      text: brainstormingSubscriptionEvent.ideaText,
+      color: brainstormingSubscriptionEvent.stickyColor,
+      hasVisibleContent: this.stickyContentVisible
+    });
+  }
+
+  private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    let voteIndex = 0;
+    this.ideaResponses.forEach((idea, index) => {
+      if (idea.text !== '' && this.votes) {
+        this.votes[index] += brainstormingSubscriptionEvent.ideaVoting[voteIndex];
+        voteIndex++;
+      }
+    });
+  }
+
+  private subscribeToPresenterChannel(): void {
+    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
+      this.handlePresenterChannelEvent(response);
+    },"BrainstormingPresenterComponent.ngOnInit");
+  }
+
+  private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
+    if (this.hasVotingStarted(response)){
+      this.updateTimer(response);
+      this.initializeTimer();
+    }
+  }
+
+private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
+  return !!(this.ideaEvent &&
+    response.clientOnly &&
+    (this.stage === 'voting' || this.stage === 'brainstorming'))
+}
+
+  private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
+    if (this.ideaEvent) {
+      this.ideaEvent.timer = response.timer;
+    }
+  }
+
   startBrainstorming(): void {
     if (!this.ideaEvent?.questionID) return
     this.stage = 'brainstorming';
@@ -93,11 +127,11 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
       openForIdeas: true,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.questionID,
-      client_only: true
+      questionID: this.ideaEvent.questionID,
+      clientOnly: true
     };
-    if (this.timerLength_brainstorming) {
-      payload.timer = this.timerLength_brainstorming;
+    if (this.timerLengthBrainstorming) {
+      payload.timer = this.timerLengthBrainstorming;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -108,8 +142,8 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
       openForIdeas: false,
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.questionID,
-      client_only: true
+      questionID: this.ideaEvent.questionID,
+      clientOnly: true
     };
     clearInterval(this.timerInterval)
     this.ideaEvent.timer = undefined;
@@ -117,34 +151,38 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     this.stage = 'afterBrainstorming';
   }
 
-  resizeTextToFitContainer(element: HTMLElement) {
-    const maxWidth = element.clientWidth;
-    const maxHeight = element.clientHeight;
+  resizeTextToFitContainer(selector: string) {
+    const stickies: NodeListOf<HTMLElement> = document.querySelectorAll(selector);
+    stickies.forEach(element => {
 
-    let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 50; // Set a maximum font size
-    let fontSize = maxFontSize;
+      const maxWidth = element.clientWidth;
+      const maxHeight = element.clientHeight;
 
-    // Apply the maximum font size
-    element.style.fontSize = fontSize + 'px';
+      let minFontSize = 5; // Set a minimum font size
+      let maxFontSize = 50; // Set a maximum font size
+      let fontSize = maxFontSize;
 
-    // Reduce the font size until the content fits or reaches the minimum size
-    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
-      fontSize--;
-      element.style.fontSize = fontSize + 'px';
-    }
-
-    // Increase the font size until the content overflows or reaches the maximum size
-    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
-      fontSize++;
+      // Apply the maximum font size
       element.style.fontSize = fontSize + 'px';
 
-      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+      // Reduce the font size until the content fits or reaches the minimum size
+      while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
         fontSize--;
         element.style.fontSize = fontSize + 'px';
-        break;
       }
-    }
+
+      // Increase the font size until the content overflows or reaches the maximum size
+      while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+        fontSize++;
+        element.style.fontSize = fontSize + 'px';
+
+        if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+          fontSize--;
+          element.style.fontSize = fontSize + 'px';
+          break;
+        }
+      }
+    });
   }
 
   startVoting(): void {
@@ -159,13 +197,13 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
       interaction: "brainstorming",
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent.questionID,
-      single_choice: singleChoice,
-      voting_in_progress: true,
-      client_only: true
+      questionID: this.ideaEvent.questionID,
+      singleChoice: singleChoice,
+      votingInProgress: true,
+      clientOnly: true
     };
-    if (this.timerLength_voting) {
-      payload.timer = this.timerLength_voting;
+    if (this.timerLengthVoting) {
+      payload.timer = this.timerLengthVoting;
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -221,16 +259,15 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     )
   }
 
-
   stopVoting() {
     if (!this.ideaEvent?.questionID) return
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: "brainstorming",
       question: this.ideaEvent?.question,
-      question_id: this.ideaEvent?.questionID,
-      single_choice: false,
-      voting_in_progress: false,
-      client_only: true
+      questionID: this.ideaEvent?.questionID,
+      singleChoice: false,
+      votingInProgress: false,
+      clientOnly: true
     };
     this.stage = 'afterBrainstorming';
     clearInterval(this.timerInterval)
@@ -263,7 +300,6 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     if (this.ideaEvent) {
       this.editableSticky = this.ideaResponses.length - 1;
     }
-
   }
 
   toggleEditMode(index: number) {
@@ -279,5 +315,4 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     this.editing = false;
     this.editedIdea = "";
   }
-
 }

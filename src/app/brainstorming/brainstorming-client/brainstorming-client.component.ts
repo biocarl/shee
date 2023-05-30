@@ -20,44 +20,39 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
   votingEvent ?: BrainstormingPresenterVotingSubscribeResponse;
   openForIdeas: boolean = false;
   isAfterBrainstorming: boolean = false;
-  idea_text: string = "";
-  is_sent: boolean = false;
-  is_voted: boolean = false;
-  multi_vote_check: boolean [];
+  ideaText: string = "";
+  isSent: boolean = false;
+  isVoted: boolean = false;
+  multiVoteCheck: boolean [];
   stickyColor: string = "#FFD707FF"
   bgColor: string = "#ffd707F";
 
   constructor(private groupService: GroupService,
               private queueService: QueueService,
               private participantService: ParticipantService) {
-    this.multi_vote_check = Array(this.votingEvent?.ideas.length).fill(false);
+    this.multiVoteCheck = Array(this.votingEvent?.ideas.length).fill(false);
   }
 
   ngAfterViewChecked(): void {
-    const sticky = document.querySelector('#user-input');
-    if(sticky) {
-      this.resizeTextToFitContainer(sticky as HTMLElement);
-    }
+    this.resizeTextToFitContainer('#user-input');
   }
 
   voteForIdea(voteSelectionIndex: number) {
     if (!this.votingEvent?.ideas) return
-
     // handle idea-vote
     const voting: number[] = Array(this.votingEvent.ideas.length).fill(0);
     voting[voteSelectionIndex] = 1;
     const message: BrainstormigClientVotingPublishRequest = {
       interaction: "brainstorming",
-      idea_voting: voting,
+      ideaVoting: voting,
       participantName: this.participantService.getParticipantName(),
-      question_id: this.votingEvent.questionID
-
+      questionID: this.votingEvent.questionID
     };
     this.queueService.publishMessageToClientChannel<BrainstormigClientVotingPublishRequest>(message);
     if (this.votingEvent.singleChoice) {
-      this.is_voted = true;
-    }else {
-      this.multi_vote_check[voteSelectionIndex] = true;
+      this.isVoted = true;
+    } else {
+      this.multiVoteCheck[voteSelectionIndex] = true;
     }
 
   }
@@ -67,19 +62,19 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
 
     const idea: BrainstormingClientPublishRequest = {
       interaction: "brainstorming",
-      idea_text: this.idea_text,
+      ideaText: this.ideaText,
       participantName: this.participantService.getParticipantName(),
-      question_id: this.ideaEvent.questionID,
+      questionID: this.ideaEvent.questionID,
       stickyColor: this.stickyColor
     };
 
     this.queueService.publishMessageToClientChannel<BrainstormingClientPublishRequest>(idea);
 
-    this.idea_text = "";
-    this.is_sent = true;
+    this.ideaText = "";
+    this.isSent = true;
 
     setTimeout(() => {
-      this.is_sent = false
+      this.isSent = false
     }, 1000)
   }
 
@@ -88,7 +83,7 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
     this.votingEvent = data as BrainstormingPresenterVotingSubscribeResponse;
     if (this.ideaEvent.openForIdeas) {
       this.openForIdeas = true;
-    } else if (this.ideaEvent.openForIdeas === false)  {
+    } else if (this.ideaEvent.openForIdeas === false) {
       this.isAfterBrainstorming = true;
     }
     this.initializeTimer();
@@ -107,7 +102,7 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
     }
   }
 
-  changeColor(event : MouseEvent) {
+  changeColor(event: MouseEvent) {
     const element = event.target as HTMLElement;
     const colorSpans = document.querySelectorAll('.color-selection span') as NodeListOf<HTMLElement>;
 
@@ -124,32 +119,35 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
     this.stickyColor = getComputedStyle(element).getPropertyValue('background-color');
   }
 
-  resizeTextToFitContainer(element: HTMLElement) {
-    const maxWidth = element.clientWidth;
-    const maxHeight = element.clientHeight;
+  resizeTextToFitContainer(selector: string) {
+    const sticky: HTMLElement | null = document.querySelector(selector);
+    if (sticky) {
+      const maxWidth = sticky.clientWidth;
+      const maxHeight = sticky.clientHeight;
 
-    let minFontSize = 5; // Set a minimum font size
-    let maxFontSize = 50; // Set a maximum font size
-    let fontSize = maxFontSize;
+      let minFontSize = 5; // Set a minimum font size
+      let maxFontSize = 50; // Set a maximum font size
+      let fontSize = maxFontSize;
 
-    // Apply the maximum font size
-    element.style.fontSize = fontSize + 'px';
+      // Apply the maximum font size
+      sticky.style.fontSize = fontSize + 'px';
 
-    // Reduce the font size until the content fits or reaches the minimum size
-    while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
-      fontSize--;
-      element.style.fontSize = fontSize + 'px';
-    }
-
-    // Increase the font size until the content overflows or reaches the maximum size
-    while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
-      fontSize++;
-      element.style.fontSize = fontSize + 'px';
-
-      if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+      // Reduce the font size until the content fits or reaches the minimum size
+      while ((sticky.scrollHeight > maxHeight || sticky.scrollWidth > maxWidth) && fontSize > minFontSize) {
         fontSize--;
-        element.style.fontSize = fontSize + 'px';
-        break;
+        sticky.style.fontSize = fontSize + 'px';
+      }
+
+      // Increase the font size until the content overflows or reaches the maximum size
+      while ((sticky.scrollHeight <= maxHeight && sticky.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+        fontSize++;
+        sticky.style.fontSize = fontSize + 'px';
+
+        if (sticky.scrollHeight > maxHeight || sticky.scrollWidth > maxWidth) {
+          fontSize--;
+          sticky.style.fontSize = fontSize + 'px';
+          break;
+        }
       }
     }
   }

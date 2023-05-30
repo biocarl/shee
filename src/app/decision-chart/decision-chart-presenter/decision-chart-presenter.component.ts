@@ -12,23 +12,44 @@ import {View} from "../../view";
   styleUrls: ['./decision-chart-presenter.component.css']
 })
 export class DecisionChartPresenterComponent implements OnInit, View {
-  questionEvent ? : DecisionPresenterSubscribeResponse;
-  questionResponses ? : number[];
+  questionEvent?: DecisionPresenterSubscribeResponse;
+  questionResponses?: number[];
 
-  constructor(private queueService: QueueService) {}
-
+  constructor(private queueService: QueueService) {
+  }
 
   ngOnInit(): void {
-    this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
-      if(!this.questionEvent){
-        console.error("Error: question event was not populated by parent client component");
-        return;
-      }
+    this.subscribeToClientChannel()
+  }
 
-      if(this.questionResponses && pollSubscriptionEvent.question_id === this.questionEvent.questionID) {
-        this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
-      }
+  initializeComponent(data: PresenterMessage): void {
+    this.questionEvent = data as DecisionPresenterSubscribeResponse;
+    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
+  }
+
+  private subscribeToClientChannel():void {
+    this.queueService.listenToClientChannel<DecisionClientSubscribeResponse>(pollSubscriptionEvent => {
+      return this.questionEvent ?
+        this.updateQuestionResponses(pollSubscriptionEvent.questionID, this.questionEvent.questionID, pollSubscriptionEvent) :
+        this.handleErrorResponse();
     },"DecisionChartPresenterComponent.ngOnInit");
+  }
+
+  private updateQuestionResponses(pollID: string, questionEventID: string, pollSubscriptionEvent: DecisionClientSubscribeResponse):void {
+    if (this.questionResponses && this.isIdMatch(pollID, questionEventID)) {
+      this.questionResponses = this.questionResponses.map((total, index) => total + pollSubscriptionEvent.voting[index]);
+    }
+  }
+
+  private isIdMatch(pollID: string, questionEventID: string): boolean {
+    return pollID === questionEventID;
+  }
+
+  private handleErrorResponse():void {
+    if (!this.questionEvent) {
+      console.error("Error: question event was not populated by parent client component");
+      return;
+    }
   }
 
   getPercentage(index: number): number {
@@ -43,12 +64,4 @@ export class DecisionChartPresenterComponent implements OnInit, View {
 
     return (this.questionResponses[index] / totalVotes) * 100;
   }
-
-
-  initializeComponent(data: PresenterMessage): void {
-    this.questionEvent = data as DecisionPresenterSubscribeResponse;
-    this.questionResponses = Array(this.questionEvent.answers.length).fill(0);
-
-  }
-
 }

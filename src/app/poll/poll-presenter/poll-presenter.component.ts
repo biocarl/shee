@@ -18,43 +18,70 @@ import {View} from "../../view";
  * @component
  */
 export class PollPresenterComponent implements View, OnInit {
-  questionEvent ?: PollPresenterSubscribeResponse;
+  questionEvent?: PollPresenterSubscribeResponse;
 
-  accumulatedClientChoices ?: Array<{count: number, users: Array<string>}>;
+  accumulatedClientChoices?: Array<{ count: number, users: Array<string> }>;
   userHistory: Set<string> = new Set();
-  constructor(private queueService: QueueService,private log: LoggerService) {}
 
-
+  constructor(private queueService: QueueService, private log: LoggerService) {
+  }
 
   ngOnInit(): void {
-    this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
-      if (!this.questionEvent) {
-        console.error("Error: question event was not populated by parent client component");
-        return;
-      }
-
-      if (this.accumulatedClientChoices && pollSubscriptionEvent.question_id === this.questionEvent.questionID
-          && this.isInValidTimeRangeIfSet()) {
-
-        this.accumulatedClientChoices = this.accumulatedClientChoices.map(
-          (totalChoiceResult, index)  => {
-            const obj = structuredClone(totalChoiceResult); // You work with references here and need a deepClone on top
-            if(pollSubscriptionEvent.voting[index] != 0){
-              obj.count += pollSubscriptionEvent.voting[index];
-              obj.users.push(pollSubscriptionEvent.participantName);
-            }
-            return obj;}
-        );
-      }
-
-      if (pollSubscriptionEvent.participantName) {
-
-        this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + this.questionEvent.answers[pollSubscriptionEvent.voting.indexOf(1)]);
-        this.addUserToUserHistory(pollSubscriptionEvent.participantName);
-      }
-    },"PollPresenterComponent.ngOnInit");
-
+    this.subscribeToClientChannel();
     this.initUsersFromCookies(this.userHistory);
+  }
+
+  initializeComponent(data: PresenterMessage): void {
+    this.questionEvent = data as PollPresenterSubscribeResponse;
+    this.accumulatedClientChoices = Array(this.questionEvent.answers.length).fill({count: 0, users: []});
+    this.initializeTimer();
+  }
+
+  private subscribeToClientChannel() {
+    this.queueService.listenToClientChannel<PollClientSubscribeResponse>(pollSubscriptionEvent => {
+      this.handlePollSubscriptionEvent(pollSubscriptionEvent);
+    },"PollPresenterComponent.ngOnInit");
+  }
+
+  private handlePollSubscriptionEvent(pollSubscriptionEvent: PollClientSubscribeResponse): void {
+    if (!this.questionEvent) {
+      console.error("Error: question event was not populated by parent client component");
+      return;
+    }
+
+    if (this.canUpdatePollChoices(pollSubscriptionEvent)) {
+      this.updateClientChoices(pollSubscriptionEvent);
+    }
+
+    if (pollSubscriptionEvent.participantName) {
+      this.logParticipantVote(pollSubscriptionEvent);
+      this.addUserToUserHistory(pollSubscriptionEvent.participantName);
+    }
+  }
+
+// TODO: better name & ask Carl about !!
+  private canUpdatePollChoices(pollSubscriptionEvent: PollClientSubscribeResponse): boolean {
+    return !!(
+      this.accumulatedClientChoices &&
+      pollSubscriptionEvent.questionID === this.questionEvent?.questionID &&
+      this.isInValidTimeRangeIfSet()
+    );
+  }
+
+  private updateClientChoices(pollSubscriptionEvent: PollClientSubscribeResponse): void {
+    this.accumulatedClientChoices = this.accumulatedClientChoices?.map((totalChoiceResult, index) => {
+      const obj = structuredClone(totalChoiceResult); // You work with references here and need a deepClone on top
+      if (pollSubscriptionEvent.voting[index] !== 0) {
+        obj.count += pollSubscriptionEvent.voting[index];
+        obj.users.push(pollSubscriptionEvent.participantName);
+      }
+      return obj;
+    });
+  }
+
+  private logParticipantVote(pollSubscriptionEvent: PollClientSubscribeResponse): void {
+    const votedAnswer = this.questionEvent?.answers[pollSubscriptionEvent.voting.indexOf(1)];
+    this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + votedAnswer);
   }
 
   getPercentage(index: number): number {
@@ -71,16 +98,10 @@ export class PollPresenterComponent implements View, OnInit {
   }
 
   private isInValidTimeRangeIfSet() {
-    if(this.questionEvent?.timer !== undefined){
+    if (this.questionEvent?.timer !== undefined) {
       return this.questionEvent.timer > 0;
     }
     return true;
-  }
-
-  initializeComponent(data: PresenterMessage): void {
-    this.questionEvent = data as PollPresenterSubscribeResponse;
-    this.accumulatedClientChoices = Array(this.questionEvent.answers.length).fill({count: 0, users: []});
-    this.initializeTimer();
   }
 
   private initializeTimer() {
@@ -96,22 +117,23 @@ export class PollPresenterComponent implements View, OnInit {
     }
   }
 
-  getMissingUsers(currentUsers: Array<string>){
+  getMissingUsers(currentUsers: Array<string>) {
     return Array.from(this.userHistory).filter((x => !currentUsers.includes(x)));
   }
 
-  clearUserHistory(){
+  clearUserHistory() {
     this.userHistory.clear();
   }
-  initUsersFromCookies(users : Set<string>){
+
+  initUsersFromCookies(users: Set<string>) {
     const userCookies = getCookieValueFor("users");
-    if(userCookies){
+    if (userCookies) {
       userCookies.split("|").forEach((user: string) => users.add(user));
     }
   }
 
-  addUserToUserHistory(user : string){
+  addUserToUserHistory(user: string) {
     this.userHistory.add(user);
-    addCookie("users",Array.from(this.userHistory).join("|"));
+    addCookie("users", Array.from(this.userHistory).join("|"));
   }
 }

@@ -1,7 +1,7 @@
 export interface BrainstormingClientPublishRequest {
   interaction: "brainstorming",
-  idea_text: string,
+  ideaText: string,
   participantName?: string;
-  question_id: string;
+  questionID: string;
   stickyColor: string;
 }

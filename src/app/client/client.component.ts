@@ -22,7 +22,7 @@ import {LoggerService} from "../logger.service";
  * @component
  * @implements {OnInit}
  */
-export class ClientComponent implements OnInit, OnDestroy {
+export class ClientComponent implements OnInit {
   groupName: string | null = "";
   participantName ?: string = "";
   @ViewChild(AnchorDirective, {static: true}) anchor!: AnchorDirective;
@@ -39,7 +39,6 @@ export class ClientComponent implements OnInit, OnDestroy {
     private participantService: ParticipantService,
     private modeToggleService: ModeToggleService,
     private log: LoggerService
-
   ) {
     this.mode = modeToggleService.currentMode;
     this.modeSubscription = modeToggleService.modeChanged$.subscribe(
@@ -50,6 +49,19 @@ export class ClientComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setParticipantAndGroupNames();
+    this.setWaitComponent();
+    this.listenToPresenter();
+    this.log.toConsole("Requested current question")
+    this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
+  }
+
+  private setParticipantAndGroupNames() {
+    this.setGroupNameFromRouteParam();
+    this.participantName = this.participantService.getParticipantName();
+  }
+
+  private setGroupNameFromRouteParam() {
     // Retrieve route parameter /:group from url
     this.route.paramMap.subscribe(params => {
       this.groupName = params.get("group");
@@ -57,28 +69,28 @@ export class ClientComponent implements OnInit, OnDestroy {
         this.groupService.setGroupName(this.groupName);
       }
     });
-
-    this.participantName = this.participantService.getParticipantName();
-
-    this.viewContainerRef = this.anchor.viewContainerRef;
-
-    // Show "waiting" while presenter has not initialized yet
-    this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
-
-    // Listen to all presenter messages and inject component into view based on the interaction field
-    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
-      if (presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly) {
-        this.queueService.currentPresenterMessage = presenterMessage;
-        this.componentChooserService.loadComponentIntoView(this.anchor.viewContainerRef,
-          presenterMessage.interaction, "client", presenterMessage);
-      }
-    },'ClientComponent.ngOnInit');
-
-    // Request current question
-   this.log.toConsole("Requested current question")
-   this.queueService.publishMessageToClientChannel(this.queueService.questionTrigger);
   }
-  ngOnDestroy() {
-    this.modeSubscription.unsubscribe();
+
+  private setWaitComponent() {
+    this.viewContainerRef = this.anchor.viewContainerRef;
+    this.viewContainerRef.createComponent<WaitComponent>(WaitComponent);
+  }
+
+  private listenToPresenter() {
+    this.queueService.listenToPresenterChannel<PresenterMessage>(presenterMessage => {
+      this.handlePresenterMessageAndInjectComponent(presenterMessage);
+    },'ClientComponent.ngOnInit');
+  }
+
+  private handlePresenterMessageAndInjectComponent(presenterMessage: PresenterMessage) {
+    if (this.isDifferentQuestionOrClientOnly(presenterMessage)) {
+      this.queueService.currentPresenterMessage = presenterMessage;
+      this.componentChooserService.injectComponent(this.anchor.viewContainerRef,
+        presenterMessage.interaction, "client", presenterMessage);
+    }
+  }
+
+  private isDifferentQuestionOrClientOnly(presenterMessage: PresenterMessage) {
+    return !!(presenterMessage.questionID !== this.queueService.currentPresenterMessage?.questionID || presenterMessage.clientOnly);
   }
 }
