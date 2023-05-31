@@ -183,8 +183,8 @@ export class QueueService {
   ): Promise<void> {
     return this.listenToChannel<Type>(
       handlePresenterMessage,
-      callingMethod,
-      this.PRESENTER_TOPIC_SUFFIX
+      this.PRESENTER_TOPIC_SUFFIX,
+      callingMethod
     );
   }
 
@@ -199,8 +199,8 @@ export class QueueService {
   ): Promise<void> {
     return this.listenToChannel<Type>(
       handleClientMessage,
-      callingMethod,
-      this.CLIENT_TOPIC_SUFFIX
+      this.CLIENT_TOPIC_SUFFIX,
+      callingMethod
     );
   }
 
@@ -244,7 +244,7 @@ export class QueueService {
     this.publishMessageToChannel<Type>(
       clientMessage,
       this.CLIENT_TOPIC_SUFFIX
-     );
+    );
   }
 
   publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
