@@ -1,0 +1,36 @@
+<div
+  class="v-nav"
+  [class.small]="groupService.getGroupName()"
+  [class.v-blue]="groupService.hasQuestions"
+>
+  <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-1">
+    <div class="v-container">
+      <h1>
+        <code>&lt;</code>{{ groupService.getGroupName() }}<code>&gt;</code>
+        {{ envName }}
+      </h1>
+    </div>
+  </div>
+  <ng-template #NoGroup>
+    <div style="background: #f5f3ee">
+      <div class="v-container">
+        <div class="title is-1 heading">
+          <div>
+            <span class="v-abbreviation">V</span>irtual
+            <span class="v-abbreviation">A</span>udience
+            <span style="display: inline-flex; flex-direction: column">
+              <span style="white-space: pre"
+                ><img
+                  src="assets/guru_nice_transparent.png"
+                  alt="guru-nice"
+                  width="100px"
+              /></span>
+              <span> <span class="v-abbreviation">G</span>uru </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<router-outlet></router-outlet>

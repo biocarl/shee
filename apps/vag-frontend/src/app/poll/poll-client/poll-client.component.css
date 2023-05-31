@@ -1,0 +1,33 @@
+.v-questions {
+  display: flex;
+  flex-direction: column;
+  min-height: 85vh;
+  justify-content: space-evenly;
+  background: #3f51b5 -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(#0b72d9),
+      to(#3f51b5)
+    ) no-repeat;
+  color: whitesmoke;
+}
+
+.v-question {
+  flex: 1;
+  min-height: 10vh;
+  text-align: center;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  border-top: 3px solid #f58b44;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+.v-question span {
+  font-size: 130%;
+  font-weight: bold;
+}

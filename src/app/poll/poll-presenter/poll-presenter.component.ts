@@ -81,7 +81,7 @@ export class PollPresenterComponent implements View, OnInit {
 
   private logParticipantVote(pollSubscriptionEvent: PollClientSubscribeResponse): void {
     const votedAnswer = this.questionEvent?.answers[pollSubscriptionEvent.voting.indexOf(1)];
-    this.log.toConsole(pollSubscriptionEvent.participantName + ' has voted for ' + votedAnswer);
+    this.log.logMessage(pollSubscriptionEvent.participantName + ' has voted for ' + votedAnswer);
   }
 
   getPercentage(index: number): number {

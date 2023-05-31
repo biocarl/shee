@@ -36,6 +36,9 @@ export class ModeToggleService {
   ) {
     this.modeChanged$ = this.modeChangedSubject.asObservable();
     this.init();
+   // window.onbeforeunload = () => {
+    //  this.modeStorage.clear();
+   // };
   }
 
   /**
@@ -83,4 +86,6 @@ export class ModeToggleService {
       this.updateCurrentMode(Mode.LIGHT);
     }
   }
+
+
 }

@@ -43,7 +43,7 @@ export class ComponentChooserService {
   }
 
   loadComponentIntoView(viewContainerRef: ViewContainerRef, interaction: string, type: string, event: PresenterMessage) {
-    this.log.toConsole("Entered loadComponentIntoView()");
+    this.log.logMessage("Entered loadComponentIntoView()");
     if (!this.validate(viewContainerRef, interaction, type)) {return;}
 
     this.clearViewContainer(viewContainerRef);
@@ -69,14 +69,14 @@ export class ComponentChooserService {
   }
 
   private injectSelectedComponent(viewContainerRef: ViewContainerRef, interaction: string, type: string, event: PresenterMessage): void {
-    this.log.toConsole(`Start injecting ${type} component for interaction: ${interaction}`);
+    this.log.logMessage(`Start injecting ${type} component for interaction: ${interaction}`);
 
     const component = this.typeMap[type][interaction];
     const ref: ComponentRef<View> = viewContainerRef.createComponent(component);
 
     ref.instance.initializeComponent(event);
 
-    this.log.toConsole(`End injecting ${type} component for interaction: ${interaction}`);
+    this.log.logMessage(`End injecting ${type} component for interaction: ${interaction}`);
   }
 
   private logError(message: string): void {

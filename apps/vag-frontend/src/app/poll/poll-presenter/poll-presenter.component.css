@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  background-color: black;
+  padding: 0.8em;
+}
+
+.badge {
+  display: inline-block;
+  background-color: red;
+  border: 6px solid white;
+  color: white !important;
+  font-weight: bold;
+  font-size: 1.1em;
+  padding: 0.1em 0.4em 0.1em 0.4em;
+  margin: 0.3em;
+  text-align: center;
+  border-radius: 10px;
+}
+
+li {
+  color: white;
+  font-weight: bold;
+  list-style-type: none;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+}
+
+h3 {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+h4 {
+  color: aqua;
+  font-weight: lighter;
+  text-align: center;
+}
+
+strong {
+  font-size: 25px;
+  font-weight: bolder;
+  color: red;
+}

@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+  margin: 0;
+  background-color: #f5f3ee;
+}
+
+.v-message {
+  background-color: #f5f3ee;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 85vh;
+  align-items: center;
+}
+
+.v-message > * {
+  font-size: 300%;
+  font-weight: bold;
+  text-align: center;
+}

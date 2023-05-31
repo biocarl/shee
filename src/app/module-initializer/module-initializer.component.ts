@@ -43,7 +43,7 @@ export class ModuleInitializerComponent implements OnInit{
   ngOnInit(): void {
     this.http.get<ModuleTypes>('assets/modules.json').subscribe(data => {
       this.modules = data.modules;
-      this.log.toConsole("Module initializer modules: ",this.modules);
+      this.log.logMessage("Module initializer modules: ",this.modules);
     });
   }
 
