@@ -6,29 +6,11 @@
       <!-- roomname -->
       <div class="navbar-item group-name">
         <div>
-          <div *ngIf="groupService.getGroupName; else NoGroup" class="title is-3">
+          <div *ngIf="groupService.getGroupName" class="title is-3">
             <div >
               <h1><code>&lt;</code>{{groupService.getGroupName()}}<span style="color: red">{{envName}}</span><code>&gt;</code> </h1>
             </div>
           </div>
-
-
-          <ng-template #NoGroup>
-            <div style="background:#f5f3ee">
-              <div class="v-container">
-                <div class="title is-1 heading">
-                  <div>
-                    <span class="v-abbreviation">V</span>irtual
-                    <span class="v-abbreviation">A</span>udience
-                    <span style="display: inline-flex; flex-direction: column">
-               <span style="white-space: pre"><img src="assets/guru_nice_transparent.png" alt="guru-nice" width="100px"></span>
-                <span> <span class="v-abbreviation">G</span>uru </span>
-              </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ng-template>
         </div>
       </div>
     </div>
