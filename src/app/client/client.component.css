@@ -1,64 +1,36 @@
-/*.footer-client {*/
-/*  background-color: transparent;*/
-/*  background-repeat: no-repeat;*/
-/*  background-size: cover; !* Bildgröße anpassen *!*/
-/*  background-position: top; !* Bildposition zentrieren *!*/
-/*  position: fixed;*/
-/*  left: 0;*/
-/*  bottom: 0;*/
-/*  width: 100%; !* Breite auf 100% setzen *!*/
-/*  height: 30%;*/
-/*  z-index: -1;*/
-/*}*/
-
-.futter.footer-client-dark {
+.footerShee.footer-client-dark {
   background-image: url("src/assets/SVG/Grafik_Footer_Client_desktop_dark.svg");
 }
 
 /* Stile für Light Mode */
-.futter.footer-client-light {
+.footerShee.footer-client-light {
   background-image: url("src/assets/SVG/Grafik_Footer_Client_desktop_light.svg");
 }
 
 @media screen and (max-width: 768px) {
-  .futter.footer-client-dark {
-    background-image: url("src/assets/SVG/Grafik_Footer_Client_dark.svg");
+  .footerShee.footer-client-dark,
+  .footerShee.footer-client-light {
     background-size: 100% auto;
     background-position: bottom;
     height: 100%;
   }
-}
-@media screen and (max-width: 768px) {
-  .futter.footer-client-light {
-    background-image: url("src/assets/SVG/Grafik_Footer_Client_mobile_light.svg");
-    background-size: 100% auto;
-    background-position: bottom;
-    height: 100%;
-  }
-  .futter.footer-client-light{
+  .footerShee.footer-client-light {
     background-image: url("src/assets/SVG/Grafik_Footer_Client_mobile_light.svg");
   }
-  .futter.footer-client-dark{
+  .footerShee.footer-client-dark {
     background-image: url("src/assets/SVG/Grafik_Footer_Client_dark.svg");
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .futter {
-    background-size: 100% auto;
-    background-position: bottom;
   }
 }
 
 @media screen and (min-width: 1700px) {
-  .futter {
+  .footerShee {
     background-size: 100% auto;
     background-position: bottom;
   }
 }
 
 @media screen and (min-width: 1824px) {
-  .futter {
+  .footerShee {
     background-position: bottom;
   }
 }
