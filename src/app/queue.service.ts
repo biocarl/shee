@@ -17,7 +17,7 @@ export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = '_presenter_topic';
   private CLIENT_TOPIC_SUFFIX: string = '_client_topic';
   currentPresenterMessage?: PresenterMessage;
-
+  private currentID="";
   constructor(
     private groupService: GroupService,
     private zone: NgZone,
@@ -57,9 +57,10 @@ export class QueueService {
 
           // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
           // @ts-ignore
-          if (!event.questionID) {
+          if (!event.questionID||(this.currentID!==event.questionID)) {
             // @ts-ignore
             event.questionID = rawEvent.id;
+            this.currentID=rawEvent.id;
           }
 
           handleMessage(event);
