@@ -32,21 +32,21 @@ html.light {
   background-position-x: 280px;
 }
 
-.v-message {
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 85vh;
-  align-items: center;
-  color: var(--textColor);
-}
+/*.v-message {*/
+/*  background-color: transparent;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  justify-content: flex-start;*/
+/*  height: 85vh;*/
+/*  align-items: center;*/
+/*  color: var(--textColor);*/
+/*}*/
 
-.v-message > * {
-  font-size: 300%;
-  font-weight: bold;
-  text-align: center;
-}
+/*.v-message > * {*/
+/*  font-size: 300%;*/
+/*  font-weight: bold;*/
+/*  text-align: center;*/
+/*}*/
 
 body.light {
   --background-color: var(--backgroundColor_light);
@@ -128,6 +128,19 @@ body.dark {
     flex-grow: 1;
     flex-shrink: 0;
   }
+}
+
+.futter {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: cover; /* Bildgröße anpassen */
+  background-position: top; /* Bildposition zentrieren */
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%; /* Breite auf 100% setzen */
+  height: 30%;
+  z-index: -1;
 }
 
 @media screen and (max-width: 1023px) {
