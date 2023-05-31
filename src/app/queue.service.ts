@@ -25,150 +25,7 @@ export class QueueService {
     private log: LoggerService
   ) {}
 
-  /**
- *
-  listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void, callingMethod?: string): Promise<void> {
-    this.log.logToConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToPresenterChannel method.`);
-    return new Promise((resolve, reject) => {
-      const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
-      eventSource.onopen = () => {
-        this.log.logToConsole("Listener for presenter channel initialized.")
-        resolve();
-      };
-      eventSource.onerror = (error) => {
-        this.log.logToConsole("Failed to initialize listener for presenter channel.",error);
-        reject(error);
-      };
-      eventSource.onmessage = (eventWrapper) => {
-        this.zone.run(
-          () => {
 
-            const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-            const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-              this.log.logToConsole("Received presenter message:", rawEvent);
-
-            // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
-            // @ts-ignore
-            if (!event.questionID) {
-              // @ts-ignore
-              event.questionID = rawEvent.id;
-            }
-            // Run callback
-            handlePresenterMessage(event);
-          }
-        )
-      };
-    });
-  }
- listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void,callingMethod?: string):Promise <void> {
-    this.log.logToConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToClientChannel method.`);
-    return new Promise((resolve, reject) => {
-      const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
-      eventSource.onopen = () => {
-        this.log.logToConsole("Listener for client channel initialized.");
-        resolve();
-      };
-      eventSource.onerror = (error) => {
-        this.log.logToConsole("Failed to initialize listener for client channel.",error);
-        reject(error);
-      };
-      eventSource.onmessage = (eventWrapper) => {
-        this.zone.run(
-          () => {
-            const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
-            const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-            this.log.logToConsole("Received client message:", rawEvent);
-
-            // @ts-ignore
-            event.id = rawEvent.id;
-            // Run callback
-            handleClientMessage(event);
-          }
-        )
-      };
-    });
-  }
-  publishMessageToClientChannel<Type>(clientMessage: Type) {
-    const payload: EventCreationRequest = {
-      topic: this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX,
-      message: this.#encodeMessageToBase64(clientMessage),
-      title: "Client event published",
-      tags: [],
-      attach: ""
-    }
-
-    this.log.logToConsole("Trying to send Post to client channel:", payload);
-
-    this.http.post<any>(`${environment.apiUrl}`, payload)
-      .subscribe(result => {
-          this.log.logToConsole("Post to client channel earlier was successful.",result)
-      });
-  }
- publishMessageToPresenterChannel<Type>(presenterMessage: Type) {
-    const payload: EventCreationRequest = {
-      topic: this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX,
-      message: this.#encodeMessageToBase64(presenterMessage),
-      title: "Presenter event published",
-      tags: [],
-      attach: ""
-    }
-
-    this.log.logToConsole("Trying to send Post to presenter channel:", payload);
-
-    this.http.post<any>(`${environment.apiUrl}`, payload)
-      .subscribe(result => {
-          this.log.logToConsole("Post to presenter channel earlier was successful.",result)
-      });
-  }
-
-  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type,timestamp:number) => void): void {
-    const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/json?poll=1&since=all`
-    this.log.logToConsole(url);
-    fetch(url)
-      .then(response => response.text())
-      .then(text => {
-        // If the response is empty, log a message and return early
-        if (!text.trim()) {
-          this.log.logToConsole('No cached messages returned from server');
-          return;
-        }
-
-        // Split the text by newlines to separate each JSON object
-        let jsonStrings = text.trim().split('\n');
-
-        // Get the last JSON object (the newest message)
-        let lastJsonString = jsonStrings[jsonStrings.length - 1];
-
-        // Parse the last JSON object
-        let newestMessage = JSON.parse(lastJsonString);
-
-        this.log.logToConsole('Newest Message:', newestMessage);
-        const event: Type = this.#decodeMessageFromBase64<Type>(newestMessage.message);
-        handleCachedMessage(event,newestMessage.time);
-      })
-      .catch((error) => {
-        this.log.logToConsole('Error retrieving cached Messages:', error);
-      });
-  }
-
-  #encodeMessageToBase64(payload: any): string {
-    // TODO Bind this properly to be {} at least
-    return this.#utf8ToBase64(JSON.stringify(payload));
-  }
-
-  #decodeMessageFromBase64<Type>(payloadMessage: string): Type {
-    return JSON.parse(this.#base64ToUtf8(payloadMessage));
-  }
-
-  #utf8ToBase64(str: string): string {
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
-  }
-
-  #base64ToUtf8(base64: string): string {
-    return decodeURIComponent(Array.prototype.map.call(atob(base64), (c: string) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-  }
-}
- */
 
   /**
    * Params queue service
@@ -197,6 +54,7 @@ export class QueueService {
     handleClientMessage: (clientMessage: Type) => void,
     callingMethod: string = 'Unknown'
   ): Promise<void> {
+    this.log.logToConsole("Listener for presenter channel initialized.")
     return this.listenToChannel<Type>(
       handleClientMessage,
       this.CLIENT_TOPIC_SUFFIX,
@@ -231,6 +89,12 @@ export class QueueService {
     this.zone.run(() => {
       const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
       event = this.decodeMessageFromBase64<Type>(rawEvent.message);
+       // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
+            // @ts-ignore
+            if (!event.questionID) {
+              // @ts-ignore
+              event.questionID = rawEvent.id;
+            }
     });
     return event;
   }
