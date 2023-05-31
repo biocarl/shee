@@ -31,15 +31,15 @@ export class QueueService {
    * @param {string} [callingMethod] - The name of the Method that called this method.
    */
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void, callingMethod?: string): Promise<void> {
-    this.log.logMessage(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToPresenterChannel method.`);
+    this.log.logToConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToPresenterChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
-        this.log.logMessage("Listener for presenter channel initialized.")
+        this.log.logToConsole("Listener for presenter channel initialized.")
         resolve();
       };
       eventSource.onerror = (error) => {
-        this.log.logMessage("Failed to initialize listener for presenter channel.",error);
+        this.log.logToConsole("Failed to initialize listener for presenter channel.",error);
         reject(error);
       };
       eventSource.onmessage = (eventWrapper) => {
@@ -48,7 +48,7 @@ export class QueueService {
 
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-              this.log.logMessage("Received presenter message:", rawEvent);
+              this.log.logToConsole("Received presenter message:", rawEvent);
 
             // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
             // @ts-ignore
@@ -71,15 +71,15 @@ export class QueueService {
    * @param {string} [callingMethod] - The name of the Method that called this method.
    */
   listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void,callingMethod?: string):Promise <void> {
-    this.log.logMessage(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToClientChannel method.`);
+    this.log.logToConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToClientChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
       eventSource.onopen = () => {
-        this.log.logMessage("Listener for client channel initialized.");
+        this.log.logToConsole("Listener for client channel initialized.");
         resolve();
       };
       eventSource.onerror = (error) => {
-        this.log.logMessage("Failed to initialize listener for client channel.",error);
+        this.log.logToConsole("Failed to initialize listener for client channel.",error);
         reject(error);
       };
       eventSource.onmessage = (eventWrapper) => {
@@ -87,7 +87,7 @@ export class QueueService {
           () => {
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-            this.log.logMessage("Received client message:", rawEvent);
+            this.log.logToConsole("Received client message:", rawEvent);
 
             // @ts-ignore
             event.id = rawEvent.id;
@@ -112,11 +112,11 @@ export class QueueService {
       attach: ""
     }
 
-    this.log.logMessage("Trying to send Post to client channel:", payload);
+    this.log.logToConsole("Trying to send Post to client channel:", payload);
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-          this.log.logMessage("Post to client channel earlier was successful.",result)
+          this.log.logToConsole("Post to client channel earlier was successful.",result)
       });
   }
 
@@ -136,23 +136,23 @@ export class QueueService {
       attach: ""
     }
 
-    this.log.logMessage("Trying to send Post to presenter channel:", payload);
+    this.log.logToConsole("Trying to send Post to presenter channel:", payload);
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-          this.log.logMessage("Post to presenter channel earlier was successful.",result)
+          this.log.logToConsole("Post to presenter channel earlier was successful.",result)
       });
   }
 
   requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type,timestamp:number) => void): void {
     const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/json?poll=1&since=all`
-    this.log.logMessage(url);
+    this.log.logToConsole(url);
     fetch(url)
       .then(response => response.text())
       .then(text => {
         // If the response is empty, log a message and return early
         if (!text.trim()) {
-          this.log.logMessage('No cached messages returned from server');
+          this.log.logToConsole('No cached messages returned from server');
           return;
         }
 
@@ -165,12 +165,12 @@ export class QueueService {
         // Parse the last JSON object
         let newestMessage = JSON.parse(lastJsonString);
 
-        this.log.logMessage('Newest Message:', newestMessage);
+        this.log.logToConsole('Newest Message:', newestMessage);
         const event: Type = this.#decodeMessageFromBase64<Type>(newestMessage.message);
         handleCachedMessage(event,newestMessage.time);
       })
       .catch((error) => {
-        this.log.logMessage('Error retrieving cached Messages:', error);
+        this.log.logToConsole('Error retrieving cached Messages:', error);
       });
   }
 

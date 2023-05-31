@@ -22,7 +22,7 @@ export class LoggerService {
    * @public
    * @returns {void}
    */
-  public logMessage(message: string, objectToLog?: any): void {
+  public logToConsole(message: string, objectToLog?: any): void {
     if (this.isInDevelopment) {
       this.logWithTimestamp(message, objectToLog);
       if (objectToLog?.message) {
