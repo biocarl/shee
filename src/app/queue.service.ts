@@ -39,7 +39,7 @@ export class QueueService {
         resolve();
       };
       eventSource.onerror = (error) => {
-        this.log.toConsole("Failed to initialize listener for presenter channel.",error);
+        this.log.toConsole("Failed to initialize listener for presenter channel.", error);
         reject(error);
       };
       eventSource.onmessage = (eventWrapper) => {
@@ -48,14 +48,16 @@ export class QueueService {
 
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
-              this.log.toConsole("Received presenter message:", rawEvent);
-
-            // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
-            // @ts-ignore
-            if (!event.questionID) {
-              // @ts-ignore
-              event.questionID = rawEvent.id;
-            }
+            this.log.toConsole("Received presenter message:", rawEvent);
+            /* TODO: In our opinion, not needed anymore, but we are too scared to delete carls code :-D
+            (questionid is now generated in query-to-event-service when publishing the presenter message)
+                        // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
+                        // @ts-ignore
+                        if (!event.questionID) {
+                          // @ts-ignore
+                          event.questionID = rawEvent.id;
+                        }
+             */
             // Run callback
             handlePresenterMessage(event);
           }
@@ -70,7 +72,7 @@ export class QueueService {
    * @param {Function} handleClientMessage - The callback function that handles the client messages.
    * @param {string} [callingMethod] - The name of the Method that called this method.
    */
-  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void,callingMethod?: string):Promise <void> {
+  listenToClientChannel<Type>(handleClientMessage: (clientMessage: Type) => void, callingMethod?: string): Promise<void> {
     this.log.toConsole(`${callingMethod === undefined ? "Unknown" : callingMethod} started listenToClientChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + this.CLIENT_TOPIC_SUFFIX}/sse`);
@@ -79,7 +81,7 @@ export class QueueService {
         resolve();
       };
       eventSource.onerror = (error) => {
-        this.log.toConsole("Failed to initialize listener for client channel.",error);
+        this.log.toConsole("Failed to initialize listener for client channel.", error);
         reject(error);
       };
       eventSource.onmessage = (eventWrapper) => {
@@ -88,9 +90,10 @@ export class QueueService {
             const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
             const event: Type = this.#decodeMessageFromBase64<Type>(rawEvent.message);
             this.log.toConsole("Received client message:", rawEvent);
-
-            // @ts-ignore
-            event.id = rawEvent.id;
+            /* TODO: Is this ever used? Can it be deleted?
+               // @ts-ignore
+               event.id = rawEvent.id;
+             */
             // Run callback
             handleClientMessage(event);
           }
@@ -116,7 +119,7 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-          this.log.toConsole("Post to client channel earlier was successful.",result)
+        this.log.toConsole("Post to client channel earlier was successful.", result)
       });
   }
 
@@ -140,11 +143,11 @@ export class QueueService {
 
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-          this.log.toConsole("Post to presenter channel earlier was successful.",result)
+        this.log.toConsole("Post to presenter channel earlier was successful.", result)
       });
   }
 
-  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type,timestamp:number) => void): void {
+  requestCachedMessages<Type>(handleCachedMessage: (presenterMessage: Type, timestamp: number) => void): void {
     const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/json?poll=1&since=all`
     this.log.toConsole(url);
     fetch(url)
@@ -167,7 +170,7 @@ export class QueueService {
 
         this.log.toConsole('Newest Message:', newestMessage);
         const event: Type = this.#decodeMessageFromBase64<Type>(newestMessage.message);
-        handleCachedMessage(event,newestMessage.time);
+        handleCachedMessage(event, newestMessage.time);
       })
       .catch((error) => {
         this.log.toConsole('Error retrieving cached Messages:', error);
