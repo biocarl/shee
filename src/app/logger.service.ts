@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import {Injectable} from '@angular/core';
+import {environment} from '../environments/environment';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 /**
  * LoggerService is a utility service for logging messages to the console in a non-production environment.
@@ -12,7 +12,8 @@ import { environment } from '../environments/environment';
 export class LoggerService {
   private isInDevelopment = !environment.production;
 
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * Logs a message and an optional object to the console if the application is running in a non-production environment.

@@ -6,7 +6,7 @@ import {PresenterMessage} from './presenter-message';
 import {LoggerService} from './logger.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 /**
  * The QueueService is used to listen to and publish messages to event channels via Ntfy.sh.
