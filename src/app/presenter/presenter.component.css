@@ -1,47 +1,24 @@
-.footer-presenter {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 15vh;
-}
-
-.footer-presenter.footer-presenter-dark {
+.footerShee.footer-presenter-dark {
   background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
 }
 
 /* Stile für Light Mode */
-.footer-presenter.footer-presenter-light {
+.footerShee.footer-presenter-light {
   background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_light.svg");
 }
 
-/*
-// No need for seperate assets?
-@media screen and (max-width: 768px) {
-  .footer-presenter.footer-presenter-dark {
-    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_dark.svg");
-  }
-  .footer-presenter.footer-presenter-light {
-    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_mobile_light.svg");
-  }
-}
-*/
-
-
-@media screen and (min-width: 768px) {
-  .footer-presenter {
+@media screen and (min-width: 667px) and (max-height: 428px){
+  .footerShee {
     background-size: 100% auto;
     background-position: bottom;
+    position: static;
   }
 }
 
 @media screen and (min-width: 1500px) {
-  .footer-presenter {
+  .footerShee {
     background-size: 100% auto;
     background-position: bottom;
+    position: fixed;
   }
 }

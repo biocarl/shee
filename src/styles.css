@@ -57,8 +57,7 @@ body.light {
   --buttonTextColor: var(--buttonTextColor_light);
   background-image: url("src/assets/SVG/Grafik_Sonne.svg");
   background-repeat: no-repeat;
-  background-position: calc(0% - 200px) 0;
-  background-position-y: -100px;
+  background-position: calc(0% - 200px) -100px;
   height: 100%;
   margin: 0;
 }
@@ -72,8 +71,7 @@ body.dark {
   --buttonTextColor: var(--buttonTextColor_dark);
   background-image: url("src/assets/SVG/Grafik_Mond.svg");
   background-repeat: no-repeat;
-  background-position: calc(100% + 200px) 0;
-  background-position-y: -120px;
+  background-position: calc(100% + 200px) -120px;
   height: 100%;
   margin: 0;
 }
@@ -130,6 +128,19 @@ body.dark {
   }
 }
 
+.footerShee {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-size: cover; /* Bildgröße anpassen */
+  background-position: top; /* Bildposition zentrieren */
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%; /* Breite auf 100% setzen */
+  height: 30%;
+  z-index: -1;
+}
+
 @media screen and (max-width: 1023px) {
   .navbar-menu {
     background-color: transparent;
@@ -149,7 +160,6 @@ body.dark {
   .navbar {
     background-size: 100% auto;
     background-position: top;
-
   }
 }
 
