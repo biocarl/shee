@@ -17,7 +17,6 @@ export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = '_presenter_topic';
   private CLIENT_TOPIC_SUFFIX: string = '_client_topic';
   currentPresenterMessage?: PresenterMessage;
-  private currentID="";
   constructor(
     private groupService: GroupService,
     private zone: NgZone,
@@ -55,13 +54,15 @@ export class QueueService {
 
           this.log.logToConsole("Received presenter message:", rawEvent);
 
-          // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
-          // @ts-ignore
-          if (!event.questionID||(this.currentID!==event.questionID)) {
-            // @ts-ignore
-            event.questionID = rawEvent.id;
-            this.currentID=rawEvent.id;
-          }
+          /* TODO: In our opinion, not needed anymore, but we are too scared to delete carls code :-D
+            (questionid is now generated in query-to-event-service when publishing the presenter message)
+                        // TODO Restrict generic to contain id field 'HasId' type: https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-constraints
+                        // @ts-ignore
+                        if (!event.questionID) {
+                          // @ts-ignore
+                          event.questionID = rawEvent.id;
+                        }
+             */
 
           handleMessage(event);
         });
