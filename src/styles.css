@@ -57,8 +57,7 @@ body.light {
   --buttonTextColor: var(--buttonTextColor_light);
   background-image: url("src/assets/SVG/Grafik_Sonne.svg");
   background-repeat: no-repeat;
-  background-position: calc(0% - 200px) 0;
-  background-position-y: -100px;
+  background-position: calc(0% - 200px) -100px;
   height: 100%;
   margin: 0;
 }
@@ -72,8 +71,7 @@ body.dark {
   --buttonTextColor: var(--buttonTextColor_dark);
   background-image: url("src/assets/SVG/Grafik_Mond.svg");
   background-repeat: no-repeat;
-  background-position: calc(100% + 200px) 0;
-  background-position-y: -120px;
+  background-position: calc(100% + 200px) -120px;
   height: 100%;
   margin: 0;
 }
