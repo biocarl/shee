@@ -1,9 +1,9 @@
-import { Injectable, NgZone } from '@angular/core';
-import { GroupService } from './group.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
-import { PresenterMessage } from './presenter-message';
-import { LoggerService } from './logger.service';
+import {Injectable, NgZone} from '@angular/core';
+import {GroupService} from './group.service';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../environments/environment';
+import {PresenterMessage} from './presenter-message';
+import {LoggerService} from './logger.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,13 +17,14 @@ export class QueueService {
   private PRESENTER_TOPIC_SUFFIX: string = '_presenter_topic';
   private CLIENT_TOPIC_SUFFIX: string = '_client_topic';
   currentPresenterMessage?: PresenterMessage;
+
   constructor(
     private groupService: GroupService,
     private zone: NgZone,
     private http: HttpClient,
     private log: LoggerService
-  ) {}
-
+  ) {
+  }
 
   listenToPresenterChannel<Type>(handlePresenterMessage: (presenterMessage: Type) => void, callingMethod?: string): Promise<void> {
     return this.listenToChannel<Type>(this.PRESENTER_TOPIC_SUFFIX, handlePresenterMessage, callingMethod);
@@ -33,12 +34,10 @@ export class QueueService {
     return this.listenToChannel<Type>(this.CLIENT_TOPIC_SUFFIX, handleClientMessage, callingMethod);
   }
 
-  private listenToChannel<Type>(topicSuffix: string, handleMessage: (message: Type) => void, callingMethod: string="Unknown"): Promise<void> {
-    const method = callingMethod ;
-    this.log.logToConsole(`${method} started listenToChannel method.`);
+  private listenToChannel<Type>(topicSuffix: string, handleMessage: (message: Type) => void, callingMethod: string = "Unknown"): Promise<void> {
+    this.log.logToConsole(`${callingMethod} started listenToChannel method.`);
     return new Promise((resolve, reject) => {
       const eventSource = new EventSource(`${environment.apiUrl}/${this.groupService.getGroupName() + topicSuffix}/sse`);
-      console.log(eventSource)
       eventSource.onopen = () => {
         this.log.logToConsole("Listener for channel initialized.")
         resolve();
@@ -51,7 +50,6 @@ export class QueueService {
         this.zone.run(() => {
           const rawEvent: EventResponse = JSON.parse(eventWrapper.data);
           const event: Type = this.decodeMessageFromBase64<Type>(rawEvent.message);
-
           this.log.logToConsole("Received presenter message:", rawEvent);
 
           /* TODO: In our opinion, not needed anymore, but we are too scared to delete carls code :-D
@@ -86,16 +84,14 @@ export class QueueService {
       tags: [],
       attach: ""
     }
-
     this.log.logToConsole("Trying to send Post to channel:", payload);
-
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-          this.log.logToConsole("Post to channel earlier was successful.", result)
+        this.log.logToConsole("Post to channel earlier was successful.", result)
       });
   }
 
-  requestLastMessage<Type>(handleCachedMessage: (presenterMessage: Type,timestamp:number) => void): void {
+  requestLastMessage<Type>(handleCachedMessage: (presenterMessage: Type, timestamp: number) => void): void {
     const url = `${environment.apiUrl}/${this.groupService.getGroupName() + this.PRESENTER_TOPIC_SUFFIX}/json?poll=1&since=all`
     this.log.logToConsole(url);
     fetch(url)
@@ -118,7 +114,7 @@ export class QueueService {
 
         this.log.logToConsole('Newest Message:', newestMessage);
         const event: Type = this.decodeMessageFromBase64<Type>(newestMessage.message);
-        handleCachedMessage(event,newestMessage.time);
+        handleCachedMessage(event, newestMessage.time);
       })
       .catch((error) => {
         this.log.logToConsole('Error retrieving cached Messages:', error);
