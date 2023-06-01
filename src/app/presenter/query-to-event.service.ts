@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ParamMap} from "@angular/router";
 import {QueueService} from "../queue.service";
+import {v4 as uuidv4} from 'uuid';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ import {QueueService} from "../queue.service";
  * @Injectable
  */
 export class QueryToEventService {
-  constructor(private queueService : QueueService) { }
+  constructor(private queueService: QueueService) {
+  }
+
   /**
    * Retrieves query parameters from the URL and publishes them as a presenter event if they are valid.
    * @param {ParamMap} params The map of query parameters from the URL.
@@ -19,23 +23,27 @@ export class QueryToEventService {
    * @returns {void}
    */
   publishIfValid(params: ParamMap) {
-    const jsonPayload = this.retrieveQueryParamsAsJson(params);
-
+    const jsonPayload: PresenterMessageCreationRequest = this.retrieveQueryParamsAsJson(params);
+    this.createQuestionID(jsonPayload);
     // If a valid payload retrieved from parameters publish as presenter event
-    if(jsonPayload.interaction){
+    if (jsonPayload.interaction) {
       this.queueService.publishMessageToPresenterChannel<PresenterMessageCreationRequest>(jsonPayload);
-    }else{
+    } else {
       console.error('No valid presenter event via query provided. At least `interaction` field is required');
     }
   }
 
-  private retrieveQueryParamsAsJson(params : ParamMap) : PresenterMessageCreationRequest {
-    return params.keys.reduce( (agg, key )=> {
+  private createQuestionID(jsonPayload: PresenterMessageCreationRequest) {
+    jsonPayload.questionID = uuidv4();
+  }
+
+  private retrieveQueryParamsAsJson(params: ParamMap): PresenterMessageCreationRequest {
+    return params.keys.reduce((agg, key) => {
         const value = params.get(key) ?? "";
-        if(value.includes(",")){
+        if (value.includes(",")) {
           // @ts-ignore
           agg[key] = value.split(",");
-        }else {
+        } else {
           // @ts-ignore
           agg[key] = value;
         }
@@ -56,5 +64,6 @@ interface PresenterMessageCreationRequest {
    * @type {string}
    */
   interaction: string;
+  questionID: string
   // Here also other fields will be used but only defined during runtime (there TS does not complain)
 }
