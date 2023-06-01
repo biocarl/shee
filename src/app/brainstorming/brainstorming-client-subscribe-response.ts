@@ -2,6 +2,6 @@ export interface BrainstormingClientSubscribeResponse {
   participantName: string;
   ideaText: string;
   questionID: string;
-  ideaVoting: number[],
+  ideaVoting: number[];
   stickyColor: string;
 }

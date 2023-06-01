@@ -94,8 +94,8 @@ export class ClientComponent implements OnInit {
   }
 
   private requestLastMessage() {
-    this.log.toConsole("Requested current question.");
-    this.queueService.requestCachedMessages<PresenterMessage>((presenterMessage, timestamp: number) => {
+    this.log.logToConsole("Requested current question.");
+    this.queueService.requestLastMessage<PresenterMessage>((presenterMessage, timestamp: number) => {
       this.adjustTimer(presenterMessage,timestamp);
         this.loadComponent(presenterMessage);
     });

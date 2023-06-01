@@ -70,7 +70,7 @@ export class PairPresenterComponent implements OnInit, View {
 
   private logParticipantListening(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
     if (counterSubscriptionEvent.participantName) {
-      this.log.toConsole(counterSubscriptionEvent.participantName + " is listening.");
+      this.log.logToConsole(counterSubscriptionEvent.participantName + " is listening.");
     }
   }
 

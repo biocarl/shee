@@ -1,8 +1,8 @@
-import { DOCUMENT } from "@angular/common";
-import { Inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { ModeStorage, MODE_STORAGE_SERVICE } from "./mode-storage.service";
-import { Mode } from "./mode-toggle.model";
+import {DOCUMENT} from "@angular/common";
+import {Inject, Injectable} from "@angular/core";
+import {BehaviorSubject, Observable} from "rxjs";
+import {ModeStorage, MODE_STORAGE_SERVICE} from "./mode-storage.service";
+import {Mode} from "./mode-toggle.model";
 
 /**
  * Angular service that provides the mode toggle feature.
@@ -57,11 +57,9 @@ export class ModeToggleService {
    * 4 - Else set the default value to `light`
    */
   private init() {
-    const deviceMode = window.matchMedia("(prefers-color-scheme: dark)");
     let initMode = this.modeStorage.get();
     if (!initMode) {
       initMode = Mode.DARK;
-      //deviceMode.matches ? (initMode = Mode.DARK) : (initMode = Mode.LIGHT);
     }
     this.updateCurrentMode(initMode);
     this.document.body.classList.add(this.currentMode);
