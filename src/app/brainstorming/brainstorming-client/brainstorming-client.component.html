@@ -54,7 +54,7 @@
 
 </div>
 
-<div *ngIf="votingEvent">
+<div *ngIf="votingEvent?.votingInProgress !== undefined">
   <div *ngIf="this.votingEvent?.votingInProgress===false; else openVoting">
     Voting has been stopped
   </div>
