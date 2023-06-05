@@ -13,3 +13,7 @@ img{
 .is-public span {
   color: indianred;
 }
+
+hr {
+  background: var(--textColor);
+}

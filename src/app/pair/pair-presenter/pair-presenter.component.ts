@@ -31,6 +31,7 @@ export class PairPresenterComponent implements OnInit, View {
   connectedParticipants: number = 0;
   qrCodeUrl ?: string;
   isPublic: boolean = false;
+  users: Array<string> = [];
 
   constructor(private queueService: QueueService, private qrCodeService: QrCodeService, private groupService : GroupService, private log: LoggerService) {}
 
@@ -59,6 +60,7 @@ export class PairPresenterComponent implements OnInit, View {
 
   private handleClientChannelEvent(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
     this.incrementConnectedParticipants(counterSubscriptionEvent);
+    this.addToUsers(counterSubscriptionEvent);
     this.logParticipantListening(counterSubscriptionEvent);
   }
 
@@ -75,4 +77,9 @@ export class PairPresenterComponent implements OnInit, View {
   }
 
 
+  private addToUsers(counterSubscriptionEvent: CounterClientSubscribeResponse): void {
+    if(counterSubscriptionEvent.participantName) {
+      this.users.push(counterSubscriptionEvent.participantName)
+    }
+  }
 }
