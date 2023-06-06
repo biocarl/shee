@@ -11,9 +11,20 @@ img{
 }
 
 .is-public span {
-  color: indianred;
+  color: var(--secondaryColor);
 }
 
 hr {
   background: var(--textColor);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.user{
+  margin-right: 20px;
+  color: var(--secondaryColor);
 }

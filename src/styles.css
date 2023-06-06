@@ -13,6 +13,8 @@
   --menuColor_dark: #ABABAB;
   --buttonTextColor_light:  #000000DE;
   --buttonTextColor_dark: #FFFFFFDE;
+  --secondaryColor_dark: darkcyan;
+    --secondaryColor_light: #AD195E;
 }
 
 html.dark {
@@ -39,7 +41,6 @@ html.light {
   justify-content: flex-start;
   height: 85vh;
   align-items: center;
-  color: var(--textColor);
 }
 
 .v-message > * {
@@ -55,6 +56,7 @@ body.light {
   --textColor: var(--textColor_light);
   --menuColor: var(--menuColor_light);
   --buttonTextColor: var(--buttonTextColor_light);
+  --secondaryColor: var(--secondaryColor_light);
   background-image: url("src/assets/SVG/Grafik_Sonne.svg");
   background-repeat: no-repeat;
   background-position: calc(0% - 200px) -100px;
@@ -69,6 +71,7 @@ body.dark {
   --textColor: var(--textColor_dark);
   --menuColor: var(--menuColor_dark);
   --buttonTextColor: var(--buttonTextColor_dark);
+  --secondaryColor: var(--secondaryColor_dark);
   background-image: url("src/assets/SVG/Grafik_Mond.svg");
   background-repeat: no-repeat;
   background-position: calc(100% + 200px) -120px;
