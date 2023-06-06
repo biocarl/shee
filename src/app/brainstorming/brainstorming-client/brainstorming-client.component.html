@@ -9,9 +9,6 @@
   </div>
   <ng-template #showTextarea>
     <form>
-      <!-- TODO replace "false" with dark mode variable  -->
-      <img *ngIf="false" id="cute-sheep" src="assets/SVG/Grafik_Maskottchen_w_light.svg" alt="SchöneSchaf"
-           height="286" width="284">
       <div class="positioning-wrapper">
         <div *ngIf="isSent" id="toast-sent"> Sent!</div>
         <div id="question">{{ideaEvent?.question}}</div>
@@ -43,7 +40,7 @@
                   [(ngModel)]="ideaText"
                   [maxlength]="280"></textarea>
         <div id="character-counter"
-             [style.color]="ideaText.length < 280 ? 'var(--textColor_dark)' : 'red'">{{ ideaText.length }}/280
+             [style.color]="ideaText.length < 280 ? 'var(--textColor)' : 'red'">{{ ideaText.length }}/280
         </div>
         <button [disabled]="ideaText.trim().length===0" id="send-button" type="button"
                 (click)="sendIdea()">Send Idea
