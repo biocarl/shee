@@ -4,7 +4,7 @@
 }
 
 div{
-  color: var(--textColor_dark);
+  color: var(--textColor);
 }
 
 #user-input {
@@ -68,9 +68,11 @@ textarea {
 }
 
 #send-button{
-  background: var(--menuColor_dark);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: rgba(244,255,237,0.36);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: var(--buttonTextColor);
   border-radius: 30px;
+  border-color: transparent;
   width: 388px;
   height: 84px;
   position:fixed;
@@ -80,7 +82,6 @@ textarea {
   font-style: normal;
   left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
   top: calc(100% + 84px); /* 100% + Buttonhöhe */
-  color: var(--buttonTextColor_dark);
   transition: opacity 0.1s ease-in-out;
 }
 
@@ -106,7 +107,7 @@ textarea {
   align-items: center;
   text-align: center;
   justify-content: center;
-  color: var(--buttonTextColor_dark);
+  color: var(--buttonTextColor);
   z-index: 2;
   opacity: 0;
   animation: fadeInOut 1s;
@@ -117,7 +118,6 @@ textarea {
   position: absolute;
   width: 80vw;
   bottom: calc(var(--user-input-height) + 30px);
-  color: var(--titleColor_dark);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;

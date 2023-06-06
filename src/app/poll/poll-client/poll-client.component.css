@@ -6,7 +6,6 @@
   height: 35vh;
   padding-top: 15%;
   position: relative;
-  padding-top: 5%;
 }
 
 .v-question {
@@ -28,8 +27,7 @@
   transition: width 0.3s;
   background-color: rgba(244,255,237,0.36);
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-  color: var(--textColor);
-
+  color: var(--buttonTextColor);
 }
 
 .v-question span {
@@ -46,7 +44,7 @@
 .timer{
   font-size: 2rem;
   text-align: center;
-  color: var(--s);
+  color: var(--textColor);
 }
 
 

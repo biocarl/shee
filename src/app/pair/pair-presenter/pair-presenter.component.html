@@ -7,7 +7,10 @@
   <div class="qr-code">
     <img height="400px" [src]="qrCodeUrl" alt="QR Code">
   </div>
-  <h4 class="is-public is-size-4" *ngIf="isPublic">Provide your <span>real name</span> please</h4>
+  <h4 class="is-public is-size-4" *ngIf="isPublic">Provide your <span>real name</span> please  <hr> Paired: </h4>
+  <div  class="is-public is-size-4 user-container" *ngIf="isPublic && connectedParticipants != 0">
+    <div *ngFor="let user of users" class="user">{{user}}</div>
+  </div>
 </div>
 
 

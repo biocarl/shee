@@ -1,3 +1,7 @@
+h1,div,label{
+  color: var(--textColor);
+}
+
 h1 {
   font-size: x-large;
   padding: 0;
