@@ -18,10 +18,10 @@ hr {
   background: var(--textColor);
 }
 
-.container {
+.user-container {
   display: flex;
-  justify-content: center;
-  align-content: center;
+  flex-wrap: wrap;
+  width: 65%;
 }
 
 .user{
