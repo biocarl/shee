@@ -12,13 +12,13 @@
 
     <ng-template #selector>
         <div *ngIf="questionEvent">
-        <div class="timer" *ngIf="questionEvent.timer !== undefined">
-        <h3>{{questionEvent?.question}}</h3>
+          <div class="timer" *ngIf="questionEvent.timer !== undefined">
+            <h3>{{questionEvent?.question}}</h3>
 
-        <div *ngIf="questionEvent.timer > 0; else timeUp">
-        Timer: {{ questionEvent.timer }}
-        </div>
-        </div>
+            <div *ngIf="questionEvent.timer > 0; else timeUp">
+              Timer: {{ questionEvent.timer }}
+            </div>
+          </div>
 
         <ng-template #timeUp><span class="timer">Time is up!</span></ng-template>
         <div class="v-questions"
