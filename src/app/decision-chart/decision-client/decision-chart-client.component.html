@@ -10,11 +10,11 @@
 
 
     <ng-template #selector>
-      <div class="v-questions content is-large">
+      <div class="answers content is-large">
         <div
           *ngFor="let answer of questionEvent?.answers; let i = index;"
           (click)="voteForQuestion(i)"
-          class="v-question"
+          class="answer"
           [style.border-top-width]='i != 0 ? "3px" : "0"'
         >
     <span>

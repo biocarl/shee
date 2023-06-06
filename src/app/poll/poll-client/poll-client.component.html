@@ -12,21 +12,23 @@
 
     <ng-template #selector>
         <div *ngIf="questionEvent">
-          <div class="timer" *ngIf="questionEvent.timer !== undefined">
-            <h3>{{questionEvent?.question}}</h3>
-
-            <div *ngIf="questionEvent.timer > 0; else timeUp">
-              Timer: {{ questionEvent.timer }}
+          <div class="question">
+            <div >{{questionEvent?.question}}</div>
+            <div class="timer" *ngIf="questionEvent.timer !== undefined">
+              <div  *ngIf="questionEvent.timer > 0; else timeUp">
+                Timer: {{ questionEvent.timer }}
+              </div>
             </div>
           </div>
 
+
         <ng-template #timeUp><span class="timer">Time is up!</span></ng-template>
-        <div class="v-questions"
+        <div class="answers"
             [style.filter]="questionEvent.timer === 0 ? 'grayscale(100%)' : 'none'">
           <div
             *ngFor="let answer of questionEvent.answers; let i = index;"
             (click)="publishVoteForParticipant(i)"
-            class="v-question"
+            class="answer"
             [style.pointer-events]="questionEvent.timer === 0 ? 'none' : 'auto'">
     <span>
       {{answer}}
