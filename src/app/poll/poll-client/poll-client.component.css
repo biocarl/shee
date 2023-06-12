@@ -1,14 +1,14 @@
-.v-questions {
+.answers {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 35vh;
-  padding-top: 15%;
+  padding-top: 5%;
   position: relative;
 }
 
-.v-question {
+.answer {
   flex: 1;
   height: 84px;
   width: 388px;
@@ -30,7 +30,7 @@
   color: var(--buttonTextColor);
 }
 
-.v-question span {
+.answer span {
   font-size: 130%;
   letter-spacing: 0.05em;
 }
@@ -42,6 +42,9 @@
 }
 
 .timer{
+  color: var(--secondaryColor);
+}
+.question{
   font-size: 2rem;
   text-align: center;
   color: var(--textColor);
