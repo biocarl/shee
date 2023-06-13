@@ -42,9 +42,21 @@
 <ng-template #brainstormingControls>
 <!--  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>-->
 <!--  <input type="number" min="1" [(ngModel)]="timerLengthBrainstorming" placeholder="Enter Timer in sec" name="timer">-->
-  <button class="brainstormingButton" (click)="startBrainstorming()">
+<!--  <button class="brainstormingButton" mat-raised-button (click)="openTimerDialog()">
     {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
-  </button>
+  </button> -->
+  <h1 mat-dialog-title>Hi </h1>
+<div mat-dialog-content>
+  <p>What's your favorite animal?</p>
+  <mat-form-field>
+    <mat-label>Favorite Animal</mat-label>
+    <input matInput [(ngModel)]="timerLengthBrainstorming">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="startBrainstorming()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="timerLengthBrainstorming" cdkFocusInitial>Ok</button>
+</div>
   </ng-template>
 
   <button [disabled]="stage=='voting'" class="brainstormingButton addStickie" (click)="addStickie()">add Stickie</button>

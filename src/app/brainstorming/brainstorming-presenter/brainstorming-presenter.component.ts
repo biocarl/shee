@@ -7,12 +7,14 @@ import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
 import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
 import {View} from "../../view";
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
   selector: 'app-brainstorming-presenter',
   templateUrl: './brainstorming-presenter.component.html',
-  styleUrls: ['./brainstorming-presenter.component.css']
+  styleUrls: ['./brainstorming-presenter.component.css'],
+
 })
 export class BrainstormingPresenterComponent implements View, OnInit, AfterViewChecked {
   ideaEvent ?: BrainstormingPresenterSubscribeResponse;
@@ -28,7 +30,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
   editableSticky?: number;
   editedIdea: string = "";
 
-  constructor(private queueService: QueueService) {
+  constructor(private queueService: QueueService, private dialog: MatDialog) {
   }
 
    ngOnInit(): void {
@@ -315,4 +317,13 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
     this.editing = false;
     this.editedIdea = "";
   }
+
+  /*
+  openTimerDialog() {
+    const dialogRef = this.dialog.open( {
+      data: {timer: this.timerLengthBrainstorming},
+    });
+  }
+  */
 }
+

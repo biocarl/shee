@@ -27,6 +27,11 @@ import {ModeToggleModule} from "./mode-toggle/mode-toggle.module";
 import {NgOptimizedImage} from "@angular/common";
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from "@angular/cdk/clipboard";
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button'
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
 
 @NgModule({
   declarations: [
@@ -55,8 +60,12 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
     ModeToggleModule,
     NgOptimizedImage,
     DragDropModule,
-    ClipboardModule
-
+    ClipboardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
