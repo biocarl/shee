@@ -27,6 +27,7 @@ import {ModeToggleModule} from "./mode-toggle/mode-toggle.module";
 import {NgOptimizedImage} from "@angular/common";
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from "@angular/cdk/clipboard";
+import { InfWhiteboardComponent } from './inf-whiteboard/inf-whiteboard.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
     PairPresenterComponent,
     PairClientComponent,
     BrainstormingClientComponent,
-    BrainstormingPresenterComponent
+    BrainstormingPresenterComponent,
+    InfWhiteboardComponent
   ],
   imports: [
     BrowserModule,
