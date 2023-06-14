@@ -163,6 +163,10 @@ label {
   color: var(--buttonTextColor);
   border: none;
 }
+.mat-raised-button{
+  background-color: rgba(244, 255, 237, 0.36);
+  color: var(--buttonTextColor);
+}
 
 .addStickie {
   position: absolute;
