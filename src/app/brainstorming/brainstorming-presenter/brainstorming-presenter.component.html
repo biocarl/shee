@@ -42,7 +42,7 @@
 <ng-template #brainstormingControls>
 <!--  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>-->
 <!--  <input type="number" min="1" [(ngModel)]="timerLengthBrainstorming" placeholder="Enter Timer in sec" name="timer">-->
- <button class="brainstormingButton" mat-raised-button (click)="openTimerDialog()">
+ <button class="brainstormingButton"  (click)="openTimerDialog()">
     {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
   </button>
 
