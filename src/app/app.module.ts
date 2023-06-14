@@ -31,6 +31,7 @@ import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angula
 import {MatButtonModule} from '@angular/material/button'
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { TimerPopupComponent } from './brainstorming/brainstorming-presenter/timer-popup/timer-popup.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
     PairPresenterComponent,
     PairClientComponent,
     BrainstormingClientComponent,
-    BrainstormingPresenterComponent
+    BrainstormingPresenterComponent,
+    TimerPopupComponent
   ],
   imports: [
     BrowserModule,

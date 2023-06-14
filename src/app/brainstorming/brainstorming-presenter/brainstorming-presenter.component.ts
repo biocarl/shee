@@ -1,13 +1,14 @@
-import {AfterViewChecked, Component, OnInit} from '@angular/core';
-import {PresenterMessage} from "../../presenter-message";
-import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
-import {QueueService} from "../../queue.service";
-import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subscribe-response";
-import {CdkDragStart} from '@angular/cdk/drag-drop';
-import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
-import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
-import {View} from "../../view";
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { PresenterMessage } from "../../presenter-message";
+import { BrainstormingPresenterSubscribeResponse } from "../brainstorming-presenter-subscribe-response";
+import { QueueService } from "../../queue.service";
+import { BrainstormingClientSubscribeResponse } from "../brainstorming-client-subscribe-response";
+import { CdkDragStart } from '@angular/cdk/drag-drop';
+import { BrainstormingPresenterStatusVotingRequest } from "../brainstorming-presenter-status-voting-request";
+import { BrainstormingPresenterPublishRequest } from "../brainstorming-presenter-publish-request";
+import { View } from "../../view";
 import { MatDialog } from '@angular/material/dialog';
+import { TimerPopupComponent } from './timer-popup/timer-popup.component';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 })
 export class BrainstormingPresenterComponent implements View, OnInit, AfterViewChecked {
-  ideaEvent ?: BrainstormingPresenterSubscribeResponse;
+  ideaEvent?: BrainstormingPresenterSubscribeResponse;
   ideaResponses: { text: string, color: string, hasVisibleContent: boolean }[] = [];
   maxZIndex = 20;
   stickyContentVisible: boolean = false;
@@ -33,7 +34,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
   constructor(private queueService: QueueService, private dialog: MatDialog) {
   }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.subscribeToClientChannel();
     this.subscribeToPresenterChannel();
   }
@@ -48,7 +49,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     this.ideaEvent.ideas.map(
       (idea, index) => {
         if (this.ideaEvent) {
-          this.ideaResponses.push({text: idea, color: "#ffd707ff", hasVisibleContent: true});
+          this.ideaResponses.push({ text: idea, color: "#ffd707ff", hasVisibleContent: true });
         }
       }
     )
@@ -62,7 +63,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
       }
       this.handleClientChannelEvent(brainstormingSubscriptionEvent);
 
-    },"BrainstormingPresenterComponent.ngOnInit");
+    }, "BrainstormingPresenterComponent.ngOnInit");
   }
 
   private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
@@ -100,21 +101,21 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
   private subscribeToPresenterChannel(): void {
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
       this.handlePresenterChannelEvent(response);
-    },"BrainstormingPresenterComponent.ngOnInit");
+    }, "BrainstormingPresenterComponent.ngOnInit");
   }
 
   private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
-    if (this.hasVotingStarted(response)){
+    if (this.hasVotingStarted(response)) {
       this.updateTimer(response);
       this.initializeTimer();
     }
   }
 
-private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
-  return !!(this.ideaEvent &&
-    response.clientOnly &&
-    (this.stage === 'voting' || this.stage === 'brainstorming'))
-}
+  private hasVotingStarted(response: BrainstormingPresenterStatusVotingRequest) {
+    return !!(this.ideaEvent &&
+      response.clientOnly &&
+      (this.stage === 'voting' || this.stage === 'brainstorming'))
+  }
 
   private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
     if (this.ideaEvent) {
@@ -237,7 +238,7 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
 
   hideIdea(i: number) {
     if (i > -1) {
-      this.ideaResponses.splice(i, 1, {text: "", color: "", hasVisibleContent: false});
+      this.ideaResponses.splice(i, 1, { text: "", color: "", hasVisibleContent: false });
     }
   }
 
@@ -297,7 +298,7 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
   }
 
   addStickie() {
-    this.ideaResponses.push({text: "new idea", color: "#ffd707ff", hasVisibleContent: true});
+    this.ideaResponses.push({ text: "new idea", color: "#ffd707ff", hasVisibleContent: true });
     this.editing = !this.editing;
     if (this.ideaEvent) {
       this.editableSticky = this.ideaResponses.length - 1;
@@ -318,12 +319,16 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
     this.editedIdea = "";
   }
 
-  /*
+
   openTimerDialog() {
-    const dialogRef = this.dialog.open( {
-      data: {timer: this.timerLengthBrainstorming},
+    const dialogRef = this.dialog.open(TimerPopupComponent, {
+      data: { timer: this.timerLengthBrainstorming },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.timerLengthBrainstorming = result;
+      this.startBrainstorming()
     });
   }
-  */
+
 }
 

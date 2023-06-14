@@ -1,0 +1,11 @@
+
+<h1 mat-dialog-title>Timer? </h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.timer">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No</button>
+    <button mat-button [mat-dialog-close]="data.timer" cdkFocusInitial>Ok</button>
+</div>
