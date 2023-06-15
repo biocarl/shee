@@ -39,12 +39,21 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   addStickyNote() {
+
+    let shadow = new fabric.Shadow({
+      color: 'rgb(0,0,0,0.5)',
+      blur: 7,
+      offsetX:1,
+      offsetY: 1,
+    });
+
     let rectangle = new fabric.Rect({
       left: 0,
       top: 0,
       width: 200,
       height: 200,
       fill: 'yellow',
+      shadow: shadow,
     });
 
     let textbox = new fabric.Textbox('Some text', {
