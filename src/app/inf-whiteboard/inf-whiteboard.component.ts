@@ -70,6 +70,14 @@ export class InfWhiteboardComponent implements OnInit {
     });
 
     let group = new fabric.Group([rectangle, textbox], {});
+
+    group.setControlsVisibility({
+      mb: false,
+      ml:false,
+      mr:false,
+      mt:false
+    });
+
     this.canvas.add(group);
   }
 }
