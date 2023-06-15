@@ -1,12 +1,12 @@
 <div class="popup">
   <h1 mat-dialog-title>Timer? </h1>
-  <div mat-dialog-content>
+  <div>
     <mat-form-field>
-      <input matInput [(ngModel)]="data.timer">
+      <input class="inputTimer" [(ngModel)]="data.timer" type="number" id="numberInput" name="numberInput" min="1">
     </mat-form-field>
   </div>
   <div class="timerButtons">
     <button mat-button [mat-dialog-close]="data " (click)="onNoClick()" class="popupButton">No</button>
-    <button mat-button [mat-dialog-close]="data " (click)="onOkClick()" class="popupButton">Ok</button>
+    <button mat-button [mat-dialog-close]="data " (click)="onOkClick()"  class="popupButton">Ok</button>
   </div>
 </div>

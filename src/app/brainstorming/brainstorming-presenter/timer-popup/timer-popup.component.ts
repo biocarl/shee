@@ -18,10 +18,24 @@ export class TimerPopupComponent {
   ) { }
 
   onOkClick(): void {
-  this.data.choice = true;
+    if (this.isTimerValid()) {
+      this.data.choice = true;
+    }
   }
+
   onNoClick(): void {
     this.data.timer = undefined;
     this.data.choice = true;
   }
+  
+  private isTimerValid(): boolean {
+    const min = 1;
+
+    if (this.data.timer && this.data.timer < min) {
+      alert(`Please enter a number greater than:  ${min}`);
+      return false;
+    }
+    return true;
+  }
+
 }
