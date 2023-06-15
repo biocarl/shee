@@ -39,6 +39,8 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   addStickyNote() {
+    const stickyHeight = 200;
+    const stickyWidth = 200;
 
     let shadow = new fabric.Shadow({
       color: 'rgb(0,0,0,0.5)',
@@ -50,19 +52,40 @@ export class InfWhiteboardComponent implements OnInit {
     let rectangle = new fabric.Rect({
       left: 0,
       top: 0,
-      width: 200,
-      height: 200,
+      width: stickyWidth,
+      height: stickyHeight,
       fill: 'yellow',
       shadow: shadow,
     });
 
-    let textbox = new fabric.Textbox('Some text', {
-      left: 30,  // Start from the padding size
-      top: 30,   // Start from the padding size
-      width: 140,  // Rectangle's width (200) - 2 * padding size (30)
+
+    let textbox = new fabric.Textbox('', {
+      left: 10,  // Start from the padding size
+      top: 10,   // Start from the padding size
+      fontSize: 21,
+      width: stickyHeight-20,  // Rectangle's width (200) - 2 * padding size (10)
       fill: 'black',
       splitByGrapheme: true,
+      //@ts-ignore
+      fixedHeight: 150,
     });
+
+      textbox.on('changed',() => {
+        //@ts-ignore
+        while(textbox.height < stickyHeight-20 ){
+          // @ts-ignore
+          textbox.fontSize++;
+          console.log("Font size got bigger: " + textbox.fontSize);
+          this.canvas.renderAll();
+        }
+        //@ts-ignore
+        while(textbox.height > stickyHeight-20 ){
+        // @ts-ignore
+        textbox.fontSize--;
+        console.log("Font size got smaller: " + textbox.fontSize);
+        this.canvas.renderAll();
+      }
+      });
 
       textbox.on('editing:exited', () => {
       console.log('Exited editing mode for:', textbox);
