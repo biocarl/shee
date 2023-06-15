@@ -1,12 +1,12 @@
 <div class="popup">
-<h1 mat-dialog-title >Timer? </h1>
-<div mat-dialog-content>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.timer">
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
+  <h1 mat-dialog-title>Timer? </h1>
+  <div mat-dialog-content>
+    <mat-form-field>
+      <input matInput [(ngModel)]="data.timer">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="buttons">
     <button mat-button [mat-dialog-close]="data " (click)="onNoClick()" class="popupButton">No</button>
-    <button mat-button [mat-dialog-close]="data " (click)="onOkClick()" cdkFocusInitial class="popupButton">Ok</button>
-</div>
+    <button mat-button [mat-dialog-close]="data " (click)="onOkClick()" class="popupButton">Ok</button>
+  </div>
 </div>
