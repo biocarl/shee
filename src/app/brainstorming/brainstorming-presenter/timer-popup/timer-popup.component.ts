@@ -1,9 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog'
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 
 export interface DialogData {
   timer?: number,
-  choice:boolean
+  choice: boolean
 }
 
 @Component({
@@ -15,13 +15,13 @@ export class TimerPopupComponent {
   constructor(
     public dialogRef: MatDialogRef<TimerPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-  ) {}
+  ) { }
 
-    onOkClick():void{
-    this.data.choice=true;
+  onOkClick(): void {
+  this.data.choice = true;
   }
   onNoClick(): void {
-    this.data.timer=undefined;
-    this.data.choice=true;
+    this.data.timer = undefined;
+    this.data.choice = true;
   }
 }

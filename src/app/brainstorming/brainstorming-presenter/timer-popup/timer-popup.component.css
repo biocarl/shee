@@ -1,0 +1,38 @@
+.popup {
+    color: var(--headerTextColor);
+    background-color: var(--background-color);
+    border: 5px solid var(--secondaryColor);
+    text-align: center;
+    font-family: 'ChunkFive', serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+h1 {
+    border-bottom: 5px solid var(--secondaryColor);
+}
+
+.popupButton {
+    position: relative;
+    height: 45px;
+    left: 2.5vw;
+    text-align: center;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: space-evenly;
+    cursor: pointer;
+    padding: 1em;
+    box-sizing: border-box;
+    margin: 15px;
+    /* Hinzugefügt für die Box */
+    border-radius: 30px;
+    font-family: 'ChunkFive', sans-serif;
+    font-size: 18px;
+    transition: width 0.3s;
+    background-color: rgba(244, 255, 237, 0.36);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    color: var(--buttonTextColor);
+    border: none;
+}

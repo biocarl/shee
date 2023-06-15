@@ -145,6 +145,10 @@ body.dark {
   z-index: -1;
 }
 
+.mat-mdc-dialog-container .mdc-dialog__title{
+  font-family: 'ChunkFive', serif !important;
+}
+
 @media screen and (max-width: 1023px) {
   .navbar-menu {
     background-color: transparent;
