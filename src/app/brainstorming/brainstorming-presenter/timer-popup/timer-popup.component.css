@@ -33,9 +33,6 @@ h1 {
   color: var(--buttonTextColor);
   border: none;
 }
-
-.buttons {
-  display: inline-flexbox;
+.timerButtons {
   justify-content: space-evenly;
-  align-items: center;
 }
