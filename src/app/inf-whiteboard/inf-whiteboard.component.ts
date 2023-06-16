@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { fabric } from 'fabric';
+import {Component, OnInit} from '@angular/core';
+import {fabric} from 'fabric';
 
 @Component({
   selector: 'app-inf-whiteboard',
@@ -9,7 +9,7 @@ import { fabric } from 'fabric';
 export class InfWhiteboardComponent implements OnInit {
   private canvas!: fabric.Canvas;
 
-  ngOnInit (): void {
+  ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas', {
       backgroundColor: 'white',
     });
@@ -30,7 +30,7 @@ export class InfWhiteboardComponent implements OnInit {
           textbox.enterEditing();
           items.forEach((item) => {
             if (item !== textbox) {
-              item.set({ selectable: false });
+              item.set({selectable: false});
             }
           });
         }
@@ -45,7 +45,7 @@ export class InfWhiteboardComponent implements OnInit {
     let shadow = new fabric.Shadow({
       color: 'rgb(0,0,0,0.5)',
       blur: 7,
-      offsetX:1,
+      offsetX: 1,
       offsetY: 1,
     });
 
@@ -60,34 +60,63 @@ export class InfWhiteboardComponent implements OnInit {
 
 
     let textbox = new fabric.Textbox('', {
+      hasBorders: false,
+      textAlign: "center",
       left: 10,  // Start from the padding size
       top: 10,   // Start from the padding size
       fontSize: 21,
-      width: stickyHeight-20,  // Rectangle's width (200) - 2 * padding size (10)
+      width: 180,  // Rectangle's width (200) - 2 * padding size (10)
       fill: 'black',
-      splitByGrapheme: true,
       //@ts-ignore
-      fixedHeight: 150,
+      fixedHeight: 180,
+      fixedWidth: 180,
     });
 
-      textbox.on('changed',() => {
-        //@ts-ignore
-        while(textbox.height < stickyHeight-20 ){
-          // @ts-ignore
-          textbox.fontSize++;
-          console.log("Font size got bigger: " + textbox.fontSize);
-          this.canvas.renderAll();
-        }
-        //@ts-ignore
-        while(textbox.height > stickyHeight-20 ){
+    textbox.on('changed', () => {
+      //@ts-ignore
+      while (textbox.height < stickyHeight - 20) {
+        // @ts-ignore
+        textbox.fontSize++;
+        console.log("Font size got bigger: " + textbox.fontSize);
+        this.canvas.renderAll();
+      }
+      //@ts-ignore
+      while (textbox.height > stickyHeight - 20) {
         // @ts-ignore
         textbox.fontSize--;
         console.log("Font size got smaller: " + textbox.fontSize);
         this.canvas.renderAll();
       }
-      });
 
-      textbox.on('editing:exited', () => {
+      // @ts-ignore
+      if (textbox.width > textbox.fixedWidth) {
+        // @ts-ignore
+        textbox.fontSize *= textbox.fixedWidth / (textbox.width + 1);
+        // @ts-ignore
+        textbox.width = textbox.fixedWidth;
+      }
+
+
+      // if (typeof textbox.text === "string") {
+      //   this.canvas.getContext().font = textbox.fontSize + 'px Times New Roman';
+      //   let textWidth = this.canvas.getContext().measureText(textbox.text).width;
+      //
+      //     console.log("textWidhtouter: " + textWidth + "   "+ this.canvas.getContext().measureText(textbox.text).width);
+      //
+      // //@ts-ignore
+      //   while(textWidth > stickyHeight-20 && textbox.fontSize > 1 ){
+      //   // @ts-ignore
+      //   textbox.fontSize--;
+      //   console.log("Font size got smaller: " + textbox.fontSize);
+      //   this.canvas.renderAll();
+      //     this.canvas.getContext().font = textbox.fontSize + 'px Times New Roman';
+      //     // @ts-ignore
+      //     textWidth = this.canvas.getContext().measureText(textbox.text).width;
+      // }
+      // }
+    });
+
+    textbox.on('editing:exited', () => {
       console.log('Exited editing mode for:', textbox);
 
       // Re-add the textbox to the group after editing is finished.
@@ -105,9 +134,9 @@ export class InfWhiteboardComponent implements OnInit {
 
     group.setControlsVisibility({
       mb: false,
-      ml:false,
-      mr:false,
-      mt:false
+      ml: false,
+      mr: false,
+      mt: false
     });
 
     this.canvas.add(group);
