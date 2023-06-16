@@ -36,6 +36,7 @@ export class InfWhiteboardComponent implements OnInit {
         }
       }
     });
+
   }
 
   addStickyNote() {
@@ -70,6 +71,7 @@ export class InfWhiteboardComponent implements OnInit {
       //@ts-ignore
       fixedHeight: 180,
       fixedWidth: 180,
+      objectCaching: false
     });
 
     textbox.on('changed', () => {
