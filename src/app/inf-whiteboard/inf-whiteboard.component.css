@@ -1,6 +1,22 @@
-html {
+.no-scroll {
   overflow: hidden;
 }
+
+/*.zoom-in-cursor {*/
+/*  cursor: zoom-in;*/
+/*}*/
+
+/*.zoom-out-cursor {*/
+/*  cursor: zoom-out;*/
+/*}*/
+
+/*.grab-cursor {*/
+/*  cursor: grab;*/
+/*}*/
+
+/*.grabbing-cursor {*/
+/*  cursor: grabbing;*/
+/*}*/
 
 
 .canvas-container {

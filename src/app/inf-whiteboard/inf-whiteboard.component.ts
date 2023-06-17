@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit, Renderer2} from '@angular/core';
 import {fabric} from 'fabric';
 
 @Component({
@@ -8,22 +8,28 @@ import {fabric} from 'fabric';
 })
 export class InfWhiteboardComponent implements OnInit {
   private canvas!: fabric.Canvas;
+  private canBePanned = false;
+  private lastPosX: number = 0;
+  private lastPosY: number = 0;
+  private isDragging: boolean = false;
+
+  constructor(private renderer: Renderer2) {
+    this.renderer.addClass(document.body, 'is-clipped');
+  }
 
   ngOnInit(): void {
     this.canvas = new fabric.Canvas('canvas', {
-      backgroundColor: 'white',
+      backgroundColor: 'rgb(0,0,0,0)',
     });
-    this.canvas.setWidth(window.innerWidth - 100);
+    this.canvas.setWidth(window.innerWidth);
     this.canvas.setHeight(window.innerHeight);
 
     this.canvas.on('mouse:dblclick', (options) => {
       let target = options.target as fabric.Group;
       if (target && target.type === 'group') {
-        // Get the objects and select the textbox.
         let items = target.getObjects();
         let textbox = items.find((obj) => obj.type === 'textbox') as fabric.Textbox;
         if (textbox) {
-          console.log('Entering editing mode for:', textbox);
           target.removeWithUpdate(textbox);
           this.canvas.add(textbox);
           this.canvas.setActiveObject(textbox);
@@ -37,9 +43,85 @@ export class InfWhiteboardComponent implements OnInit {
       }
     });
 
+    this.canvas.on('mouse:wheel', (opt: fabric.IEvent<WheelEvent>) => {
+      const evt = opt.e;
+      if (evt.ctrlKey) {
+        const delta = opt.e.deltaY;
+        let zoom = this.canvas.getZoom();
+        zoom *= 0.999 ** delta;
+        if (zoom > 20) zoom = 20;
+        if (zoom < 0.01) zoom = 0.01;
+        this.canvas.zoomToPoint({x: opt.e.offsetX, y: opt.e.offsetY}, zoom);
+        opt.e.preventDefault();
+        opt.e.stopPropagation();
+      }
+    });
+
+    this.canvas.on('mouse:down', (opt) => {
+      const evt = opt.e;
+      if (this.canBePanned) {
+        // this.canvas.defaultCursor = 'grabbing';
+        this.isDragging = true;
+        this.lastPosX = evt.clientX;
+        this.lastPosY = evt.clientY;
+      }
+    });
+
+    this.canvas.on('mouse:move', (opt) => {
+      if (this.isDragging) {
+        // this.canvas.defaultCursor = 'grabbing';
+        const e = opt.e;
+        const vpt = this.canvas.viewportTransform;
+        if (vpt) {
+          vpt[4] += e.clientX - this.lastPosX;
+          vpt[5] += e.clientY - this.lastPosY;
+        }
+        this.canvas.requestRenderAll();
+        this.lastPosX = e.clientX;
+        this.lastPosY = e.clientY;
+      }
+    });
+    this.canvas.on('mouse:up', () => {
+      if (this.isDragging) {
+        // @ts-ignore
+        this.canvas.setViewportTransform(this.canvas.viewportTransform);
+        this.isDragging = false;
+        // this.canvas.defaultCursor = 'default            ';
+      }
+    });
   }
 
-  addStickyNote() {
+  @HostListener('document:keydown', ['$event'])
+  onKeyPress(event: KeyboardEvent) {
+    console.log(event.key);
+    if (event.key === ' ') {
+      // event.preventDefault();
+      this.canBePanned = true;
+      // this.canvas.defaultCursor = 'grab';
+    }
+    if (event.ctrlKey) {
+
+      // this.canvas.defaultCursor = 'zoom-in';
+    }if (event.key === 'Delete') {
+      this.deleteSticky();
+    }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  onKeyUp(event: KeyboardEvent) {
+    if (event.key === ' ') {
+      event.preventDefault();
+      this.canBePanned = false;
+      // this.canvas.defaultCursor = 'default';
+    }
+    // if (event.ctrlKey) {
+    //   event.preventDefault();
+    //   this.canBePanned = false;
+    //   this.canvas.defaultCursor = 'default';
+    // }
+  }
+
+  addStickyNote(stickyText?: string) {
     const stickyHeight = 200;
     const stickyWidth = 200;
 
@@ -59,7 +141,6 @@ export class InfWhiteboardComponent implements OnInit {
       shadow: shadow,
     });
 
-
     let textbox = new fabric.Textbox('', {
       hasBorders: false,
       textAlign: "center",
@@ -75,72 +156,85 @@ export class InfWhiteboardComponent implements OnInit {
     });
 
     textbox.on('changed', () => {
-      //@ts-ignore
-      while (textbox.height < stickyHeight - 20) {
-        // @ts-ignore
-        textbox.fontSize++;
-        console.log("Font size got bigger: " + textbox.fontSize);
-        this.canvas.renderAll();
-      }
-      //@ts-ignore
-      while (textbox.height > stickyHeight - 20) {
-        // @ts-ignore
-        textbox.fontSize--;
-        console.log("Font size got smaller: " + textbox.fontSize);
-        this.canvas.renderAll();
-      }
-
-      // @ts-ignore
-      if (textbox.width > textbox.fixedWidth) {
-        // @ts-ignore
-        textbox.fontSize *= textbox.fixedWidth / (textbox.width + 1);
-        // @ts-ignore
-        textbox.width = textbox.fixedWidth;
-      }
-
-
-      // if (typeof textbox.text === "string") {
-      //   this.canvas.getContext().font = textbox.fontSize + 'px Times New Roman';
-      //   let textWidth = this.canvas.getContext().measureText(textbox.text).width;
-      //
-      //     console.log("textWidhtouter: " + textWidth + "   "+ this.canvas.getContext().measureText(textbox.text).width);
-      //
-      // //@ts-ignore
-      //   while(textWidth > stickyHeight-20 && textbox.fontSize > 1 ){
-      //   // @ts-ignore
-      //   textbox.fontSize--;
-      //   console.log("Font size got smaller: " + textbox.fontSize);
-      //   this.canvas.renderAll();
-      //     this.canvas.getContext().font = textbox.fontSize + 'px Times New Roman';
-      //     // @ts-ignore
-      //     textWidth = this.canvas.getContext().measureText(textbox.text).width;
-      // }
-      // }
+      this.adjustFontSize(textbox, stickyHeight);
     });
 
     textbox.on('editing:exited', () => {
-      console.log('Exited editing mode for:', textbox);
-
       // Re-add the textbox to the group after editing is finished.
-      group.addWithUpdate(textbox);
+      sticky.addWithUpdate(textbox);
       this.canvas.remove(textbox);
 
-      // Instead of removing the group, just deselect it and stop editing.
-      this.canvas.discardActiveObject().renderAll();
+      // Deselect group
+      this.canvas.discardActiveObject();
+      this.canvas.renderAll();
 
       // Make items selectable again
-      group.getObjects().forEach(item => item.set('selectable', true));
+      sticky.getObjects().forEach(item => item.set('selectable', true));
     });
 
-    let group = new fabric.Group([rectangle, textbox], {});
+    let sticky = new fabric.Group([rectangle, textbox], {});
 
-    group.setControlsVisibility({
+    sticky.setControlsVisibility({
       mb: false,
       ml: false,
       mr: false,
       mt: false
     });
 
-    this.canvas.add(group);
+    sticky.set({
+      borderColor: 'white',
+      cornerStrokeColor: 'white',
+      lockScalingFlip:true
+    })
+
+    this.canvas.add(sticky);
+    sticky.viewportCenter();
+    if(stickyText){
+      textbox.set({
+        text: stickyText,
+      })
+      this.adjustFontSize(textbox,stickyHeight);
+    }
+  }
+
+  private adjustFontSize(textbox: fabric.Textbox, stickyHeight: number) {
+    //@ts-ignore
+    while (textbox.height < stickyHeight - 20 && textbox.fontSize <= 200) {
+      // @ts-ignore
+      textbox.fontSize++;
+      this.canvas.renderAll();
+    }
+    //@ts-ignore
+    while (textbox.height > stickyHeight - 20 && textbox.fontSize >= 1) {
+      // @ts-ignore
+      textbox.fontSize--;
+      this.canvas.renderAll();
+    }
+
+    // @ts-ignore
+    if (textbox.width > textbox.fixedWidth) {
+      // @ts-ignore
+      textbox.fontSize *= textbox.fixedWidth / (textbox.width + 1);
+      // @ts-ignore
+      textbox.width = textbox.fixedWidth;
+    }
+    this.canvas.renderAll();
+    console.log("Fontsize: " + textbox.fontSize);
+  }
+
+  private deleteSticky() {
+    const activeObjects = this.canvas.getActiveObjects();
+
+    if (activeObjects && activeObjects.length > 0) {
+      activeObjects.forEach((obj) => {
+        if (obj.type === 'group') {
+          const stickyGroup = obj as fabric.Group;
+          this.canvas.remove(stickyGroup);
+        }
+      });
+
+      this.canvas.discardActiveObject();
+      this.canvas.renderAll();
+    }
   }
 }
