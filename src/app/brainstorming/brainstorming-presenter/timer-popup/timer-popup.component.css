@@ -6,7 +6,7 @@
     font-family: 'ChunkFive', serif;
     font-style: normal;
     font-weight: 400;
-    width: fit-content;
+    width: 250px;
 }
 
 h1 {
@@ -17,7 +17,6 @@ h1 {
 
 .popupButton {
     position: relative;
-    height: 45px;
     text-align: center;
     list-style: none;
     justify-content: center;
@@ -42,7 +41,7 @@ h1 {
 }
 
 
-input {
+.timerInput {
   border-radius: 40px;
   font-size: 18px;
   border: none;

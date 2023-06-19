@@ -371,20 +371,25 @@ export class BrainstormingPresenterComponent
     this.editedIdea = '';
   }
 
-  openTimerDialog() {
+  openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { timer: this.timerLengthBrainstorming },
+      data: { timer: this.timerLengthBrainstorming, stage: "brainstorming" },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(
-        'Result: ' + result + ' Timerlength: ' + this.timerLengthBrainstorming
-      );
       if (result.choice) {
         this.timerLengthBrainstorming = result.timer;
-        console.log(
-          'Choice: ' + result.choice + ' Timerlength: ' + this.timerLengthBrainstorming
-        );
         this.startBrainstorming();
+      }
+    });
+  }
+  openVotingTimerDialog() {
+    const dialogRef = this.dialog.open(TimerPopupComponent, {
+      data: { timer: this.timerLengthBrainstorming, stage: "voting" },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.choice) {
+        this.timerLengthVoting = result.timer;
+        this.startVoting();
       }
     });
   }

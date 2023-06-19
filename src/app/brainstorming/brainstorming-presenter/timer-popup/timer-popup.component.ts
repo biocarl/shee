@@ -3,7 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 
 export interface DialogData {
   timer?: number,
-  choice: boolean
+  choice: boolean,
+  stage: string
 }
 
 @Component({
@@ -16,18 +17,15 @@ export class TimerPopupComponent {
     public dialogRef: MatDialogRef<TimerPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) { }
-
-  onOkClick(): void {
+  selectedOption: string = "No";
+ 
+  onStartClick(): void {
     if (this.isTimerValid()) {
       this.data.choice = true;
     }
   }
 
-  onNoClick(): void {
-    this.data.timer = undefined;
-    this.data.choice = true;
-  }
-  
+
   private isTimerValid(): boolean {
     const min = 1;
 
