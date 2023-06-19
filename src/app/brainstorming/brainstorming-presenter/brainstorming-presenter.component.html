@@ -1,6 +1,6 @@
 <ng-container *ngIf="ideaEvent">
-  <div style="font-size:3rem;text-align:center" *ngIf="ideaEvent.timer !== undefined">
-    <div *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
+  <div *ngIf="ideaEvent.timer !== undefined">
+    <div  class="timer" *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
   </div>
   <ng-template #timeUp>Time is up!</ng-template>
 </ng-container>
@@ -40,8 +40,6 @@
 
 <!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
 <ng-template #brainstormingControls>
-<!--  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>-->
-<!--  <input type="number" min="1" [(ngModel)]="timerLengthBrainstorming" placeholder="Enter Timer in sec" name="timer">-->
  <button class="brainstormingButton" (click)="openTimerDialog()">
     {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
   </button>
@@ -52,7 +50,7 @@
 
 <ng-template #hideButton>
 
-  <button class="brainstormingButton" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
+  <button class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
 <br><br>

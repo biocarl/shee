@@ -168,3 +168,15 @@ label {
   position: absolute;
   margin-left: 250px;
 }
+
+.hideButton {
+  position: absolute;
+  margin-left: 415px;
+}
+
+.timer {
+  margin-top: 10px;
+  font-size: 3rem;
+  text-align: center;
+  color: var(--secondaryColor)
+}
