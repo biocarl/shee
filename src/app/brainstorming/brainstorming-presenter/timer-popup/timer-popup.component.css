@@ -36,3 +36,13 @@ h1 {
 .timerButtons {
   justify-content: space-evenly;
 }
+
+
+input {
+  border-radius: 40px;
+  font-size: 18px;
+  border: none;
+  background-color: #D9D9D9;
+  width: 80%;
+  text-align: center;
+}
