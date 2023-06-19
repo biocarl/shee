@@ -149,4 +149,6 @@ export class InfWhiteboardComponent implements OnInit {
       });
     }
   }
+
+  protected readonly StickyNote = StickyNote;
 }

@@ -26,6 +26,8 @@ export class StickyNote extends CanvasObject<fabric.Group>{
     return stickyNote;
   }
 
+
+
   private createShadow(): fabric.Shadow {
     return new fabric.Shadow({
       color: 'rgb(0,0,0,0.5)',
@@ -41,7 +43,7 @@ export class StickyNote extends CanvasObject<fabric.Group>{
       top: 0,
       width: STICKY_NOTE_DIMENSIONS,
       height: STICKY_NOTE_DIMENSIONS,
-      fill: 'yellow',
+      fill: '#ffd707ff',
       shadow: this.createShadow(),
     });
   }
@@ -204,5 +206,14 @@ export class StickyNote extends CanvasObject<fabric.Group>{
   protected attachDoubleClickHandler(stickyNote: fabric.Group) {
     stickyNote.on('mousedblclick', this.handleDoubleClick.bind(this));
   }
+
+  public setBackgroundColor(object: fabric.Group, color: string): void {
+      object.getObjects().forEach(object => {
+        if (object.type === 'rect') {
+          object.set({ fill: color });
+        }
+      });
+      this.canvas.renderAll();
+    }
 }
 
