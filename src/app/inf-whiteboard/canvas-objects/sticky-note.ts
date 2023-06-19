@@ -53,7 +53,7 @@ export class StickyNote {
       top: STICKY_NOTE_PADDING,
       fontSize: 21,
       width: TEXTBOX_DIMENSIONS,
-      fill: 'black',
+      fill: text ? 'transparent' : 'rgb(0,0,0,0.87)',
       fixedHeight: TEXTBOX_DIMENSIONS,
       fixedWidth: TEXTBOX_DIMENSIONS,
       objectCaching: false,
@@ -61,7 +61,12 @@ export class StickyNote {
     });
 
     if (text) {
-      this.adjustFontSize(textbox);
+      // Delay execution until rendering is finished
+      setTimeout(() => {
+        this.adjustFontSize(textbox);
+        textbox.fill = 'rgb(0,0,0,0.87)'
+        this.canvas.renderAll();
+      }, 0);
     }
 
     textbox.on('changed', () => {
