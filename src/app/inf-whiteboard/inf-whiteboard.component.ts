@@ -45,7 +45,6 @@ export class InfWhiteboardComponent implements OnInit {
     }
   };
 
-
   private handleMouseMove(opt: fabric.IEvent<MouseEvent>) {
     if (this.isDragging) {
       // this.canvas.defaultCursor = 'grabbing';
@@ -60,7 +59,6 @@ export class InfWhiteboardComponent implements OnInit {
       this.lastPosY = e.clientY;
     }
   };
-
 
   private handleMouseDown(opt: fabric.IEvent<MouseEvent>) {
     const evt = opt.e;
@@ -103,7 +101,6 @@ export class InfWhiteboardComponent implements OnInit {
       // this.canvas.defaultCursor = 'grab';
     }
     if (event.ctrlKey) {
-
       // this.canvas.defaultCursor = 'zoom-in';
     }
     if (event.key === 'Delete') {
@@ -137,7 +134,6 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.add(newSticky);
     newSticky.viewportCenter();
   }
-
 
   private deleteObjects() {
     const activeObjects = this.canvas.getActiveObjects();

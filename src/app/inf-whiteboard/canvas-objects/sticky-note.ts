@@ -1,15 +1,17 @@
 import {fabric} from 'fabric';
 import {FixedSizeTextbox} from "./fixed-size-textbox";
+import {CanvasObject} from "../canvas-object";
 
 const STICKY_NOTE_DIMENSIONS = 200;
 const STICKY_NOTE_PADDING = 10;
 const MAX_FONT_SIZE = 200;
 const TEXTBOX_DIMENSIONS = STICKY_NOTE_DIMENSIONS - 2 * STICKY_NOTE_PADDING;
 
-export class StickyNote {
+export class StickyNote extends CanvasObject<fabric.Group>{
   private canvas!: fabric.Canvas;
 
   constructor(canvas: fabric.Canvas) {
+    super();
     this.canvas = canvas;
   }
 
@@ -19,8 +21,7 @@ export class StickyNote {
     const stickyNote = new fabric.Group([rectangle, textbox]);
 
     this.setStyle(stickyNote);
-
-    stickyNote.on('mousedblclick', this.handleDoubleClick.bind(this));
+    this.attachDoubleClickHandler(stickyNote);
 
     return stickyNote;
   }
@@ -199,5 +200,9 @@ export class StickyNote {
       }
     }
   };
+
+  protected attachDoubleClickHandler(stickyNote: fabric.Group) {
+    stickyNote.on('mousedblclick', this.handleDoubleClick.bind(this));
+  }
 }
 
