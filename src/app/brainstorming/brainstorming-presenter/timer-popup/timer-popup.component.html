@@ -1,12 +1,20 @@
 <div class="popup">
-  <h1 mat-dialog-title>Timer? </h1>
-  <div mat-dialog-content>
-    <mat-form-field>
-      <input matInput [(ngModel)]="data.timer">
+  <h1 mat-dialog-title>Timer?</h1>
+  <div>
+    <form id="selectTimer">
+      <input type="radio" id="Yes" name="timerOption" value="Yes" [(ngModel)]="selectedOption">
+      <label for="Yes">Yes</label><br>
+      <input type="radio" id="No" name="timerOption" value="No" [(ngModel)]="selectedOption">
+      <label for="No">No&nbsp;</label><br>
+    </form>
+    <mat-form-field *ngIf="selectedOption == 'Yes'">
+      <input class = "timerInput" [(ngModel)]="data.timer" type="number" id="numberInput" name="numberInput" min="1" />
     </mat-form-field>
+    
   </div>
   <div class="timerButtons">
-    <button mat-button [mat-dialog-close]="data " (click)="onNoClick()" class="popupButton">No</button>
-    <button mat-button [mat-dialog-close]="data " (click)="onOkClick()" class="popupButton">Ok</button>
+    <button [disabled]="selectedOption==='Yes' && data.timer === undefined" mat-button [mat-dialog-close]="data" (click)="onStartClick()" class="popupButton">
+      Start
+    </button>
   </div>
 </div>

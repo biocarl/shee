@@ -1,38 +1,51 @@
 .popup {
-  color: var(--headerTextColor);
-  background-color: var(--background-color);
-  border: 5px solid var(--secondaryColor);
-  text-align: center;
-  font-family: 'ChunkFive', serif;
-  font-style: normal;
-  font-weight: 400;
+    color: var(--textColor);
+    background-color: var(--background-color);
+    border: 5px solid var(--secondaryColor);
+    text-align: center;
+    font-family: 'ChunkFive', serif;
+    font-style: normal;
+    font-weight: 400;
+    width: 250px;
 }
 
 h1 {
-  border-bottom: 5px solid var(--secondaryColor);
+    border-bottom: 5px solid var(--secondaryColor);
+    font-size: 18px;
+    color: var(--headerTextColor) !important;
 }
 
 .popupButton {
-  position: relative;
-  height: 45px;
-  text-align: center;
-  list-style: none;
-  justify-content: center;
-  align-content: space-evenly;
-  cursor: pointer;
-  padding: 1em;
-  box-sizing: border-box;
-  margin: 15px;
-  /* Hinzugefügt für die Box */
-  border-radius: 30px;
-  font-family: 'ChunkFive', sans-serif;
-  font-size: 18px;
-  transition: width 0.3s;
-  background-color: rgba(244, 255, 237, 0.36);
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-  color: var(--buttonTextColor);
-  border: none;
+    position: relative;
+    text-align: center;
+    list-style: none;
+    justify-content: center;
+    align-content: space-evenly;
+    cursor: pointer;
+    padding: 1em;
+    box-sizing: border-box;
+    margin: 15px;
+    /* Hinzugefügt für die Box */
+    border-radius: 30px;
+    font-family: 'ChunkFive', sans-serif;
+    font-size: 18px;
+    transition: width 0.3s;
+    background-color: rgba(244, 255, 237, 0.36);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    color: var(--buttonTextColor);
+    border: none;
 }
+
 .timerButtons {
-  justify-content: space-evenly;
+    justify-content: space-evenly;
+}
+
+
+.timerInput {
+  border-radius: 40px;
+  font-size: 18px;
+  border: none;
+  background-color: #D9D9D9;
+  width: 80%;
+  text-align: center;
 }

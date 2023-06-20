@@ -176,6 +176,7 @@ label {
   margin-left: 250px;
 }
 
+
 .fa-eye {
   position: relative;
   left: -3px;
@@ -186,4 +187,16 @@ label {
   left: -5px;
   top: -2px;
   position: relative;
+
+.hideButton {
+  position: absolute;
+  margin-left: 415px;
+}
+
+.timer {
+  margin-top: 10px;
+  font-size: 3rem;
+  text-align: center;
+  color: var(--secondaryColor)
+
 }

@@ -16,7 +16,7 @@ import {
   DecisionChartPresenterComponent
 } from './decision-chart/decision-chart-presenter/decision-chart-presenter.component';
 import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {PairPresenterComponent} from './pair/pair-presenter/pair-presenter.component';
 import {PairClientComponent} from './pair/pair-client/pair-client.component';
 import {BrainstormingClientComponent} from './brainstorming/brainstorming-client/brainstorming-client.component';
@@ -32,6 +32,7 @@ import {MatButtonModule} from '@angular/material/button'
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { TimerPopupComponent } from './brainstorming/brainstorming-presenter/timer-popup/timer-popup.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { TimerPopupComponent } from './brainstorming/brainstorming-presenter/tim
     MatInputModule,
     FormsModule,
     MatButtonModule,
-    MatDialogModule,
+    MatRadioModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
