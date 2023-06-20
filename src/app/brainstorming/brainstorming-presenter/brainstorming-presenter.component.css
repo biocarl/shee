@@ -164,14 +164,9 @@ label {
   border: none;
 }
 
-.addStickie {
-  position: absolute;
-  margin-left: 250px;
-}
-
 .hideButton {
   position: absolute;
-  margin-left: 415px;
+  margin-left: 223px;
 }
 
 .timer {

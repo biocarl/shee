@@ -53,10 +53,6 @@
   </button>
 </ng-template>
 
-<button [disabled]="stage == 'voting'" class="brainstormingButton addStickie" (click)="addStickie()">
-  add Stickie
-</button>
-
 <ng-template #hideButton>
   <button class="brainstormingButton hideButton" (click)="toggleAllStickies()">
     <i [class]="
