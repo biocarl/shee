@@ -1,14 +1,14 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { PresenterMessage } from '../../presenter-message';
-import { BrainstormingPresenterSubscribeResponse } from '../brainstorming-presenter-subscribe-response';
-import { QueueService } from '../../queue.service';
-import { BrainstormingClientSubscribeResponse } from '../brainstorming-client-subscribe-response';
-import { CdkDragStart } from '@angular/cdk/drag-drop';
-import { BrainstormingPresenterStatusVotingRequest } from '../brainstorming-presenter-status-voting-request';
-import { BrainstormingPresenterPublishRequest } from '../brainstorming-presenter-publish-request';
-import { View } from '../../view';
-import { MatDialog } from '@angular/material/dialog';
-import { TimerPopupComponent } from './timer-popup/timer-popup.component';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import {PresenterMessage} from '../../presenter-message';
+import {BrainstormingPresenterSubscribeResponse} from '../brainstorming-presenter-subscribe-response';
+import {QueueService} from '../../queue.service';
+import {BrainstormingClientSubscribeResponse} from '../brainstorming-client-subscribe-response';
+import {CdkDragStart} from '@angular/cdk/drag-drop';
+import {BrainstormingPresenterStatusVotingRequest} from '../brainstorming-presenter-status-voting-request';
+import {BrainstormingPresenterPublishRequest} from '../brainstorming-presenter-publish-request';
+import {View} from '../../view';
+import {MatDialog} from '@angular/material/dialog';
+import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 
 @Component({
   selector: 'app-brainstorming-presenter',
@@ -16,8 +16,7 @@ import { TimerPopupComponent } from './timer-popup/timer-popup.component';
   styleUrls: ['./brainstorming-presenter.component.css'],
 })
 export class BrainstormingPresenterComponent
-  implements View, OnInit, AfterViewChecked
-{
+  implements View, OnInit, AfterViewChecked {
   ideaEvent?: BrainstormingPresenterSubscribeResponse;
   ideaResponses: { text: string; color: string; hasVisibleContent: boolean }[] =
     [];
@@ -32,8 +31,10 @@ export class BrainstormingPresenterComponent
   editing: boolean = false;
   editableSticky?: number;
   editedIdea: string = '';
+  private isSingleChoice: boolean = false;
 
-  constructor(private queueService: QueueService, private dialog: MatDialog) {}
+  constructor(private queueService: QueueService, private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.subscribeToClientChannel();
@@ -202,7 +203,7 @@ export class BrainstormingPresenterComponent
       while (
         (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) &&
         fontSize > minFontSize
-      ) {
+        ) {
         fontSize--;
         element.style.fontSize = fontSize + 'px';
       }
@@ -212,7 +213,7 @@ export class BrainstormingPresenterComponent
         element.scrollHeight <= maxHeight &&
         element.scrollWidth <= maxWidth &&
         fontSize < maxFontSize
-      ) {
+        ) {
         fontSize++;
         element.style.fontSize = fontSize + 'px';
 
@@ -230,11 +231,6 @@ export class BrainstormingPresenterComponent
 
   startVoting(): void {
     if (!this.ideaEvent?.questionID) return;
-    const votingOption = document.getElementById(
-      'votingOption'
-    ) as HTMLSelectElement;
-    const selectedOption = votingOption.value;
-    let singleChoice: boolean = selectedOption === 'oneVote';
     let finalIdeas: string[] = this.ideaResponses
       .map((idea) => idea.text)
       .filter((idea) => idea !== '');
@@ -245,7 +241,7 @@ export class BrainstormingPresenterComponent
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
       questionID: this.ideaEvent.questionID,
-      singleChoice: singleChoice,
+      singleChoice: this.isSingleChoice,
       votingInProgress: true,
       clientOnly: true,
     };
@@ -373,7 +369,7 @@ export class BrainstormingPresenterComponent
 
   openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { timer: this.timerLengthBrainstorming, stage: "brainstorming" },
+      data: { stage: "brainstorming"},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.choice) {
@@ -382,15 +378,18 @@ export class BrainstormingPresenterComponent
       }
     });
   }
-  openVotingTimerDialog() {
+
+  openVotingDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { timer: this.timerLengthBrainstorming, stage: "voting" },
+      data: { stage: "voting"},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.choice) {
+        this.isSingleChoice = !result.isMultivote;
         this.timerLengthVoting = result.timer;
         this.startVoting();
       }
     });
   }
+
 }

@@ -4,7 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 export interface DialogData {
   timer?: number,
   choice: boolean,
-  stage: string
+  stage: string,
+  isMultivote:boolean
 }
 
 @Component({
@@ -18,10 +19,13 @@ export class TimerPopupComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) { }
   selectedOption: string = "No";
- 
+  votingOption:string="No";
+
   onStartClick(): void {
     if (this.isTimerValid()) {
       this.data.choice = true;
+      this.data.isMultivote= this.votingOption==="Yes";
+      console.log('🪲', this.data.timer)
     }
   }
 

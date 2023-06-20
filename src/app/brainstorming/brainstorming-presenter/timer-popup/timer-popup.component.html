@@ -1,19 +1,34 @@
 <div class="popup">
-  <h1 mat-dialog-title>Timer?</h1>
-  <div>
+  <h1 mat-dialog-title> {{ data.stage === "brainstorming" ? "Brainstorming" : "Voting" }} Options</h1>
+
+  <div class="options">
+    <p> Timer?</p>
     <form id="selectTimer">
-      <input type="radio" id="Yes" name="timerOption" value="Yes" [(ngModel)]="selectedOption">
-      <label for="Yes">Yes</label><br>
       <input type="radio" id="No" name="timerOption" value="No" [(ngModel)]="selectedOption">
       <label for="No">No&nbsp;</label><br>
+      <input type="radio" id="Yes" name="timerOption" value="Yes" [(ngModel)]="selectedOption">
+      <label for="Yes">Yes</label><br>
+
     </form>
     <mat-form-field *ngIf="selectedOption == 'Yes'">
-      <input class = "timerInput" [(ngModel)]="data.timer" type="number" id="numberInput" name="numberInput" min="1" />
+      <input class="timerInput" [(ngModel)]="data.timer" type="number" id="numberInput" name="numberInput" min="1"/>
     </mat-form-field>
-    
+
+  </div>
+  <div class="options" *ngIf="data.stage==='voting'">
+    <p>Multivote?</p>
+    <form>
+
+      <input type="radio" id="NoMultivote" name="votingOption" value="No" [(ngModel)]="votingOption">
+      <label for="NoMultivote">No&nbsp;</label><br>
+      <input type="radio" id="YesMultivote" name="votingOption" value="Yes" [(ngModel)]="votingOption">
+      <label for="YesMultivote">Yes</label><br>
+    </form>
+
   </div>
   <div class="timerButtons">
-    <button [disabled]="selectedOption==='Yes' && data.timer === undefined" mat-button [mat-dialog-close]="data" (click)="onStartClick()" class="popupButton">
+    <button [disabled]="selectedOption==='Yes' && data.timer === undefined" mat-button [mat-dialog-close]="data"
+            (click)="onStartClick()" class="popupButton">
       Start
     </button>
   </div>

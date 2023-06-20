@@ -26,13 +26,8 @@
   <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
   <form>
-    <select id="votingOption">
-      <option value="oneVote">Each student has one vote</option>
-      <option value="manyVotes">Each student has many votes</option>
-    </select>
-    <label>Enter the duration of the timer for voting in sec (Optional)</label>
-    <input type="number" min="1" [(ngModel)]="timerLengthVoting" placeholder="Enter Timer in sec" name="timer" />
-    <button class="brainstormingButton startVoting " type="button" (click)="startVoting()">
+
+    <button class="brainstormingButton startVoting " type="button" (click)="openVotingDialog()">
       Start Voting
     </button>
   </form>
@@ -40,7 +35,7 @@
 
 <!-- Stage: voting -->
 <ng-container *ngIf="stage === 'voting'">
-  <button class="brainstormingButton" type="button" (click)="stopVoting()">
+  <button class="brainstormingButton startBrainstorming" type="button" (click)="stopVoting()">
     StopVoting
   </button>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
