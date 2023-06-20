@@ -167,7 +167,7 @@ label {
 
 .hideButton {
   position: absolute;
-  left: 300px;
+  left: 303px;
 
 }
 
@@ -180,12 +180,18 @@ label {
 
 .startVoting {
   position: absolute;
-  left: 363px;
+  left: 364px;
   justify-content: center;
   align-self: center;
 }
 
 .startBrainstorming {
   width: 250px;
+
+}
+
+button {
+
+  align-items: center;
 
 }
