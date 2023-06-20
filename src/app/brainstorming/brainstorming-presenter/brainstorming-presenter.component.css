@@ -3,6 +3,13 @@ label {
   color: var(--textColor);
 }
 
+#toggle {
+  width: 49px;
+  position: absolute;
+  left: 435px;
+  top: 190px;
+}
+
 .sticky {
   font-size: 15px;
   text-align: center;
@@ -167,4 +174,16 @@ label {
 .addStickie {
   position: absolute;
   margin-left: 250px;
+}
+
+.fa-eye {
+  position: relative;
+  left: -3px;
+  top: -2px;
+}
+
+.fa-eye-slash {
+  left: -5px;
+  top: -2px;
+  position: relative;
 }
