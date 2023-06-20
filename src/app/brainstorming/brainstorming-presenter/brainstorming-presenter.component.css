@@ -3,12 +3,6 @@ label {
   color: var(--textColor);
 }
 
-#toggle {
-  width: 49px;
-  position: absolute;
-  left: 435px;
-  top: 190px;
-}
 
 .sticky {
   font-size: 15px;
@@ -150,7 +144,6 @@ label {
   top: 190px;
   height: 45px;
   left: 2.5vw;
-  text-align: center;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -169,11 +162,13 @@ label {
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   color: var(--buttonTextColor);
   border: none;
+  text-align: center;
 }
 
 .hideButton {
   position: absolute;
-  margin-left: 223px;
+  left: 300px;
+
 }
 
 .timer {
@@ -181,5 +176,16 @@ label {
   font-size: 3rem;
   text-align: center;
   color: var(--secondaryColor)
+}
+
+.startVoting {
+  position: absolute;
+  left: 363px;
+  justify-content: center;
+  align-self: center;
+}
+
+.startBrainstorming {
+  width: 250px;
 
 }

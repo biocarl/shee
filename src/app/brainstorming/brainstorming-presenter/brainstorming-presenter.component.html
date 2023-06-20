@@ -15,7 +15,7 @@
 
 <!-- Stage: brainstorming -->
 <ng-container *ngIf="stage === 'brainstorming'">
-  <button class="brainstormingButton" (click)="stopBrainstorming()">
+  <button class="brainstormingButton startBrainstorming" (click)="stopBrainstorming()">
     Stop brainstorming
   </button>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
@@ -32,7 +32,7 @@
     </select>
     <label>Enter the duration of the timer for voting in sec (Optional)</label>
     <input type="number" min="1" [(ngModel)]="timerLengthVoting" placeholder="Enter Timer in sec" name="timer" />
-    <button class="brainstormingButton" type="button" (click)="startVoting()">
+    <button class="brainstormingButton startVoting " type="button" (click)="startVoting()">
       Start Voting
     </button>
   </form>
@@ -48,14 +48,14 @@
 
 <!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
 <ng-template #brainstormingControls>
-  <button class="brainstormingButton" (click)="openBrainstormingTimerDialog()">
+  <button class="brainstormingButton startBrainstorming" (click)="openBrainstormingTimerDialog()">
     {{ stage === "initial" ? "Start" : "Resume" }} brainstorming
   </button>
 </ng-template>
 
 <ng-template #hideButton>
 
-  <button class="brainstormingButton" id="toggle" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
+  <button class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
 <br /><br />
