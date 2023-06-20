@@ -3,6 +3,13 @@ label {
   color: var(--textColor);
 }
 
+#toggle {
+  width: 49px;
+  position: absolute;
+  left: 435px;
+  top: 190px;
+}
+
 .sticky {
   font-size: 15px;
   text-align: center;
@@ -174,4 +181,5 @@ label {
   font-size: 3rem;
   text-align: center;
   color: var(--secondaryColor)
+
 }
