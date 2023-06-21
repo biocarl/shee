@@ -51,5 +51,10 @@ h1 {
 }
 .options{
   display: flex;
-
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 30px;
+  line-height: 150%;
 }
+
