@@ -27,7 +27,7 @@
 
   </div>
   <div class="timerButtons">
-    <button [disabled]="selectedOption==='Yes' && data.timer === undefined" mat-button [mat-dialog-close]="data"
+    <button [disabled]="selectedOption==='Yes' && data.timer === undefined" [mat-dialog-close]="data"
             (click)="onStartClick()" class="popupButton">
       Start
     </button>
