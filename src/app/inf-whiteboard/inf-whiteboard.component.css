@@ -1,7 +1,3 @@
-.no-scroll {
-  overflow: hidden;
-}
-
 /*.zoom-in-cursor {*/
 /*  cursor: zoom-in;*/
 /*}*/
@@ -19,7 +15,98 @@
 /*}*/
 
 
-.canvas-container {
-  margin-left:50px;
-  margin-right: 50px;
+
+
+#canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.floating-menu {
+  position: absolute;
+}
+
+input[type=radio] {
+  display:none;
+  margin:0;
+}
+
+span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+span:hover {
+  transform: scale(1.25);
+}
+
+span.active {
+  transform: scale(1.25);
+}
+
+span.red {
+  background: #fc3030;
+}
+
+span.orange {
+  background: #f2711c;
+}
+
+span.yellow {
+  background: #FFD707FF;
+}
+
+span.olive {
+  background: #b5cc18;
+}
+
+span.green {
+  background: #21ba45;
+}
+
+span.teal {
+  background: #00b5ad;
+}
+
+span.blue {
+  background: #2185d0;
+}
+
+span.violet {
+  background: #7e43fd;
+}
+
+span.purple {
+  background: #a333c8;
+}
+
+span.pink {
+  background: #e03997;
+}
+
+.color-selection {
+  display:flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  position: absolute;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

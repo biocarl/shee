@@ -47,7 +47,7 @@ import { InfWhiteboardComponent } from './inf-whiteboard/inf-whiteboard.componen
     PairClientComponent,
     BrainstormingClientComponent,
     BrainstormingPresenterComponent,
-    InfWhiteboardComponent
+    InfWhiteboardComponent,
   ],
   imports: [
     BrowserModule,
