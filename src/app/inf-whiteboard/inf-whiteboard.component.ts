@@ -18,6 +18,7 @@ export class InfWhiteboardComponent implements OnInit {
   public showMenu = false;
   public menuPosition = {top: 0, left: 0};
   public selectedObject: fabric.Object | fabric.Group | null = null;
+  private objectIsMoving: boolean = false;
 
   constructor(private renderer: Renderer2) {
     this.disableScrollbar();
@@ -39,9 +40,11 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.on('mouse:up', this.handleMouseUp.bind(this));
     this.canvas.on('mouse:move', this.handleMouseMove.bind(this));
     this.canvas.on('selection:created', this.onObjectSelected.bind(this));
+    this.canvas.on('selection:updated', this.onObjectSelectedUpdated.bind(this));
     this.canvas.on('selection:cleared', this.onObjectDeselected.bind(this));
-    // this.canvas.on('object:moving', this.onObjectMoving.bind(this));
-    //
+    this.canvas.on('object:moving', this.onObjectMoving.bind(this));
+    this.canvas.on('object:scaling', this.onObjectScaling.bind(this));
+    this.canvas.on('object:rotating', this.onObjectRotating.bind(this));
   }
 
   private handleMouseUp() {
@@ -50,6 +53,11 @@ export class InfWhiteboardComponent implements OnInit {
       this.canvas.setViewportTransform(this.canvas.viewportTransform);
       this.isDragging = false;
       // this.canvas.defaultCursor = 'default            ';
+    }
+
+    if(this.objectIsMoving){
+      this.objectIsMoving = false;
+      this.showMenu = true;
     }
   };
 
@@ -79,69 +87,70 @@ export class InfWhiteboardComponent implements OnInit {
   };
 
   private handleMouseWheel(opt: fabric.IEvent<WheelEvent>) {
-    const evt = opt.e;
-    if (evt.ctrlKey) {
-      const delta = opt.e.deltaY;
-      let zoom = this.canvas.getZoom();
-      zoom *= 0.999 ** delta;
-      if (zoom > 20) zoom = 20;
-      if (zoom < 0.01) zoom = 0.01;
-      this.canvas.zoomToPoint({x: opt.e.offsetX, y: opt.e.offsetY}, zoom);
-      opt.e.preventDefault();
-      opt.e.stopPropagation();
+    const delta = opt.e.deltaY;
+    let zoom = this.canvas.getZoom();
+    zoom *= 0.999 ** delta;
+    if (zoom > 20) zoom = 20;
+    if (zoom < 0.01) zoom = 0.01;
+    this.canvas.zoomToPoint({x: opt.e.offsetX, y: opt.e.offsetY}, zoom);
+    opt.e.preventDefault();
+    opt.e.stopPropagation();
+    if (this.selectedObject) {
+      this.placeMenu();
     }
   };
 
   onObjectSelected() {
+    this.placeMenu();
+  }
+
+  onObjectSelectedUpdated() {
+    this.placeMenu();
+  }
+
+  onObjectRotating() {
+    this.placeMenu();
+  }
+
+  private placeMenu() {
     const object = this.canvas.getActiveObject();
-    let zoom = this.canvas.getZoom();
     if (object) {
-      let objectCenter = object.getCenterPoint();
+      const menu = document.getElementById('menu')!;
+      const menuWidth = menu.offsetWidth;
+      const menuHeight = menu.offsetHeight;
 
-      let boundingRect = object.getBoundingRect();
-      let objectHeight = boundingRect.height * zoom;
+      // Get the bounding rectangle of the object, taking into account rotation.
+      const boundingRect = object.getBoundingRect(undefined,true);
 
+      // Calculate the position of the bounding rectangle in the DOM's coordinate system.
+      const rectTop = boundingRect.top;
+      const rectLeft = boundingRect.left;
 
-      let absCoords = {
-        // @ts-ignore
-        left: objectCenter.x * zoom + (this.canvas.viewportTransform![4] + document.getElementById('menu').offsetWidth / 2),
-        top: objectCenter.y * zoom - objectHeight/2 + this.canvas.viewportTransform![5] + 40
-      };
-
+      // Position the menu above the bounding rectangle, centered horizontally.
+      const menuTop = (rectTop - menuHeight + 60);
+      const menuLeft = (rectLeft + (boundingRect.width - menuWidth) / 2);
 
       this.showMenu = true;
       this.selectedObject = object;
-      // @ts-ignore
-      let menu = document.getElementById('menu'), menuWidth = document.getElementById('menu').offsetWidth,        menuHeight = document.getElementById('menu').offsetHeight;
-      menu!.style.left = (absCoords.left - menuWidth) + 'px';
-      menu!.style.top = (absCoords.top - menuHeight) + 'px';
+      menu.style.left = menuLeft + 'px';
+      menu.style.top = menuTop + 'px';
     }
   }
 
-  onObjectDeselected(event: fabric.IEvent) {
+  onObjectDeselected() {
     this.showMenu = false;
     this.selectedObject = null;
   }
 
-  // onObjectMoving() {
-  //   const object = this.canvas.getActiveObject();
-  //
-  //   if (object) {
-  //     // calculate the position in viewport coordinates
-  //     const zoom = this.canvas.getZoom();
-  //     const pan = this.canvas.viewportTransform;
-  //     const objectCenter = object.getCenterPoint();
-  //     if (pan) {
-  //       // @ts-ignore
-  //       const xPos = objectCenter.x * zoom + pan[4] - document.getElementById("menu").offsetWidth / 2;
-  //       const yPos = objectCenter.y * zoom + pan[5] - document.getElementById("menu").offsetHeight - 100;
-  //       this.menuPosition = {
-  //         top: yPos,
-  //         left: xPos,
-  //       };
-  //     }
-  //   }
-  // }
+  onObjectMoving() {
+    this.placeMenu();
+    this.showMenu = false;
+    this.objectIsMoving = true;
+  }
+
+  onObjectScaling() {
+    this.placeMenu();
+  }
 
 
   changeColor(event: MouseEvent) {
@@ -171,7 +180,6 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.setWidth(window.innerWidth);
     let navbarHeight = document.getElementById("navbar")!.offsetHeight;
     let buttonHeight = document.getElementById("buttons")!.offsetHeight;
-    console.log("navbarHeight = " + navbarHeight + " - ButtonHeight: " + buttonHeight);
     this.canvas.setHeight(window.innerHeight - (navbarHeight + buttonHeight));
   }
 
@@ -183,9 +191,9 @@ export class InfWhiteboardComponent implements OnInit {
       this.canBePanned = true;
       // this.canvas.defaultCursor = 'grab';
     }
-    if (event.ctrlKey) {
-      // this.canvas.defaultCursor = 'zoom-in';
-    }
+    // if (event.ctrlKey) {
+    //   // this.canvas.defaultCursor = 'zoom-in';
+    // }
     if (event.key === 'Delete') {
       this.deleteObjects();
     }
