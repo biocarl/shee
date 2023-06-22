@@ -6,12 +6,18 @@
 }
 
 h3 {
-  font-weight: normal;
+  position: absolute;
+  width: 80vw;
+  top: 130px;
+  bottom: calc(var(--user-input-height) + 30px);
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
   text-align: center;
-  margin-bottom: 3em;
-  letter-spacing: 0.15em;
-  font-size: 20px;
-  color: var(--textColor);
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 h4{
@@ -35,7 +41,7 @@ h4{
 
 .bar-container {
   background-color: rgba(244,255,237,0.36);
-  height: 30px;
+  height: 40px;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -84,5 +90,15 @@ h4{
 }
 .diff {
   color: indianred;
+}
+.timer {
+  position: relative;
+  color: var(--secondaryColor);
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
+  text-align: center;
 }
 
