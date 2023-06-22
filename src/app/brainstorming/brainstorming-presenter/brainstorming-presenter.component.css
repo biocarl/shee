@@ -126,8 +126,8 @@ label {
 
 .question {
   position: absolute;
-  top: 115px;
   width: 80vw;
+  top: 130px;
   bottom: calc(var(--user-input-height) + 30px);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
@@ -187,11 +187,8 @@ label {
 
 .startBrainstorming {
   width: 250px;
-
 }
 
 button {
-
   align-items: center;
-
 }
