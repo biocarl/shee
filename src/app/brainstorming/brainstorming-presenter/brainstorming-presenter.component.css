@@ -168,7 +168,7 @@ label {
 .hideButton {
   position: absolute;
   left: 303px;
-
+  width: 56px;
 }
 
 .timer {
