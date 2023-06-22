@@ -24,10 +24,10 @@ label {
 }
 
 .sticky:active,
-.post-it.cdk-drag-dragging>.sticky {
+.post-it.cdk-drag-dragging > .sticky {
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .post-it {
@@ -172,10 +172,15 @@ label {
 }
 
 .timer {
-  margin-top: 10px;
-  font-size: 3rem;
+  position: relative;
+  top: 35px;
+  color: var(--secondaryColor);
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
   text-align: center;
-  color: var(--secondaryColor)
 }
 
 .startVoting {
