@@ -127,6 +127,7 @@ label {
 .question {
   position: absolute;
   width: 80vw;
+  top: 130px;
   bottom: calc(var(--user-input-height) + 30px);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
