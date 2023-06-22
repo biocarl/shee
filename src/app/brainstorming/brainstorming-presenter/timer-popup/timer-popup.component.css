@@ -54,11 +54,14 @@ h1 {
   justify-content: flex-start;
   margin-top: 20px;
   padding-left: 20px;
-  padding-right: 30px;
   line-height: 150%;
 }
 
-.titlePopUp {
+.titleMultivote {
   padding-right: 20px;
+}
+
+.titleTimer {
+  padding-right: 48px;
 }
 

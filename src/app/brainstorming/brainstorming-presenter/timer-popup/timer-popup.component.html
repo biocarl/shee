@@ -2,7 +2,7 @@
   <h1 mat-dialog-title> {{ data.stage === "brainstorming" ? "Brainstorming" : "Voting" }} Options</h1>
 
   <div class="options">
-    <p class = "titlePopUp"> Timer?</p>
+    <p class = "titleTimer"> Timer?</p>
     <form id="selectTimer">
       <input type="radio" id="No" name="timerOption" value="No" [(ngModel)]="selectedOption">
       <label for="No">No&nbsp;</label><br>
@@ -16,7 +16,7 @@
 
   </div>
   <div class="options" *ngIf="data.stage==='voting'">
-    <p class = "titlePopUp">Multivote?</p>
+    <p class = "titleMultivote">Multivote?</p>
     <form>
 
       <input type="radio" id="NoMultivote" name="votingOption" value="No" [(ngModel)]="votingOption">
