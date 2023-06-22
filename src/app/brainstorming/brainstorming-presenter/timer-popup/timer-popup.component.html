@@ -10,7 +10,7 @@
       <label for="Yes">Yes</label>
     </form>
     <mat-form-field>
-      <input class="timerInput" [(ngModel)]="data.timer" type="number" id="numberInput" name="numberInput" min="1"/>
+      <input class="timerInput" [(ngModel)]="data.timer" pattern="[0-9]+" type="text" id="numberInput" name="numberInput" min="1"/>
     </mat-form-field>
 
   </div>

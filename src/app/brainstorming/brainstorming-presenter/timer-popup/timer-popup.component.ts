@@ -22,22 +22,24 @@ export class TimerPopupComponent {
   votingOption:string="No";
 
   onStartClick(): void {
-    if (this.isTimerValid()) {
+    if(this.selectedOption==='No'){
+      this.data.choice = true;
+      this.data.timer = undefined;
+    }
+    else if (this.isTimerValid()) {
       this.data.choice = true;
       this.data.isMultivote= this.votingOption==="Yes";
-      console.log('🪲', this.data.timer)
     }
   }
-
 
   private isTimerValid(): boolean {
     const min = 1;
 
-    if (this.data.timer && this.data.timer < min) {
+    if (this.data.timer &&(isNaN(this.data.timer) ||  this.data.timer < min)) {
       alert(`Please enter a number greater than:  ${min}`);
       return false;
     }
     return true;
   }
-
 }
+
