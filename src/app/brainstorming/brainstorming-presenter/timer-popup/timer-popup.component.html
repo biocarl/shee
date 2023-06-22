@@ -2,21 +2,20 @@
   <h1 mat-dialog-title> {{ data.stage === "brainstorming" ? "Brainstorming" : "Voting" }} Options</h1>
 
   <div class="options">
-    <p class = "titleTimer"> Timer?</p>
+    <p class="titleTimer"> Timer?</p>
     <form id="selectTimer">
       <input type="radio" id="No" name="timerOption" value="No" [(ngModel)]="selectedOption">
       <label for="No">No&nbsp;</label><br>
       <input type="radio" id="Yes" name="timerOption" value="Yes" [(ngModel)]="selectedOption">
-      <label for="Yes">Yes</label><br>
-
+      <label for="Yes">Yes</label>
     </form>
-    <mat-form-field *ngIf="selectedOption == 'Yes'">
+    <mat-form-field>
       <input class="timerInput" [(ngModel)]="data.timer" type="number" id="numberInput" name="numberInput" min="1"/>
     </mat-form-field>
 
   </div>
   <div class="options" *ngIf="data.stage==='voting'">
-    <p class = "titleMultivote">Multivote?</p>
+    <p class="titleMultivote">Multivote?</p>
     <form>
 
       <input type="radio" id="NoMultivote" name="votingOption" value="No" [(ngModel)]="votingOption">
