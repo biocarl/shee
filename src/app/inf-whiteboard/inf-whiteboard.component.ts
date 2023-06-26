@@ -190,7 +190,6 @@ export class InfWhiteboardComponent implements OnInit {
 
         // Check if span's background color matches sticky note's color
         const spanColor = getComputedStyle(span).getPropertyValue('background-color');
-        console.log(`Background Color: ${backgroundColor}, Span Color: ${spanColor}`);
         if (spanColor === backgroundColor) {
           span.classList.add('active');
         }
