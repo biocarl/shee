@@ -59,9 +59,7 @@ export class InfWhiteboardComponent implements OnInit {
 
     if (this.objectIsMoving) {
       this.objectIsMoving = false;
-      if(this.groupCounter === 1) {
-        this.showMenu = true;
-      }
+      this.placeMenu();
     }
   };
 
