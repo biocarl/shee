@@ -15,6 +15,7 @@ export class InfWhiteboardComponent implements OnInit {
   private lastPosX: number = 0;
   private lastPosY: number = 0;
   private isDragging: boolean = false;
+  private groupCounter: number = 0;
 
   public showMenu = false;
   public menuPosition = {top: 0, left: 0};
@@ -58,7 +59,9 @@ export class InfWhiteboardComponent implements OnInit {
 
     if (this.objectIsMoving) {
       this.objectIsMoving = false;
-      this.showMenu = true;
+      if(this.groupCounter === 1) {
+        this.showMenu = true;
+      }
     }
   };
 
@@ -102,14 +105,33 @@ export class InfWhiteboardComponent implements OnInit {
   };
 
   onObjectSelected(event: fabric.IEvent) {
+    if(event.selected) {
+      event.selected.forEach(obj => {
+        if(obj.type === 'group') {
+          this.groupCounter++;
+        }
+      });
+    }
+    console.log("GroupCounter: " + this.groupCounter);
+
     this.selectedObject = event.selected && event.selected[0];
-    this.placeMenu();
+      this.placeMenu();
   }
 
 
   onObjectSelectedUpdated(event: fabric.IEvent) {
+    this.groupCounter = 0;
+    if(event.selected) {
+      event.selected.forEach(obj => {
+        if(obj.type === 'group') {
+          this.groupCounter++;
+        }
+      });
+    }
+    console.log("GroupCounter: " + this.groupCounter);
+
     this.selectedObject = event.selected && event.selected[0];
-    this.placeMenu();
+      this.placeMenu();
   }
 
   onObjectRotating() {
@@ -117,29 +139,39 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   private placeMenu() {
-    const object = this.canvas.getActiveObject();
-    if (object) {
-      const menu = document.getElementById('menu')!;
-      const menuWidth = menu.offsetWidth;
-      const menuHeight = menu.offsetHeight;
+    if(this.groupCounter === 1) {
+      const object = this.canvas.getActiveObject();
+      if (object) {
+        const menu = document.getElementById('menu')!;
+        const menuWidth = menu.offsetWidth;
+        const menuHeight = menu.offsetHeight;
 
-      //@ts-ignore
-      this.updateActiveColor(object);
+        //@ts-ignore
+        this.updateActiveColor(object);
 
-      // Get the bounding rectangle of the object, taking into account viewporttransform.
-      const boundingRect = object.getBoundingRect(undefined, true);
+        // Get the bounding rectangle of the object, taking into account viewporttransform.
+        const boundingRect = object.getBoundingRect(undefined, true);
 
-      //TODO: remove magic numbers 60 and 250 and replace with dynamic calculation of menu width
-      const menuTop = (boundingRect.top - menuHeight + 60);
-      const menuLeft = boundingRect.left + (boundingRect.width / 2) - ((menuWidth+250) / 2);
+        //TODO: remove magic numbers 60 and 250 and replace with dynamic calculation of menu width
+        const menuTop = (boundingRect.top - menuHeight + 60);
+        const menuLeft = boundingRect.left + (boundingRect.width / 2) - ((menuWidth + 250) / 2);
 
-      this.showMenu = true;
-      menu.style.left = menuLeft + 'px';
-      menu.style.top = menuTop + 'px';
+        this.showMenu = true;
+        menu.style.left = menuLeft + 'px';
+        menu.style.top = menuTop + 'px';
+      }
     }
   }
 
-  onObjectDeselected() {
+  onObjectDeselected(event: fabric.IEvent) {
+    if(event.deselected) {
+      event.deselected.forEach(obj => {
+        if(obj.type === 'group') {
+          this.groupCounter--;
+        }
+      });
+    }
+    console.log("GroupCounter: " + this.groupCounter);
     this.showMenu = false;
     this.selectedObject = undefined;
   }
@@ -190,7 +222,7 @@ export class InfWhiteboardComponent implements OnInit {
 
         // Check if span's background color matches sticky note's color
         const spanColor = getComputedStyle(span).getPropertyValue('background-color');
-        if (spanColor === backgroundColor) {
+         if (spanColor === backgroundColor) {
           span.classList.add('active');
         }
       });
