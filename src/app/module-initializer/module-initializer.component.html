@@ -3,7 +3,7 @@
   <div class="center">
     <label class="module-select" for="module-select">Select Module</label>
     <br>
-    <select class="center" id="module-select" name="module-select" [(ngModel)]="selectedModuleString">
+    <select class="initializer-dropdown" id="module-select" name="module-select" [(ngModel)]="selectedModuleString">
       <option *ngFor="let module of modules" [value]="module.name">{{module.name}}</option>
     </select>
   </div>
@@ -12,18 +12,20 @@
     <label [for]="parameter.name">
 
       <div class="p-name">
-        {{parameter.name}}:
+        {{parameter.name}}
       </div>
       <div class="p-description">
         {{parameter.description}}
       </div>
 
     </label>
+    <div class="input-flex">
     <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value"
            [required]="parameter.required"/>
+    </div>
   </div>
 
   <div class="center">
-    <button type="button" (click)="initializeModuleWithParams()">Initialize Module</button>
+    <button  class="initializer-button" type="button" (click)="initializeModuleWithParams()">Initialize Module</button>
   </div>
 </form>
