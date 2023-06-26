@@ -116,6 +116,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
 
   private increaseFontSize(textbox: FixedSizeTextbox) {
     textbox.fontSize!++;
+    this.canvas.renderAll();
   }
 
   private isTextboxTooLarge(textbox: FixedSizeTextbox): boolean {
