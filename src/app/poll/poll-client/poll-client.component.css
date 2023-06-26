@@ -6,6 +6,7 @@
   height: 35vh;
   padding-top: 5%;
   position: relative;
+  margin-top: 85px;
 }
 
 .answer {
@@ -43,11 +44,22 @@
 
 .timer{
   color: var(--secondaryColor);
+  margin-top: 10px;
 }
 .question{
-  font-size: 2rem;
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
   text-align: center;
-  color: var(--textColor);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--titleColor);
+  position: absolute;
+  width: 80vw;
+  top: 130px;
+  bottom: calc(var(--user-input-height) + 30px);
 }
 
 
