@@ -16,11 +16,12 @@ export class InfWhiteboardComponent implements OnInit {
   private lastPosY: number = 0;
   private isDragging: boolean = false;
   private groupCounter: number = 0;
-
   public showMenu = false;
+
   public menuPosition = {top: 0, left: 0};
   public selectedObject: fabric.Object | fabric.Group | undefined = undefined;
   private objectIsMoving: boolean = false;
+  private objectIsRotating: boolean = false;
 
   constructor(private renderer: Renderer2,private log:LoggerService) {
     this.disableScrollbar();
@@ -59,6 +60,11 @@ export class InfWhiteboardComponent implements OnInit {
 
     if (this.objectIsMoving) {
       this.objectIsMoving = false;
+      this.placeMenu();
+    }
+
+    if(this.objectIsRotating){
+      this.objectIsRotating = false;
       this.placeMenu();
     }
   };
@@ -110,12 +116,9 @@ export class InfWhiteboardComponent implements OnInit {
         }
       });
     }
-    console.log("GroupCounter: " + this.groupCounter);
-
     this.selectedObject = event.selected && event.selected[0];
       this.placeMenu();
   }
-
 
   onObjectSelectedUpdated(event: fabric.IEvent) {
     this.groupCounter = 0;
@@ -126,14 +129,13 @@ export class InfWhiteboardComponent implements OnInit {
         }
       });
     }
-    console.log("GroupCounter: " + this.groupCounter);
-
     this.selectedObject = event.selected && event.selected[0];
       this.placeMenu();
   }
 
   onObjectRotating() {
-    this.placeMenu();
+    this.objectIsRotating = true;
+    this.showMenu = false;
   }
 
   private placeMenu() {
@@ -169,7 +171,6 @@ export class InfWhiteboardComponent implements OnInit {
         }
       });
     }
-    console.log("GroupCounter: " + this.groupCounter);
     this.showMenu = false;
     this.selectedObject = undefined;
   }

@@ -1,7 +1,6 @@
 import {fabric} from 'fabric';
 import {FixedSizeTextbox} from "./fixed-size-textbox";
 import {CanvasObject} from "../canvas-object";
-import {LoggerService} from "../../logger.service";
 
 const STICKY_NOTE_DIMENSIONS = 200;
 const STICKY_NOTE_PADDING = 10;
@@ -100,11 +99,9 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
 
   private adjustFontSize(textbox: FixedSizeTextbox) {
     while (this.isTextboxTooSmall(textbox)) {
-      console.log("font +. font size: " + textbox.fontSize);
       this.increaseFontSize(textbox);
     }
     while (this.isTextboxTooLarge(textbox)) {
-      console.log("font -. font size: " + textbox.fontSize);
       this.decreaseFontSize(textbox);
     }
     this.adjustFontSizeForWidth(textbox);
