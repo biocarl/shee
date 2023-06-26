@@ -1,6 +1,7 @@
 import {Component, HostListener, OnInit, Renderer2} from '@angular/core';
 import {fabric} from 'fabric';
-import {StickyNote} from "./canvas-objects/sticky-note";
+import {StickyNoteFactory} from "./canvas-objects/sticky-note-factory";
+import {LoggerService} from "../logger.service";
 
 @Component({
   selector: 'app-inf-whiteboard',
@@ -9,7 +10,7 @@ import {StickyNote} from "./canvas-objects/sticky-note";
 })
 export class InfWhiteboardComponent implements OnInit {
   private canvas!: fabric.Canvas;
-  private stickyNote!: StickyNote;
+  private stickyNoteFactory!: StickyNoteFactory;
   private canBePanned = false;
   private lastPosX: number = 0;
   private lastPosY: number = 0;
@@ -17,10 +18,10 @@ export class InfWhiteboardComponent implements OnInit {
 
   public showMenu = false;
   public menuPosition = {top: 0, left: 0};
-  public selectedObject: fabric.Object | fabric.Group | null = null;
+  public selectedObject: fabric.Object | fabric.Group | undefined = undefined;
   private objectIsMoving: boolean = false;
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2,private log:LoggerService) {
     this.disableScrollbar();
   }
 
@@ -31,7 +32,7 @@ export class InfWhiteboardComponent implements OnInit {
   ngOnInit(): void {
     this.initializeCanvas();
     this.setCanvasEventListeners();
-    this.stickyNote = new StickyNote(this.canvas);
+    this.stickyNoteFactory = new StickyNoteFactory(this.canvas);
   }
 
   private setCanvasEventListeners() {
@@ -55,7 +56,7 @@ export class InfWhiteboardComponent implements OnInit {
       // this.canvas.defaultCursor = 'default            ';
     }
 
-    if(this.objectIsMoving){
+    if (this.objectIsMoving) {
       this.objectIsMoving = false;
       this.showMenu = true;
     }
@@ -100,11 +101,14 @@ export class InfWhiteboardComponent implements OnInit {
     }
   };
 
-  onObjectSelected() {
+  onObjectSelected(event: fabric.IEvent) {
+    this.selectedObject = event.selected && event.selected[0];
     this.placeMenu();
   }
 
-  onObjectSelectedUpdated() {
+
+  onObjectSelectedUpdated(event: fabric.IEvent) {
+    this.selectedObject = event.selected && event.selected[0];
     this.placeMenu();
   }
 
@@ -119,19 +123,17 @@ export class InfWhiteboardComponent implements OnInit {
       const menuWidth = menu.offsetWidth;
       const menuHeight = menu.offsetHeight;
 
-      // Get the bounding rectangle of the object, taking into account rotation.
-      const boundingRect = object.getBoundingRect(undefined,true);
+      //@ts-ignore
+      this.updateActiveColor(object);
 
-      // Calculate the position of the bounding rectangle in the DOM's coordinate system.
-      const rectTop = boundingRect.top;
-      const rectLeft = boundingRect.left;
+      // Get the bounding rectangle of the object, taking into account viewporttransform.
+      const boundingRect = object.getBoundingRect(undefined, true);
 
-      // Position the menu above the bounding rectangle, centered horizontally.
-      const menuTop = (rectTop - menuHeight + 60);
-      const menuLeft = (rectLeft + (boundingRect.width - menuWidth) / 2);
+      //TODO: remove magic numbers 60 and 250 and replace with dynamic calculation of menu width
+      const menuTop = (boundingRect.top - menuHeight + 60);
+      const menuLeft = boundingRect.left + (boundingRect.width / 2) - ((menuWidth+250) / 2);
 
       this.showMenu = true;
-      this.selectedObject = object;
       menu.style.left = menuLeft + 'px';
       menu.style.top = menuTop + 'px';
     }
@@ -139,7 +141,7 @@ export class InfWhiteboardComponent implements OnInit {
 
   onObjectDeselected() {
     this.showMenu = false;
-    this.selectedObject = null;
+    this.selectedObject = undefined;
   }
 
   onObjectMoving() {
@@ -151,7 +153,6 @@ export class InfWhiteboardComponent implements OnInit {
   onObjectScaling() {
     this.placeMenu();
   }
-
 
   changeColor(event: MouseEvent) {
     const element = event.target as HTMLElement;
@@ -168,9 +169,35 @@ export class InfWhiteboardComponent implements OnInit {
     element.classList.add('active');
     let bgColor = getComputedStyle(element).getPropertyValue('background-color');
     // @ts-ignore
-    this.stickyNote.setBackgroundColor(this.selectedObject, bgColor);
+    this.stickyNoteFactory.setBackgroundColor(this.selectedObject, bgColor);
     this.canvas.renderAll();
   }
+
+  private updateActiveColor(object: fabric.Group | fabric.Object | undefined) {
+    if (object) {
+      let objectWithColor = object;
+      // rectangle is the first object in the group
+      if ("item" in object) {
+        objectWithColor = object.item(0) as fabric.Rect;
+      }
+      const backgroundColor = objectWithColor.fill;
+
+      const colorSpans = document.querySelectorAll('.color-selection span') as NodeListOf<HTMLElement>;
+
+      // Loop over all color spans to remove the 'active' class from their classList
+      colorSpans.forEach(span => {
+        span.classList.remove('active');
+
+        // Check if span's background color matches sticky note's color
+        const spanColor = getComputedStyle(span).getPropertyValue('background-color');
+        console.log(`Background Color: ${backgroundColor}, Span Color: ${spanColor}`);
+        if (spanColor === backgroundColor) {
+          span.classList.add('active');
+        }
+      });
+    }
+  }
+
 
 
   private initializeCanvas() {
@@ -185,15 +212,10 @@ export class InfWhiteboardComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeyPress(event: KeyboardEvent) {
-    console.log(event.key);
+    this.log.logToConsole(event.key);
     if (event.key === ' ') {
-      // event.preventDefault();
       this.canBePanned = true;
-      // this.canvas.defaultCursor = 'grab';
     }
-    // if (event.ctrlKey) {
-    //   // this.canvas.defaultCursor = 'zoom-in';
-    // }
     if (event.key === 'Delete') {
       this.deleteObjects();
     }
@@ -204,13 +226,7 @@ export class InfWhiteboardComponent implements OnInit {
     if (event.key === ' ') {
       event.preventDefault();
       this.canBePanned = false;
-      // this.canvas.defaultCursor = 'default';
     }
-    // if (event.ctrlKey) {
-    //   event.preventDefault();
-    //   this.canBePanned = false;
-    //   this.canvas.defaultCursor = 'default';
-    // }
   }
 
   @HostListener('window:resize')
@@ -220,7 +236,7 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   addStickyNote(stickyText?: string) {
-    let newSticky = this.stickyNote.create(stickyText);
+    let newSticky = this.stickyNoteFactory.create(stickyText);
 
     this.canvas.add(newSticky);
     newSticky.viewportCenter();

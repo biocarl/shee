@@ -1,6 +1,7 @@
 import {fabric} from 'fabric';
 import {FixedSizeTextbox} from "./fixed-size-textbox";
 import {CanvasObject} from "../canvas-object";
+import {LoggerService} from "../../logger.service";
 
 const STICKY_NOTE_DIMENSIONS = 200;
 const STICKY_NOTE_PADDING = 10;
@@ -8,7 +9,7 @@ const MAX_FONT_SIZE = 200;
 const TEXTBOX_DIMENSIONS = STICKY_NOTE_DIMENSIONS - 2 * STICKY_NOTE_PADDING;
 
 //canvasObject-factory
-export class StickyNote implements CanvasObject<fabric.Group>{
+export class StickyNoteFactory implements CanvasObject<fabric.Group>{
   private canvas!: fabric.Canvas;
 
   constructor(canvas: fabric.Canvas) {
@@ -27,8 +28,6 @@ export class StickyNote implements CanvasObject<fabric.Group>{
     return stickyNote;
   }
 
-
-
   private createShadow(): fabric.Shadow {
     return new fabric.Shadow({
       color: 'rgb(0,0,0,0.5)',
@@ -44,7 +43,7 @@ export class StickyNote implements CanvasObject<fabric.Group>{
       top: 0,
       width: STICKY_NOTE_DIMENSIONS,
       height: STICKY_NOTE_DIMENSIONS,
-      fill: '#ffd707ff',
+      fill: 'rgb(255, 215, 7)',
       shadow: this.createShadow(),
     });
   }
@@ -98,17 +97,6 @@ export class StickyNote implements CanvasObject<fabric.Group>{
     });
   }
 
-  // public setTextInTextbox(stickyNote: fabric.Group, text: string) {
-  //   const textbox = this.findTextboxInGroup(stickyNote.getObjects());
-  //   if (textbox) {
-  //     textbox.text = text;
-  //     this.adjustFontSize(textbox);
-  //   }
-  // }
-
-  // private findTextboxInGroup(items: fabric.Object[]): FixedSizeTextbox | undefined {
-  //   return items.find((obj) => obj.type === 'textbox') as FixedSizeTextbox;
-  // }
 
   private adjustFontSize(textbox: FixedSizeTextbox) {
     while (this.isTextboxTooSmall(textbox)) {
@@ -128,7 +116,6 @@ export class StickyNote implements CanvasObject<fabric.Group>{
 
   private increaseFontSize(textbox: FixedSizeTextbox) {
     textbox.fontSize!++;
-    this.canvas.renderAll();
   }
 
   private isTextboxTooLarge(textbox: FixedSizeTextbox): boolean {
