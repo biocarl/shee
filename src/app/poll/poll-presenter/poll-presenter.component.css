@@ -1,5 +1,5 @@
 :host {
-  display:block;
+  display: block;
   background-color: transparent;
   padding: 0.8em;
   font-family: 'ChunkFive', sans-serif;
@@ -21,7 +21,7 @@
   color: var(--titleColor);
 }
 
-h4{
+h4 {
   color: aqua;
   font-weight: lighter;
   text-align: center;
@@ -41,7 +41,7 @@ h4{
 }
 
 .bar-container {
-  background-color: rgba(244,255,237,0.36);
+  background-color: rgba(244, 255, 237, 0.36);
   height: 40px;
   position: relative;
   overflow: hidden;
@@ -67,7 +67,7 @@ h4{
 }
 
 .bar-value {
-  color: rgb(0,0,0,0.87);
+  color: rgb(0, 0, 0, 0.87);
 }
 
 .container {
@@ -82,6 +82,7 @@ h4{
   text-align: center;
   padding: 0.5em;
 }
+
 .hidden {
   display: none;
 }
@@ -89,9 +90,11 @@ h4{
 .voted {
   color: darkgreen;
 }
+
 .diff {
   color: indianred;
 }
+
 .timer {
   position: relative;
   color: var(--secondaryColor);
@@ -101,5 +104,9 @@ h4{
   font-size: 32px;
   line-height: 40px;
   text-align: center;
+  margin-top: 10px;
 }
 
+.answers {
+  margin-top: 85px;
+}
