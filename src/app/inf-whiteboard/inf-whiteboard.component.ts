@@ -267,9 +267,6 @@ export class InfWhiteboardComponent implements OnInit {
 
   addStickyNote(stickyText?: string) {
     let newSticky = this.stickyNoteFactory.create(stickyText);
-
-    this.canvas.add(newSticky);
-    newSticky.viewportCenter();
   }
 
   private deleteObjects() {

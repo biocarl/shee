@@ -15,7 +15,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
     this.canvas = canvas;
   }
 
-  public create(text?: string): fabric.Group {
+  public create(text?: string): void {
     const rectangle = this.createRectangle();
     const textbox = this.createTextbox(text);
     const stickyNote = new fabric.Group([rectangle, textbox]);
@@ -24,7 +24,8 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
 
     this.attachDoubleClickHandler(stickyNote);
     //soll ich selbst aufs canvas packen
-    return stickyNote;
+    this.canvas.add(stickyNote);
+    stickyNote.viewportCenter();
   }
 
   private createShadow(): fabric.Shadow {
