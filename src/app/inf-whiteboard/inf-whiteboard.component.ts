@@ -176,7 +176,6 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   onObjectMoving() {
-    this.placeMenu();
     this.showMenu = false;
     this.objectIsMoving = true;
   }
@@ -228,13 +227,12 @@ export class InfWhiteboardComponent implements OnInit {
     }
   }
 
-
-
   private initializeCanvas() {
     this.canvas = new fabric.Canvas('canvas', {
       backgroundColor: 'transparent',
     });
     this.canvas.setWidth(window.innerWidth);
+    //TODO hardcoded height may change depending on DOM
     let navbarHeight = document.getElementById("navbar")!.offsetHeight;
     let buttonHeight = document.getElementById("buttons")!.offsetHeight;
     this.canvas.setHeight(window.innerHeight - (navbarHeight + buttonHeight));
@@ -254,7 +252,6 @@ export class InfWhiteboardComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
     if (event.key === ' ') {
-      event.preventDefault();
       this.canBePanned = false;
     }
   }
@@ -266,7 +263,7 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   addStickyNote(stickyText?: string) {
-    let newSticky = this.stickyNoteFactory.create(stickyText);
+    const newSticky = this.stickyNoteFactory.create(stickyText);
   }
 
   private deleteObjects() {
@@ -274,6 +271,7 @@ export class InfWhiteboardComponent implements OnInit {
 
     if (activeObjects && activeObjects.length > 0) {
       activeObjects.forEach((obj) => {
+        //TODO implement logic to delete fabricObjects without breaking delete functionality while typing
         if (obj.type === 'group') {
           const stickyGroup = obj as fabric.Group;
           this.canvas.remove(stickyGroup);
