@@ -173,7 +173,7 @@ label {
 
 .timer {
   position: relative;
-  top: 35px;
+  top: 50px;
   color: var(--secondaryColor);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
