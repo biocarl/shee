@@ -1,10 +1,14 @@
 <ng-container *ngIf="ideaEvent">
-  <div style="font-size:3rem;text-align:center" *ngIf="ideaEvent.timer !== undefined">
-    <div *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
+  <div *ngIf="ideaEvent.timer !== undefined">
+    <div class="timer" *ngIf="ideaEvent.timer > 0; else timeUp">
+      Timer: {{ ideaEvent.timer }}
+    </div>
   </div>
-  <ng-template #timeUp>Time is up!</ng-template>
+  <ng-template #timeUp>
+    <div class="timer"> Time is up!</div>
+  </ng-template>
 </ng-container>
-<div>{{ideaEvent?.question}}</div>
+<div class="question">{{ ideaEvent?.question }}</div>
 
 <!-- Stage: initial -->
 <ng-container *ngIf="stage === 'initial'">
@@ -13,7 +17,9 @@
 
 <!-- Stage: brainstorming -->
 <ng-container *ngIf="stage === 'brainstorming'">
-  <button class="button mb-3" (click)="stopBrainstorming()">Stop brainstorming</button>
+  <button class="brainstormingButton startBrainstorming" (click)="stopBrainstorming()">
+    Stop brainstorming
+  </button>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
 </ng-container>
 
@@ -22,77 +28,69 @@
   <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
   <form>
-    <select id="votingOption">
-      <option value="oneVote">Each student has one vote</option>
-      <option value="manyVotes">Each student has many votes</option>
-    </select>
-    <label>Enter the duration of the timer for voting in sec (Optional)</label>
-    <input type="number" min="1" [(ngModel)]="timerLengthVoting" placeholder="Enter Timer in sec" name="timer">
-    <button class="button mb-3" type="button" (click)="startVoting()">Start Voting</button>
+
+    <button class="brainstormingButton startVoting " type="button" (click)="openVotingDialog()">
+      Start Voting
+    </button>
   </form>
 </ng-container>
 
 <!-- Stage: voting -->
 <ng-container *ngIf="stage === 'voting'">
-<button class="button mb-3"  type="button" (click)="stopVoting()">StopVoting</button>
-<ng-container *ngTemplateOutlet="hideButton"></ng-container>
+  <button class="brainstormingButton startBrainstorming" type="button" (click)="stopVoting()">
+    StopVoting
+  </button>
+  <ng-container *ngTemplateOutlet="hideButton"></ng-container>
 </ng-container>
 
 <!-- Brainstorming Start/Resume Button - shown on initial and afterBrainstorming, but with a different text-->
 <ng-template #brainstormingControls>
-  <label>Enter the duration of the timer for brainstorming in sec (Optional)</label>
-  <input type="number" min="1" [(ngModel)]="timerLengthBrainstorming" placeholder="Enter Timer in sec" name="timer">
-  <button class="button mb-3" (click)="startBrainstorming()">
-    {{stage === 'initial' ? 'Start' : 'Resume'}} brainstorming
+  <button class="brainstormingButton startBrainstorming" (click)="openBrainstormingTimerDialog()">
+    {{ stage === "initial" ? "Start" : "Resume" }} brainstorming
   </button>
-
-  </ng-template>
-
-  <button [disabled]="stage=='voting'" class="button" (click)="addStickie()">add Stickie</button>
-
-<ng-template #hideButton>
-  <button class="button mb-3" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
-<br><br>
+<ng-template #hideButton>
+
+  <button class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
+</ng-template>
+
+<br /><br />
 
 <!-- Ideas into Stickies -->
 <div class="boundary columns is-multiline is-align-content-flex-start">
-  <div class="post-it m-4 p-0 column is-one-fifth"
-       (cdkDragStarted)="moveToTopLayerWhenDragged($event)"
-       cdkDrag
-       *ngFor="let idea of ideaResponses; let i=index; trackBy: trackByIndex"
-       cdkDragBoundary=".boundary"
-       [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
-
-    <div class="sticky"
-         [style.background]="ideaResponses[i].color">
-      <ng-container *ngIf="editing && (editableSticky==i); else displayIdea">
-          <textarea id="user-input" type="text" placeholder="Enter text" name="idea"
-          [(ngModel)]="editedIdea"
+  <div class="post-it m-4 p-0 column is-one-fifth" (cdkDragStarted)="moveToTopLayerWhenDragged($event)" cdkDrag
+    *ngFor="let idea of ideaResponses; let i = index; trackBy: trackByIndex" cdkDragBoundary=".boundary"
+    [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
+    <div class="sticky" [style.background]="ideaResponses[i].color">
+      <ng-container *ngIf="editing && editableSticky == i; else displayIdea">
+        <textarea id="user-input" type="text" placeholder="Enter text" name="idea" [(ngModel)]="editedIdea"
           [maxlength]="280"></textarea>
-        <div id="character-counter" [style.color]="editedIdea.length < 280 ? 'var(--textColor_dark)' : 'red'" >{{ editedIdea.length }}/280</div>
-        <button [disabled]="editedIdea==''" class="button is-rounded" (click)="saveIdea(i)">Save</button>
+        <div id="character-counter" [style.color]="
+            editedIdea.length < 280 ? 'var(--textColor_dark)' : 'red'
+          ">
+          {{ editedIdea.length }}/280
+        </div>
+        <button [disabled]="editedIdea == ''" class="brainstormingButton" (click)="saveIdea(i)">
+          Save
+        </button>
       </ng-container>
       <ng-template #displayIdea>
-        <ng-container  *ngIf="idea.hasVisibleContent; else hiddenEye">
-          {{idea.text}}
-          <div *ngIf="votes">👍{{votes[i]}}</div>
+        <ng-container *ngIf="idea.hasVisibleContent; else hiddenEye">
+          {{ idea.text }}
+          <div *ngIf="votes">👍{{ votes[i] }}</div>
         </ng-container>
       </ng-template>
 
-      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i> </ng-template>
+      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i>
+      </ng-template>
     </div>
     <div class="icon-container">
       <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
-            (click)="showCopiedMessage(copyMessage)"></i></a>
+          (click)="showCopiedMessage(copyMessage)"></i></a>
       <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
       <a> <i class="fa-solid fa-pen fa-xs" (click)="toggleEditMode(i)"></i></a>
       <span class="copied-message" #copyMessage>Copied to Clipboard</span>
-
-
-
-
     </div>
     <div class="top-tape"></div>
     <div class="shadow"></div>

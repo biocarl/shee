@@ -16,7 +16,7 @@ import {
   DecisionChartPresenterComponent
 } from './decision-chart/decision-chart-presenter/decision-chart-presenter.component';
 import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {PairPresenterComponent} from './pair/pair-presenter/pair-presenter.component';
 import {PairClientComponent} from './pair/pair-client/pair-client.component';
 import {BrainstormingClientComponent} from './brainstorming/brainstorming-client/brainstorming-client.component';
@@ -28,6 +28,13 @@ import {NgOptimizedImage} from "@angular/common";
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ClipboardModule} from "@angular/cdk/clipboard";
 import { InfWhiteboardComponent } from './inf-whiteboard/inf-whiteboard.component';
+import {MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button'
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { TimerPopupComponent } from './brainstorming/brainstorming-presenter/timer-popup/timer-popup.component';
+import { MatRadioModule } from '@angular/material/radio';
+
 
 @NgModule({
   declarations: [
@@ -48,6 +55,8 @@ import { InfWhiteboardComponent } from './inf-whiteboard/inf-whiteboard.componen
     BrainstormingClientComponent,
     BrainstormingPresenterComponent,
     InfWhiteboardComponent,
+    BrainstormingPresenterComponent,
+    TimerPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -57,8 +66,12 @@ import { InfWhiteboardComponent } from './inf-whiteboard/inf-whiteboard.componen
     ModeToggleModule,
     NgOptimizedImage,
     DragDropModule,
-    ClipboardModule
-
+    ClipboardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

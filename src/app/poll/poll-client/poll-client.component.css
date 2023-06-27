@@ -1,14 +1,15 @@
-.v-questions {
+.answers {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 35vh;
-  padding-top: 15%;
+  padding-top: 5%;
   position: relative;
+  margin-top: 85px;
 }
 
-.v-question {
+.answer {
   flex: 1;
   height: 84px;
   width: 388px;
@@ -30,7 +31,7 @@
   color: var(--buttonTextColor);
 }
 
-.v-question span {
+.answer span {
   font-size: 130%;
   letter-spacing: 0.05em;
 }
@@ -42,9 +43,23 @@
 }
 
 .timer{
-  font-size: 2rem;
+  color: var(--secondaryColor);
+  margin-top: 10px;
+}
+.question{
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
   text-align: center;
-  color: var(--textColor);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--titleColor);
+  position: absolute;
+  width: 80vw;
+  top: 130px;
+  bottom: calc(var(--user-input-height) + 30px);
 }
 
 

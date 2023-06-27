@@ -1,7 +1,16 @@
 <!--Show question-->
 <br>
 <div *ngIf="questionEvent && accumulatedClientChoices" class="bar-chart">
-  <h3>{{questionEvent.question}}</h3>
+  <h3 class="question">{{questionEvent.question}}</h3>
+  <div *ngIf="questionEvent.timer !== undefined">
+    <div class="timer" *ngIf="questionEvent.timer > 0; else timeUp">
+      Timer: {{ questionEvent.timer }}
+    </div>
+  </div>
+  <ng-template #timeUp>
+    <div class="timer"> Time is up!</div>
+  </ng-template>
+  <div class = "answers">
   <div *ngFor="let answer of questionEvent.answers; let i = index" class="bar-chart-item">
     <div class="bar-label container">{{answer}}</div>
     <div class="bar-container">
@@ -24,6 +33,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 

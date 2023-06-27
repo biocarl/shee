@@ -1,18 +1,20 @@
-:host{
-  --user-input-width:250px; /*brainstorming user input textfield*/
-  --user-input-height:250px; /*brainstorming user input textfield*/
+:host {
+  --user-input-width: 250px;
+  /*brainstorming user input textfield*/
+  --user-input-height: 250px;
+  /*brainstorming user input textfield*/
 }
 
-div{
+div {
   color: var(--textColor);
 }
 
 #user-input {
   background-color: #FFD707FF;
-  color: rgb(0,0,0,0.87);
+  color: rgb(0, 0, 0, 0.87);
   font-size: 15px;
   word-wrap: break-word;
-  padding:30px 13px 28px 13px;
+  padding: 30px 13px 28px 13px;
   text-align: center;
   border-bottom-right-radius: 60px 5px;
   line-height: 1.5;
@@ -27,7 +29,7 @@ div{
 .positioning-wrapper {
   position: fixed;
   left: 50%;
-  top: 45%;
+  top: 40%;
   transform: translate(-50%, -50%);
   width: var(--user-input-width);
   height: var(--user-input-height);
@@ -49,39 +51,44 @@ textarea {
 
 .positioning-wrapper:after {
   content: "";
-  position:absolute;
+  position: absolute;
   z-index: -1;
-  right:0; bottom:15px;
-  width:200px;
+  right: 0;
+  bottom: 15px;
+  width: 200px;
   height: 25px;
   background: rgba(0, 0, 0, 0.2);
-  box-shadow:2px 15px 5px rgba(0, 0, 0, 0.40);
+  box-shadow: 2px 15px 5px rgba(0, 0, 0, 0.40);
   transform: matrix(-1, -0.1, 0, 1, 0, 0);
 }
 
-#cute-sheep{
+#cute-sheep {
   position: absolute;
   width: 341px;
   height: 334px;
-  left: calc(50% - 350px); /* 50% vom linken Rand minus die Hälfte der Maskottchen-Breite */
-  top: calc(60% - 380px); /* 50% vom oberen Rand minus ein gewünschter Abstand zum Textfeld */
+  left: calc(50% - 350px);
+  /* 50% vom linken Rand minus die Hälfte der Maskottchen-Breite */
+  top: calc(60% - 380px);
+  /* 50% vom oberen Rand minus ein gewünschter Abstand zum Textfeld */
 }
 
-#send-button{
-  background-color: rgba(244,255,237,0.36);
+#send-button {
+  background-color: rgba(244, 255, 237, 0.36);
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   color: var(--buttonTextColor);
   border-radius: 30px;
   border-color: transparent;
   width: 388px;
   height: 84px;
-  position:fixed;
+  position: fixed;
   font-weight: 400;
   font-size: 24px;
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  left: calc(50% - 194px); /* 50% minus die Hälfte der Buttonbreite */
-  top: calc(100% + 84px); /* 100% + Buttonhöhe */
+  left: calc(50% - 194px);
+  /* 50% minus die Hälfte der Buttonbreite */
+  top: calc(100% + 84px);
+  /* 100% + Buttonhöhe */
   transition: opacity 0.1s ease-in-out;
 }
 
@@ -89,7 +96,7 @@ textarea {
   opacity: 0;
 }
 
-#toast-sent{
+#toast-sent {
   position: absolute;
   width: 149px;
   height: 62px;
@@ -114,18 +121,31 @@ textarea {
   animation-fill-mode: forwards;
 }
 
-#question{
+.brainstorming-title {
   position: absolute;
+  top: 130px;
   width: 80vw;
   bottom: calc(var(--user-input-height) + 30px);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
-  line-height: 64px;
+  line-height: 40px;
   text-align: center;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.timer {
+  position: relative;
+  top: 50px;
+  color: var(--secondaryColor);
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
+  text-align: center;
 }
 
 ::placeholder {
@@ -142,7 +162,7 @@ textarea {
   text-align: center;
 }
 
-#user-input:focus::placeholder{
+#user-input:focus::placeholder {
   visibility: hidden;
 }
 
@@ -154,7 +174,7 @@ input[type=radio] {
   display: none;
 }
 
-input[type=radio]:checked + span {
+input[type=radio]:checked+span {
   transform: scale(1.25);
 }
 
@@ -216,17 +236,41 @@ span.pink {
   background: #e03997;
 }
 
-textarea{
+textarea {
   resize: none;
 }
 
 .color-selection {
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-wrap: nowrap;
   position: absolute;
-  top:-37px; /* height of span 30px + 7px spacing above textfield*/
-  left:-10px; /*whole div is 30*7+10x6px wide = 270px or 20px bigger than the textfield -> -10px to center;*/
+  top: -37px;
+  /* height of span 30px + 7px spacing above textfield*/
+  left: -10px;
+  /*whole div is 30*7+10x6px wide = 270px or 20px bigger than the textfield -> -10px to center;*/
+}
+
+.voting-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 35vh;
+  padding-top: 5%;
+  position: relative;
+}
+
+.thanks {
+  position: relative;
+  top: 150px;
+  color: var(--textColor);
+  font-family: 'Baloo Bhaina', serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 40px;
+  text-align: center;
 }
 
 #character-counter {
@@ -242,41 +286,51 @@ textarea{
   z-index: 1;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  text-align:center;
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  text-align: center;
   font-size: 50px;
-  color: rgb(0,0,0,0.87);
-  transform: translate(0%,-60%);
+  color: rgb(0, 0, 0, 0.87);
+  transform: translate(0%, -60%);
 }
-::-moz-placeholder { /* Firefox 19+ */
-  text-align:center;
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  text-align: center;
   font-size: 50px;
-  color: rgb(0,0,0,0.87);
-  transform: translate(0%,-60%);
+  color: rgb(0, 0, 0, 0.87);
+  transform: translate(0%, -60%);
 }
-:-ms-input-placeholder { /* IE 10+ */
-  text-align:center;
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  text-align: center;
   font-size: 50px;
-  color: rgb(0,0,0,0.87);
-  transform: translate(0%,-60%);
+  color: rgb(0, 0, 0, 0.87);
+  transform: translate(0%, -60%);
 }
-:-moz-placeholder { /* Firefox 18- */
-  text-align:center;
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  text-align: center;
   font-size: 50px;
-  color: rgb(0,0,0,0.87);
-  transform: translate(0%,-60%);
+  color: rgb(0, 0, 0, 0.87);
+  transform: translate(0%, -60%);
 }
 
 @keyframes fadeInOut {
   0% {
     opacity: 0;
   }
+
   20% {
     opacity: 1;
   }
+
   80% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }

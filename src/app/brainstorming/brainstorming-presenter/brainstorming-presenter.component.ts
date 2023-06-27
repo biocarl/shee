@@ -1,37 +1,42 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
-import {PresenterMessage} from "../../presenter-message";
-import {BrainstormingPresenterSubscribeResponse} from "../brainstorming-presenter-subscribe-response";
-import {QueueService} from "../../queue.service";
-import {BrainstormingClientSubscribeResponse} from "../brainstorming-client-subscribe-response";
+import {PresenterMessage} from '../../presenter-message';
+import {BrainstormingPresenterSubscribeResponse} from '../brainstorming-presenter-subscribe-response';
+import {QueueService} from '../../queue.service';
+import {BrainstormingClientSubscribeResponse} from '../brainstorming-client-subscribe-response';
 import {CdkDragStart} from '@angular/cdk/drag-drop';
-import {BrainstormingPresenterStatusVotingRequest} from "../brainstorming-presenter-status-voting-request";
-import {BrainstormingPresenterPublishRequest} from "../brainstorming-presenter-publish-request";
-import {View} from "../../view";
-
+import {BrainstormingPresenterStatusVotingRequest} from '../brainstorming-presenter-status-voting-request';
+import {BrainstormingPresenterPublishRequest} from '../brainstorming-presenter-publish-request';
+import {View} from '../../view';
+import {MatDialog} from '@angular/material/dialog';
+import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 
 @Component({
   selector: 'app-brainstorming-presenter',
   templateUrl: './brainstorming-presenter.component.html',
-  styleUrls: ['./brainstorming-presenter.component.css']
+  styleUrls: ['./brainstorming-presenter.component.css'],
 })
-export class BrainstormingPresenterComponent implements View, OnInit, AfterViewChecked {
-  ideaEvent ?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses: { text: string, color: string, hasVisibleContent: boolean }[] = [];
+export class BrainstormingPresenterComponent
+  implements View, OnInit, AfterViewChecked {
+  ideaEvent?: BrainstormingPresenterSubscribeResponse;
+  ideaResponses: { text: string; color: string; hasVisibleContent: boolean }[] =
+    [];
   maxZIndex = 20;
   stickyContentVisible: boolean = false;
   votes?: number[];
   timerLengthVoting?: number;
   private timerInterval: any;
   timerLengthBrainstorming?: number;
-  stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' = 'initial';
+  stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
+    'initial';
   editing: boolean = false;
   editableSticky?: number;
-  editedIdea: string = "";
+  editedIdea: string = '';
+  private isSingleChoice: boolean = false;
 
-  constructor(private queueService: QueueService) {
+  constructor(private queueService: QueueService, private dialog: MatDialog) {
   }
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.subscribeToClientChannel();
     this.subscribeToPresenterChannel();
   }
@@ -43,27 +48,35 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.initializeTimer();
-    this.ideaEvent.ideas.map(
-      (idea, index) => {
-        if (this.ideaEvent) {
-          this.ideaResponses.push({text: idea, color: "#ffd707ff", hasVisibleContent: true});
-        }
+    this.ideaEvent.ideas.map((idea, index) => {
+      if (this.ideaEvent) {
+        this.ideaResponses.push({
+          text: idea,
+          color: '#ffd707ff',
+          hasVisibleContent: true,
+        });
       }
-    )
+    });
   }
 
   private subscribeToClientChannel(): void {
-    this.queueService.listenToClientChannel<BrainstormingClientSubscribeResponse>(brainstormingSubscriptionEvent => {
-      if (!this.ideaEvent) {
-        console.error("Error: idea event was not populated by parent client component");
-        return;
-      }
-      this.handleClientChannelEvent(brainstormingSubscriptionEvent);
-
-    },"BrainstormingPresenterComponent.ngOnInit");
+    this.queueService.listenToClientChannel<BrainstormingClientSubscribeResponse>(
+      (brainstormingSubscriptionEvent) => {
+        if (!this.ideaEvent) {
+          console.error(
+            'Error: idea event was not populated by parent client component'
+          );
+          return;
+        }
+        this.handleClientChannelEvent(brainstormingSubscriptionEvent);
+      },
+      'BrainstormingPresenterComponent.ngOnInit'
+    );
   }
 
-  private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
+  private handleClientChannelEvent(
+    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
+  ) {
     if (this.isMatchingQuestion(brainstormingSubscriptionEvent)) {
       if (this.stage === 'brainstorming') {
         this.addBrainstormingIdea(brainstormingSubscriptionEvent);
@@ -73,62 +86,83 @@ export class BrainstormingPresenterComponent implements View, OnInit, AfterViewC
     }
   }
 
-  private isMatchingQuestion(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): boolean {
-    return !!(this.ideaEvent && this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID);
+  private isMatchingQuestion(
+    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
+  ): boolean {
+    return !!(
+      this.ideaEvent &&
+      this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID
+    );
   }
 
-  private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+  private addBrainstormingIdea(
+    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
+  ): void {
     this.ideaResponses.push({
       text: brainstormingSubscriptionEvent.ideaText,
       color: brainstormingSubscriptionEvent.stickyColor,
-      hasVisibleContent: this.stickyContentVisible
+      hasVisibleContent: this.stickyContentVisible,
     });
   }
 
-  private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+  private updateVotes(
+    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
+  ): void {
     let voteIndex = 0;
     this.ideaResponses.forEach((idea, index) => {
       if (idea.text !== '' && this.votes) {
-        this.votes[index] += brainstormingSubscriptionEvent.ideaVoting[voteIndex];
+        this.votes[index] +=
+          brainstormingSubscriptionEvent.ideaVoting[voteIndex];
         voteIndex++;
       }
     });
   }
 
   private subscribeToPresenterChannel(): void {
-    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(response => {
-      this.handlePresenterChannelEvent(response);
-    },"BrainstormingPresenterComponent.ngOnInit");
+    this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(
+      (response) => {
+        this.handlePresenterChannelEvent(response);
+      },
+      'BrainstormingPresenterComponent.ngOnInit'
+    );
   }
 
-  private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
-    if (this.hasVotingStarted(response)){
+  private handlePresenterChannelEvent(
+    response: BrainstormingPresenterStatusVotingRequest
+  ) {
+    if (this.hasVotingStarted(response)) {
       this.updateTimer(response);
       this.initializeTimer();
     }
   }
 
-private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
-  return !!(this.ideaEvent &&
-    response.clientOnly &&
-    (this.stage === 'voting' || this.stage === 'brainstorming'))
-}
+  private hasVotingStarted(
+    response: BrainstormingPresenterStatusVotingRequest
+  ) {
+    return !!(
+      this.ideaEvent &&
+      response.clientOnly &&
+      (this.stage === 'voting' || this.stage === 'brainstorming')
+    );
+  }
 
-  private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
+  private updateTimer(
+    response: BrainstormingPresenterStatusVotingRequest
+  ): void {
     if (this.ideaEvent) {
       this.ideaEvent.timer = response.timer;
     }
   }
 
   startBrainstorming(): void {
-    if (!this.ideaEvent?.questionID) return
+    if (!this.ideaEvent?.questionID) return;
     this.stage = 'brainstorming';
     const payload: BrainstormingPresenterPublishRequest = {
       openForIdeas: true,
-      interaction: "brainstorming",
+      interaction: 'brainstorming',
       question: this.ideaEvent?.question,
       questionID: this.ideaEvent.questionID,
-      clientOnly: true
+      clientOnly: true,
     };
     if (this.timerLengthBrainstorming) {
       payload.timer = this.timerLengthBrainstorming;
@@ -137,24 +171,24 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
   }
 
   stopBrainstorming(): void {
-    if (!this.ideaEvent?.questionID) return
+    if (!this.ideaEvent?.questionID) return;
     const payload: BrainstormingPresenterPublishRequest = {
       openForIdeas: false,
-      interaction: "brainstorming",
+      interaction: 'brainstorming',
       question: this.ideaEvent?.question,
       questionID: this.ideaEvent.questionID,
-      clientOnly: true
+      clientOnly: true,
     };
-    clearInterval(this.timerInterval)
+    clearInterval(this.timerInterval);
     this.ideaEvent.timer = undefined;
     this.queueService.publishMessageToPresenterChannel(payload);
     this.stage = 'afterBrainstorming';
   }
 
   resizeTextToFitContainer(selector: string) {
-    const stickies: NodeListOf<HTMLElement> = document.querySelectorAll(selector);
-    stickies.forEach(element => {
-
+    const stickies: NodeListOf<HTMLElement> =
+      document.querySelectorAll(selector);
+    stickies.forEach((element) => {
       const maxWidth = element.clientWidth;
       const maxHeight = element.clientHeight;
 
@@ -166,17 +200,27 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
       element.style.fontSize = fontSize + 'px';
 
       // Reduce the font size until the content fits or reaches the minimum size
-      while ((element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) && fontSize > minFontSize) {
+      while (
+        (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) &&
+        fontSize > minFontSize
+        ) {
         fontSize--;
         element.style.fontSize = fontSize + 'px';
       }
 
       // Increase the font size until the content overflows or reaches the maximum size
-      while ((element.scrollHeight <= maxHeight && element.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+      while (
+        element.scrollHeight <= maxHeight &&
+        element.scrollWidth <= maxWidth &&
+        fontSize < maxFontSize
+        ) {
         fontSize++;
         element.style.fontSize = fontSize + 'px';
 
-        if (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) {
+        if (
+          element.scrollHeight > maxHeight ||
+          element.scrollWidth > maxWidth
+        ) {
           fontSize--;
           element.style.fontSize = fontSize + 'px';
           break;
@@ -186,21 +230,20 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
   }
 
   startVoting(): void {
-    if (!this.ideaEvent?.questionID) return
-    const votingOption = document.getElementById('votingOption') as HTMLSelectElement;
-    const selectedOption = votingOption.value;
-    let singleChoice: boolean = selectedOption === 'oneVote';
-    let finalIdeas: string[] = this.ideaResponses.map(idea => idea.text).filter(idea => idea !== "");
+    if (!this.ideaEvent?.questionID) return;
+    let finalIdeas: string[] = this.ideaResponses
+      .map((idea) => idea.text)
+      .filter((idea) => idea !== '');
     this.stage = 'voting';
     this.votes = Array(this.ideaResponses.length).fill(0);
     const payload: BrainstormingPresenterStatusVotingRequest = {
-      interaction: "brainstorming",
+      interaction: 'brainstorming',
       ideas: finalIdeas,
       question: this.ideaEvent?.question,
       questionID: this.ideaEvent.questionID,
-      singleChoice: singleChoice,
+      singleChoice: this.isSingleChoice,
       votingInProgress: true,
-      clientOnly: true
+      clientOnly: true,
     };
     if (this.timerLengthVoting) {
       payload.timer = this.timerLengthVoting;
@@ -214,7 +257,9 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
     const shadowElement = element.querySelector('.shadow') as HTMLElement;
     const postItElement = stickyElement.parentElement;
     const tapeElement = element.querySelector('.top-tape') as HTMLElement;
-    const iconsElement = element.querySelector('.icon-container') as HTMLElement;
+    const iconsElement = element.querySelector(
+      '.icon-container'
+    ) as HTMLElement;
 
     if (stickyElement && stickyElement.parentElement && postItElement) {
       postItElement.style.zIndex = (++this.maxZIndex).toString();
@@ -235,7 +280,11 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
 
   hideIdea(i: number) {
     if (i > -1) {
-      this.ideaResponses.splice(i, 1, {text: "", color: "", hasVisibleContent: false});
+      this.ideaResponses.splice(i, 1, {
+        text: '',
+        color: '',
+        hasVisibleContent: false,
+      });
     }
   }
 
@@ -252,25 +301,23 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
 
   toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
-    this.ideaResponses.forEach(
-      idea => {
-        idea.hasVisibleContent = this.stickyContentVisible;
-      }
-    )
+    this.ideaResponses.forEach((idea) => {
+      idea.hasVisibleContent = this.stickyContentVisible;
+    });
   }
 
   stopVoting() {
-    if (!this.ideaEvent?.questionID) return
+    if (!this.ideaEvent?.questionID) return;
     const payload: BrainstormingPresenterStatusVotingRequest = {
-      interaction: "brainstorming",
+      interaction: 'brainstorming',
       question: this.ideaEvent?.question,
       questionID: this.ideaEvent?.questionID,
       singleChoice: false,
       votingInProgress: false,
-      clientOnly: true
+      clientOnly: true,
     };
     this.stage = 'afterBrainstorming';
-    clearInterval(this.timerInterval)
+    clearInterval(this.timerInterval);
     this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
   }
@@ -295,7 +342,11 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
   }
 
   addStickie() {
-    this.ideaResponses.push({text: "new idea", color: "#ffd707ff", hasVisibleContent: true});
+    this.ideaResponses.push({
+      text: 'new idea',
+      color: '#ffd707ff',
+      hasVisibleContent: true,
+    });
     this.editing = !this.editing;
     if (this.ideaEvent) {
       this.editableSticky = this.ideaResponses.length - 1;
@@ -313,6 +364,32 @@ private hasVotingStarted (response: BrainstormingPresenterStatusVotingRequest) {
   saveIdea(index: number) {
     this.ideaResponses[index].text = this.editedIdea;
     this.editing = false;
-    this.editedIdea = "";
+    this.editedIdea = '';
   }
+
+  openBrainstormingTimerDialog() {
+    const dialogRef = this.dialog.open(TimerPopupComponent, {
+      data: { stage: "brainstorming"},
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.choice) {
+        this.timerLengthBrainstorming = result.timer;
+        this.startBrainstorming();
+      }
+    });
+  }
+
+  openVotingDialog() {
+    const dialogRef = this.dialog.open(TimerPopupComponent, {
+      data: { stage: "voting"},
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result.choice) {
+        this.isSingleChoice = !result.isMultivote;
+        this.timerLengthVoting = result.timer;
+        this.startVoting();
+      }
+    });
+  }
+
 }
