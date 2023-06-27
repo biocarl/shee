@@ -138,7 +138,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
   private handleTextboxEditingExited(textbox: FixedSizeTextbox) {
     const stickyNote = this.findGroupContainingTextbox(textbox);
     if (stickyNote) {
-      this.addTextboxToGroupAndRemoveFromCanvas(stickyNote, textbox);
       this.deselectGroup();
       this.makeObjectsSelectable(stickyNote);
     }
@@ -152,11 +151,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
       group = textbox.originalGroup;
     }
     return group;
-  }
-
-  private addTextboxToGroupAndRemoveFromCanvas(stickyNote: fabric.Group, textbox: FixedSizeTextbox) {
-    stickyNote.addWithUpdate(textbox);
-    this.canvas.remove(textbox);
   }
 
   private deselectGroup() {
@@ -175,8 +169,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
       let items = target.getObjects();
       let textbox = items.find((obj) => obj.type === 'textbox') as FixedSizeTextbox;
       if (textbox) {
-        target.removeWithUpdate(textbox);
-        this.canvas.add(textbox);
         this.canvas.setActiveObject(textbox);
         textbox.enterEditing();
         textbox.originalGroup = target;
