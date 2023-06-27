@@ -1,6 +1,8 @@
+<div class="question">{{ ideaEvent?.question }}</div>
+
 <ng-container *ngIf="ideaEvent">
-  <div *ngIf="ideaEvent.timer !== undefined">
-    <div class="timer" *ngIf="ideaEvent.timer > 0; else timeUp">
+  <div [style.visibility]="ideaEvent?.timer !== undefined ? 'visible' : 'hidden'">
+    <div class="timer" *ngIf="ideaEvent!.timer! > 0; else timeUp">
       Timer: {{ ideaEvent.timer }}
     </div>
   </div>
@@ -8,7 +10,6 @@
     <div class="timer"> Time is up!</div>
   </ng-template>
 </ng-container>
-<div class="question">{{ ideaEvent?.question }}</div>
 
 <!-- Stage: initial -->
 <ng-container *ngIf="stage === 'initial'">
@@ -25,19 +26,18 @@
 
 <!-- Stage: afterBrainstorming -->
 <ng-container *ngIf="stage === 'afterBrainstorming'">
-  <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
-  <ng-container *ngTemplateOutlet="hideButton"></ng-container>
-  <form>
-
-    <button class="brainstormingButton startVoting " type="button" (click)="openVotingDialog()">
-      Start Voting
-    </button>
-  </form>
+  <div>
+    <ng-container *ngTemplateOutlet="brainstormingControls"></ng-container>
+    <ng-container *ngTemplateOutlet="hideButton"></ng-container>
+      <button class="brainstormingButton startVoting " type="button" (click)="openVotingDialog()">
+        Start Voting
+      </button>
+  </div>
 </ng-container>
 
 <!-- Stage: voting -->
 <ng-container *ngIf="stage === 'voting'">
-  <button class="brainstormingButton startBrainstorming" type="button" (click)="stopVoting()">
+  <button class="brainstormingButton startBrainstorming" style="display: inline" type="button" (click)="stopVoting()">
     StopVoting
   </button>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
@@ -51,48 +51,47 @@
 </ng-template>
 
 <ng-template #hideButton>
-
-  <button class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
+  <button class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i
+    [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
-<br /><br />
-
 <!-- Ideas into Stickies -->
-<div class="boundary columns is-multiline is-align-content-flex-start">
-  <div class="post-it m-4 p-0 column is-one-fifth" (cdkDragStarted)="moveToTopLayerWhenDragged($event)" cdkDrag
-    *ngFor="let idea of ideaResponses; let i = index; trackBy: trackByIndex" cdkDragBoundary=".boundary"
-    [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">
-    <div class="sticky" [style.background]="ideaResponses[i].color">
-      <ng-container *ngIf="editing && editableSticky == i; else displayIdea">
-        <textarea id="user-input" type="text" placeholder="Enter text" name="idea" [(ngModel)]="editedIdea"
-          [maxlength]="280"></textarea>
-        <div id="character-counter" [style.color]="
-            editedIdea.length < 280 ? 'var(--textColor_dark)' : 'red'
-          ">
-          {{ editedIdea.length }}/280
-        </div>
-        <button [disabled]="editedIdea == ''" class="brainstormingButton" (click)="saveIdea(i)">
-          Save
-        </button>
-      </ng-container>
-      <ng-template #displayIdea>
-        <ng-container *ngIf="idea.hasVisibleContent; else hiddenEye">
-          {{ idea.text }}
-          <div *ngIf="votes">👍{{ votes[i] }}</div>
-        </ng-container>
-      </ng-template>
+<!--<div class="boundary columns is-multiline is-align-content-flex-start">-->
+<!--  <div class="post-it m-4 p-0 column is-one-fifth" (cdkDragStarted)="moveToTopLayerWhenDragged($event)" cdkDrag-->
+<!--    *ngFor="let idea of ideaResponses; let i = index; trackBy: trackByIndex" cdkDragBoundary=".boundary"-->
+<!--    [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">-->
+<!--    <div class="sticky" [style.background]="ideaResponses[i].color">-->
+<!--      <ng-container *ngIf="editing && editableSticky == i; else displayIdea">-->
+<!--        <textarea id="user-input" type="text" placeholder="Enter text" name="idea" [(ngModel)]="editedIdea"-->
+<!--          [maxlength]="280"></textarea>-->
+<!--        <div id="character-counter" [style.color]="-->
+<!--            editedIdea.length < 280 ? 'var(&#45;&#45;textColor_dark)' : 'red'-->
+<!--          ">-->
+<!--          {{ editedIdea.length }}/280-->
+<!--        </div>-->
+<!--        <button [disabled]="editedIdea == ''" class="brainstormingButton" (click)="saveIdea(i)">-->
+<!--          Save-->
+<!--        </button>-->
+<!--      </ng-container>-->
+<!--      <ng-template #displayIdea>-->
+<!--        <ng-container *ngIf="idea.hasVisibleContent; else hiddenEye">-->
+<!--          {{ idea.text }}-->
+<!--          <div *ngIf="votes">👍{{ votes[i] }}</div>-->
+<!--        </ng-container>-->
+<!--      </ng-template>-->
 
-      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i>
-      </ng-template>
-    </div>
-    <div class="icon-container">
-      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"
-          (click)="showCopiedMessage(copyMessage)"></i></a>
-      <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>
-      <a> <i class="fa-solid fa-pen fa-xs" (click)="toggleEditMode(i)"></i></a>
-      <span class="copied-message" #copyMessage>Copied to Clipboard</span>
-    </div>
-    <div class="top-tape"></div>
-    <div class="shadow"></div>
-  </div>
-</div>
+<!--      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i>-->
+<!--      </ng-template>-->
+<!--    </div>-->
+<!--    <div class="icon-container">-->
+<!--      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"-->
+<!--          (click)="showCopiedMessage(copyMessage)"></i></a>-->
+<!--      <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>-->
+<!--      <a> <i class="fa-solid fa-pen fa-xs" (click)="toggleEditMode(i)"></i></a>-->
+<!--      <span class="copied-message" #copyMessage>Copied to Clipboard</span>-->
+<!--    </div>-->
+<!--    <div class="top-tape"></div>-->
+<!--    <div class="shadow"></div>-->
+<!--  </div>-->
+<!--</div>-->
+<app-inf-whiteboard></app-inf-whiteboard>

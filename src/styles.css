@@ -83,7 +83,6 @@ body.dark {
 .navbar {
   background-color: transparent !important;
   width: 100%;
-  height: var(--navbarHeight);
   background-repeat: no-repeat;
   background-position: center top;
 }
