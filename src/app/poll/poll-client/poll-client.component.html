@@ -13,7 +13,7 @@
     <ng-template #selector>
         <div *ngIf="questionEvent">
           <div class="question">
-            <div >{{questionEvent?.question}}</div>
+            <div >{{questionEvent.question}}</div>
             <div class="timer" *ngIf="questionEvent.timer !== undefined">
               <div  *ngIf="questionEvent.timer > 0; else timeUp">
                 Timer: {{ questionEvent.timer }}

@@ -1,7 +1,7 @@
 <div class="question">{{ ideaEvent?.question }}</div>
 
 <ng-container *ngIf="ideaEvent">
-  <div [style.visibility]="ideaEvent?.timer !== undefined ? 'visible' : 'hidden'">
+  <div [style.visibility]="ideaEvent.timer !== undefined ? 'visible' : 'hidden'">
     <div class="timer" *ngIf="ideaEvent!.timer! > 0; else timeUp">
       Timer: {{ ideaEvent.timer }}
     </div>
