@@ -15,16 +15,15 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.canvas = canvas;
   }
 
-  public create(text?: string, color?: string): void {
+  public create(textVisible?:boolean,text?: string, color?: string): void {
     console.log("Rec color die ankam: " + color);
     const rectangle = this.createRectangle(color);
-    const textbox = this.createTextbox(text);
+    const textbox = this.createTextbox(textVisible,text);
     const stickyNote = new fabric.Group([rectangle, textbox]);
 
     this.setStyle(stickyNote);
 
     this.attachDoubleClickHandler(stickyNote);
-    //soll ich selbst aufs canvas packen
     this.canvas.add(stickyNote);
     stickyNote.viewportCenter();
   }
@@ -49,7 +48,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     });
   }
 
-  private createTextbox(text?: string): FixedSizeTextbox {
+  private createTextbox(textVisible?: boolean,text?: string): FixedSizeTextbox {
     let textbox = new FixedSizeTextbox('', {
       hasBorders: false,
       textAlign: "center",
@@ -61,7 +60,9 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       fixedHeight: TEXTBOX_DIMENSIONS,
       fixedWidth: TEXTBOX_DIMENSIONS,
       objectCaching: false,
-      text: text ? text : "",
+      text: textVisible ? text : "❔",
+      hiddenIcon: "❔",
+      visibleText: text ? text : ""
     });
 
     if (text) {
@@ -143,6 +144,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       this.deselectGroup();
       this.makeObjectsSelectable(stickyNote);
     }
+    textbox.visibleText = textbox.text;
   }
 
   private findGroupContainingTextbox(textbox: FixedSizeTextbox): fabric.Group | undefined {

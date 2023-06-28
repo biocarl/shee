@@ -3,6 +3,7 @@ import {fabric} from 'fabric';
 import {StickyNoteFactory} from "./canvas-objects/sticky-note-factory";
 import {LoggerService} from "../logger.service";
 import {CanvasObjectService} from "../brainstorming/canvas-object.service";
+import {FixedSizeTextbox} from "./canvas-objects/fixed-size-textbox";
 
 @Component({
   selector: 'app-inf-whiteboard',
@@ -30,13 +31,17 @@ export class InfWhiteboardComponent implements OnInit {
     this.canObjSer.objectAdded.subscribe((object:{ text: string; color: string; hasVisibleContent: boolean; type: string } ) => {
       if(object.type === "stickyNote"){
         if(this.stickyNoteFactory) {
-          this.addStickyNote(object.text, object.color);
+          this.addStickyNote(object.hasVisibleContent,object.text, object.color);
         }
         else {
           this.bufferedObjects.push(object);
         }
       }
     })
+    this.canObjSer.toggleTextVisibility.subscribe((object:{textVisible:boolean}) =>{
+      console.log("Hide event gehört!");
+      this.toggleTextVisibility(object.textVisible);
+      })
   }
 
   private disableScrollbar() {
@@ -49,8 +54,9 @@ export class InfWhiteboardComponent implements OnInit {
     this.setCanvasEventListeners();
     this.stickyNoteFactory = new StickyNoteFactory(this.canvas);
     this.bufferedObjects.forEach(object => {
-      this.addStickyNote(object.text,object.color);
+      this.addStickyNote(true,object.text,object.color);
     });
+    console.log(this.canvas.getObjects());
     this.bufferedObjects = [];
   }
 
@@ -278,9 +284,9 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.setHeight(window.innerHeight - (document.getElementById("navbar")!.offsetHeight + document.getElementById("buttons")!.offsetHeight));
   }
 
-  addStickyNote(stickyText?: string,color?:string) {
+  addStickyNote(textVisible: boolean = false,stickyText?: string,color?:string) {
     // @ts-ignore
-    const newSticky = this.stickyNoteFactory.create(stickyText,color);
+    const newSticky = this.stickyNoteFactory.create(textVisible,stickyText,color);
   }
 
   private deleteObjects() {
@@ -298,4 +304,21 @@ export class InfWhiteboardComponent implements OnInit {
       });
     }
   }
+
+  public toggleTextVisibility(textVisible: boolean): void {
+    this.canvas.getObjects().forEach(obj => {
+      if (obj.type === 'group') {
+        let group = obj as fabric.Group;
+
+        group.getObjects().forEach(groupItem => {
+          console.log("Textbox?",groupItem);
+          if (groupItem instanceof FixedSizeTextbox) {
+            groupItem.text = textVisible ? groupItem.visibleText : groupItem.hiddenIcon;
+          }
+        });
+      }
+    });
+    this.canvas.renderAll();
+  }
+
 }

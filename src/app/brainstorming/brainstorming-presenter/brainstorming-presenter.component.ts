@@ -232,11 +232,11 @@ export class BrainstormingPresenterComponent
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
+
     toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
-    this.ideaResponses.forEach((idea) => {
-      idea.hasVisibleContent = this.stickyContentVisible;
-    });
+    console.log("Hide gedrückt.",this.stickyContentVisible);
+    this.canObjServ.toggleTextVisibility.emit({textVisible: this.stickyContentVisible});
   }
 
   stopVoting() {
@@ -282,6 +282,7 @@ export class BrainstormingPresenterComponent
       type: "stickyNote"
     });
   }
+
    openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
       data: {stage: "brainstorming"},
