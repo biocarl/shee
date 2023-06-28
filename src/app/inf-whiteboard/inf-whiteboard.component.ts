@@ -2,6 +2,7 @@ import {Component, HostListener, OnInit, Renderer2} from '@angular/core';
 import {fabric} from 'fabric';
 import {StickyNoteFactory} from "./canvas-objects/sticky-note-factory";
 import {LoggerService} from "../logger.service";
+import {CanvasObjectService} from "../brainstorming/canvas-object.service";
 
 @Component({
   selector: 'app-inf-whiteboard',
@@ -10,21 +11,32 @@ import {LoggerService} from "../logger.service";
 })
 export class InfWhiteboardComponent implements OnInit {
   private canvas!: fabric.Canvas;
-  private stickyNoteFactory!: StickyNoteFactory;
+  private stickyNoteFactory?: StickyNoteFactory;
   private canBePanned = false;
   private lastPosX: number = 0;
   private lastPosY: number = 0;
   private isDragging: boolean = false;
-  private groupCounter: number = 0;
-  public showMenu = false;
-
-  public menuPosition = {top: 0, left: 0};
-  public selectedObject: fabric.Object | fabric.Group | undefined = undefined;
   private objectIsMoving: boolean = false;
   private objectIsRotating: boolean = false;
+  private groupCounter: number = 0;
+  private bufferedObjects: { text: string; color: string; hasVisibleContent: boolean; type: string }[] = [];
 
-  constructor(private renderer: Renderer2,private log:LoggerService) {
+  public showMenu = false;
+  public menuPosition = {top: 0, left: 0};
+  public selectedObject: fabric.Object | fabric.Group | undefined = undefined;
+
+  constructor(private renderer: Renderer2,private log:LoggerService, private canObjSer: CanvasObjectService) {
     this.disableScrollbar();
+    this.canObjSer.objectAdded.subscribe((object:{ text: string; color: string; hasVisibleContent: boolean; type: string } ) => {
+      if(object.type === "stickyNote"){
+        if(this.stickyNoteFactory) {
+          this.addStickyNote(object.text, object.color);
+        }
+        else {
+          this.bufferedObjects.push(object);
+        }
+      }
+    })
   }
 
   private disableScrollbar() {
@@ -36,6 +48,10 @@ export class InfWhiteboardComponent implements OnInit {
     this.initializeCanvas();
     this.setCanvasEventListeners();
     this.stickyNoteFactory = new StickyNoteFactory(this.canvas);
+    this.bufferedObjects.forEach(object => {
+      this.addStickyNote(object.text,object.color);
+    });
+    this.bufferedObjects = [];
   }
 
   private setCanvasEventListeners() {
@@ -263,8 +279,9 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.setHeight(window.innerHeight - (document.getElementById("navbar")!.offsetHeight + document.getElementById("buttons")!.offsetHeight));
   }
 
-  addStickyNote(stickyText?: string) {
-    const newSticky = this.stickyNoteFactory.create(stickyText);
+  addStickyNote(stickyText?: string,color?:string) {
+    // @ts-ignore
+    const newSticky = this.stickyNoteFactory.create(stickyText,color);
   }
 
   private deleteObjects() {

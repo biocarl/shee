@@ -4,4 +4,5 @@ export interface BrainstormingClientPublishRequest {
   participantName?: string;
   questionID: string;
   stickyColor: string;
+  type: "stickyNote" | "wasauchimmer";
 }

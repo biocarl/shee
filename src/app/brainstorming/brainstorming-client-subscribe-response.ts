@@ -4,4 +4,5 @@ export interface BrainstormingClientSubscribeResponse {
   questionID: string;
   ideaVoting: number[];
   stickyColor: string;
+  type: "stickyNote" | "wasAuchImmer";
 }

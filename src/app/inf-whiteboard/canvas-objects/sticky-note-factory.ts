@@ -8,15 +8,16 @@ const MAX_FONT_SIZE = 200;
 const TEXTBOX_DIMENSIONS = STICKY_NOTE_DIMENSIONS - 2 * STICKY_NOTE_PADDING;
 
 //canvasObject-factory
-export class StickyNoteFactory implements CanvasObject<fabric.Group>{
+export class StickyNoteFactory implements CanvasObject<fabric.Group> {
   private canvas!: fabric.Canvas;
 
   constructor(canvas: fabric.Canvas) {
     this.canvas = canvas;
   }
 
-  public create(text?: string): void {
-    const rectangle = this.createRectangle();
+  public create(text?: string, color?: string): void {
+    console.log("Rec color die ankam: " + color);
+    const rectangle = this.createRectangle(color);
     const textbox = this.createTextbox(text);
     const stickyNote = new fabric.Group([rectangle, textbox]);
 
@@ -37,13 +38,13 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
     });
   }
 
-  private createRectangle(): fabric.Rect {
+  private createRectangle(color?: string): fabric.Rect {
     return new fabric.Rect({
       left: 0,
       top: 0,
       width: STICKY_NOTE_DIMENSIONS,
       height: STICKY_NOTE_DIMENSIONS,
-      fill: 'rgb(255, 215, 7)',
+      fill: color ? color : 'rgb(255, 215, 7)',
       shadow: this.createShadow(),
     });
   }
@@ -187,12 +188,12 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group>{
   }
 
   public setBackgroundColor(object: fabric.Group, color: string): void {
-      object.getObjects().forEach(object => {
-        if (object.type === 'rect') {
-          object.set({ fill: color });
-        }
-      });
-      this.canvas.renderAll();
-    }
+    object.getObjects().forEach(object => {
+      if (object.type === 'rect') {
+        object.set({fill: color});
+      }
+    });
+    this.canvas.renderAll();
+  }
 }
 

@@ -1,14 +1,14 @@
-import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PresenterMessage} from '../../presenter-message';
 import {BrainstormingPresenterSubscribeResponse} from '../brainstorming-presenter-subscribe-response';
 import {QueueService} from '../../queue.service';
 import {BrainstormingClientSubscribeResponse} from '../brainstorming-client-subscribe-response';
-import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterStatusVotingRequest} from '../brainstorming-presenter-status-voting-request';
 import {BrainstormingPresenterPublishRequest} from '../brainstorming-presenter-publish-request';
 import {View} from '../../view';
 import {MatDialog} from '@angular/material/dialog';
 import {TimerPopupComponent} from './timer-popup/timer-popup.component';
+import {CanvasObjectService} from "../canvas-object.service";
 
 @Component({
   selector: 'app-brainstorming-presenter',
@@ -16,24 +16,24 @@ import {TimerPopupComponent} from './timer-popup/timer-popup.component';
   styleUrls: ['./brainstorming-presenter.component.css'],
 })
 export class BrainstormingPresenterComponent
-  implements View, OnInit, AfterViewChecked {
+  implements View, OnInit {
+  private isSingleChoice: boolean = false;
+  private timerInterval: any;
   ideaEvent?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses: { text: string; color: string; hasVisibleContent: boolean }[] =
+  ideaResponses: { text: string; color: string; hasVisibleContent: boolean; type: string; }[] =
     [];
-  maxZIndex = 20;
+  //maxZIndex = 20;
   stickyContentVisible: boolean = false;
   votes?: number[];
   timerLengthVoting?: number;
-  private timerInterval: any;
   timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
   editing: boolean = false;
   editableSticky?: number;
   editedIdea: string = '';
-  private isSingleChoice: boolean = false;
 
-  constructor(private queueService: QueueService, private dialog: MatDialog) {
+  constructor(private queueService: QueueService, private dialog: MatDialog,private canObjServ: CanvasObjectService) {
   }
 
   ngOnInit(): void {
@@ -41,21 +41,16 @@ export class BrainstormingPresenterComponent
     this.subscribeToPresenterChannel();
   }
 
-  ngAfterViewChecked(): void {
-    this.resizeTextToFitContainer('.sticky');
-  }
-
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.initializeTimer();
     this.ideaEvent.ideas.map((idea, index) => {
-      if (this.ideaEvent) {
-        this.ideaResponses.push({
-          text: idea,
-          color: '#ffd707ff',
-          hasVisibleContent: true,
-        });
-      }
+      this.canObjServ.objectAdded.emit( {
+        text: idea,
+        color: '#ffd707ff',
+        hasVisibleContent: true,
+        type: "stickyNote"
+      });
     });
   }
 
@@ -74,9 +69,7 @@ export class BrainstormingPresenterComponent
     );
   }
 
-  private handleClientChannelEvent(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ) {
+  private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
     if (this.isMatchingQuestion(brainstormingSubscriptionEvent)) {
       if (this.stage === 'brainstorming') {
         this.addBrainstormingIdea(brainstormingSubscriptionEvent);
@@ -86,28 +79,23 @@ export class BrainstormingPresenterComponent
     }
   }
 
-  private isMatchingQuestion(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ): boolean {
+  private isMatchingQuestion(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): boolean {
     return !!(
       this.ideaEvent &&
       this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID
     );
   }
 
-  private addBrainstormingIdea(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ): void {
-    this.ideaResponses.push({
+  private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    this.canObjServ.objectAdded.emit( {
       text: brainstormingSubscriptionEvent.ideaText,
       color: brainstormingSubscriptionEvent.stickyColor,
       hasVisibleContent: this.stickyContentVisible,
+      type: brainstormingSubscriptionEvent.type
     });
   }
 
-  private updateVotes(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ): void {
+  private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
     let voteIndex = 0;
     this.ideaResponses.forEach((idea, index) => {
       if (idea.text !== '' && this.votes) {
@@ -127,18 +115,14 @@ export class BrainstormingPresenterComponent
     );
   }
 
-  private handlePresenterChannelEvent(
-    response: BrainstormingPresenterStatusVotingRequest
-  ) {
+  private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
     if (this.hasVotingStarted(response)) {
       this.updateTimer(response);
       this.initializeTimer();
     }
   }
 
-  private hasVotingStarted(
-    response: BrainstormingPresenterStatusVotingRequest
-  ) {
+  private hasVotingStarted(response: BrainstormingPresenterStatusVotingRequest) {
     return !!(
       this.ideaEvent &&
       response.clientOnly &&
@@ -146,9 +130,7 @@ export class BrainstormingPresenterComponent
     );
   }
 
-  private updateTimer(
-    response: BrainstormingPresenterStatusVotingRequest
-  ): void {
+  private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
     if (this.ideaEvent) {
       this.ideaEvent.timer = response.timer;
     }
@@ -185,49 +167,49 @@ export class BrainstormingPresenterComponent
     this.stage = 'afterBrainstorming';
   }
 
-  resizeTextToFitContainer(selector: string) {
-    const stickies: NodeListOf<HTMLElement> =
-      document.querySelectorAll(selector);
-    stickies.forEach((element) => {
-      const maxWidth = element.clientWidth;
-      const maxHeight = element.clientHeight;
-
-      let minFontSize = 5; // Set a minimum font size
-      let maxFontSize = 50; // Set a maximum font size
-      let fontSize = maxFontSize;
-
-      // Apply the maximum font size
-      element.style.fontSize = fontSize + 'px';
-
-      // Reduce the font size until the content fits or reaches the minimum size
-      while (
-        (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) &&
-        fontSize > minFontSize
-        ) {
-        fontSize--;
-        element.style.fontSize = fontSize + 'px';
-      }
-
-      // Increase the font size until the content overflows or reaches the maximum size
-      while (
-        element.scrollHeight <= maxHeight &&
-        element.scrollWidth <= maxWidth &&
-        fontSize < maxFontSize
-        ) {
-        fontSize++;
-        element.style.fontSize = fontSize + 'px';
-
-        if (
-          element.scrollHeight > maxHeight ||
-          element.scrollWidth > maxWidth
-        ) {
-          fontSize--;
-          element.style.fontSize = fontSize + 'px';
-          break;
-        }
-      }
-    });
-  }
+  // resizeTextToFitContainer(selector: string) {
+  //   const stickies: NodeListOf<HTMLElement> =
+  //     document.querySelectorAll(selector);
+  //   stickies.forEach((element) => {
+  //     const maxWidth = element.clientWidth;
+  //     const maxHeight = element.clientHeight;
+  //
+  //     let minFontSize = 5; // Set a minimum font size
+  //     let maxFontSize = 50; // Set a maximum font size
+  //     let fontSize = maxFontSize;
+  //
+  //     // Apply the maximum font size
+  //     element.style.fontSize = fontSize + 'px';
+  //
+  //     // Reduce the font size until the content fits or reaches the minimum size
+  //     while (
+  //       (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) &&
+  //       fontSize > minFontSize
+  //       ) {
+  //       fontSize--;
+  //       element.style.fontSize = fontSize + 'px';
+  //     }
+  //
+  //     // Increase the font size until the content overflows or reaches the maximum size
+  //     while (
+  //       element.scrollHeight <= maxHeight &&
+  //       element.scrollWidth <= maxWidth &&
+  //       fontSize < maxFontSize
+  //       ) {
+  //       fontSize++;
+  //       element.style.fontSize = fontSize + 'px';
+  //
+  //       if (
+  //         element.scrollHeight > maxHeight ||
+  //         element.scrollWidth > maxWidth
+  //       ) {
+  //         fontSize--;
+  //         element.style.fontSize = fontSize + 'px';
+  //         break;
+  //       }
+  //     }
+  //   });
+  // }
 
   startVoting(): void {
     if (!this.ideaEvent?.questionID) return;
@@ -251,42 +233,43 @@ export class BrainstormingPresenterComponent
     this.queueService.publishMessageToPresenterChannel(payload);
   }
 
-  moveToTopLayerWhenDragged(event: CdkDragStart) {
-    const element = event.source.getRootElement();
-    const stickyElement = element.querySelector('.sticky') as HTMLElement;
-    const shadowElement = element.querySelector('.shadow') as HTMLElement;
-    const postItElement = stickyElement.parentElement;
-    const tapeElement = element.querySelector('.top-tape') as HTMLElement;
-    const iconsElement = element.querySelector(
-      '.icon-container'
-    ) as HTMLElement;
+  // moveToTopLayerWhenDragged(event: CdkDragStart) {
+  //   const element = event.source.getRootElement();
+  //   const stickyElement = element.querySelector('.sticky') as HTMLElement;
+  //   const shadowElement = element.querySelector('.shadow') as HTMLElement;
+  //   const postItElement = stickyElement.parentElement;
+  //   const tapeElement = element.querySelector('.top-tape') as HTMLElement;
+  //   const iconsElement = element.querySelector(
+  //     '.icon-container'
+  //   ) as HTMLElement;
+  //
+  //   if (stickyElement && stickyElement.parentElement && postItElement) {
+  //     postItElement.style.zIndex = (++this.maxZIndex).toString();
+  //     stickyElement.style.zIndex = (++this.maxZIndex).toString();
+  //   }
+  //
+  //   if (shadowElement) {
+  //     shadowElement.style.zIndex = (this.maxZIndex - 1).toString();
+  //   }
+  //
+  //   if (tapeElement) {
+  //     tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
+  //   }
+  //   if (iconsElement) {
+  //     iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
+  //   }
+  // }
 
-    if (stickyElement && stickyElement.parentElement && postItElement) {
-      postItElement.style.zIndex = (++this.maxZIndex).toString();
-      stickyElement.style.zIndex = (++this.maxZIndex).toString();
-    }
 
-    if (shadowElement) {
-      shadowElement.style.zIndex = (this.maxZIndex - 1).toString();
-    }
-
-    if (tapeElement) {
-      tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
-    }
-    if (iconsElement) {
-      iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
-    }
-  }
-
-  hideIdea(i: number) {
-    if (i > -1) {
-      this.ideaResponses.splice(i, 1, {
-        text: '',
-        color: '',
-        hasVisibleContent: false,
-      });
-    }
-  }
+  // hideIdea(i: number) {
+  //   if (i > -1) {
+  //     this.ideaResponses.splice(i, 1, {
+  //       text: '',
+  //       color: '',
+  //       hasVisibleContent: false,
+  //     });
+  //   }
+  // }
 
   trackByIndex(index: number): number {
     return index;
@@ -341,17 +324,17 @@ export class BrainstormingPresenterComponent
     }
   }
 
-  addStickie() {
-    this.ideaResponses.push({
-      text: 'new idea',
-      color: '#ffd707ff',
-      hasVisibleContent: true,
-    });
-    this.editing = !this.editing;
-    if (this.ideaEvent) {
-      this.editableSticky = this.ideaResponses.length - 1;
-    }
-  }
+  // addStickie() {
+  //   this.ideaResponses.push({
+  //     text: 'new idea',
+  //     color: '#ffd707ff',
+  //     hasVisibleContent: true,
+  //   });
+  //   this.editing = !this.editing;
+  //   if (this.ideaEvent) {
+  //     this.editableSticky = this.ideaResponses.length - 1;
+  //   }
+  // }
 
   toggleEditMode(index: number) {
     this.editing = true;
@@ -369,7 +352,7 @@ export class BrainstormingPresenterComponent
 
   openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { stage: "brainstorming"},
+      data: {stage: "brainstorming"},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.choice) {
@@ -381,7 +364,7 @@ export class BrainstormingPresenterComponent
 
   openVotingDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { stage: "voting"},
+      data: {stage: "voting"},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.choice) {
