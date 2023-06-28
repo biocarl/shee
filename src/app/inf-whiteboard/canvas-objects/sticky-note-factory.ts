@@ -81,6 +81,10 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
 
     textbox.on('editing:exited', () => {
       this.handleTextboxEditingExited(textbox);
+      if(textbox.text) {
+        textbox.text = textbox.text.trim();
+        textbox.fire('changed');
+      }
     });
     return textbox;
   }
