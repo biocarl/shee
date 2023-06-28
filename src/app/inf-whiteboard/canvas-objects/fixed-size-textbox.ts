@@ -5,6 +5,7 @@ interface FixedSizeTextboxOptions extends fabric.ITextboxOptions {
   fixedHeight?: number;
   originalGroup?: fabric.Group;
   visibleText?: string;
+  visibleTextFontSize?: number;
   hiddenIcon?: string;
 }
 
@@ -13,6 +14,7 @@ export class FixedSizeTextbox extends fabric.Textbox {
   fixedHeight?: number;
   originalGroup?: fabric.Group;
   visibleText?: string;
+  visibleTextFontSize?: number;
   hiddenIcon?: string;
 
   constructor(text: string, options?: FixedSizeTextboxOptions) {
@@ -22,6 +24,7 @@ export class FixedSizeTextbox extends fabric.Textbox {
     this.fixedHeight = options?.fixedHeight;
     this.originalGroup = options?.originalGroup;
     this.visibleText = options?.visibleText;
+    this.visibleTextFontSize = options?.visibleTextFontSize;
     this.hiddenIcon = options?.hiddenIcon;
   }
 }

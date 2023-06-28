@@ -15,7 +15,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.canvas = canvas;
   }
 
-  public create(textVisible?:boolean,text?: string, color?: string): void {
+  public create(textVisible?:boolean,text?: string, color?: string): fabric.Group {
     console.log("Rec color die ankam: " + color);
     const rectangle = this.createRectangle(color);
     const textbox = this.createTextbox(textVisible,text);
@@ -26,6 +26,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.attachDoubleClickHandler(stickyNote);
     this.canvas.add(stickyNote);
     stickyNote.viewportCenter();
+    return stickyNote;
   }
 
   private createShadow(): fabric.Shadow {
@@ -108,6 +109,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       this.decreaseFontSize(textbox);
     }
     this.adjustFontSizeForWidth(textbox);
+    textbox.visibleTextFontSize = textbox.fontSize;
   }
 
   private isTextboxTooSmall(textbox: FixedSizeTextbox): boolean {

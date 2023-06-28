@@ -285,8 +285,11 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   addStickyNote(textVisible: boolean = false,stickyText?: string,color?:string) {
-    // @ts-ignore
-    const newSticky = this.stickyNoteFactory.create(textVisible,stickyText,color);
+    if(this.stickyNoteFactory){
+      const newSticky = this.stickyNoteFactory.create(textVisible,stickyText,color);
+      const textbox = newSticky.getObjects().find((object: any) => object instanceof FixedSizeTextbox);
+      textbox!.fire('changed');
+    }
   }
 
   private deleteObjects() {
@@ -314,6 +317,8 @@ export class InfWhiteboardComponent implements OnInit {
           console.log("Textbox?",groupItem);
           if (groupItem instanceof FixedSizeTextbox) {
             groupItem.text = textVisible ? groupItem.visibleText : groupItem.hiddenIcon;
+            groupItem.fontSize = textVisible ? groupItem.visibleTextFontSize : 150;
+            groupItem.fire('changed');
           }
         });
       }
