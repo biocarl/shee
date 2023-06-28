@@ -33,7 +33,7 @@ export class BrainstormingPresenterComponent
   editableSticky?: number;
   editedIdea: string = '';
 
-  constructor(private queueService: QueueService, private dialog: MatDialog,private canObjServ: CanvasObjectService) {
+  constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService) {
   }
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class BrainstormingPresenterComponent
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.initializeTimer();
     this.ideaEvent.ideas.map((idea, index) => {
-      this.canObjServ.objectAdded.emit( {
+      this.canObjServ.objectAdded.emit({
         text: idea,
         color: '#ffd707ff',
         hasVisibleContent: true,
@@ -87,7 +87,7 @@ export class BrainstormingPresenterComponent
   }
 
   private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
-    this.canObjServ.objectAdded.emit( {
+    this.canObjServ.objectAdded.emit({
       text: brainstormingSubscriptionEvent.ideaText,
       color: brainstormingSubscriptionEvent.stickyColor,
       hasVisibleContent: this.stickyContentVisible,
@@ -232,57 +232,7 @@ export class BrainstormingPresenterComponent
     }
     this.queueService.publishMessageToPresenterChannel(payload);
   }
-
-  // moveToTopLayerWhenDragged(event: CdkDragStart) {
-  //   const element = event.source.getRootElement();
-  //   const stickyElement = element.querySelector('.sticky') as HTMLElement;
-  //   const shadowElement = element.querySelector('.shadow') as HTMLElement;
-  //   const postItElement = stickyElement.parentElement;
-  //   const tapeElement = element.querySelector('.top-tape') as HTMLElement;
-  //   const iconsElement = element.querySelector(
-  //     '.icon-container'
-  //   ) as HTMLElement;
-  //
-  //   if (stickyElement && stickyElement.parentElement && postItElement) {
-  //     postItElement.style.zIndex = (++this.maxZIndex).toString();
-  //     stickyElement.style.zIndex = (++this.maxZIndex).toString();
-  //   }
-  //
-  //   if (shadowElement) {
-  //     shadowElement.style.zIndex = (this.maxZIndex - 1).toString();
-  //   }
-  //
-  //   if (tapeElement) {
-  //     tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
-  //   }
-  //   if (iconsElement) {
-  //     iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
-  //   }
-  // }
-
-
-  // hideIdea(i: number) {
-  //   if (i > -1) {
-  //     this.ideaResponses.splice(i, 1, {
-  //       text: '',
-  //       color: '',
-  //       hasVisibleContent: false,
-  //     });
-  //   }
-  // }
-
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  showCopiedMessage(element: HTMLElement) {
-    element.style.opacity = '1';
-    setTimeout(() => {
-      element.style.opacity = '0';
-    }, 1200);
-  }
-
-  toggleAllStickies(): void {
+    toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
     this.ideaResponses.forEach((idea) => {
       idea.hasVisibleContent = this.stickyContentVisible;
@@ -324,33 +274,15 @@ export class BrainstormingPresenterComponent
     }
   }
 
-  // addStickie() {
-  //   this.ideaResponses.push({
-  //     text: 'new idea',
-  //     color: '#ffd707ff',
-  //     hasVisibleContent: true,
-  //   });
-  //   this.editing = !this.editing;
-  //   if (this.ideaEvent) {
-  //     this.editableSticky = this.ideaResponses.length - 1;
-  //   }
-  // }
-
-  toggleEditMode(index: number) {
-    this.editing = true;
-    this.editableSticky = index;
-    if (this.ideaEvent) {
-      this.editedIdea = this.ideaResponses[index].text;
-    }
+  addSticky() {
+    this.canObjServ.objectAdded.emit({
+      text: "",
+      color: "",
+      hasVisibleContent: this.stickyContentVisible,
+      type: "stickyNote"
+    });
   }
-
-  saveIdea(index: number) {
-    this.ideaResponses[index].text = this.editedIdea;
-    this.editing = false;
-    this.editedIdea = '';
-  }
-
-  openBrainstormingTimerDialog() {
+   openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
       data: {stage: "brainstorming"},
     });
@@ -374,5 +306,4 @@ export class BrainstormingPresenterComponent
       }
     });
   }
-
 }

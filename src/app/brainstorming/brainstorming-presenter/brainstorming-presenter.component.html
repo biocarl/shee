@@ -21,6 +21,7 @@
   <button class="brainstormingButton startBrainstorming" (click)="stopBrainstorming()">
     Stop brainstorming
   </button>
+  <button class="brainstormingButton" type="button" (click)="addSticky()">Add Sticky</button>
   <ng-container *ngTemplateOutlet="hideButton"></ng-container>
 </ng-container>
 
@@ -48,6 +49,7 @@
   <button class="brainstormingButton startBrainstorming" (click)="openBrainstormingTimerDialog()">
     {{ stage === "initial" ? "Start" : "Resume" }} brainstorming
   </button>
+  <button class="brainstormingButton" type="button" (click)="addSticky()">Add Sticky</button>
 </ng-template>
 
 <ng-template #hideButton>

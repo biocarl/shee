@@ -169,8 +169,8 @@ export class InfWhiteboardComponent implements OnInit {
         // Get the bounding rectangle of the object, taking into account viewporttransform.
         const boundingRect = object.getBoundingRect(undefined, true);
 
-        //TODO: remove magic numbers 60 and 250 and replace with dynamic calculation of menu width
-        const menuTop = (boundingRect.top - menuHeight + 60);
+        //TODO: remove magic numbers 180 and 250 and replace with dynamic calculation of menu width
+        const menuTop = (boundingRect.top - menuHeight+180);
         const menuLeft = boundingRect.left + (boundingRect.width / 2) - ((menuWidth + 250) / 2);
 
         this.showMenu = true;
@@ -251,8 +251,7 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.setWidth(window.innerWidth);
     //TODO hardcoded height may change depending on DOM
     let navbarHeight = document.getElementById("navbar")!.offsetHeight;
-    let buttonHeight = document.getElementById("buttons")!.offsetHeight;
-    this.canvas.setHeight(window.innerHeight - (navbarHeight + buttonHeight));
+    this.canvas.setHeight(window.innerHeight - (navbarHeight));
   }
 
   @HostListener('document:keydown', ['$event'])
