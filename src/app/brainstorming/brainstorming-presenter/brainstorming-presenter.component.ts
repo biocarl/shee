@@ -9,6 +9,7 @@ import {View} from '../../view';
 import {MatDialog} from '@angular/material/dialog';
 import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 import {CanvasObjectService} from "../canvas-object.service";
+import {VotingService} from "../voting.service";
 
 @Component({
   selector: 'app-brainstorming-presenter',
@@ -29,11 +30,8 @@ export class BrainstormingPresenterComponent
   timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
-  editing: boolean = false;
-  editableSticky?: number;
-  editedIdea: string = '';
 
-  constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService) {
+  constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService,private votingServ: VotingService) {
   }
 
   ngOnInit(): void {

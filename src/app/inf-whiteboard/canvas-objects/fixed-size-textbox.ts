@@ -27,4 +27,10 @@ export class FixedSizeTextbox extends fabric.Textbox {
     this.visibleTextFontSize = options?.visibleTextFontSize;
     this.hiddenIcon = options?.hiddenIcon;
   }
+
+  override toObject(propertiesToInclude?: string[]): any {
+    propertiesToInclude = (propertiesToInclude || []).concat(['fixedWidth', 'fixedHeight', 'visibleText', 'visibleTextFontSize', 'hiddenIcon']);
+
+    return super.toObject(propertiesToInclude);
+  }
 }

@@ -15,10 +15,9 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.canvas = canvas;
   }
 
-  public create(textVisible?:boolean,text?: string, color?: string): fabric.Group {
-    console.log("Rec color die ankam: " + color);
+  public create(textVisible?: boolean, text?: string, color?: string): fabric.Group {
     const rectangle = this.createRectangle(color);
-    const textbox = this.createTextbox(textVisible,text);
+    const textbox = this.createTextbox(textVisible, text);
     const stickyNote = new fabric.Group([rectangle, textbox]);
 
     this.setStyle(stickyNote);
@@ -49,7 +48,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     });
   }
 
-  private createTextbox(textVisible?: boolean,text?: string): FixedSizeTextbox {
+  private createTextbox(textVisible?: boolean, text?: string): FixedSizeTextbox {
     let textbox = new FixedSizeTextbox('', {
       hasBorders: false,
       textAlign: "center",
@@ -79,13 +78,13 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       this.adjustFontSize(textbox);
     });
 
-    textbox.on('editing:exited', () => {
-      this.handleTextboxEditingExited(textbox);
-      if(textbox.text) {
-        textbox.text = textbox.text.trim();
-        textbox.fire('changed');
-      }
-    });
+    // textbox.on('editing:exited', () => {
+    //   this.handleTextboxEditingExited(textbox);
+    //   if (textbox.text) {
+    //     textbox.text = textbox.text.trim();
+    //     textbox.fire('changed');
+    //   }
+    // });
     return textbox;
   }
 
@@ -144,15 +143,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.canvas.renderAll();
   }
 
-  private handleTextboxEditingExited(textbox: FixedSizeTextbox) {
-    const stickyNote = this.findGroupContainingTextbox(textbox);
-    if (stickyNote) {
-      this.deselectGroup();
-      this.makeObjectsSelectable(stickyNote);
-    }
-    textbox.visibleText = textbox.text;
-  }
-
   private findGroupContainingTextbox(textbox: FixedSizeTextbox): fabric.Group | undefined {
     const groups = this.canvas.getObjects('group') as fabric.Group[];
     let group = groups.find((group) => group.getObjects().includes(textbox));
@@ -175,27 +165,86 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
 
   private handleDoubleClick(options: fabric.IEvent<MouseEvent>) {
     let target = options.target as fabric.Group;
+
     if (target && target.type === 'group') {
       let items = target.getObjects();
       let textbox = items.find((obj) => obj.type === 'textbox') as FixedSizeTextbox;
       if (textbox) {
-        this.canvas.setActiveObject(textbox);
-        textbox.enterEditing();
         textbox.originalGroup = target;
-        items.forEach((item) => {
-          if (item !== textbox) {
-            item.set({selectable: false});
+        textbox.clone((clonedObj: FixedSizeTextbox) => {
+          let textboxForEdit = clonedObj as FixedSizeTextbox;
+
+          if (textbox.originalGroup) {
+            clonedObj.set({
+              //TODO padding relative to center for left/top
+              left: textbox.originalGroup.left! ,
+              top: textbox.originalGroup.top! ,
+              angle: textbox.originalGroup.angle,
+              scaleX: textbox.originalGroup.scaleX,
+              scaleY: textbox.originalGroup.scaleY,
+              hasBorders: false
+            })
+            clonedObj.rotate(target.angle!);
+            console.log("textboxForEdit", textboxForEdit);
+
+            textboxForEdit.on('changed', () => {
+              this.adjustFontSize(textboxForEdit);
+            });
+
+            textboxForEdit.on('editing:exited', () => {
+              this.handleTextboxEditingExited(textboxForEdit);
+              if (textboxForEdit.text) {
+                textbox.text = textboxForEdit.text.trim();
+                textbox.fire('changed');
+              }
+            });
+
+            textbox.visible = false;
+            this.canvas.add(textboxForEdit);
+            this.canvas.requestRenderAll();
+
+            this.canvas.setActiveObject(textboxForEdit);
+            textboxForEdit.enterEditing();
+            textboxForEdit.originalGroup = target;
+            items.forEach((item) => {
+              if (item !== textboxForEdit) {
+                item.set({selectable: false});
+              }
+            });
           }
         });
       }
     }
-  };
+  }
+
+
+  private handleTextboxEditingExited(textbox: FixedSizeTextbox) {
+    const stickyNote = this.findGroupContainingTextbox(textbox);
+    if (stickyNote) {
+      let items = stickyNote.getObjects();
+      items.forEach((item) => {
+        console.log("item:", item);
+        if (item.type === "textbox" && item instanceof FixedSizeTextbox) {
+          item.set({
+            text: textbox.text,
+            visibleText: textbox.text,
+            visible: true
+          });
+          item.fire('changed');
+        }
+      });
+      this.canvas.remove(textbox);
+      this.makeObjectsSelectable(stickyNote);
+      this.deselectGroup();
+    }
+  }
 
   attachDoubleClickHandler(stickyNote: fabric.Group) {
     stickyNote.on('mousedblclick', this.handleDoubleClick.bind(this));
   }
 
-  public setBackgroundColor(object: fabric.Group, color: string): void {
+  public setBackgroundColor(object: fabric.Group, color: string):
+    void {
     object.getObjects().forEach(object => {
       if (object.type === 'rect') {
         object.set({fill: color});
