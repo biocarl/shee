@@ -25,6 +25,7 @@ export class TimerPopupComponent {
     if(this.selectedOption==='No'){
       this.data.choice = true;
       this.data.timer = undefined;
+      this.data.isMultivote= this.votingOption==="Yes";
     }
     else if (this.isTimerValid()) {
       this.data.choice = true;
