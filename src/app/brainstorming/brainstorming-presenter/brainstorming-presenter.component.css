@@ -193,3 +193,23 @@ button {
 .hidden {
   visibility: hidden;
 }
+
+
+.votingCountBox {
+  background: rgba(245, 245, 245, 0.94);
+  border-radius: 30px;
+  width: fit-content;
+  padding-left: 2px;
+  padding-right: 2px;
+  height: 30.86px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.thumb {
+  height: 18px;
+}
+
+

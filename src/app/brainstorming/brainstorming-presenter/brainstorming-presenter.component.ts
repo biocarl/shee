@@ -10,6 +10,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 import {CanvasObjectService} from "../canvas-object.service";
 import {VotingService} from "../voting.service";
+import {FixedSizeTextbox} from "../../inf-whiteboard/canvas-objects/fixed-size-textbox";
+import {fabric} from "fabric";
 
 @Component({
   selector: 'app-brainstorming-presenter',
@@ -21,8 +23,7 @@ export class BrainstormingPresenterComponent
   private isSingleChoice: boolean = false;
   private timerInterval: any;
   ideaEvent?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses: { text: string; color: string; hasVisibleContent: boolean; type: string; }[] =
-    [];
+  ideaResponses: string[] = [];
   //maxZIndex = 20;
   stickyContentVisible: boolean = false;
   votes?: number[];
@@ -30,6 +31,7 @@ export class BrainstormingPresenterComponent
   timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
+  private canvas? :fabric.Canvas;
 
   constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService,private votingServ: VotingService) {
   }
@@ -96,11 +98,11 @@ export class BrainstormingPresenterComponent
   private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
     let voteIndex = 0;
     this.ideaResponses.forEach((idea, index) => {
-      if (idea.text !== '' && this.votes) {
-        this.votes[index] +=
-          brainstormingSubscriptionEvent.ideaVoting[voteIndex];
-        voteIndex++;
-      }
+      // if (idea.text !== '' && this.votes) {
+      //   this.votes[index] +=
+      //     brainstormingSubscriptionEvent.ideaVoting[voteIndex];
+      //   voteIndex++;
+      // }
     });
   }
 
@@ -210,25 +212,40 @@ export class BrainstormingPresenterComponent
   // }
 
   startVoting(): void {
-    if (!this.ideaEvent?.questionID) return;
-    let finalIdeas: string[] = this.ideaResponses
-      .map((idea) => idea.text)
-      .filter((idea) => idea !== '');
-    this.stage = 'voting';
-    this.votes = Array(this.ideaResponses.length).fill(0);
-    const payload: BrainstormingPresenterStatusVotingRequest = {
-      interaction: 'brainstorming',
-      ideas: finalIdeas,
-      question: this.ideaEvent?.question,
-      questionID: this.ideaEvent.questionID,
-      singleChoice: this.isSingleChoice,
-      votingInProgress: true,
-      clientOnly: true,
-    };
-    if (this.timerLengthVoting) {
-      payload.timer = this.timerLengthVoting;
-    }
-    this.queueService.publishMessageToPresenterChannel(payload);
+    this.canObjServ.sendCanvas.subscribe((obj) => {
+      this.canvas = obj.canvas;
+      obj.canvas.getObjects().forEach(obj => {
+        if (obj.type === 'group') {
+          let group = obj as fabric.Group;
+
+          group.getObjects().forEach(groupItem => {
+            if (groupItem instanceof FixedSizeTextbox) {
+              this.ideaResponses.push(groupItem.text!);
+            }
+          });
+        }
+      });
+      if (!this.ideaEvent?.questionID) return;
+      // let finalIdeas: string[] = this.ideaResponses
+      //   .map((idea) => idea.text)
+      //   .filter((idea) => idea !== '');
+      this.stage = 'voting';
+      this.votes = Array(this.ideaResponses.length).fill(0);
+      const payload: BrainstormingPresenterStatusVotingRequest = {
+        interaction: 'brainstorming',
+        ideas: this.ideaResponses,
+        question: this.ideaEvent?.question,
+        questionID: this.ideaEvent.questionID,
+        singleChoice: this.isSingleChoice,
+        votingInProgress: true,
+        clientOnly: true,
+      };
+      if (this.timerLengthVoting) {
+        payload.timer = this.timerLengthVoting;
+      }
+      this.queueService.publishMessageToPresenterChannel(payload);
+    })
+    this.canObjServ.requestCanvas.emit();
   }
 
     toggleAllStickies(): void {

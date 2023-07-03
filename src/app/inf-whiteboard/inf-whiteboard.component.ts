@@ -43,6 +43,10 @@ export class InfWhiteboardComponent implements OnInit {
       console.log("Hide event gehört!");
       this.toggleTextVisibility(object.textVisible);
       })
+    this.canObjSer.requestCanvas.subscribe(() => {
+      console.log("requestCanvas received");
+      this.canObjSer.sendCanvas.emit({canvas: this.canvas});
+    })
   }
 
   private disableScrollbar() {
@@ -326,5 +330,11 @@ export class InfWhiteboardComponent implements OnInit {
     });
     this.canvas.renderAll();
   }
+
+  toJohnson() {
+    console.log(JSON.stringify(this.canvas));
+    console.log(JSON.parse(JSON.stringify(this.canvas)));
+  }
+
 
 }
