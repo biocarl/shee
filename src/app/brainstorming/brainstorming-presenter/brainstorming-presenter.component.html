@@ -57,47 +57,4 @@
     [class]="stickyContentVisible ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i></button>
 </ng-template>
 
-<!-- Ideas into Stickies -->
-<!--<div class="boundary columns is-multiline is-align-content-flex-start">-->
-<!--  <div class="post-it m-4 p-0 column is-one-fifth" (cdkDragStarted)="moveToTopLayerWhenDragged($event)" cdkDrag-->
-<!--    *ngFor="let idea of ideaResponses; let i = index; trackBy: trackByIndex" cdkDragBoundary=".boundary"-->
-<!--    [style.visibility]="ideaResponses[i].text === '' ? 'hidden' : 'visible'">-->
-<!--    <div class="sticky" [style.background]="ideaResponses[i].color">-->
-<!--      <ng-container *ngIf="editing && editableSticky == i; else displayIdea">-->
-<!--        <textarea id="user-input" type="text" placeholder="Enter text" name="idea" [(ngModel)]="editedIdea"-->
-<!--          [maxlength]="280"></textarea>-->
-<!--        <div id="character-counter" [style.color]="-->
-<!--            editedIdea.length < 280 ? 'var(&#45;&#45;textColor_dark)' : 'red'-->
-<!--          ">-->
-<!--          {{ editedIdea.length }}/280-->
-<!--        </div>-->
-<!--        <button [disabled]="editedIdea == ''" class="brainstormingButton" (click)="saveIdea(i)">-->
-<!--          Save-->
-<!--        </button>-->
-<!--      </ng-container>-->
-<!--      <ng-template #displayIdea>-->
-<!--        <ng-container *ngIf="idea.hasVisibleContent; else hiddenEye">-->
-<!--          {{ idea.text }}-->
-<!--          <div *ngIf="votes">👍{{ votes[i] }}</div>-->
-<!--        </ng-container>-->
-<!--      </ng-template>-->
-
-<!--      <ng-template #hiddenEye><i class="fa-solid fa-eye-slash"></i>-->
-<!--      </ng-template>-->
-<!--    </div>-->
-<!--    <div class="icon-container">-->
-<!--      <a><i class="fa-regular fa-copy fa-xs" [cdkCopyToClipboard]="idea.text"-->
-<!--          (click)="showCopiedMessage(copyMessage)"></i></a>-->
-<!--      <a><i class="fa-solid fa-trash fa-xs" (click)="hideIdea(i)"></i></a>-->
-<!--      <a> <i class="fa-solid fa-pen fa-xs" (click)="toggleEditMode(i)"></i></a>-->
-<!--      <span class="copied-message" #copyMessage>Copied to Clipboard</span>-->
-<!--    </div>-->
-<!--    <div class="top-tape"></div>-->
-<!--    <div class="shadow"></div>-->
-<!--  </div>-->
-<!--</div>-->
-
-<div *ngFor="let idea in ideaResponses; let i = index;">
-<div class="votingCountBox"><img class="thumb" src="assets/SVG/Thumbs_Up_Icon.svg"/>&nbsp;9</div>
-  </div>
 <app-inf-whiteboard ></app-inf-whiteboard>

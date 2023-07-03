@@ -19,9 +19,13 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     const rectangle = this.createRectangle(color);
     const textbox = this.createTextbox(textVisible, text);
     const stickyNote = new fabric.Group([rectangle, textbox]);
-
+    this.createVotingCounter().then(votingCounter => {
+      votingCounter.left = 100- votingCounter.width!/2;
+      votingCounter.top = 75 + votingCounter.height!/2;
+      stickyNote.add(votingCounter);
+      this.canvas.renderAll();
+    });
     this.setStyle(stickyNote);
-
     this.attachDoubleClickHandler(stickyNote);
     this.canvas.add(stickyNote);
     stickyNote.viewportCenter();
@@ -78,14 +82,62 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       this.adjustFontSize(textbox);
     });
 
-    // textbox.on('editing:exited', () => {
-    //   this.handleTextboxEditingExited(textbox);
-    //   if (textbox.text) {
-    //     textbox.text = textbox.text.trim();
-    //     textbox.fire('changed');
-    //   }
-    // });
     return textbox;
+  }
+
+  private createVotingCounter(): Promise<fabric.Group> {
+    return new Promise((resolve) => {
+      let votingCounter = new fabric.Group();
+      const counter = new fabric.Text('0', {
+        selectable: false,
+        fontSize: 19,
+        objectCaching: false
+      });
+      const background = new fabric.Rect({
+        fill: "rgb(255,255,255,0.87)",
+        rx: 15,
+        ry: 100,
+        objectCaching: false
+      });
+      fabric.loadSVGFromURL('/assets/SVG/Thumbs_Up_Icon.svg', (objects, options) => {
+        const obj = fabric.util.groupSVGElements(objects, options);
+        obj.set({
+          scaleX: 0.2,
+          scaleY: 0.2,
+          left: 5,
+          top: 1,
+          objectCaching : false
+        })
+        background.set({
+          width: counter.width! + obj.width! * 0.2 + 10,
+          height: counter.height! + 5
+        })
+        counter.set({
+          left: obj.width! * 0.2 + 6,
+          top: 3
+        })
+       votingCounter.toObject = (function(toObject) {
+          return function(this: fabric.Group) {
+            return fabric.util.object.extend(toObject.call(this), {
+              name: this.name
+            });
+          };
+        })(fabric.Group.prototype.toObject);
+        votingCounter.name = "votingCounter";
+        votingCounter.addWithUpdate(background);
+        votingCounter.addWithUpdate(obj);
+        votingCounter.addWithUpdate(counter);
+
+        // Set the position of the votingCounter at the bottom left of the sticky note.
+        votingCounter.set({
+          left: 0,
+          top: STICKY_NOTE_DIMENSIONS - votingCounter.height!,
+          visible: false,
+        });
+
+        resolve(votingCounter);
+      });
+    });
   }
 
   private setStyle(stickyNote: fabric.Group) {
@@ -177,12 +229,13 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
           if (textbox.originalGroup) {
             clonedObj.set({
               //TODO padding relative to center for left/top
-              left: textbox.originalGroup.left! ,
-              top: textbox.originalGroup.top! ,
+              left: textbox.originalGroup.left!,
+              top: textbox.originalGroup.top!,
               angle: textbox.originalGroup.angle,
               scaleX: textbox.originalGroup.scaleX,
               scaleY: textbox.originalGroup.scaleY,
-              hasBorders: false
+              hasBorders: false,
+              objectCaching: false
             })
             clonedObj.rotate(target.angle!);
             console.log("textboxForEdit", textboxForEdit);

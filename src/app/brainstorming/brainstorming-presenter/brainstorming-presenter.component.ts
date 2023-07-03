@@ -9,7 +9,6 @@ import {View} from '../../view';
 import {MatDialog} from '@angular/material/dialog';
 import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 import {CanvasObjectService} from "../canvas-object.service";
-import {VotingService} from "../voting.service";
 import {FixedSizeTextbox} from "../../inf-whiteboard/canvas-objects/fixed-size-textbox";
 import {fabric} from "fabric";
 
@@ -18,22 +17,21 @@ import {fabric} from "fabric";
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css'],
 })
-export class BrainstormingPresenterComponent
-  implements View, OnInit {
+export class BrainstormingPresenterComponent implements View, OnInit {
   private isSingleChoice: boolean = false;
   private timerInterval: any;
   ideaEvent?: BrainstormingPresenterSubscribeResponse;
   ideaResponses: string[] = [];
   //maxZIndex = 20;
   stickyContentVisible: boolean = false;
-  votes?: number[];
+  votes: number[] = [];
   timerLengthVoting?: number;
   timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
-  private canvas? :fabric.Canvas;
+  private canvas?: fabric.Canvas;
 
-  constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService,private votingServ: VotingService) {
+  constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService) {
   }
 
   ngOnInit(): void {
@@ -44,7 +42,7 @@ export class BrainstormingPresenterComponent
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.initializeTimer();
-    this.ideaEvent.ideas.map((idea, index) => {
+    this.ideaEvent.ideas.map((idea) => {
       this.canObjServ.objectAdded.emit({
         text: idea,
         color: '#ffd707ff',
@@ -95,17 +93,47 @@ export class BrainstormingPresenterComponent
     });
   }
 
-  private updateVotes(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
-    let voteIndex = 0;
-    this.ideaResponses.forEach((idea, index) => {
-      // if (idea.text !== '' && this.votes) {
-      //   this.votes[index] +=
-      //     brainstormingSubscriptionEvent.ideaVoting[voteIndex];
-      //   voteIndex++;
-      // }
+  private updateVotes(event: BrainstormingClientSubscribeResponse): void {
+    this.ideaResponses.forEach((_, index) => {
+      if (this.votes) {
+        this.votes[index] += event.ideaVoting[index];
+        this.updateVoteCounterOnCanvas(index);
+      }
     });
   }
 
+  private updateVoteCounterOnCanvas(index: number): void {
+    const groupObjects = this.getGroupObjectsOnCanvas();
+
+    groupObjects.forEach((group, groupIndex) => {
+      if (this.votes[groupIndex] !== 0 && groupIndex === index) {
+        this.updateVoteCounterOnGroup(group, index);
+      }
+    });
+  }
+
+  private getGroupObjectsOnCanvas(): fabric.Group[] {
+    const objects = this.canvas?.getObjects() || [];
+    return objects.filter(obj => obj.type === 'group') as fabric.Group[];
+  }
+
+  private updateVoteCounterOnGroup(group: fabric.Group, index: number): void {
+    const textObjectsInGroup = this.getTextObjectsInGroup(group);
+
+    textObjectsInGroup.forEach(textObj => {
+      textObj.set('text', `${this.votes[index]}`);
+    });
+
+    this.canvas?.renderAll();
+  }
+
+  private getTextObjectsInGroup(group: fabric.Group): fabric.Text[] {
+    const groupObjects = group.getObjects();
+    return groupObjects
+      .filter(groupItem => groupItem.type === 'group')
+      .flatMap(groupItem => (groupItem as fabric.Group).getObjects())
+      .filter(item => item.type === 'text') as fabric.Text[];
+  }
   private subscribeToPresenterChannel(): void {
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(
       (response) => {
@@ -226,9 +254,6 @@ export class BrainstormingPresenterComponent
         }
       });
       if (!this.ideaEvent?.questionID) return;
-      // let finalIdeas: string[] = this.ideaResponses
-      //   .map((idea) => idea.text)
-      //   .filter((idea) => idea !== '');
       this.stage = 'voting';
       this.votes = Array(this.ideaResponses.length).fill(0);
       const payload: BrainstormingPresenterStatusVotingRequest = {
@@ -246,11 +271,19 @@ export class BrainstormingPresenterComponent
       this.queueService.publishMessageToPresenterChannel(payload);
     })
     this.canObjServ.requestCanvas.emit();
+    this.getGroupObjectsOnCanvas().forEach((obj) => {
+      obj.getObjects("group").forEach((obj) => {
+        if (obj.name === "votingCounter") {
+          obj.visible = true;
+          this.canvas?.renderAll();
+        }
+      })
+    })
   }
 
-    toggleAllStickies(): void {
+  toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
-    console.log("Hide gedrückt.",this.stickyContentVisible);
+    console.log("Hide gedrückt.", this.stickyContentVisible);
     this.canObjServ.toggleTextVisibility.emit({textVisible: this.stickyContentVisible});
   }
 
@@ -268,7 +301,16 @@ export class BrainstormingPresenterComponent
     clearInterval(this.timerInterval);
     this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
+    // this.getGroupObjectsOnCanvas().forEach((obj) => {
+    //   obj.getObjects("group").forEach((obj) => {
+    //     if (obj.name === "votingCounter") {
+    //       obj.visible = false;
+    //       this.canvas?.renderAll();
+    //     }
+    //   })
+    // })
   }
+
 
   private initializeTimer() {
     if (this.ideaEvent?.timer) {
@@ -298,7 +340,7 @@ export class BrainstormingPresenterComponent
     });
   }
 
-   openBrainstormingTimerDialog() {
+  openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
       data: {stage: "brainstorming"},
     });
