@@ -269,6 +269,7 @@ export class BrainstormingPresenterComponent implements View, OnInit {
         payload.timer = this.timerLengthVoting;
       }
       this.queueService.publishMessageToPresenterChannel(payload);
+      this.ideaResponses = [];
     })
     this.canObjServ.requestCanvas.emit();
     this.getGroupObjectsOnCanvas().forEach((obj) => {
