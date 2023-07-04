@@ -58,7 +58,7 @@
         {
           "name" : "ideas",
           "description" : "A set of the first ideas you want to provide",
-          "value" : ["Nutella and bananas are the way!","Yes!","To much gluten :("],
+          "value" : ["Nutella and bananas are the way!","Yes!","Too much gluten :("],
           "required" : false
         }
       ]
