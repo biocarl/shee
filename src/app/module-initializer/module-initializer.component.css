@@ -108,5 +108,10 @@ li {
 }
 
 .addBtn {
-  align-item: center;
+  align-self: center;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
 }
