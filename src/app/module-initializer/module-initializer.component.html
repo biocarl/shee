@@ -23,10 +23,10 @@
   <div class="input-flex">
     <ul>
       <li *ngFor="let answer of parameter.value; let i = index; trackBy:trackByIndex">
-        <button class="addDeleteBtn addBtn" *ngIf="parameter.value.length>1" style="visibility: hidden" >+</button>
+        <button class="spacer" *ngIf="parameter.value.length>1" style="visibility: hidden" >+</button>
         <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value[i]"
                [required]="parameter.required"/>
-        <button class="spacer addDeleteBtn" *ngIf="parameter.value.length>1 && i <=1" style="visibility: hidden">-</button>
+        <button class="spacer" *ngIf="parameter.value.length>1 && i <=1" style="visibility: hidden">-</button>
         <button class="addDeleteBtn" *ngIf="parameter.value.length>1 && i>1" (click)=parameter.value.splice(i,1)>-
         </button>
       </li>
