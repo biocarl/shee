@@ -15,7 +15,6 @@ h1 {
 
 .p-description, input {
   display: block;
-  width: calc(100% - 4em);
 }
 
 .p-description {
@@ -125,6 +124,7 @@ ul {
   border: none;
   width: 50px;
   height: 38px;
+  margin-left: 10px;
 }
 .deleteBtn {
   margin-left: 10px;
