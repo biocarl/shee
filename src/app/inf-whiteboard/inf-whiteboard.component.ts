@@ -4,7 +4,6 @@ import {StickyNoteFactory} from "./canvas-objects/sticky-note-factory";
 import {LoggerService} from "../logger.service";
 import {CanvasObjectService} from "../brainstorming/canvas-object.service";
 import {FixedSizeTextbox} from "./canvas-objects/fixed-size-textbox";
-import {VotingService} from "../brainstorming/voting.service";
 
 @Component({
   selector: 'app-inf-whiteboard',
@@ -27,7 +26,7 @@ export class InfWhiteboardComponent implements OnInit {
   public menuPosition = {top: 0, left: 0};
   public selectedObject: fabric.Object | fabric.Group | undefined = undefined;
 
-  constructor(private renderer: Renderer2,private log:LoggerService, private canObjSer: CanvasObjectService,private votingServ: VotingService) {
+  constructor(private renderer: Renderer2,private log:LoggerService, private canObjSer: CanvasObjectService) {
     this.disableScrollbar();
     this.canObjSer.objectAdded.subscribe((object:{ text: string; color: string; hasVisibleContent: boolean; type: string } ) => {
       if(object.type === "stickyNote"){
@@ -286,7 +285,7 @@ export class InfWhiteboardComponent implements OnInit {
   @HostListener('window:resize')
   onResize() {
     this.canvas.setWidth(window.innerWidth);
-    this.canvas.setHeight(window.innerHeight - (document.getElementById("navbar")!.offsetHeight + document.getElementById("buttons")!.offsetHeight));
+    this.canvas.setHeight(window.innerHeight - (document.getElementById("navbar")!.offsetHeight));
   }
 
   addStickyNote(textVisible: boolean = false,stickyText?: string,color?:string) {

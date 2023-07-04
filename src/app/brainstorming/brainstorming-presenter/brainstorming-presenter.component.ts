@@ -31,7 +31,8 @@ export class BrainstormingPresenterComponent implements View, OnInit {
     'initial';
   private canvas?: fabric.Canvas;
 
-  constructor(private queueService: QueueService, private dialog: MatDialog, private canObjServ: CanvasObjectService) {
+  constructor(private queueService: QueueService,
+              private dialog: MatDialog, private canObjServ: CanvasObjectService) {
   }
 
   ngOnInit(): void {
@@ -240,38 +241,70 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   // }
 
   startVoting(): void {
-    this.canObjServ.sendCanvas.subscribe((obj) => {
-      this.canvas = obj.canvas;
-      obj.canvas.getObjects().forEach(obj => {
-        if (obj.type === 'group') {
-          let group = obj as fabric.Group;
+    this.subscribeCanvasObjects();
+    this.emitCanvasRequest();
+    this.toggleVotingCounterVisibility();
+  }
 
-          group.getObjects().forEach(groupItem => {
-            if (groupItem instanceof FixedSizeTextbox) {
-              this.ideaResponses.push(groupItem.text!);
-            }
-          });
-        }
-      });
-      if (!this.ideaEvent?.questionID) return;
-      this.stage = 'voting';
-      this.votes = Array(this.ideaResponses.length).fill(0);
-      const payload: BrainstormingPresenterStatusVotingRequest = {
-        interaction: 'brainstorming',
-        ideas: this.ideaResponses,
-        question: this.ideaEvent?.question,
-        questionID: this.ideaEvent.questionID,
-        singleChoice: this.isSingleChoice,
-        votingInProgress: true,
-        clientOnly: true,
-      };
-      if (this.timerLengthVoting) {
-        payload.timer = this.timerLengthVoting;
+  private subscribeCanvasObjects(): void {
+    this.canObjServ.sendCanvas.subscribe((obj) => {
+      this.extractIdeaResponsesFromCanvas(obj);
+      this.initializeVotingStage();
+    });
+  }
+
+  private extractIdeaResponsesFromCanvas(obj: any): void {
+    this.canvas = obj.canvas;
+    obj.canvas.getObjects().forEach((obj: fabric.Group) => {
+      if (obj.type === 'group') {
+        let group = obj as fabric.Group;
+
+        group.getObjects().forEach(groupItem => {
+          if (groupItem instanceof FixedSizeTextbox) {
+            this.ideaResponses.push(groupItem.text!);
+          }
+        });
       }
-      this.queueService.publishMessageToPresenterChannel(payload);
-      this.ideaResponses = [];
-    })
+    });
+  }
+
+  private initializeVotingStage(): void {
+    if (!this.ideaEvent?.questionID) return;
+
+    this.stage = 'voting';
+    this.votes = Array(this.ideaResponses.length).fill(0);
+
+    this.sendVotingRequestToPresenter();
+  }
+
+  private sendVotingRequestToPresenter(): void {
+    const payload: BrainstormingPresenterStatusVotingRequest = this.constructVotingRequestPayload();
+    this.queueService.publishMessageToPresenterChannel(payload);
+  }
+
+  private constructVotingRequestPayload(): BrainstormingPresenterStatusVotingRequest {
+    const payload: BrainstormingPresenterStatusVotingRequest = {
+      interaction: 'brainstorming',
+      ideas: this.ideaResponses,
+      question: this.ideaEvent?.question!,
+      questionID: this.ideaEvent?.questionID!,
+      singleChoice: this.isSingleChoice,
+      votingInProgress: true,
+      clientOnly: true,
+    };
+
+    if (this.timerLengthVoting) {
+      payload.timer = this.timerLengthVoting;
+    }
+
+    return payload;
+  }
+
+  private emitCanvasRequest(): void {
     this.canObjServ.requestCanvas.emit();
+  }
+
+  private toggleVotingCounterVisibility(): void {
     this.getGroupObjectsOnCanvas().forEach((obj) => {
       obj.getObjects("group").forEach((obj) => {
         if (obj.name === "votingCounter") {
@@ -302,16 +335,8 @@ export class BrainstormingPresenterComponent implements View, OnInit {
     clearInterval(this.timerInterval);
     this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
-    // this.getGroupObjectsOnCanvas().forEach((obj) => {
-    //   obj.getObjects("group").forEach((obj) => {
-    //     if (obj.name === "votingCounter") {
-    //       obj.visible = false;
-    //       this.canvas?.renderAll();
-    //     }
-    //   })
-    // })
+    this.ideaResponses = [];
   }
-
 
   private initializeTimer() {
     if (this.ideaEvent?.timer) {
