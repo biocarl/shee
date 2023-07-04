@@ -14,8 +14,6 @@ h1 {
 }
 
 .p-description, input {
-  margin-left: 2em;
-  margin-right: 2em;
   display: block;
   width: calc(100% - 4em);
 }
@@ -30,7 +28,6 @@ h1 {
 }
 
 .p-name {
-  padding-left: 0.6em;
   text-transform: capitalize;
   padding-bottom: 0.3em;
   padding-top: 0.3em;
@@ -128,4 +125,7 @@ ul {
   border: none;
   width: 50px;
   height: 38px;
+}
+.deleteBtn {
+  margin-left: 10px;
 }
