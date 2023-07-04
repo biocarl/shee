@@ -7,6 +7,7 @@
       <option *ngFor="let module of modules" [value]="module.name">{{module.name}}</option>
     </select>
   </div>
+</form>
 
   <div *ngFor="let parameter of selectedModule(selectedModuleString).parameters">
     <label [for]="parameter.name">
@@ -20,12 +21,16 @@
 
     </label>
     <div class="input-flex">
-    <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value"
+      <ul>
+      <li *ngFor="let answer of parameter.value; let i = index; trackBy:trackByIndex">
+    <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value[i]"
            [required]="parameter.required"/>
+      </li>
+      </ul>
     </div>
   </div>
 
   <div class="center">
     <button  class="initializer-button" type="button" (click)="initializeModuleWithParams()">Initialize Module</button>
   </div>
-</form>
+
