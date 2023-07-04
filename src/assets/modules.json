@@ -25,7 +25,7 @@
         },
         {
           "name" : "timer",
-          "description" : "Publish a poll with a time constraint in seconds(optional).",
+          "description" : "Publish a poll with a time constraint in seconds (optional).",
           "value" : ["7000"],
           "required" : false
         }
