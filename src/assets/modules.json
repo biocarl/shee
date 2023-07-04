@@ -19,13 +19,13 @@
         },
         {
           "name" : "answers",
-          "description" : "A set of options you want to provide for the presenters to vote on",
+          "description" : "A set of options you want to provide for the clients to vote on",
           "value" : ["Done ✅","Help needed \uD83C\uDD98","Ready to help ⛑️"],
           "required" : true
         },
         {
           "name" : "timer",
-          "description" : "Publish a poll with a time constraint in seconds (optional).",
+          "description" : "Publish a poll with a time constraint in seconds (optional)",
           "value" : ["7000"],
           "required" : false
         }
