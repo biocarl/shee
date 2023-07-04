@@ -157,22 +157,39 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
 
 
   private adjustFontSize(textbox: FixedSizeTextbox) {
-    while (this.isTextboxTooSmall(textbox)) {
-      this.increaseFontSize(textbox);
-    }
-    while (this.isTextboxTooLarge(textbox)) {
-      this.decreaseFontSize(textbox);
-    }
+    this.adjustFontSizeForHeight(textbox);
     this.adjustFontSizeForWidth(textbox);
     textbox.visibleTextFontSize = textbox.fontSize;
+    this.canvas.renderAll();
+  }
+
+  private adjustFontSizeForHeight(textbox: FixedSizeTextbox) {
+    const stepSize = 10;
+
+    while (this.isTextboxTooSmall(textbox)) {
+      this.increaseFontSize(textbox, stepSize);
+    }
+
+    while (this.isTextboxTooLarge(textbox)) {
+      this.decreaseFontSize(textbox, stepSize);
+    }
+
+    // Fine tune the font size, 1 pixel at a time
+    while (this.isTextboxTooSmall(textbox)) {
+      this.increaseFontSize(textbox, 1);
+    }
+
+    while (this.isTextboxTooLarge(textbox)) {
+      this.decreaseFontSize(textbox, 1);
+    }
   }
 
   private isTextboxTooSmall(textbox: FixedSizeTextbox): boolean {
     return textbox.height! < STICKY_NOTE_DIMENSIONS - 20 && textbox.fontSize! <= MAX_FONT_SIZE;
   }
 
-  private increaseFontSize(textbox: FixedSizeTextbox) {
-    textbox.fontSize!++;
+  private increaseFontSize(textbox: FixedSizeTextbox, step: number) {
+    textbox.fontSize! += step;
     this.canvas.renderAll();
   }
 
@@ -180,8 +197,8 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     return textbox.height! > STICKY_NOTE_DIMENSIONS - 20 && textbox.fontSize! >= 1;
   }
 
-  private decreaseFontSize(textbox: FixedSizeTextbox) {
-    textbox.fontSize!--;
+  private decreaseFontSize(textbox: FixedSizeTextbox, step: number) {
+    textbox.fontSize! -= step;
     this.canvas.renderAll();
   }
 
@@ -194,6 +211,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     }
     this.canvas.renderAll();
   }
+
 
   private findGroupContainingTextbox(textbox: FixedSizeTextbox): fabric.Group | undefined {
     const groups = this.canvas.getObjects('group') as fabric.Group[];
