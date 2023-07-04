@@ -4,18 +4,14 @@ interface FixedSizeTextboxOptions extends fabric.ITextboxOptions {
   fixedWidth?: number;
   fixedHeight?: number;
   originalGroup?: fabric.Group;
-  visibleText?: string;
-  visibleTextFontSize?: number;
-  hiddenIcon?: string;
+  textVisible?: boolean;
 }
 
 export class FixedSizeTextbox extends fabric.Textbox {
   fixedWidth?: number;
   fixedHeight?: number;
   originalGroup?: fabric.Group;
-  visibleText?: string;
-  visibleTextFontSize?: number;
-  hiddenIcon?: string;
+  textVisible?: boolean;
 
   constructor(text: string, options?: FixedSizeTextboxOptions) {
     super(text, options);
@@ -23,13 +19,11 @@ export class FixedSizeTextbox extends fabric.Textbox {
     this.fixedWidth = options?.fixedWidth;
     this.fixedHeight = options?.fixedHeight;
     this.originalGroup = options?.originalGroup;
-    this.visibleText = options?.visibleText;
-    this.visibleTextFontSize = options?.visibleTextFontSize;
-    this.hiddenIcon = options?.hiddenIcon;
+    this.textVisible = options?.textVisible;
   }
 
   override toObject(propertiesToInclude?: string[]): any {
-    propertiesToInclude = (propertiesToInclude || []).concat(['fixedWidth', 'fixedHeight', 'visibleText', 'visibleTextFontSize', 'hiddenIcon']);
+    propertiesToInclude = (propertiesToInclude || []).concat(['fixedWidth', 'fixedHeight', 'textVisible']);
 
     return super.toObject(propertiesToInclude);
   }

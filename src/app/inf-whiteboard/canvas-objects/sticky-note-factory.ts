@@ -19,14 +19,20 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     const rectangle = this.createRectangle(color);
     const textbox = this.createTextbox(textVisible, text);
     const stickyNote = new fabric.Group([rectangle, textbox]);
-    this.createVotingCounter().then(votingCounter => {
-      votingCounter.left = 100- votingCounter.width!/2;
-      votingCounter.top = 75 + votingCounter.height!/2;
-      stickyNote.add(votingCounter);
-      this.canvas.renderAll();
-    });
+    this.createHiddenIcon(stickyNote, textVisible);
+    this.createVotingCounter(stickyNote);
     this.setStyle(stickyNote);
     this.attachDoubleClickHandler(stickyNote);
+
+    stickyNote.toObject = (function (toObject) {
+      return function (this: fabric.Group) {
+        return fabric.util.object.extend(toObject.call(this), {
+          name: this.name
+        });
+      };
+    })(fabric.Group.prototype.toObject);
+    stickyNote.name = "stickyNote";
+
     this.canvas.add(stickyNote);
     stickyNote.viewportCenter();
     return stickyNote;
@@ -64,9 +70,8 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       fixedHeight: TEXTBOX_DIMENSIONS,
       fixedWidth: TEXTBOX_DIMENSIONS,
       objectCaching: false,
-      text: textVisible ? text : "❔",
-      hiddenIcon: "❔",
-      visibleText: text ? text : ""
+      text: text,
+      textVisible: textVisible
     });
 
     if (text) {
@@ -85,58 +90,61 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     return textbox;
   }
 
-  private createVotingCounter(): Promise<fabric.Group> {
-    return new Promise((resolve) => {
-      let votingCounter = new fabric.Group();
-      const counter = new fabric.Text('0', {
-        selectable: false,
-        fontSize: 19,
+  private createVotingCounter(stickyNote:fabric.Group) {
+    let votingCounter = new fabric.Group();
+    const counter = new fabric.Text('0', {
+      selectable: false,
+      fontSize: 19,
+      objectCaching: false
+    });
+    const background = new fabric.Rect({
+      fill: "rgb(255,255,255,0.87)",
+      rx: 15,
+      ry: 100,
+      objectCaching: false
+    });
+    fabric.loadSVGFromURL('/assets/SVG/Thumbs_Up_Icon.svg', (objects, options) => {
+      const obj = fabric.util.groupSVGElements(objects, options);
+      obj.set({
+        scaleX: 0.2,
+        scaleY: 0.2,
+        left: 5,
+        top: 1,
         objectCaching: false
       });
-      const background = new fabric.Rect({
-        fill: "rgb(255,255,255,0.87)",
-        rx: 15,
-        ry: 100,
-        objectCaching: false
+      background.set({
+        width: counter.width! + obj.width! * 0.2 + 10,
+        height: counter.height! + 5
       });
-      fabric.loadSVGFromURL('/assets/SVG/Thumbs_Up_Icon.svg', (objects, options) => {
-        const obj = fabric.util.groupSVGElements(objects, options);
-        obj.set({
-          scaleX: 0.2,
-          scaleY: 0.2,
-          left: 5,
-          top: 1,
-          objectCaching : false
-        })
-        background.set({
-          width: counter.width! + obj.width! * 0.2 + 10,
-          height: counter.height! + 5
-        })
-        counter.set({
-          left: obj.width! * 0.2 + 6,
-          top: 3
-        })
-       votingCounter.toObject = (function(toObject) {
-          return function(this: fabric.Group) {
-            return fabric.util.object.extend(toObject.call(this), {
-              name: this.name
-            });
-          };
-        })(fabric.Group.prototype.toObject);
-        votingCounter.name = "votingCounter";
-        votingCounter.addWithUpdate(background);
-        votingCounter.addWithUpdate(obj);
-        votingCounter.addWithUpdate(counter);
-
-        // Set the position of the votingCounter at the bottom left of the sticky note.
-        votingCounter.set({
-          left: 0,
-          top: STICKY_NOTE_DIMENSIONS - votingCounter.height!,
-          visible: false,
-        });
-
-        resolve(votingCounter);
+      counter.set({
+        left: obj.width! * 0.2 + 6,
+        top: 3
       });
+
+      votingCounter.toObject = (function (toObject) {
+        return function (this: fabric.Group) {
+          return fabric.util.object.extend(toObject.call(this), {
+            name: this.name
+          });
+        };
+      })(fabric.Group.prototype.toObject);
+
+      votingCounter.name = "votingCounter";
+      votingCounter.addWithUpdate(background);
+      votingCounter.addWithUpdate(obj);
+      votingCounter.addWithUpdate(counter);
+
+      // Set the position of the votingCounter at the bottom left of the sticky note.
+      votingCounter.set({
+        left: 0,
+        top: STICKY_NOTE_DIMENSIONS - votingCounter.height!,
+        visible: false,
+      });
+
+      votingCounter.left = 100 - votingCounter.width! / 2;
+      votingCounter.top = 75 + votingCounter.height! / 2;
+      stickyNote.add(votingCounter);
+      this.canvas.renderAll();
     });
   }
 
@@ -159,7 +167,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
   private adjustFontSize(textbox: FixedSizeTextbox) {
     this.adjustFontSizeForHeight(textbox);
     this.adjustFontSizeForWidth(textbox);
-    textbox.visibleTextFontSize = textbox.fontSize;
     this.canvas.renderAll();
   }
 
@@ -239,7 +246,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     if (target && target.type === 'group') {
       let items = target.getObjects();
       let textbox = items.find((obj) => obj.type === 'textbox') as FixedSizeTextbox;
-      if (textbox) {
+      if (textbox && textbox.textVisible) {
         textbox.originalGroup = target;
         textbox.clone((clonedObj: FixedSizeTextbox) => {
           let textboxForEdit = clonedObj as FixedSizeTextbox;
@@ -298,7 +305,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
         if (item.type === "textbox" && item instanceof FixedSizeTextbox) {
           item.set({
             text: textbox.text,
-            visibleText: textbox.text,
             visible: true
           });
           item.fire('changed');
@@ -322,6 +328,28 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       }
     });
     this.canvas.renderAll();
+  }
+
+  private createHiddenIcon(stickyNote: fabric.Group, textVisible?: boolean) {
+    const svgString = "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"1em\" viewBox=\"0 0 640 512\"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c8.4-19.3 10.6-41.4 4.8-63.3c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zM373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5L373 389.9z\"/></svg>";
+    fabric.loadSVGFromString(svgString, (objects, options) => {
+      let obj = fabric.util.groupSVGElements(objects, options);
+      obj.scaleToHeight(STICKY_NOTE_DIMENSIONS - STICKY_NOTE_PADDING);
+      obj.scaleToWidth(STICKY_NOTE_DIMENSIONS - STICKY_NOTE_PADDING);
+      obj.visible = !textVisible;
+      obj.originX = "center";
+      obj.originY = "center";
+      obj.toObject = (function (toObject) {
+        return function (this: fabric.Group) {
+          return fabric.util.object.extend(toObject.call(this), {
+            name: this.name
+          });
+        };
+      })(fabric.Group.prototype.toObject);
+      obj.name = "hiddenSVG";
+      stickyNote.add(obj);
+      this.canvas.renderAll();
+    });
   }
 }
 

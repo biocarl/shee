@@ -317,7 +317,6 @@ export class BrainstormingPresenterComponent implements View, OnInit {
 
   toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
-    console.log("Hide gedrückt.", this.stickyContentVisible);
     this.canObjServ.toggleTextVisibility.emit({textVisible: this.stickyContentVisible});
   }
 

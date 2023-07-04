@@ -39,7 +39,6 @@ export class InfWhiteboardComponent implements OnInit {
       }
     })
     this.canObjSer.toggleTextVisibility.subscribe((object:{textVisible:boolean}) =>{
-      console.log("Hide event gehört!");
       this.toggleTextVisibility(object.textVisible);
       })
     this.canObjSer.requestCanvas.subscribe(() => {
@@ -319,10 +318,14 @@ export class InfWhiteboardComponent implements OnInit {
 
         group.getObjects().forEach(groupItem => {
           console.log("Textbox?",groupItem);
+
           if (groupItem instanceof FixedSizeTextbox) {
-            groupItem.text = textVisible ? groupItem.visibleText : groupItem.hiddenIcon;
-            groupItem.fontSize = textVisible ? groupItem.visibleTextFontSize : 150;
-            groupItem.fire('changed');
+            groupItem.visible = textVisible;
+            groupItem.textVisible = textVisible;
+          }
+
+          if(groupItem.name === "hiddenSVG"){
+            groupItem.visible = !textVisible;
           }
         });
       }
