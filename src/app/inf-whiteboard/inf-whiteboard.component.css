@@ -51,42 +51,62 @@ span.active {
 
 span.red {
   background: #fc3030;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.orange {
   background: #f2711c;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.yellow {
   background: #FFD707FF;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.olive {
   background: #b5cc18;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.green {
   background: #21ba45;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.teal {
   background: #00b5ad;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.blue {
   background: #2185d0;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.violet {
   background: #7e43fd;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.purple {
   background: #a333c8;
+  border-style: solid;
+  border-width: 1px;
 }
 
 span.pink {
   background: #e03997;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .color-selection {
