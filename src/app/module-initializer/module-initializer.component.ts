@@ -68,7 +68,11 @@ export class ModuleInitializerComponent implements OnInit {
     this.router.navigate(['../../presenter'], {queryParams, relativeTo: this.route}).then();
   }
 
-  trackByIndex(index: number) {
+  trackByIndex(index: number) :number {
     return index;
   }
+  addAnswer(param:string[]) :string[]{
+    param.length=param.length +1;
+    return param;
+}
 }
