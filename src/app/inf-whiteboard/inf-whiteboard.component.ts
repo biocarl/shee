@@ -320,7 +320,7 @@ export class InfWhiteboardComponent implements OnInit {
           console.log("Textbox?",groupItem);
 
           if (groupItem instanceof FixedSizeTextbox) {
-            groupItem.visible = textVisible;
+            groupItem.fill = textVisible ? 'rgb(0,0,0,0.87)' : 'transparent';
             groupItem.textVisible = textVisible;
           }
 

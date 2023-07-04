@@ -66,7 +66,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       top: STICKY_NOTE_PADDING,
       fontSize: 21,
       width: TEXTBOX_DIMENSIONS,
-      fill: text ? 'transparent' : 'rgb(0,0,0,0.87)',
+      fill: textVisible ? 'rgb(0,0,0,0.87)' : 'transparent',
       fixedHeight: TEXTBOX_DIMENSIONS,
       fixedWidth: TEXTBOX_DIMENSIONS,
       objectCaching: false,
@@ -78,7 +78,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       // Delay execution until rendering is finished
       setTimeout(() => {
         this.adjustFontSize(textbox);
-        textbox.fill = 'rgb(0,0,0,0.87)'
+        textbox.fill = textVisible ? 'rgb(0,0,0,0.87)' : 'transparent';
         this.canvas.renderAll();
       }, 0);
     }
