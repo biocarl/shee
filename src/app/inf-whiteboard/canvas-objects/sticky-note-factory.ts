@@ -260,7 +260,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
               objectCaching: false
             })
             clonedObj.rotate(target.angle!);
-            console.log("textboxForEdit", textboxForEdit);
 
             textboxForEdit.on('changed', () => {
               this.adjustFontSize(textboxForEdit);

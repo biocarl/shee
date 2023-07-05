@@ -205,9 +205,14 @@ export class InfWhiteboardComponent implements OnInit {
     this.selectedObject = undefined;
   }
 
-  onObjectMoving() {
+  onObjectMoving(event: fabric.IEvent) {
     this.showMenu = false;
     this.objectIsMoving = true;
+
+    if(event.target){
+      this.canvas.bringToFront(event.target);
+    }
+
   }
 
   onObjectScaling() {
