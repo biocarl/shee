@@ -18,9 +18,11 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
   public create(textVisible?: boolean, text?: string, color?: string): fabric.Group {
     const rectangle = this.createRectangle(color);
     const textbox = this.createTextbox(textVisible, text);
+    this.canvas.add(textbox);
+    textbox.fire("changed");
     const stickyNote = new fabric.Group([rectangle, textbox]);
-   // this.createHiddenIcon(stickyNote, textVisible);
-    //this.createVotingCounter(stickyNote);
+    this.createHiddenIcon(stickyNote, textVisible);
+    this.createVotingCounter(stickyNote);
     this.setStyle(stickyNote);
     this.attachDoubleClickHandler(stickyNote);
 
@@ -77,15 +79,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       text: text,
       textVisible: textVisible
     });
-
-    if (text) {
-      // Delay execution until rendering is finished
-      setTimeout(() => {
-        this.adjustFontSize(textbox);
-        textbox.fill = textVisible ? 'rgb(0,0,0,0.87)' : 'transparent';
-        this.canvas.renderAll();
-      }, 0);
-    }
 
     textbox.on('changed', () => {
       this.adjustFontSize(textbox);
