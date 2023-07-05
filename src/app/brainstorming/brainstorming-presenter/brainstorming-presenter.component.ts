@@ -360,7 +360,7 @@ export class BrainstormingPresenterComponent implements View, OnInit {
     this.canObjServ.objectAdded.emit({
       text: "",
       color: "",
-      hasVisibleContent: this.stickyContentVisible,
+      hasVisibleContent: true,
       type: "stickyNote"
     });
   }
