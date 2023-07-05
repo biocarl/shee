@@ -15,25 +15,32 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.canvas = canvas;
   }
 
-  public create(textVisible?: boolean, text?: string, color?: string): fabric.Group {
+  public create(textVisible?: boolean, text?: string, color?: string,presenter?:boolean): fabric.Group {
     const rectangle = this.createRectangle(color);
     const textbox = this.createTextbox(textVisible, text);
+    //hacky fix for text resizing before the rest is added
     this.canvas.add(textbox);
     textbox.fire("changed");
     const stickyNote = new fabric.Group([rectangle, textbox]);
+    this.canvas.remove(textbox);
+    //
     this.createHiddenIcon(stickyNote, textVisible);
     this.createVotingCounter(stickyNote);
     this.setStyle(stickyNote);
+    if(presenter === true){
+      rectangle.stroke = 'rgb(63,63,63)';
+      rectangle.strokeWidth = 3;
+    }
     this.attachDoubleClickHandler(stickyNote);
 
     stickyNote.toObject = (function (toObject) {
       return function (this: fabric.Group) {
         return fabric.util.object.extend(toObject.call(this), {
-          name: this.name
+          name: this.name,
         });
       };
     })(fabric.Group.prototype.toObject);
-    stickyNote.name = "stickyNote";
+    stickyNote.name = presenter ? "stickyNotePresenter" : "stickyNote";
 
     this.canvas.add(stickyNote);
     stickyNote.viewportCenterV();
@@ -60,7 +67,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       width: STICKY_NOTE_DIMENSIONS,
       height: STICKY_NOTE_DIMENSIONS,
       fill: color ? color : 'rgb(255, 215, 7)',
-      shadow: this.createShadow(),
+      shadow: this.createShadow()
     });
   }
 
@@ -77,7 +84,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       fixedWidth: TEXTBOX_DIMENSIONS,
       objectCaching: false,
       text: text,
-      textVisible: textVisible
+      textVisible: textVisible,
     });
 
     textbox.on('changed', () => {
@@ -241,6 +248,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     let target = options.target as fabric.Group;
 
     if (target && target.type === 'group') {
+      target.bringToFront();
       let items = target.getObjects();
       let textbox = items.find((obj) => obj.type === 'textbox') as FixedSizeTextbox;
       if (textbox && textbox.textVisible) {
@@ -257,7 +265,8 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
               scaleX: textbox.originalGroup.scaleX,
               scaleY: textbox.originalGroup.scaleY,
               hasBorders: false,
-              objectCaching: false
+              objectCaching: false,
+              originalGroup: textbox.originalGroup
             })
             clonedObj.rotate(target.angle!);
 

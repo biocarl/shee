@@ -30,6 +30,7 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
   private canvas?: fabric.Canvas;
+   firstClientIdeaReceived: boolean = false;
 
   constructor(private queueService: QueueService,
               private dialog: MatDialog, private canObjServ: CanvasObjectService) {
@@ -48,7 +49,8 @@ export class BrainstormingPresenterComponent implements View, OnInit {
         text: idea,
         color: '#ffd707ff',
         hasVisibleContent: true,
-        type: "stickyNote"
+        type: "stickyNote",
+        presenter: true
       });
     });
   }
@@ -86,11 +88,13 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   }
 
   private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    this.firstClientIdeaReceived = true;
     this.canObjServ.objectAdded.emit({
       text: brainstormingSubscriptionEvent.ideaText,
       color: brainstormingSubscriptionEvent.stickyColor,
       hasVisibleContent: this.stickyContentVisible,
-      type: brainstormingSubscriptionEvent.type
+      type: brainstormingSubscriptionEvent.type,
+      presenter: false
     });
   }
 
@@ -361,7 +365,8 @@ export class BrainstormingPresenterComponent implements View, OnInit {
       text: "",
       color: "",
       hasVisibleContent: true,
-      type: "stickyNote"
+      type: "stickyNote",
+      presenter: true
     });
   }
 

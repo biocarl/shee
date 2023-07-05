@@ -10,7 +10,7 @@
   </div>
   <ng-template #showTextarea>
     <ng-container *ngIf="ideaEvent">
-      <div class="brainstorming-title">{{ideaEvent?.question}}</div>
+      <div class="brainstorming-title">{{ideaEvent.question}}</div>
       <div *ngIf="ideaEvent.timer !== undefined">
         <div class="timer" *ngIf="ideaEvent.timer>0;else timeUp">Timer: {{ ideaEvent.timer }}</div>
       </div>

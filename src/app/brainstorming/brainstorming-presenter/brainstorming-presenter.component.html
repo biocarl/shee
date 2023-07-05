@@ -53,7 +53,7 @@
 </ng-template>
 
 <ng-template #hideButton>
-  <button class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i
+  <button *ngIf="firstClientIdeaReceived" class="brainstormingButton hideButton" (click)="toggleAllStickies()"><i
     [class]="stickyContentVisible ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i></button>
 </ng-template>
 

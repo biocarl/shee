@@ -23,7 +23,7 @@ export class FixedSizeTextbox extends fabric.Textbox {
   }
 
   override toObject(propertiesToInclude?: string[]): any {
-    propertiesToInclude = (propertiesToInclude || []).concat(['fixedWidth', 'fixedHeight', 'textVisible']);
+    propertiesToInclude = (propertiesToInclude || []).concat(['fixedWidth', 'fixedHeight', 'textVisible','presenter']);
 
     return super.toObject(propertiesToInclude);
   }

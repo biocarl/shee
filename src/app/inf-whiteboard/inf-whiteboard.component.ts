@@ -29,14 +29,15 @@ export class InfWhiteboardComponent implements OnInit {
   constructor(private renderer: Renderer2, private log: LoggerService, private canObjSer: CanvasObjectService) {
     this.disableScrollbar();
     this.canObjSer.objectAdded.subscribe((object: {
-      text: string;
-      color: string;
-      hasVisibleContent: boolean;
-      type: string
+      text: string,
+      color: string,
+      hasVisibleContent: boolean,
+      type: string,
+      presenter: boolean
     }) => {
       if (object.type === "stickyNote") {
         if (this.stickyNoteFactory) {
-          this.addStickyNote(object.hasVisibleContent, object.text, object.color);
+          this.addStickyNote(object.hasVisibleContent, object.text, object.color,object.presenter);
         } else {
           this.bufferedObjects.push(object);
         }
@@ -61,7 +62,7 @@ export class InfWhiteboardComponent implements OnInit {
     this.setCanvasEventListeners();
     this.stickyNoteFactory = new StickyNoteFactory(this.canvas);
     this.bufferedObjects.forEach(object => {
-      this.addStickyNote(true, object.text, object.color);
+      this.addStickyNote(true, object.text, object.color, true);
     });
     console.log(this.canvas.getObjects());
     this.bufferedObjects = [];
@@ -209,7 +210,7 @@ export class InfWhiteboardComponent implements OnInit {
     this.showMenu = false;
     this.objectIsMoving = true;
 
-    if(event.target){
+    if (event.target) {
       this.canvas.bringToFront(event.target);
     }
 
@@ -234,7 +235,7 @@ export class InfWhiteboardComponent implements OnInit {
     element.classList.add('active');
     let bgColor = getComputedStyle(element).getPropertyValue('background-color');
     // @ts-ignore
-    this.stickyNoteFactory.setBackgroundColor(this.selectedObject, bgColor);
+    this.stickyNoteFactory.setBackgroundColor(this.selectedObject.originalGroup ? this.selectedObject.originalGroup : this.selectedObject, bgColor);
     this.canvas.renderAll();
   }
 
@@ -296,24 +297,27 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.setHeight(window.innerHeight - (document.getElementById("navbar")!.offsetHeight));
   }
 
-  addStickyNote(textVisible: boolean = false, stickyText?: string, color?: string) {
+  addStickyNote(textVisible: boolean = false, stickyText?: string, color?: string, presenter?: boolean) {
     if (this.stickyNoteFactory) {
-      this.stickyNoteFactory.create(textVisible, stickyText, color);
+      this.stickyNoteFactory.create(textVisible, stickyText, color, presenter);
     }
   }
 
   private deleteObjects() {
-    const activeObjects = this.canvas.getActiveObjects();
+    // Check if any text is in edit mode. If so, do nothing
+    const editingObjects = this.canvas.getObjects().filter(obj =>
+      (obj.type === 'i-text' || obj.type === 'textbox') && (obj as fabric.Textbox || fabric.IText).isEditing
+    );
+    if (editingObjects.length > 0) {
+      return;
+    }
 
+    const activeObjects = this.canvas.getActiveObjects();
     if (activeObjects && activeObjects.length > 0) {
       activeObjects.forEach((obj) => {
-        //TODO implement logic to delete fabricObjects without breaking delete functionality while typing
-        if (obj.type === 'group') {
-          const stickyGroup = obj as fabric.Group;
-          this.canvas.remove(stickyGroup);
+          this.canvas.remove(obj);
           this.canvas.discardActiveObject();
           this.canvas.renderAll();
-        }
       });
     }
   }
@@ -323,9 +327,11 @@ export class InfWhiteboardComponent implements OnInit {
       if (obj.type === 'group') {
         let group = obj as fabric.Group;
 
-        group.getObjects().forEach(groupItem => {
-          console.log("Textbox?", groupItem);
+        if (group.name?.includes("Presenter")) {
+          return;
+        }
 
+        group.getObjects().forEach(groupItem => {
           if (groupItem instanceof FixedSizeTextbox) {
             groupItem.fill = textVisible ? 'rgb(0,0,0,0.87)' : 'transparent';
             groupItem.textVisible = textVisible;
@@ -334,6 +340,7 @@ export class InfWhiteboardComponent implements OnInit {
           if (groupItem.name === "hiddenSVG") {
             groupItem.visible = !textVisible;
           }
+
         });
       }
     });
