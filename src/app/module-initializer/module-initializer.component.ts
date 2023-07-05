@@ -15,7 +15,7 @@ interface ModuleType {
 interface ModuleParameter {
   description: string;
   required: boolean;
-  value: string;
+  value: string[];
   name: string;
 }
 
@@ -30,7 +30,7 @@ interface ModuleParameter {
  * @component
  * @implements {OnInit}
  */
-export class ModuleInitializerComponent implements OnInit{
+export class ModuleInitializerComponent implements OnInit {
   modules ?: ModuleType[];
   selectedModuleString: string = "poll";
 
@@ -43,7 +43,7 @@ export class ModuleInitializerComponent implements OnInit{
   ngOnInit(): void {
     this.http.get<ModuleTypes>('assets/modules.json').subscribe(data => {
       this.modules = data.modules;
-      this.log.logToConsole("Module initializer modules: ",this.modules);
+      this.log.logToConsole("Module initializer modules: ", this.modules);
     });
   }
 
@@ -55,7 +55,7 @@ export class ModuleInitializerComponent implements OnInit{
     return this.selectedModule(this.selectedModuleString).parameters
       .reduce((acc, current) => {
           // @ts-ignore
-          acc[current.name] = current.value;
+          acc[current.name] = current.value.join(",");
           return acc
         },
         {
@@ -67,4 +67,12 @@ export class ModuleInitializerComponent implements OnInit{
     const queryParams = this.extractQueryParams();
     this.router.navigate(['../../presenter'], {queryParams, relativeTo: this.route}).then();
   }
+
+  trackByIndex(index: number) :number {
+    return index;
+  }
+  addAnswer(param:string[]) :string[]{
+    param.length=param.length +1;
+    return param;
+}
 }

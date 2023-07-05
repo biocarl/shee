@@ -14,19 +14,19 @@
         {
           "name" : "question",
           "description" : "The question asked, only shown in presenter view",
-          "value" : "What is your status on Task 1?",
+          "value" : ["What is your status on Task 1?"],
           "required" : "true"
         },
         {
           "name" : "answers",
-          "description" : "A set of options you want to provide for the presenters to vote on",
-          "value" : "Done ✅,Help needed \uD83C\uDD98,Ready to help ⛑️",
+          "description" : "A set of options you want to provide for the clients to vote on",
+          "value" : ["Done ✅","Help needed \uD83C\uDD98","Ready to help ⛑️"],
           "required" : true
         },
         {
           "name" : "timer",
-          "description" : "Publish a poll with a time constraint (in seconds). After elapsed time participant won't be able to vote anymore nor will the presenter accept voting results.",
-          "value" : "7000",
+          "description" : "Publish a poll with a time constraint in seconds (optional)",
+          "value" : ["7000"],
           "required" : false
         }
       ]
@@ -39,7 +39,7 @@
         {
           "name" : "anonymity",
           "description" : "As a presenter you can ask for a username when generating the pairing link. Decide between 'public' or 'anonymous'",
-          "value" : "public",
+          "value" : ["public"],
           "required" : false
         }
       ]
@@ -52,13 +52,13 @@
         {
           "name" : "question",
           "description" : "The question asked",
-          "value" : "What do you think about pancakes with honey?",
+          "value" : ["What do you think about pancakes with honey?"],
           "required" : "true"
         },
         {
           "name" : "ideas",
           "description" : "A set of the first ideas you want to provide",
-          "value" : "Nutella and bananas are the way!,Yes!,To much gluten :(",
+          "value" : ["Nutella and bananas are the way!","Yes!","Too much gluten :("],
           "required" : false
         }
       ]
@@ -71,13 +71,13 @@
         {
           "name" : "question",
           "description" : "The question asked, only shown in presenter view",
-          "value" : "What is the meaning of life?",
+          "value" : ["What is the meaning of life?"],
           "required" : "true"
         },
         {
           "name" : "answers",
           "description" : "A set of options you want to provide for the presenters to vote on",
-          "value" : "Can't say ...,42,Its all about love!",
+          "value" : ["Can't say ...","42","Its all about love!"],
           "required" : true
         }
       ]
