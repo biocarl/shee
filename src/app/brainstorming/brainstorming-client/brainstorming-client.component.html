@@ -78,11 +78,12 @@
 
 
       <div *ngIf="!isVoted; else voted" class="voting-options">
-        <div *ngFor="let idea of votingEvent?.ideas; let i = index;">
+        <div class="single-choice"> You have {{ votingEvent.singleChoice? "one vote!" : "multiple votes!" }}</div>
+        <div  *ngFor="let idea of votingEvent?.ideas; let i = index;">
 
           <button [disabled]="multiVoteCheck[i]"
                   (click)="voteForIdea(i)"
-                  class="votingButton">
+                  class="voting-option">
             {{idea}}
           </button>
         </div>
