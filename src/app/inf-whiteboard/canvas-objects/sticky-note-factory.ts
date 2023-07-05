@@ -300,7 +300,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     }
   }
 
-
   private handleTextboxEditingExited(textbox: FixedSizeTextbox) {
     const stickyNote = this.findGroupContainingTextbox(textbox);
     if (stickyNote) {
