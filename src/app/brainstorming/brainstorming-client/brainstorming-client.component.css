@@ -255,7 +255,6 @@ textarea {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 35vh;
   padding-top: 5%;
   position: relative;
 }
