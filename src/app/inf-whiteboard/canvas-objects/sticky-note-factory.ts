@@ -34,7 +34,10 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     stickyNote.name = "stickyNote";
 
     this.canvas.add(stickyNote);
-    stickyNote.viewportCenter();
+    stickyNote.viewportCenterV();
+    let offsetX = this.canvas.getObjects().length;
+    stickyNote.left! += 20*offsetX;
+
     return stickyNote;
   }
 
@@ -60,7 +63,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
 
   private createTextbox(textVisible?: boolean, text?: string): FixedSizeTextbox {
     let textbox = new FixedSizeTextbox('', {
-      hasBorders: false,
+      hasBorders: true,
       textAlign: "center",
       left: STICKY_NOTE_PADDING,
       top: STICKY_NOTE_PADDING,
@@ -259,7 +262,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
               angle: textbox.originalGroup.angle,
               scaleX: textbox.originalGroup.scaleX,
               scaleY: textbox.originalGroup.scaleY,
-              hasBorders: false,
+              hasBorders: true,
               objectCaching: false
             })
             clonedObj.rotate(target.angle!);

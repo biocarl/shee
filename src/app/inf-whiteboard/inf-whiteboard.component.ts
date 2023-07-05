@@ -26,21 +26,25 @@ export class InfWhiteboardComponent implements OnInit {
   public menuPosition = {top: 0, left: 0};
   public selectedObject: fabric.Object | fabric.Group | undefined = undefined;
 
-  constructor(private renderer: Renderer2,private log:LoggerService, private canObjSer: CanvasObjectService) {
+  constructor(private renderer: Renderer2, private log: LoggerService, private canObjSer: CanvasObjectService) {
     this.disableScrollbar();
-    this.canObjSer.objectAdded.subscribe((object:{ text: string; color: string; hasVisibleContent: boolean; type: string } ) => {
-      if(object.type === "stickyNote"){
-        if(this.stickyNoteFactory) {
-          this.addStickyNote(object.hasVisibleContent,object.text, object.color);
-        }
-        else {
+    this.canObjSer.objectAdded.subscribe((object: {
+      text: string;
+      color: string;
+      hasVisibleContent: boolean;
+      type: string
+    }) => {
+      if (object.type === "stickyNote") {
+        if (this.stickyNoteFactory) {
+          this.addStickyNote(object.hasVisibleContent, object.text, object.color);
+        } else {
           this.bufferedObjects.push(object);
         }
       }
     })
-    this.canObjSer.toggleTextVisibility.subscribe((object:{textVisible:boolean}) =>{
+    this.canObjSer.toggleTextVisibility.subscribe((object: { textVisible: boolean }) => {
       this.toggleTextVisibility(object.textVisible);
-      })
+    })
     this.canObjSer.requestCanvas.subscribe(() => {
       console.log("requestCanvas received");
       this.canObjSer.sendCanvas.emit({canvas: this.canvas});
@@ -57,7 +61,7 @@ export class InfWhiteboardComponent implements OnInit {
     this.setCanvasEventListeners();
     this.stickyNoteFactory = new StickyNoteFactory(this.canvas);
     this.bufferedObjects.forEach(object => {
-      this.addStickyNote(true,object.text,object.color);
+      this.addStickyNote(true, object.text, object.color);
     });
     console.log(this.canvas.getObjects());
     this.bufferedObjects = [];
@@ -89,7 +93,7 @@ export class InfWhiteboardComponent implements OnInit {
       this.placeMenu();
     }
 
-    if(this.objectIsRotating){
+    if (this.objectIsRotating) {
       this.objectIsRotating = false;
       this.placeMenu();
     }
@@ -135,28 +139,28 @@ export class InfWhiteboardComponent implements OnInit {
   };
 
   onObjectSelected(event: fabric.IEvent) {
-    if(event.selected) {
+    if (event.selected) {
       event.selected.forEach(obj => {
-        if(obj.type === 'group') {
+        if (obj.type === 'group') {
           this.groupCounter++;
         }
       });
     }
     this.selectedObject = event.selected && event.selected[0];
-      this.placeMenu();
+    this.placeMenu();
   }
 
   onObjectSelectedUpdated(event: fabric.IEvent) {
     this.groupCounter = 0;
-    if(event.selected) {
+    if (event.selected) {
       event.selected.forEach(obj => {
-        if(obj.type === 'group') {
+        if (obj.type === 'group') {
           this.groupCounter++;
         }
       });
     }
     this.selectedObject = event.selected && event.selected[0];
-      this.placeMenu();
+    this.placeMenu();
   }
 
   onObjectRotating() {
@@ -165,7 +169,7 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   private placeMenu() {
-    if(this.groupCounter === 1) {
+    if (this.groupCounter === 1) {
       const object = this.canvas.getActiveObject();
       if (object) {
         const menu = document.getElementById('menu')!;
@@ -179,7 +183,7 @@ export class InfWhiteboardComponent implements OnInit {
         const boundingRect = object.getBoundingRect(undefined, true);
 
         //TODO: remove magic numbers 180 and 250 and replace with dynamic calculation of menu width
-        const menuTop = (boundingRect.top - menuHeight+180);
+        const menuTop = (boundingRect.top - menuHeight + 180);
         const menuLeft = boundingRect.left + (boundingRect.width / 2) - ((menuWidth + 250) / 2);
 
         this.showMenu = true;
@@ -190,9 +194,9 @@ export class InfWhiteboardComponent implements OnInit {
   }
 
   onObjectDeselected(event: fabric.IEvent) {
-    if(event.deselected) {
+    if (event.deselected) {
       event.deselected.forEach(obj => {
-        if(obj.type === 'group') {
+        if (obj.type === 'group') {
           this.groupCounter--;
         }
       });
@@ -246,7 +250,7 @@ export class InfWhiteboardComponent implements OnInit {
 
         // Check if span's background color matches sticky note's color
         const spanColor = getComputedStyle(span).getPropertyValue('background-color');
-         if (spanColor === backgroundColor) {
+        if (spanColor === backgroundColor) {
           span.classList.add('active');
         }
       });
@@ -287,11 +291,9 @@ export class InfWhiteboardComponent implements OnInit {
     this.canvas.setHeight(window.innerHeight - (document.getElementById("navbar")!.offsetHeight));
   }
 
-  addStickyNote(textVisible: boolean = false,stickyText?: string,color?:string) {
-    if(this.stickyNoteFactory){
-      const newSticky = this.stickyNoteFactory.create(textVisible,stickyText,color);
-      const textbox = newSticky.getObjects().find((object: any) => object instanceof FixedSizeTextbox);
-      textbox!.fire('changed');
+  addStickyNote(textVisible: boolean = false, stickyText?: string, color?: string) {
+    if (this.stickyNoteFactory) {
+      this.stickyNoteFactory.create(textVisible, stickyText, color);
     }
   }
 
@@ -317,14 +319,14 @@ export class InfWhiteboardComponent implements OnInit {
         let group = obj as fabric.Group;
 
         group.getObjects().forEach(groupItem => {
-          console.log("Textbox?",groupItem);
+          console.log("Textbox?", groupItem);
 
           if (groupItem instanceof FixedSizeTextbox) {
             groupItem.fill = textVisible ? 'rgb(0,0,0,0.87)' : 'transparent';
             groupItem.textVisible = textVisible;
           }
 
-          if(groupItem.name === "hiddenSVG"){
+          if (groupItem.name === "hiddenSVG") {
             groupItem.visible = !textVisible;
           }
         });
