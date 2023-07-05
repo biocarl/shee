@@ -34,9 +34,9 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     stickyNote.name = "stickyNote";
 
     this.canvas.add(stickyNote);
-    stickyNote.viewportCenter();
+    stickyNote.viewportCenterV();
     let offsetX = this.canvas.getObjects().length;
-    stickyNote.left! += 5*offsetX;
+    stickyNote.left! += 20*offsetX;
 
     return stickyNote;
   }
