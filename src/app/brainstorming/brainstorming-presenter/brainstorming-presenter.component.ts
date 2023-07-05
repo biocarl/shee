@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PresenterMessage} from '../../presenter-message';
 import {BrainstormingPresenterSubscribeResponse} from '../brainstorming-presenter-subscribe-response';
 import {QueueService} from '../../queue.service';
@@ -11,13 +11,14 @@ import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 import {CanvasObjectService} from "../canvas-object.service";
 import {FixedSizeTextbox} from "../../inf-whiteboard/canvas-objects/fixed-size-textbox";
 import {fabric} from "fabric";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-brainstorming-presenter',
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css'],
 })
-export class BrainstormingPresenterComponent implements View, OnInit {
+export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy {
   private isSingleChoice: boolean = false;
   private timerInterval: any;
   ideaEvent?: BrainstormingPresenterSubscribeResponse;
@@ -30,6 +31,7 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
   private canvas?: fabric.Canvas;
+  private canvasObjectsSubscription?: Subscription;
    firstClientIdeaReceived: boolean = false;
 
   constructor(private queueService: QueueService,
@@ -39,6 +41,12 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   ngOnInit(): void {
     this.subscribeToClientChannel();
     this.subscribeToPresenterChannel();
+  }
+
+  ngOnDestroy() {
+    if(this.canvasObjectsSubscription){
+      this.canvasObjectsSubscription?.unsubscribe();
+    }
   }
 
   initializeComponent(data: PresenterMessage): void {
@@ -251,21 +259,22 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   }
 
   private subscribeCanvasObjects(): void {
-    this.canObjServ.sendCanvas.subscribe((obj) => {
+    this.canvasObjectsSubscription = this.canObjServ.sendCanvas.subscribe((obj) => {
       this.extractIdeaResponsesFromCanvas(obj);
       this.initializeVotingStage();
     });
   }
 
-  private extractIdeaResponsesFromCanvas(obj: any): void {
+  private extractIdeaResponsesFromCanvas(obj: { canvas: fabric.Canvas }): void {
     this.canvas = obj.canvas;
-    obj.canvas.getObjects().forEach((obj: fabric.Group) => {
+    this.canvas.getObjects().forEach((obj) => {
       if (obj.type === 'group') {
         let group = obj as fabric.Group;
 
         group.getObjects().forEach(groupItem => {
           if (groupItem instanceof FixedSizeTextbox) {
             this.ideaResponses.push(groupItem.text!);
+            console.log(groupItem, "was added to the ideaResponses from Canvas.");
           }
         });
       }
@@ -325,6 +334,8 @@ export class BrainstormingPresenterComponent implements View, OnInit {
   }
 
   stopVoting() {
+    this.canvasObjectsSubscription?.unsubscribe();
+
     if (!this.ideaEvent?.questionID) return;
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: 'brainstorming',
