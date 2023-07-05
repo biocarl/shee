@@ -223,7 +223,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     this.canvas.renderAll();
   }
 
-
   private findGroupContainingTextbox(textbox: FixedSizeTextbox): fabric.Group | undefined {
     const groups = this.canvas.getObjects('group') as fabric.Group[];
     let group = groups.find((group) => group.getObjects().includes(textbox));
