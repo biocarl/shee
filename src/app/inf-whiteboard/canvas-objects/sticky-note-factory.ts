@@ -306,7 +306,6 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
     if (stickyNote) {
       let items = stickyNote.getObjects();
       items.forEach((item) => {
-        console.log("item:", item);
         if (item.type === "textbox" && item instanceof FixedSizeTextbox) {
           item.set({
             text: textbox.text,

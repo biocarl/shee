@@ -47,7 +47,6 @@ export class InfWhiteboardComponent implements OnInit {
       this.toggleTextVisibility(object.textVisible);
     })
     this.canObjSer.requestCanvas.subscribe(() => {
-      console.log("requestCanvas received");
       this.canObjSer.sendCanvas.emit({canvas: this.canvas});
     })
   }
@@ -64,7 +63,6 @@ export class InfWhiteboardComponent implements OnInit {
     this.bufferedObjects.forEach(object => {
       this.addStickyNote(true, object.text, object.color, true);
     });
-    console.log(this.canvas.getObjects());
     this.bufferedObjects = [];
   }
 
@@ -346,11 +344,4 @@ export class InfWhiteboardComponent implements OnInit {
     });
     this.canvas.renderAll();
   }
-
-  toJohnson() {
-    console.log(JSON.stringify(this.canvas));
-    console.log(JSON.parse(JSON.stringify(this.canvas)));
-  }
-
-
 }

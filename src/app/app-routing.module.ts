@@ -5,7 +5,6 @@ import {NotFoundComponent} from "./not-found/not-found.component";
 import {PresenterComponent} from "./presenter/presenter.component";
 import {ClientComponent} from "./client/client.component";
 import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
-import {InfWhiteboardComponent} from "./inf-whiteboard/inf-whiteboard.component";
 
 const routes: Routes = [
   {path: "", component: NoGroupComponent},
@@ -19,7 +18,6 @@ const routes: Routes = [
       },
     ]
   },
-  {path: "canvas/test", component: InfWhiteboardComponent},
   {path: "**", component: NotFoundComponent},
 ];
 
