@@ -208,50 +208,6 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
     this.stage = 'afterBrainstorming';
   }
 
-  // resizeTextToFitContainer(selector: string) {
-  //   const stickies: NodeListOf<HTMLElement> =
-  //     document.querySelectorAll(selector);
-  //   stickies.forEach((element) => {
-  //     const maxWidth = element.clientWidth;
-  //     const maxHeight = element.clientHeight;
-  //
-  //     let minFontSize = 5; // Set a minimum font size
-  //     let maxFontSize = 50; // Set a maximum font size
-  //     let fontSize = maxFontSize;
-  //
-  //     // Apply the maximum font size
-  //     element.style.fontSize = fontSize + 'px';
-  //
-  //     // Reduce the font size until the content fits or reaches the minimum size
-  //     while (
-  //       (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) &&
-  //       fontSize > minFontSize
-  //       ) {
-  //       fontSize--;
-  //       element.style.fontSize = fontSize + 'px';
-  //     }
-  //
-  //     // Increase the font size until the content overflows or reaches the maximum size
-  //     while (
-  //       element.scrollHeight <= maxHeight &&
-  //       element.scrollWidth <= maxWidth &&
-  //       fontSize < maxFontSize
-  //       ) {
-  //       fontSize++;
-  //       element.style.fontSize = fontSize + 'px';
-  //
-  //       if (
-  //         element.scrollHeight > maxHeight ||
-  //         element.scrollWidth > maxWidth
-  //       ) {
-  //         fontSize--;
-  //         element.style.fontSize = fontSize + 'px';
-  //         break;
-  //       }
-  //     }
-  //   });
-  // }
-
   startVoting(): void {
     this.subscribeCanvasObjects();
     this.emitCanvasRequest();
@@ -286,6 +242,10 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
 
     this.stage = 'voting';
     this.votes = Array(this.ideaResponses.length).fill(0);
+    const groupObjects = this.getGroupObjectsOnCanvas();
+    groupObjects.forEach((group, groupIndex) => {
+      this.updateVoteCounterOnGroup(group, groupIndex);
+    });
 
     this.sendVotingRequestToPresenter();
   }
