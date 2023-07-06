@@ -11,7 +11,7 @@ import {TimerPopupComponent} from './timer-popup/timer-popup.component';
 import {CanvasObjectService} from "../canvas-object.service";
 import {FixedSizeTextbox} from "../../inf-whiteboard/canvas-objects/fixed-size-textbox";
 import {fabric} from "fabric";
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-brainstorming-presenter',
@@ -32,7 +32,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
     'initial';
   private canvas?: fabric.Canvas;
   private canvasObjectsSubscription?: Subscription;
-   firstClientIdeaReceived: boolean = false;
+  firstClientIdeaReceived: boolean = false;
 
   constructor(private queueService: QueueService,
               private dialog: MatDialog, private canObjServ: CanvasObjectService) {
@@ -44,7 +44,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
   }
 
   ngOnDestroy() {
-    if(this.canvasObjectsSubscription){
+    if (this.canvasObjectsSubscription) {
       this.canvasObjectsSubscription?.unsubscribe();
     }
   }
@@ -147,6 +147,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
       .flatMap(groupItem => (groupItem as fabric.Group).getObjects())
       .filter(item => item.type === 'text') as fabric.Text[];
   }
+
   private subscribeToPresenterChannel(): void {
     this.queueService.listenToPresenterChannel<BrainstormingPresenterStatusVotingRequest>(
       (response) => {
@@ -226,10 +227,11 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
 
   private extractIdeaResponsesFromCanvas(obj: { canvas: fabric.Canvas }): void {
     this.canvas = obj.canvas;
+    this.canvas.selection = false;
     this.canvas.getObjects().forEach((obj) => {
+      obj.evented = false;
       if (obj.type === 'group') {
         let group = obj as fabric.Group;
-
         group.getObjects().forEach(groupItem => {
           if (groupItem instanceof FixedSizeTextbox) {
             this.ideaResponses.push(groupItem.text!);
@@ -298,9 +300,9 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
 
   stopVoting() {
     this.canvas?.getObjects().forEach(obj => {
-      obj.selectable = true;
+      obj.evented = true;
     })
-
+    this.canvas!.selection = true;
     this.canvasObjectsSubscription?.unsubscribe();
 
     if (!this.ideaEvent?.questionID) return;
