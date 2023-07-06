@@ -1,0 +1,26 @@
+<canvas id="canvas"></canvas>
+
+<div class="floating-menu" id="menu" [ngStyle]="{'top': menuPosition.top + 'px', 'left': menuPosition.left + 'px', 'visibility': showMenu ? 'visible' : 'hidden'}">
+  <div class="color-selection">
+    <input type="radio" id="red" value="red"/>
+    <label for="red"><span (click)="changeColor($event)" class="red"></span></label>
+
+    <input type="radio" id="green"/>
+    <label for="green"><span (click)="changeColor($event)" class="green"></span></label>
+
+    <input type="radio" id="yellow"/>
+    <label for="yellow"><span (click)="changeColor($event)" class="yellow active"></span></label>
+
+    <input type="radio" id="olive"/>
+    <label for="olive"><span (click)="changeColor($event)" class="olive"></span></label>
+
+    <input type="radio" id="orange"/>
+    <label for="orange"><span (click)="changeColor($event)" class="orange"></span></label>
+
+    <input type="radio" id="blue"/>
+    <label for="blue"><span (click)="changeColor($event)" class="blue"></span></label>
+
+    <input type="radio" id="violet"/>
+    <label for="violet"><span (click)="changeColor($event)" class="violet"></span></label>
+  </div>
+</div>

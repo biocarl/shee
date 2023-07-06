@@ -1,39 +1,41 @@
-import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PresenterMessage} from '../../presenter-message';
 import {BrainstormingPresenterSubscribeResponse} from '../brainstorming-presenter-subscribe-response';
 import {QueueService} from '../../queue.service';
 import {BrainstormingClientSubscribeResponse} from '../brainstorming-client-subscribe-response';
-import {CdkDragStart} from '@angular/cdk/drag-drop';
 import {BrainstormingPresenterStatusVotingRequest} from '../brainstorming-presenter-status-voting-request';
 import {BrainstormingPresenterPublishRequest} from '../brainstorming-presenter-publish-request';
 import {View} from '../../view';
 import {MatDialog} from '@angular/material/dialog';
 import {TimerPopupComponent} from './timer-popup/timer-popup.component';
+import {CanvasObjectService} from "../canvas-object.service";
+import {FixedSizeTextbox} from "../../inf-whiteboard/canvas-objects/fixed-size-textbox";
+import {fabric} from "fabric";
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-brainstorming-presenter',
   templateUrl: './brainstorming-presenter.component.html',
   styleUrls: ['./brainstorming-presenter.component.css'],
 })
-export class BrainstormingPresenterComponent
-  implements View, OnInit, AfterViewChecked {
-  ideaEvent?: BrainstormingPresenterSubscribeResponse;
-  ideaResponses: { text: string; color: string; hasVisibleContent: boolean }[] =
-    [];
-  maxZIndex = 20;
-  stickyContentVisible: boolean = false;
-  votes?: number[];
-  timerLengthVoting?: number;
+export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy {
+  private isSingleChoice: boolean = false;
   private timerInterval: any;
+  ideaEvent?: BrainstormingPresenterSubscribeResponse;
+  ideaResponses: string[] = [];
+  //maxZIndex = 20;
+  stickyContentVisible: boolean = false;
+  votes: number[] = [];
+  timerLengthVoting?: number;
   timerLengthBrainstorming?: number;
   stage: 'initial' | 'brainstorming' | 'afterBrainstorming' | 'voting' =
     'initial';
-  editing: boolean = false;
-  editableSticky?: number;
-  editedIdea: string = '';
-  private isSingleChoice: boolean = false;
+  private canvas?: fabric.Canvas;
+  private canvasObjectsSubscription?: Subscription;
+  firstClientIdeaReceived: boolean = false;
 
-  constructor(private queueService: QueueService, private dialog: MatDialog) {
+  constructor(private queueService: QueueService,
+              private dialog: MatDialog, private canObjServ: CanvasObjectService) {
   }
 
   ngOnInit(): void {
@@ -41,21 +43,23 @@ export class BrainstormingPresenterComponent
     this.subscribeToPresenterChannel();
   }
 
-  ngAfterViewChecked(): void {
-    this.resizeTextToFitContainer('.sticky');
+  ngOnDestroy() {
+    if (this.canvasObjectsSubscription) {
+      this.canvasObjectsSubscription?.unsubscribe();
+    }
   }
 
   initializeComponent(data: PresenterMessage): void {
     this.ideaEvent = data as BrainstormingPresenterSubscribeResponse;
     this.initializeTimer();
-    this.ideaEvent.ideas.map((idea, index) => {
-      if (this.ideaEvent) {
-        this.ideaResponses.push({
-          text: idea,
-          color: '#ffd707ff',
-          hasVisibleContent: true,
-        });
-      }
+    this.ideaEvent.ideas.map((idea) => {
+      this.canObjServ.objectAdded.emit({
+        text: idea,
+        color: '#ffd707ff',
+        hasVisibleContent: true,
+        type: "stickyNote",
+        presenter: true
+      });
     });
   }
 
@@ -74,9 +78,7 @@ export class BrainstormingPresenterComponent
     );
   }
 
-  private handleClientChannelEvent(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ) {
+  private handleClientChannelEvent(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse) {
     if (this.isMatchingQuestion(brainstormingSubscriptionEvent)) {
       if (this.stage === 'brainstorming') {
         this.addBrainstormingIdea(brainstormingSubscriptionEvent);
@@ -86,36 +88,64 @@ export class BrainstormingPresenterComponent
     }
   }
 
-  private isMatchingQuestion(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ): boolean {
+  private isMatchingQuestion(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): boolean {
     return !!(
       this.ideaEvent &&
       this.ideaEvent.questionID === brainstormingSubscriptionEvent.questionID
     );
   }
 
-  private addBrainstormingIdea(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ): void {
-    this.ideaResponses.push({
+  private addBrainstormingIdea(brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse): void {
+    this.firstClientIdeaReceived = true;
+    this.canObjServ.objectAdded.emit({
       text: brainstormingSubscriptionEvent.ideaText,
       color: brainstormingSubscriptionEvent.stickyColor,
       hasVisibleContent: this.stickyContentVisible,
+      type: brainstormingSubscriptionEvent.type,
+      presenter: false
     });
   }
 
-  private updateVotes(
-    brainstormingSubscriptionEvent: BrainstormingClientSubscribeResponse
-  ): void {
-    let voteIndex = 0;
-    this.ideaResponses.forEach((idea, index) => {
-      if (idea.text !== '' && this.votes) {
-        this.votes[index] +=
-          brainstormingSubscriptionEvent.ideaVoting[voteIndex];
-        voteIndex++;
+  private updateVotes(event: BrainstormingClientSubscribeResponse): void {
+    this.ideaResponses.forEach((_, index) => {
+      if (this.votes) {
+        this.votes[index] += event.ideaVoting[index];
+        this.updateVoteCounterOnCanvas(index);
       }
     });
+  }
+
+  private updateVoteCounterOnCanvas(index: number): void {
+    const groupObjects = this.getGroupObjectsOnCanvas();
+
+    groupObjects.forEach((group, groupIndex) => {
+      if (this.votes[groupIndex] !== 0 && groupIndex === index) {
+        this.updateVoteCounterOnGroup(group, index);
+      }
+    });
+  }
+
+  private getGroupObjectsOnCanvas(): fabric.Group[] {
+    const objects = this.canvas?.getObjects() || [];
+    return objects.filter(obj => obj.type === 'group') as fabric.Group[];
+  }
+
+  private updateVoteCounterOnGroup(group: fabric.Group, index: number): void {
+    const textObjectsInGroup = this.getTextObjectsInGroup(group);
+
+    textObjectsInGroup.forEach(textObj => {
+      textObj.set('text', `${this.votes[index]}`);
+    });
+
+    this.canvas?.renderAll();
+  }
+
+  private getTextObjectsInGroup(group: fabric.Group): fabric.Text[] {
+    const groupObjects = group.getObjects();
+    return groupObjects
+      .filter(groupItem => groupItem.type === 'group')
+      .flatMap(groupItem => (groupItem as fabric.Group).getObjects())
+      .filter(item => item.type === 'text') as fabric.Text[];
   }
 
   private subscribeToPresenterChannel(): void {
@@ -127,18 +157,14 @@ export class BrainstormingPresenterComponent
     );
   }
 
-  private handlePresenterChannelEvent(
-    response: BrainstormingPresenterStatusVotingRequest
-  ) {
+  private handlePresenterChannelEvent(response: BrainstormingPresenterStatusVotingRequest) {
     if (this.hasVotingStarted(response)) {
       this.updateTimer(response);
       this.initializeTimer();
     }
   }
 
-  private hasVotingStarted(
-    response: BrainstormingPresenterStatusVotingRequest
-  ) {
+  private hasVotingStarted(response: BrainstormingPresenterStatusVotingRequest) {
     return !!(
       this.ideaEvent &&
       response.clientOnly &&
@@ -146,9 +172,7 @@ export class BrainstormingPresenterComponent
     );
   }
 
-  private updateTimer(
-    response: BrainstormingPresenterStatusVotingRequest
-  ): void {
+  private updateTimer(response: BrainstormingPresenterStatusVotingRequest): void {
     if (this.ideaEvent) {
       this.ideaEvent.timer = response.timer;
     }
@@ -185,128 +209,102 @@ export class BrainstormingPresenterComponent
     this.stage = 'afterBrainstorming';
   }
 
-  resizeTextToFitContainer(selector: string) {
-    const stickies: NodeListOf<HTMLElement> =
-      document.querySelectorAll(selector);
-    stickies.forEach((element) => {
-      const maxWidth = element.clientWidth;
-      const maxHeight = element.clientHeight;
+  startVoting(): void {
+    this.canvas?.getObjects().forEach(obj => {
+      obj.selectable = false;
+    })
+    this.subscribeCanvasObjects();
+    this.emitCanvasRequest();
+    this.toggleVotingCounterVisibility();
+  }
 
-      let minFontSize = 5; // Set a minimum font size
-      let maxFontSize = 50; // Set a maximum font size
-      let fontSize = maxFontSize;
+  private subscribeCanvasObjects(): void {
+    this.canvasObjectsSubscription = this.canObjServ.sendCanvas.subscribe((obj) => {
+      this.extractIdeaResponsesFromCanvas(obj);
+      this.initializeVotingStage();
+    });
+  }
 
-      // Apply the maximum font size
-      element.style.fontSize = fontSize + 'px';
-
-      // Reduce the font size until the content fits or reaches the minimum size
-      while (
-        (element.scrollHeight > maxHeight || element.scrollWidth > maxWidth) &&
-        fontSize > minFontSize
-        ) {
-        fontSize--;
-        element.style.fontSize = fontSize + 'px';
-      }
-
-      // Increase the font size until the content overflows or reaches the maximum size
-      while (
-        element.scrollHeight <= maxHeight &&
-        element.scrollWidth <= maxWidth &&
-        fontSize < maxFontSize
-        ) {
-        fontSize++;
-        element.style.fontSize = fontSize + 'px';
-
-        if (
-          element.scrollHeight > maxHeight ||
-          element.scrollWidth > maxWidth
-        ) {
-          fontSize--;
-          element.style.fontSize = fontSize + 'px';
-          break;
-        }
+  private extractIdeaResponsesFromCanvas(obj: { canvas: fabric.Canvas }): void {
+    this.canvas = obj.canvas;
+    this.canvas.selection = false;
+    this.canvas.getObjects().forEach((obj) => {
+      obj.evented = false;
+      if (obj.type === 'group') {
+        let group = obj as fabric.Group;
+        group.getObjects().forEach(groupItem => {
+          if (groupItem instanceof FixedSizeTextbox) {
+            this.ideaResponses.push(groupItem.text!);
+            console.log(groupItem, "was added to the ideaResponses from Canvas.");
+          }
+        });
       }
     });
   }
 
-  startVoting(): void {
+  private initializeVotingStage(): void {
     if (!this.ideaEvent?.questionID) return;
-    let finalIdeas: string[] = this.ideaResponses
-      .map((idea) => idea.text)
-      .filter((idea) => idea !== '');
+
     this.stage = 'voting';
     this.votes = Array(this.ideaResponses.length).fill(0);
+    const groupObjects = this.getGroupObjectsOnCanvas();
+    groupObjects.forEach((group, groupIndex) => {
+      this.updateVoteCounterOnGroup(group, groupIndex);
+    });
+
+    this.sendVotingRequestToPresenter();
+  }
+
+  private sendVotingRequestToPresenter(): void {
+    const payload: BrainstormingPresenterStatusVotingRequest = this.constructVotingRequestPayload();
+    this.queueService.publishMessageToPresenterChannel(payload);
+  }
+
+  private constructVotingRequestPayload(): BrainstormingPresenterStatusVotingRequest {
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: 'brainstorming',
-      ideas: finalIdeas,
-      question: this.ideaEvent?.question,
-      questionID: this.ideaEvent.questionID,
+      ideas: this.ideaResponses,
+      question: this.ideaEvent?.question!,
+      questionID: this.ideaEvent?.questionID!,
       singleChoice: this.isSingleChoice,
       votingInProgress: true,
       clientOnly: true,
     };
+
     if (this.timerLengthVoting) {
       payload.timer = this.timerLengthVoting;
     }
-    this.queueService.publishMessageToPresenterChannel(payload);
+
+    return payload;
   }
 
-  moveToTopLayerWhenDragged(event: CdkDragStart) {
-    const element = event.source.getRootElement();
-    const stickyElement = element.querySelector('.sticky') as HTMLElement;
-    const shadowElement = element.querySelector('.shadow') as HTMLElement;
-    const postItElement = stickyElement.parentElement;
-    const tapeElement = element.querySelector('.top-tape') as HTMLElement;
-    const iconsElement = element.querySelector(
-      '.icon-container'
-    ) as HTMLElement;
-
-    if (stickyElement && stickyElement.parentElement && postItElement) {
-      postItElement.style.zIndex = (++this.maxZIndex).toString();
-      stickyElement.style.zIndex = (++this.maxZIndex).toString();
-    }
-
-    if (shadowElement) {
-      shadowElement.style.zIndex = (this.maxZIndex - 1).toString();
-    }
-
-    if (tapeElement) {
-      tapeElement.style.zIndex = (this.maxZIndex + 1).toString();
-    }
-    if (iconsElement) {
-      iconsElement.style.zIndex = (this.maxZIndex + 1).toString();
-    }
+  private emitCanvasRequest(): void {
+    this.canObjServ.requestCanvas.emit();
   }
 
-  hideIdea(i: number) {
-    if (i > -1) {
-      this.ideaResponses.splice(i, 1, {
-        text: '',
-        color: '',
-        hasVisibleContent: false,
-      });
-    }
-  }
-
-  trackByIndex(index: number): number {
-    return index;
-  }
-
-  showCopiedMessage(element: HTMLElement) {
-    element.style.opacity = '1';
-    setTimeout(() => {
-      element.style.opacity = '0';
-    }, 1200);
+  private toggleVotingCounterVisibility(): void {
+    this.getGroupObjectsOnCanvas().forEach((obj) => {
+      obj.getObjects("group").forEach((obj) => {
+        if (obj.name === "votingCounter") {
+          obj.visible = true;
+          this.canvas?.renderAll();
+        }
+      })
+    })
   }
 
   toggleAllStickies(): void {
     this.stickyContentVisible = !this.stickyContentVisible;
-    this.ideaResponses.forEach((idea) => {
-      idea.hasVisibleContent = this.stickyContentVisible;
-    });
+    this.canObjServ.toggleTextVisibility.emit({textVisible: this.stickyContentVisible});
   }
 
   stopVoting() {
+    this.canvas?.getObjects().forEach(obj => {
+      obj.evented = true;
+    })
+    this.canvas!.selection = true;
+    this.canvasObjectsSubscription?.unsubscribe();
+
     if (!this.ideaEvent?.questionID) return;
     const payload: BrainstormingPresenterStatusVotingRequest = {
       interaction: 'brainstorming',
@@ -320,6 +318,7 @@ export class BrainstormingPresenterComponent
     clearInterval(this.timerInterval);
     this.ideaEvent.timer = 0;
     this.queueService.publishMessageToPresenterChannel(payload);
+    this.ideaResponses = [];
   }
 
   private initializeTimer() {
@@ -341,35 +340,19 @@ export class BrainstormingPresenterComponent
     }
   }
 
-  addStickie() {
-    this.ideaResponses.push({
-      text: 'new idea',
-      color: '#ffd707ff',
+  addSticky() {
+    this.canObjServ.objectAdded.emit({
+      text: "",
+      color: "",
       hasVisibleContent: true,
+      type: "stickyNote",
+      presenter: true
     });
-    this.editing = !this.editing;
-    if (this.ideaEvent) {
-      this.editableSticky = this.ideaResponses.length - 1;
-    }
-  }
-
-  toggleEditMode(index: number) {
-    this.editing = true;
-    this.editableSticky = index;
-    if (this.ideaEvent) {
-      this.editedIdea = this.ideaResponses[index].text;
-    }
-  }
-
-  saveIdea(index: number) {
-    this.ideaResponses[index].text = this.editedIdea;
-    this.editing = false;
-    this.editedIdea = '';
   }
 
   openBrainstormingTimerDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { stage: "brainstorming"},
+      data: {stage: "brainstorming"},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.choice) {
@@ -381,7 +364,7 @@ export class BrainstormingPresenterComponent
 
   openVotingDialog() {
     const dialogRef = this.dialog.open(TimerPopupComponent, {
-      data: { stage: "voting"},
+      data: {stage: "voting"},
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result.choice) {
@@ -391,5 +374,4 @@ export class BrainstormingPresenterComponent
       }
     });
   }
-
 }

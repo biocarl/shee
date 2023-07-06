@@ -125,10 +125,8 @@ label {
 }
 
 .question {
-  position: absolute;
+  position: relative;
   width: 80vw;
-  top: 130px;
-  bottom: calc(var(--user-input-height) + 30px);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   font-weight: 400;
@@ -137,15 +135,13 @@ label {
   text-align: center;
   left: 50%;
   transform: translateX(-50%);
+  margin-top:20px;
 }
 
 .brainstormingButton {
-  position: absolute;
   top: 190px;
   height: 45px;
   left: 48px;
-  list-style: none;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
@@ -166,14 +162,11 @@ label {
 }
 
 .hideButton {
-  position: absolute;
-  left: 303px;
+  display: inline;
   width: 56px;
 }
 
 .timer {
-  position: relative;
-  top: 50px;
   color: var(--secondaryColor);
   font-family: 'Baloo Bhaina', serif;
   font-style: normal;
@@ -184,7 +177,6 @@ label {
 }
 
 .startVoting {
-  position: absolute;
   left: 364px;
   justify-content: center;
   align-self: center;
@@ -197,3 +189,27 @@ label {
 button {
   align-items: center;
 }
+
+.hidden {
+  visibility: hidden;
+}
+
+
+.votingCountBox {
+  background: rgba(245, 245, 245, 0.94);
+  border-radius: 30px;
+  width: fit-content;
+  padding-left: 2px;
+  padding-right: 2px;
+  height: 30.86px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.thumb {
+  height: 18px;
+}
+
+

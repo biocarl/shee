@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog'
 
 export interface DialogData {
   timer?: number,
@@ -15,7 +15,6 @@ export interface DialogData {
 })
 export class TimerPopupComponent {
   constructor(
-    public dialogRef: MatDialogRef<TimerPopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) { }
   selectedOption: string = "No";

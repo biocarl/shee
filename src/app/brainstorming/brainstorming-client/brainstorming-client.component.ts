@@ -65,7 +65,8 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
       ideaText: this.ideaText,
       participantName: this.participantService.getParticipantName(),
       questionID: this.ideaEvent.questionID,
-      stickyColor: this.stickyColor
+      stickyColor: this.stickyColor,
+      type: "stickyNote"
     };
 
     this.queueService.publishMessageToClientChannel<BrainstormingClientPublishRequest>(idea);
