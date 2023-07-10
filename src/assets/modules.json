@@ -7,7 +7,7 @@
   ],
   "modules" : [
     {
-      "name" : "poll",
+      "name" : "polling",
       "description" : "This module best used if you want to get a quick feedback from the group about a specific topic with already defined opinions/answers.",
       "category" : "general",
       "parameters" : [
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "name" : "pair",
+      "name" : "pairing",
       "description" : "This module you should use if participants need to pair with the presenter instance. The view generates the amount of currently active participants and generates a QR code which encodes a valid participant link.",
       "category" : "general",
       "parameters" : [
@@ -60,25 +60,6 @@
           "description" : "A set of the first ideas you want to provide",
           "value" : ["Nutella and bananas are the way!","Yes!","Too much gluten :("],
           "required" : false
-        }
-      ]
-    },
-    {
-      "name" : "decision",
-      "description" : "This module best used if you want to get a quick decision shown as barchart about a specific topic with already defined opinions/answers.",
-      "category" : "general",
-      "parameters" : [
-        {
-          "name" : "question",
-          "description" : "The question asked, only shown in presenter view",
-          "value" : ["What is the meaning of life?"],
-          "required" : "true"
-        },
-        {
-          "name" : "answers",
-          "description" : "A set of options you want to provide for the presenters to vote on",
-          "value" : ["Can't say ...","42","Its all about love!"],
-          "required" : true
         }
       ]
     }

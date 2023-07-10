@@ -32,7 +32,7 @@ interface ModuleParameter {
  */
 export class ModuleInitializerComponent implements OnInit {
   modules ?: ModuleType[];
-  selectedModuleString: string = "poll";
+  selectedModuleString: string = "polling";
 
   constructor(private http: HttpClient,
               private router: Router,
