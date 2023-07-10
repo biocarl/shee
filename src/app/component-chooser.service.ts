@@ -27,14 +27,14 @@ export class ComponentChooserService {
 
   private typeMap: Record<string,Record<string,Type<View>>> = {
     presenter: {
-      poll: PollPresenterComponent,
-      pair: PairPresenterComponent,
+      polling: PollPresenterComponent,
+      pairing: PairPresenterComponent,
       brainstorming: BrainstormingPresenterComponent,
       decision: DecisionChartPresenterComponent
     },
     client: {
-      poll: PollClientComponent,
-      pair: PairClientComponent,
+      polling: PollClientComponent,
+      pairing: PairClientComponent,
       brainstorming: BrainstormingClientComponent,
       decision: DecisionChartClientComponent
     }
