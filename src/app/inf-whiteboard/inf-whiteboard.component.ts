@@ -277,7 +277,7 @@ export class InfWhiteboardComponent implements OnInit {
     if (event.key === ' ') {
       this.canBePanned = true;
     }
-    if (event.key === 'Delete') {
+    if (event.key === 'Delete' || event.key === 'Backspace') {
       this.deleteObjects();
     }
   }
@@ -338,7 +338,6 @@ export class InfWhiteboardComponent implements OnInit {
           if (groupItem.name === "hiddenSVG") {
             groupItem.visible = !textVisible;
           }
-
         });
       }
     });
