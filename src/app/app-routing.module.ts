@@ -1,13 +1,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {NoGroupComponent} from "./no-group/no-group.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {PresenterComponent} from "./presenter/presenter.component";
 import {ClientComponent} from "./client/client.component";
 import {ModuleInitializerComponent} from "./module-initializer/module-initializer.component";
+import {LandingPageComponent} from "./landing-page/landing-page.component";
 
 const routes: Routes = [
-  {path: "", component: NoGroupComponent},
+  {path: "", component: LandingPageComponent},
   {
     path: ":group", children: [
       {path: "", component: ClientComponent},
