@@ -1,1 +1,41 @@
-<p>landing-page works!</p>
+<div class="title">Welcome to SHEE.APP</div>
+
+<div class="columns mx-5 is-8 is-variable">
+
+  <div class="column">
+    <div class="columns">
+      <div class="column is-four-fifths get-started-card">
+        <label>Enter a room name:</label>
+        <input type=text [(ngModel)]="roomName">
+        <div>Link for the participants: https://shee.app/{{roomName}}</div>
+        <button [disabled]="!roomName" (click)="navigateToInitializer()">Get Started</button>
+      </div>
+      <div class="column spacer"></div>
+    </div>
+  </div>
+
+  <div class="column is-half">
+    <div>
+      SHEE.APP is a presentation app that enables interactive communication between presenters and participants.
+      The app has two different views: one for the presenter and one for the participants.
+      Currently, the presenter can choose from three different modules:
+    </div>
+    <ul>
+      <li>Polling: The presenter initiates a poll that participants can view and vote on.</li>
+      <li>Pairing: Provides participants with a QR code to easily join the correct presenter room. It also keeps
+        track of the number of participants currently listening to the presenter.
+      </li>
+      <li>Brainstorming: Implements an infinite Whiteboard to collect ideas from participants. Participants can also
+        vote on these ideas.
+      </li>
+    </ul>
+    <div>
+      To get started, you need to enter a room name.
+      After that, you will be redirected to a page where you can choose the type of interaction you want to have
+      with your participants.
+      Participants can join the room using the link provided above.
+    </div>
+  </div>
+</div>
+<footer class="footerShee"
+        [ngClass]="{'footer-client-dark': mode === Mode.DARK, 'footer-client-light': mode === Mode.LIGHT}"></footer>

@@ -92,9 +92,9 @@ input{
   font-family: 'ChunkFive', sans-serif;
   font-size: 18px;
   transition: width 0.3s;
-  background-color: rgba(244, 255, 237, 0.36);
+  background-color: var(--inputColor);
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-  color: var(--buttonTextColor);
+  color: var(--inputTextColor);
   border: none;
   width: 50px;
   height: 38px;

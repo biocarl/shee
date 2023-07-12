@@ -1,0 +1,72 @@
+*{
+  color: var(--textColor);
+  font-family: 'Baloo Bhaina', sans-serif;
+  font-style: normal;
+  font-size: 20px;
+  font-weight: 200;
+}
+
+.title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 40px;
+  text-align: center;
+  color: var(--titleColor);
+}
+
+input {
+  border-radius: 40px;
+  font-size: 18px;
+  border: none;
+  text-align: center;
+  background-color: var(--inputColor);
+  color: var(--titleColor);
+}
+
+.get-started-card {
+ background-color: var(--buttonBackgroundColor);
+  text-align: center;
+  border-radius: 30px;
+  font-family: 'Baloo Bhaina', sans-serif;
+  font-size: 18px;
+}
+
+.footerShee.footer-client-dark {
+  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
+}
+
+/* Stile für Light Mode */
+.footerShee.footer-client-light {
+  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_light.svg");
+}
+
+@media screen and (max-width: 768px) {
+  .footerShee.footer-client-dark,
+  .footerShee.footer-client-light {
+    background-size: 100% auto;
+    background-position: bottom;
+    height: 100%;
+  }
+  .footerShee.footer-client-light {
+    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_mobile_light.svg");
+  }
+  .footerShee.footer-client-dark {
+    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_dark.svg");
+  }
+}
+
+@media screen and (min-width: 1700px) {
+  .footerShee {
+    background-size: 100% auto;
+    background-position: bottom;
+  }
+}
+
+@media screen and (min-width: 1824px) {
+  .footerShee {
+    background-position: bottom;
+  }
+}
+
+
