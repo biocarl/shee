@@ -35,6 +35,7 @@ import {TimerPopupComponent} from './brainstorming/brainstorming-presenter/timer
 import {MatRadioModule} from '@angular/material/radio';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     MatButtonModule,
     MatRadioModule,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

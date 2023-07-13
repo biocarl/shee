@@ -53,6 +53,19 @@ input {
   color: var(--secondaryColor);
 }
 
+.fa-w-14 {
+  transition: transform 0.3s ease;
+}
+
+.fa-w-14:hover {
+  cursor: pointer;
+  transform: scale(1.3);
+}
+
+.fa-w-14:active {
+  transform: scale(0.9);
+}
+
 .error-message{
   color: #af1313;
   font-size: 0.8em;
