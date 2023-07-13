@@ -47,7 +47,7 @@ html.light {
   align-items: center;
 }
 
-.v-message>* {
+.v-message > * {
   font-size: 300%;
   font-weight: bold;
   text-align: center;
@@ -87,9 +87,9 @@ body.dark {
 
 .navbar {
   background-color: transparent !important;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: center top;
+  background-position: bottom;
+  background-size: auto;
+  background-repeat: repeat-x;
 }
 
 .navbar-light {
@@ -148,31 +148,5 @@ body.dark {
   text-align: center !important;
 }
 
-@media screen and (max-width: 1023px) {
-  .navbar-menu {
-    background-color: transparent;
-    box-shadow: none;
-    padding: 0.5rem 0;
-  }
-}
 
-@media screen and (min-width: 0px) {
-  .navbar-item,
-  .navbar-link {
-    align-items: center;
-    display: flex;
-  }
-}
 
-@media screen and (min-width: 1700px) {
-  .navbar {
-    background-size: 100% auto;
-    background-position: top;
-  }
-}
-
-@media screen and (min-width: 1824px) {
-  .navbar {
-    background-position: bottom;
-  }
-}
