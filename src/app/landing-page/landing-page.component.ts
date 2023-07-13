@@ -30,7 +30,7 @@ export class LandingPageComponent {
   }
 
   validateInput(event: KeyboardEvent) {
-    const pattern = /^[A-Za-z0-9 -]*$/; // Only numbers, letters, whitespaces, and hyphens
+    const pattern = /^[A-Za-z0-9-]*$/; // Only numbers, letters and hyphens
     const inputChar = event.key;
 
     if (!pattern.test(inputChar)) {

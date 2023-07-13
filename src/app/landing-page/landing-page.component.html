@@ -8,7 +8,7 @@
         <div class="column is-four-fifths get-started-card">
           <label>Enter a room name:</label>
           <input type="text" [(ngModel)]="roomName" (keydown)="validateInput($event)">
-          <p *ngIf="inputError" class="error-message">Only numbers, letters, whitespaces, and hyphens are allowed.</p>
+          <p *ngIf="inputError" class="error-message">Only numbers, letters and hyphens are allowed.</p>
           <div class="participant-link">Link for the participants: <i class="fas fa-copy copy-icon"
                                                                       [cdkCopyToClipboard]="'https://shee.app/' + roomName"
                                                                       ></i><br>
