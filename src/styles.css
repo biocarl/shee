@@ -146,9 +146,8 @@ body.dark {
   /* Bildgröße anpassen */
   background-position: top;
   /* Bildposition zentrieren */
-  position: fixed;
-  left: 0;
-  bottom: 0;
+
+
   width: 100%;
   /* Breite auf 100% setzen */
   height: 30%;
