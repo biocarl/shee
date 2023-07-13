@@ -9,17 +9,17 @@ body{
   --headerTextColor_light: #000000DE;
   --headerTextColor_dark: #ABABAB;
   --titleColor_light: #000000DE;
-  --titleColor_dark: #ABABAB;
+  --titleColor_dark: rgba(171, 171, 171, 0.87);
   --textColor_light: #000000DE;
-  --textColor_dark: #ABABAB;
+  --textColor_dark: rgba(171, 171, 171, 0.87);
   --menuColor_light: #000000DE;
   --menuColor_dark: #ABABAB;
   --buttonTextColor_light: #000000DE;
   --buttonTextColor_dark: #FFFFFFDE;
-  --secondaryColor_dark: #00B9B9;
-  --secondaryColor_light: #AD195E;
+  --secondaryColor_dark: rgba(0, 185, 185, 0.87);
+  --secondaryColor_light: rgba(173, 25, 94, 0.87);
   --inputColor_light: #FAF9F6;
-  --inputColor_dark: #D9D9D9;
+  --inputColor_dark: rgb(217, 217, 217);
   --inputTextColor: #000000DE;
   --buttonBackgroundColor: #FFFFFF5B
 }
