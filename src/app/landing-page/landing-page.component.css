@@ -24,7 +24,7 @@ input {
   border: none;
   text-align: center;
   background-color: var(--inputColor);
-  color: var(--titleColor);
+  color: var(--inputTextColor);
 }
 .get-started-card {
   background-color: var(--buttonBackgroundColor);
@@ -72,5 +72,8 @@ input {
   font-weight: 100;
 }
 
+#button-text {
+color: var(--buttonTextColor);
+}
 
 
