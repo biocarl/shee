@@ -21,6 +21,7 @@
 }
 
 input {
+  display: block;
   border-radius: 40px;
   font-size: 18px;
   border: none;
@@ -28,13 +29,30 @@ input {
   background-color: var(--inputColor);
   color: var(--titleColor);
 }
-
 .get-started-card {
- background-color: var(--buttonBackgroundColor);
+  background-color: var(--buttonBackgroundColor);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   border-radius: 30px;
   font-family: 'Baloo Bhaina', sans-serif;
   font-size: 18px;
+  word-break: break-word;
+}
+
+.get-started-button {
+  border-radius: 30px;
+  padding-inline: 10px;
+  font-size: 18px;
+  background-color: var(--buttonBackgroundColor);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: var(--buttonTextColor);
+  border: none;
+}
+
+.participant-link {
+  color: var(--secondaryColor);
 }
 
 

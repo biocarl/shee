@@ -8,8 +8,8 @@
         <div class="column is-four-fifths get-started-card">
           <label>Enter a room name:</label>
           <input type=text [(ngModel)]="roomName">
-          <div>Link for the participants: https://shee.app/{{roomName}}</div>
-          <button [disabled]="!roomName" (click)="navigateToInitializer()">Get Started</button>
+          <div class = "participant-link">Link for the participants: https://shee.app/{{roomName}}</div>
+          <button class="get-started-button" [disabled]="!roomName" (click)="navigateToInitializer()">Get Started</button>
         </div>
         <div class="column spacer"></div>
       </div>
