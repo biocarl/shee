@@ -53,15 +53,16 @@ input {
   color: var(--secondaryColor);
 }
 
+/*copy icon*/
 .fa-w-14 {
   transition: transform 0.3s ease;
 }
-
+/*copy icon*/
 .fa-w-14:hover {
   cursor: pointer;
   transform: scale(1.2);
 }
-
+/*copy icon*/
 .fa-w-14:active {
   transform: scale(0.9);
 }
