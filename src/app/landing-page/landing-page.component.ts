@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {Mode} from "../mode-toggle/mode-toggle.model";
 import {Subscription} from "rxjs";
 import {ModeToggleService} from "../mode-toggle/mode-toggle.service";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-landing-page',
@@ -15,6 +16,7 @@ export class LandingPageComponent {
   Mode = Mode;
   inputError: boolean = false;
   modeSubscription: Subscription;
+  host: string = environment.production ? "https://shee.app/" : "http://localhost:4200/";
 
   constructor(private router: Router, private modeToggleService: ModeToggleService,) {
     this.mode = modeToggleService.currentMode;

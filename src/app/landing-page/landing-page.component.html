@@ -10,9 +10,9 @@
           <input type="text" [(ngModel)]="roomName" (keydown)="validateInput($event)">
           <p *ngIf="inputError" class="error-message">Only numbers, letters and hyphens are allowed.</p>
           <div class="participant-link">Link for the participants: <i class="fas fa-copy copy-icon"
-                                                                      [cdkCopyToClipboard]="'https://shee.app/' + roomName"
+                                                                      [cdkCopyToClipboard]="host + roomName"
                                                                       ></i><br>
-            https://shee.app/{{roomName}}</div>
+            {{host}}{{roomName}}</div>
           <button class="get-started-button" [disabled]="!roomName" (click)="navigateToInitializer()">Get Started
           </button>
         </div>
