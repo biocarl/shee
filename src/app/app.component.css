@@ -46,7 +46,7 @@ h1{
   .navbar-menu {
     background-color: transparent;
     box-shadow: none;
-    padding: 0.5rem 0;
+    padding: 0 0;
   }
 }
 

@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  margin: 0;
+}
 
 :root {
   --backgroundColor_light: #70AACD;
@@ -24,7 +27,7 @@
 html.dark {
   height: 100%;
   background-color: var(--backgroundColor_dark);
-  background-image: url("src/assets/SVG/Grafik_Background_stars.svg");
+  background-image: url("src/assets/SVG/background_stars.svg");
   background-repeat: repeat-x;
   background-position-y: 100px;
 }
@@ -32,7 +35,7 @@ html.dark {
 html.light {
   height: 100%;
   background-color: var(--backgroundColor_light);
-  background-image: url("src/assets/SVG/Grafik_Schwalben.svg");
+  background-image: url("src/assets/SVG/schwalben.svg");
   background-repeat: no-repeat;
   background-position-y: 200px;
   background-position-x: 280px;
@@ -62,7 +65,7 @@ body.light {
   --buttonTextColor: var(--buttonTextColor_light);
   --secondaryColor: var(--secondaryColor_light);
   --inputColor: var(--inputColor_light);
-  background-image: url("src/assets/SVG/Grafik_Sonne.svg");
+  background-image: url("src/assets/SVG/sonne.svg");
   background-repeat: no-repeat;
   background-position: calc(0% - 200px) -100px;
   height: 100%;
@@ -78,7 +81,7 @@ body.dark {
   --buttonTextColor: var(--buttonTextColor_dark);
   --secondaryColor: var(--secondaryColor_dark);
   --inputColor: var(--inputColor_dark);
-  background-image: url("src/assets/SVG/Grafik_Mond.svg");
+  background-image: url("src/assets/SVG/mond.svg");
   background-repeat: no-repeat;
   background-position: calc(100% + 200px) -120px;
   height: 100%;
@@ -93,11 +96,11 @@ body.dark {
 }
 
 .navbar-light {
-  background-image: url("src/assets/SVG/Grafik_Header_Desktop_light.svg");
+  background-image: url("src/assets/SVG/wolken_navbar_hell.svg");
 }
 
 .navbar-dark {
-  background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
+  background-image: url("src/assets/SVG/wolken_navbar_dunkel.svg");
   --background-color: var(--backgroundColor_dark);
 }
 
