@@ -139,21 +139,6 @@ body.dark {
   }
 }
 
-.footerShee {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* Bildgröße anpassen */
-  background-position: top;
-  /* Bildposition zentrieren */
-
-
-  width: 100%;
-  /* Breite auf 100% setzen */
-  height: 30%;
-  z-index: -1;
-}
-
 .mat-mdc-dialog-container .mdc-dialog__title {
   font-family: 'ChunkFive', serif !important;
   color: var(--headerTextColor) !important;
@@ -191,10 +176,3 @@ body.dark {
     background-position: bottom;
   }
 }
-
-/*Is this needed?*/
-/*html, body { height: 100%; }*/
-/*body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
-
-/*html, body { height: 100%; }*/
-/*body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/

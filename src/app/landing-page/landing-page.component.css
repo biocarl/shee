@@ -6,6 +6,11 @@
   font-weight: 200;
 }
 
+.main-content{
+  line-height: 2;
+}
+
+
 .title {
   font-style: normal;
   font-weight: 400;
@@ -32,41 +37,7 @@ input {
   font-size: 18px;
 }
 
-.footerShee.footer-client-dark {
-  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_dark.svg");
-}
 
-/* Stile für Light Mode */
-.footerShee.footer-client-light {
-  background-image: url("src/assets/SVG/Grafik_Footer_Presenter_desktop_light.svg");
-}
 
-@media screen and (max-width: 768px) {
-  .footerShee.footer-client-dark,
-  .footerShee.footer-client-light {
-    background-size: 100% auto;
-    background-position: bottom;
-    height: 100%;
-  }
-  .footerShee.footer-client-light {
-    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_mobile_light.svg");
-  }
-  .footerShee.footer-client-dark {
-    background-image: url("src/assets/SVG/Grafik_Footer_Presenter_dark.svg");
-  }
-}
-
-@media screen and (min-width: 1700px) {
-  .footerShee {
-    background-size: 100% auto;
-    background-position: bottom;
-  }
-}
-
-@media screen and (min-width: 1824px) {
-  .footerShee {
-    background-position: bottom;
-  }
-}
 
 
