@@ -7,9 +7,13 @@
       <div class="columns">
         <div class="column is-four-fifths get-started-card">
           <label>Enter a room name:</label>
-          <input type=text [(ngModel)]="roomName">
-          <div class = "participant-link">Link for the participants: https://shee.app/{{roomName}}</div>
-          <button class="get-started-button" [disabled]="!roomName" (click)="navigateToInitializer()">Get Started</button>
+          <input type="text" [(ngModel)]="roomName" (keydown)="validateInput($event)">
+          <p *ngIf="inputError" class="error-message">Only numbers, letters, whitespaces, and hyphens are allowed.</p>
+          <div class="participant-link">Link for the participants: <i class="fas fa-copy copy-icon"
+                                                                      [cdkCopyToClipboard]="'https://shee.app/' + roomName"></i><br>
+            https://shee.app/{{roomName}}</div>
+          <button class="get-started-button" [disabled]="!roomName" (click)="navigateToInitializer()">Get Started
+          </button>
         </div>
         <div class="column spacer"></div>
       </div>
@@ -40,4 +44,9 @@
       </div>
     </div>
   </div>
+  <div
+    class="content m-6 is-flex is-justify-content-space-between is-align-items-center has-background-info box has-text-black">
+    Please note that the current design is in its initial developmental phase. Every component and visual element you
+    see is in a preliminary stage and serves as a starting point for future iterations.<i
+    class="fas fa-exclamation-triangle" style="color: #fba004; font-size: 3em;"></i></div>
 </div>

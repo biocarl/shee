@@ -1,13 +1,10 @@
-*{
+.main-content{
+  line-height: 2;
   color: var(--textColor);
   font-family: 'Baloo Bhaina', sans-serif;
   font-style: normal;
   font-size: 20px;
   font-weight: 200;
-}
-
-.main-content{
-  line-height: 2;
 }
 
 
@@ -42,6 +39,7 @@ input {
 }
 
 .get-started-button {
+  font-family: 'Baloo Bhaina', sans-serif;
   border-radius: 30px;
   padding-inline: 10px;
   font-size: 18px;
@@ -51,11 +49,15 @@ input {
   border: none;
 }
 
-.participant-link {
+.participant-link,.copy-icon {
   color: var(--secondaryColor);
 }
 
-
+.error-message{
+  color: #af1313;
+  font-size: 0.8em;
+  font-weight: 100;
+}
 
 
 

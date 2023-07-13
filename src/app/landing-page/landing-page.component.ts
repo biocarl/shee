@@ -13,6 +13,7 @@ export class LandingPageComponent {
   roomName: string = "";
   mode: Mode;
   Mode = Mode;
+  inputError: boolean = false;
   modeSubscription: Subscription;
 
   constructor(private router: Router, private modeToggleService: ModeToggleService,) {
@@ -26,5 +27,17 @@ export class LandingPageComponent {
 
   navigateToInitializer() {
     this.router.navigate(["../" + this.roomName + "/presenter/new"]).then()
+  }
+
+  validateInput(event: KeyboardEvent) {
+    const pattern = /^[A-Za-z0-9 -]*$/; // Only numbers, letters, whitespaces, and hyphens
+    const inputChar = event.key;
+
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+      this.inputError = true;
+    } else {
+      this.inputError = false;
+    }
   }
 }
