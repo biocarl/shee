@@ -1,28 +1,33 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /* You can add global styles to this file, and also import other style files */
+body{
+  margin: 0;
+}
 
 :root {
-  --backgroundColor_light: #70AACD;
-  --backgroundColor_dark: #1D2331;
-  --headerTextColor_light: #000000DE;
-  --headerTextColor_dark: #ABABAB;
-  --titleColor_light: #000000DE;
-  --titleColor_dark: #ABABAB;
-  --textColor_light: #000000DE;
-  --textColor_dark: #ABABAB;
-  --menuColor_light: #000000DE;
-  --menuColor_dark: #ABABAB;
-  --buttonTextColor_light: #000000DE;
-  --buttonTextColor_dark: #FFFFFFDE;
-  --secondaryColor_dark: darkcyan;
-  --secondaryColor_light: #AD195E;
-  --inputColor: #D9D9D9
+  --backgroundColor_light: rgba(112, 170, 205);
+  --backgroundColor_dark: rgba(29, 35, 49);
+  --headerTextColor_light: rgba(0, 0, 0, 0.87);
+  --headerTextColor_dark: rgba(171, 171, 171);
+  --titleColor_light: rgba(0, 0, 0, 0.87);
+  --titleColor_dark: rgba(171, 171, 171, 0.87);
+  --textColor_light: rgba(0, 0, 0, 0.87);
+  --textColor_dark: rgba(171, 171, 171, 0.87);
+  --menuColor_light: rgba(0, 0, 0, 0.87);
+  --menuColor_dark: rgba(171, 171, 171);
+  --buttonTextColor_light: rgba(0, 0, 0, 0.87);
+  --buttonTextColor_dark: rgba(255, 255, 255, 0.87);
+  --secondaryColor_dark: rgba(0, 185, 185, 0.87);
+  --secondaryColor_light: rgba(173, 25, 94, 0.87);
+  --inputColor_light: rgba(250, 249, 246);
+  --inputColor_dark: rgb(217, 217, 217);
+  --inputTextColor: rgba(0, 0, 0, 0.87);
+  --buttonBackgroundColor: rgba(255, 255, 255, 0.36);
 }
 
 html.dark {
   height: 100%;
   background-color: var(--backgroundColor_dark);
-  background-image: url("src/assets/SVG/Grafik_Background_stars.svg");
+  background-image: url("src/assets/SVG/background_stars.svg");
   background-repeat: repeat-x;
   background-position-y: 100px;
 }
@@ -30,7 +35,7 @@ html.dark {
 html.light {
   height: 100%;
   background-color: var(--backgroundColor_light);
-  background-image: url("src/assets/SVG/Grafik_Schwalben.svg");
+  background-image: url("src/assets/SVG/schwalben.svg");
   background-repeat: no-repeat;
   background-position-y: 200px;
   background-position-x: 280px;
@@ -45,7 +50,7 @@ html.light {
   align-items: center;
 }
 
-.v-message>* {
+.v-message > * {
   font-size: 300%;
   font-weight: bold;
   text-align: center;
@@ -59,7 +64,8 @@ body.light {
   --menuColor: var(--menuColor_light);
   --buttonTextColor: var(--buttonTextColor_light);
   --secondaryColor: var(--secondaryColor_light);
-  background-image: url("src/assets/SVG/Grafik_Sonne.svg");
+  --inputColor: var(--inputColor_light);
+  background-image: url("src/assets/SVG/sonne.svg");
   background-repeat: no-repeat;
   background-position: calc(0% - 200px) -100px;
   height: 100%;
@@ -74,7 +80,8 @@ body.dark {
   --menuColor: var(--menuColor_dark);
   --buttonTextColor: var(--buttonTextColor_dark);
   --secondaryColor: var(--secondaryColor_dark);
-  background-image: url("src/assets/SVG/Grafik_Mond.svg");
+  --inputColor: var(--inputColor_dark);
+  background-image: url("src/assets/SVG/mond.svg");
   background-repeat: no-repeat;
   background-position: calc(100% + 200px) -120px;
   height: 100%;
@@ -83,17 +90,17 @@ body.dark {
 
 .navbar {
   background-color: transparent !important;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: center top;
+  background-position: bottom;
+  background-size: auto;
+  background-repeat: repeat-x;
 }
 
 .navbar-light {
-  background-image: url("src/assets/SVG/Grafik_Header_Desktop_light.svg");
+  background-image: url("src/assets/SVG/wolken_navbar_hell.svg");
 }
 
 .navbar-dark {
-  background-image: url("src/assets/SVG/Grafik_Header_Desktop_dark.svg");
+  background-image: url("src/assets/SVG/wolken_navbar_dunkel.svg");
   --background-color: var(--backgroundColor_dark);
 }
 
@@ -135,22 +142,6 @@ body.dark {
   }
 }
 
-.footerShee {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-size: cover;
-  /* Bildgröße anpassen */
-  background-position: top;
-  /* Bildposition zentrieren */
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  /* Breite auf 100% setzen */
-  height: 30%;
-  z-index: -1;
-}
-
 .mat-mdc-dialog-container .mdc-dialog__title {
   font-family: 'ChunkFive', serif !important;
   color: var(--headerTextColor) !important;
@@ -160,38 +151,5 @@ body.dark {
   text-align: center !important;
 }
 
-@media screen and (max-width: 1023px) {
-  .navbar-menu {
-    background-color: transparent;
-    box-shadow: none;
-    padding: 0.5rem 0;
-  }
-}
 
-@media screen and (min-width: 0px) {
-  .navbar-item,
-  .navbar-link {
-    align-items: center;
-    display: flex;
-  }
-}
 
-@media screen and (min-width: 1700px) {
-  .navbar {
-    background-size: 100% auto;
-    background-position: top;
-  }
-}
-
-@media screen and (min-width: 1824px) {
-  .navbar {
-    background-position: bottom;
-  }
-}
-
-/*Is this needed?*/
-/*html, body { height: 100%; }*/
-/*body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/
-
-/*html, body { height: 100%; }*/
-/*body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }*/

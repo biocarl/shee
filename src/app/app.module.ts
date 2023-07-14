@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
-import {NoGroupComponent} from './no-group/no-group.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {PresenterComponent} from './presenter/presenter.component';
 import {PollClientComponent} from "./poll/poll-client/poll-client.component";
@@ -35,13 +34,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {TimerPopupComponent} from './brainstorming/brainstorming-presenter/timer-popup/timer-popup.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PollClientComponent,
-    NoGroupComponent,
     NotFoundComponent,
     PresenterComponent,
     PollPresenterComponent,
@@ -57,7 +57,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrainstormingPresenterComponent,
     InfWhiteboardComponent,
     BrainstormingPresenterComponent,
-    TimerPopupComponent
+    TimerPopupComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +74,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatButtonModule,
     MatRadioModule,
     MatDialogModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
