@@ -4,24 +4,24 @@ body{
 }
 
 :root {
-  --backgroundColor_light: #70AACD;
-  --backgroundColor_dark: #1D2331;
-  --headerTextColor_light: #000000DE;
-  --headerTextColor_dark: #ABABAB;
-  --titleColor_light: #000000DE;
+  --backgroundColor_light: rgba(112, 170, 205);
+  --backgroundColor_dark: rgba(29, 35, 49);
+  --headerTextColor_light: rgba(0, 0, 0, 0.87);
+  --headerTextColor_dark: rgba(171, 171, 171);
+  --titleColor_light: rgba(0, 0, 0, 0.87);
   --titleColor_dark: rgba(171, 171, 171, 0.87);
-  --textColor_light: #000000DE;
+  --textColor_light: rgba(0, 0, 0, 0.87);
   --textColor_dark: rgba(171, 171, 171, 0.87);
-  --menuColor_light: #000000DE;
-  --menuColor_dark: #ABABAB;
-  --buttonTextColor_light: #000000DE;
-  --buttonTextColor_dark: #FFFFFFDE;
+  --menuColor_light: rgba(0, 0, 0, 0.87);
+  --menuColor_dark: rgba(171, 171, 171);
+  --buttonTextColor_light: rgba(0, 0, 0, 0.87);
+  --buttonTextColor_dark: rgba(255, 255, 255, 0.87);
   --secondaryColor_dark: rgba(0, 185, 185, 0.87);
   --secondaryColor_light: rgba(173, 25, 94, 0.87);
-  --inputColor_light: #FAF9F6;
+  --inputColor_light: rgba(250, 249, 246);
   --inputColor_dark: rgb(217, 217, 217);
-  --inputTextColor: #000000DE;
-  --buttonBackgroundColor: #FFFFFF5B
+  --inputTextColor: rgba(0, 0, 0, 0.87);
+  --buttonBackgroundColor: rgba(255, 255, 255, 0.36);
 }
 
 html.dark {
