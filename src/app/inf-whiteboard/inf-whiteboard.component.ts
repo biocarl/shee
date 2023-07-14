@@ -53,7 +53,7 @@ export class InfWhiteboardComponent implements OnInit {
 
   private disableScrollbar() {
     this.renderer.addClass(document.getElementsByTagName('html')[0], 'is-clipped');
-    this.renderer.setStyle(document.getElementsByClassName('footerShee')[0], "display", "none");
+    //this.renderer.setStyle(document.getElementsByClassName('footerShee')[0], "display", "none");
   }
 
   ngOnInit(): void {
