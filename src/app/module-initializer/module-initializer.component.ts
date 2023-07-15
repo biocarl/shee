@@ -35,6 +35,7 @@ export class ModuleInitializerComponent implements OnInit {
   selectedModuleString: string = "polling";
   modulesLoaded: boolean = false;
 
+
   constructor(private http: HttpClient,
               private router: Router,
               private route: ActivatedRoute,

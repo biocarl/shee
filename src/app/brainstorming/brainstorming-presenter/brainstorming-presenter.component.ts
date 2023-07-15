@@ -210,9 +210,6 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
   }
 
   startVoting(): void {
-    this.canvas?.getObjects().forEach(obj => {
-      obj.selectable = false;
-    })
     this.subscribeCanvasObjects();
     this.emitCanvasRequest();
     this.toggleVotingCounterVisibility();
@@ -227,6 +224,7 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
 
   private extractIdeaResponsesFromCanvas(obj: { canvas: fabric.Canvas }): void {
     this.canvas = obj.canvas;
+
     this.canvas.selection = false;
     this.canvas.getObjects().forEach((obj) => {
       obj.evented = false;
@@ -302,7 +300,9 @@ export class BrainstormingPresenterComponent implements View, OnInit, OnDestroy 
     this.canvas?.getObjects().forEach(obj => {
       obj.evented = true;
     })
-    this.canvas!.selection = true;
+    if(this.canvas) {
+      this.canvas.selection = true;
+    }
     this.canvasObjectsSubscription?.unsubscribe();
 
     if (!this.ideaEvent?.questionID) return;
