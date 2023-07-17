@@ -1,5 +1,5 @@
 <h1>Module Initializer</h1>
-<form *ngIf="modules">
+<form *ngIf="modulesLoaded && modules">
   <div class="center">
     <label class="module-select" for="module-select">Select Module</label>
     <br>
@@ -9,31 +9,35 @@
   </div>
 </form>
 
-<div *ngFor="let parameter of selectedModule(selectedModuleString).parameters">
-  <label [for]="parameter.name">
+<ng-container *ngIf="selectedModule(selectedModuleString)">
+  <div *ngFor="let parameter of selectedModule(selectedModuleString).parameters">
+    <label [for]="parameter.name">
 
-    <div class="p-name">
-      {{parameter.name}}
-    </div>
-    <div class="p-description">
-      {{parameter.description}}
-    </div>
+      <div class="p-name">
+        {{parameter.name}}
+      </div>
+      <div class="p-description">
+        {{parameter.description}}
+      </div>
 
-  </label>
-  <div class="input-flex">
-    <ul>
-      <li *ngFor="let answer of parameter.value; let i = index; trackBy:trackByIndex">
-        <button class="spacer" *ngIf="parameter.value.length>1" style="visibility: hidden" >+</button>
-        <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value[i]"
-               [required]="parameter.required"/>
-        <button class="spacer" *ngIf="parameter.value.length>1 && i <=1" style="visibility: hidden">-</button>
-        <button class="addDeleteBtn deleteBtn" *ngIf="parameter.value.length>1 && i>1" (click)=parameter.value.splice(i,1)>-
+    </label>
+    <div class="input-flex">
+      <ul>
+        <li *ngFor="let answer of parameter.value; let i = index; trackBy:trackByIndex">
+          <button class="spacer" *ngIf="parameter.value.length>1" style="visibility: hidden">+</button>
+          <input type="text" [id]="parameter.name" [name]="parameter.name" [(ngModel)]="parameter.value[i]"
+                 [required]="parameter.required"/>
+          <button class="spacer" *ngIf="parameter.value.length>1 && i <=1" style="visibility: hidden">-</button>
+          <button class="addDeleteBtn deleteBtn" *ngIf="parameter.value.length>1 && i>1"
+                  (click)=parameter.value.splice(i,1)>-
+          </button>
+        </li>
+        <button class="addDeleteBtn addBtn" *ngIf="parameter.value.length>1" (click)="addAnswer(parameter.value)">+
         </button>
-      </li>
-      <button class="addDeleteBtn addBtn" *ngIf="parameter.value.length>1" (click)="addAnswer(parameter.value)">+</button>
-    </ul>
+      </ul>
+    </div>
   </div>
-</div>
+</ng-container>
 
 <div class="center">
   <button class="initializer-button" type="button" (click)="initializeModuleWithParams()">Initialize Module</button>

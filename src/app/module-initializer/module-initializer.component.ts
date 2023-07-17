@@ -33,6 +33,8 @@ interface ModuleParameter {
 export class ModuleInitializerComponent implements OnInit {
   modules ?: ModuleType[];
   selectedModuleString: string = "polling";
+  modulesLoaded: boolean = false;
+
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -43,6 +45,7 @@ export class ModuleInitializerComponent implements OnInit {
   ngOnInit(): void {
     this.http.get<ModuleTypes>('assets/modules.json').subscribe(data => {
       this.modules = data.modules;
+      this.modulesLoaded = true;
       this.log.logToConsole("Module initializer modules: ", this.modules);
     });
   }

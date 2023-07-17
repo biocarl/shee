@@ -107,7 +107,7 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       ry: 100,
       objectCaching: false
     });
-    fabric.loadSVGFromURL('/assets/SVG/Thumbs_Up_Icon.svg', (objects, options) => {
+    fabric.loadSVGFromURL('/assets/SVG/thumbs_Up_Icon.svg', (objects, options) => {
       const obj = fabric.util.groupSVGElements(objects, options);
       obj.set({
         scaleX: 0.2,
