@@ -2,7 +2,6 @@
   display: block;
   background-color: transparent;
   padding: 0.8em;
-  font-family: 'ChunkFive', sans-serif;
 }
 
 .question {
@@ -10,9 +9,7 @@
   width: 80vw;
   top: 130px;
   bottom: calc(var(--user-input-height) + 30px);
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 32px;
   line-height: 40px;
   text-align: center;
@@ -98,9 +95,7 @@ h4 {
 .timer {
   position: relative;
   color: var(--secondaryColor);
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 32px;
   line-height: 40px;
   text-align: center;

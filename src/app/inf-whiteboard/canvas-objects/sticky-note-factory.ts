@@ -6,6 +6,7 @@ const STICKY_NOTE_DIMENSIONS = 200;
 const STICKY_NOTE_PADDING = 10;
 const MAX_FONT_SIZE = 200;
 const TEXTBOX_DIMENSIONS = STICKY_NOTE_DIMENSIONS - 2 * STICKY_NOTE_PADDING;
+const STICKY_FONT_WEIGHT = 500;
 
 //canvasObject-factory
 export class StickyNoteFactory implements CanvasObject<fabric.Group> {
@@ -85,6 +86,8 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
       objectCaching: false,
       text: text,
       textVisible: textVisible,
+      fontFamily: '"Lato","sans-serif"',
+      fontWeight: STICKY_FONT_WEIGHT
     });
 
     textbox.on('changed', () => {
@@ -265,7 +268,9 @@ export class StickyNoteFactory implements CanvasObject<fabric.Group> {
               scaleY: textbox.originalGroup.scaleY,
               hasBorders: false,
               objectCaching: false,
-              originalGroup: textbox.originalGroup
+              originalGroup: textbox.originalGroup,
+              fontFamily: '"Lato","sans-serif"',
+              fontWeight: STICKY_FONT_WEIGHT
             })
             clonedObj.rotate(target.angle!);
 

@@ -18,7 +18,6 @@ div {
   text-align: center;
   border-bottom-right-radius: 60px 5px;
   line-height: 1.5;
-  font-weight: 550;
   transition: background-color 0.1s ease-in-out;
   display: grid;
   place-items: center;
@@ -81,9 +80,7 @@ textarea {
   width: 388px;
   height: 84px;
   position: fixed;
-  font-weight: 400;
   font-size: 24px;
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
   left: calc(50% - 194px);
   /* 50% minus die Hälfte der Buttonbreite */
@@ -105,9 +102,7 @@ textarea {
   background: #64BF4D;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 24px;
   line-height: 38px;
   display: flex;
@@ -124,9 +119,7 @@ textarea {
 .brainstorming-title {
   position: relative;
   width: 80vw;
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 32px;
   line-height: 40px;
   text-align: center;
@@ -138,9 +131,7 @@ textarea {
 .timer {
   position: relative;
   color: var(--secondaryColor);
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 32px;
   line-height: 40px;
   text-align: center;
@@ -259,7 +250,6 @@ textarea {
 }
 
 .voting-option {
-  font-family: 'Baloo Bhaina', sans-serif;
   font-style: normal;
   font-size: 20px;
   cursor: pointer;
@@ -275,9 +265,7 @@ textarea {
 .single-choice {
   font-size: 20px;
   margin-bottom: 20px;
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
 }
 
 
@@ -285,9 +273,7 @@ textarea {
   position: relative;
   top: 150px;
   color: var(--textColor);
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 50px;
   line-height: 40px;
   text-align: center;
@@ -297,9 +283,7 @@ textarea {
   position: absolute;
   bottom: -15%;
   right: 40%;
-  font-family: 'Baloo Bhaina', serif;
   font-style: normal;
-  font-weight: 400;
   font-size: 14px;
   line-height: 18px;
   pointer-events: none;

@@ -2,14 +2,12 @@ h1 {
   color: var(--titleColor);
   text-align: center;
   font-size: 32px;
-  font-family: 'Baloo Bhaina', sans-serif;
   margin-bottom: 20px;
 }
 
 .module-select {
   text-align: center;
   color: var(--textColor);
-  font-family: 'Baloo Bhaina', sans-serif;
   font-size: 20px;
 }
 
@@ -21,7 +19,6 @@ h1 {
   padding-bottom: 0.3em;
   padding-top: 0.3em;
   color: var(--textColor);
-  font-family: 'Baloo Bhaina', sans-serif;
   font-size: 20px;
   text-align: center;
 }
@@ -31,7 +28,6 @@ h1 {
   padding-bottom: 0.3em;
   padding-top: 0.3em;
   color: var(--textColor);
-  font-family: 'Baloo Bhaina', sans-serif;
   font-size: 25px;
   text-align: center;
 }
@@ -39,7 +35,6 @@ h1 {
 .initializer-button {
   text-align: center;
   border-radius: 30px;
-  font-family: 'ChunkFive', sans-serif;
   font-size: 18px;
   transition: width 0.3s;
   background-color: rgba(244, 255, 237, 0.36);
@@ -59,7 +54,6 @@ h1 {
   border-radius: 30px;
   background-color: var(--inputColor);
   border: none;
-  font-family: 'Baloo Bhaina', sans-serif;
   font-size: 25px;
   text-transform: capitalize;
   margin-bottom :40px;
@@ -73,7 +67,6 @@ input{
   border-radius: 30px;
   background-color: var(--inputColor);
   border: none;
-  font-family: 'Baloo Bhaina', sans-serif;
   font-size: 20px;
   text-transform: capitalize;
   margin-bottom :40px;
@@ -89,7 +82,6 @@ input{
 .addDeleteBtn {
   text-align: center;
   border-radius: 30px;
-  font-family: 'ChunkFive', sans-serif;
   font-size: 18px;
   transition: width 0.3s;
   background-color: var(--inputColor);
@@ -118,7 +110,6 @@ ul {
 .spacer{
   text-align: center;
   border-radius: 30px;
-  font-family: 'ChunkFive', sans-serif;
   font-size: 18px;
   transition: width 0.3s;
   background-color: rgba(244, 255, 237, 0.36);

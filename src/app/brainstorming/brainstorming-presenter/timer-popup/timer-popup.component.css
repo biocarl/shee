@@ -3,9 +3,7 @@
   background-color: var(--background-color);
   border: 5px solid var(--secondaryColor);
   text-align: center;
-  font-family: 'ChunkFive', serif;
   font-style: normal;
-  font-weight: 400;
   width: 400px;
 }
 
@@ -28,7 +26,6 @@ h1 {
   margin: 15px;
   /* Hinzugefügt für die Box */
   border-radius: 30px;
-  font-family: 'ChunkFive', sans-serif;
   font-size: 18px;
   transition: width 0.3s;
   background-color: rgba(244, 255, 237, 0.36);

@@ -120,14 +120,50 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
     this.stickyColor = getComputedStyle(element).getPropertyValue('background-color');
   }
 
+  // resizeTextToFitContainer(selector: string) {
+  //   const sticky: HTMLElement | null = document.querySelector(selector);
+  //   if (sticky) {
+  //     const maxWidth = sticky.clientWidth;
+  //     const maxHeight = sticky.clientHeight;
+  //     sticky.style.fontFamily = "'Lato','sans-serif'";
+  //     sticky.style.fontWeight = "500";
+  //
+  //     let minFontSize = 5; // Set a minimum font size
+  //     let maxFontSize = 200; // Set a maximum font size
+  //     let fontSize = maxFontSize;
+  //
+  //     // Apply the maximum font size
+  //     sticky.style.fontSize = fontSize + 'px';
+  //
+  //     // Reduce the font size until the content fits or reaches the minimum size
+  //     while ((sticky.scrollHeight > maxHeight || sticky.scrollWidth > maxWidth) && fontSize > minFontSize) {
+  //       fontSize--;
+  //       sticky.style.fontSize = fontSize + 'px';
+  //     }
+  //
+  //     // Increase the font size until the content overflows or reaches the maximum size
+  //     while ((sticky.scrollHeight <= maxHeight && sticky.scrollWidth <= maxWidth) && fontSize < maxFontSize) {
+  //       fontSize++;
+  //       sticky.style.fontSize = fontSize + 'px';
+  //
+  //       if (sticky.scrollHeight > maxHeight || sticky.scrollWidth > maxWidth) {
+  //         fontSize--;
+  //         sticky.style.fontSize = fontSize + 'px';
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
   resizeTextToFitContainer(selector: string) {
     const sticky: HTMLElement | null = document.querySelector(selector);
     if (sticky) {
       const maxWidth = sticky.clientWidth;
       const maxHeight = sticky.clientHeight;
+      sticky.style.fontFamily = "'Lato','sans-serif'";
+      sticky.style.fontWeight = "500";
 
       let minFontSize = 5; // Set a minimum font size
-      let maxFontSize = 50; // Set a maximum font size
+      let maxFontSize = 200; // Set a maximum font size
       let fontSize = maxFontSize;
 
       // Apply the maximum font size
@@ -152,4 +188,5 @@ export class BrainstormingClientComponent implements View,AfterViewChecked {
       }
     }
   }
+
 }

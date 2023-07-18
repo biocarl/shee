@@ -3,6 +3,11 @@ body{
   margin: 0;
 }
 
+html body,html button,html input,html optgroup,html select,html textarea, html h1, html h2,html h3,html h4,html h5,html h6  {
+  font-family: 'Lato', sans-serif;
+  font-weight: 1000;
+}
+
 :root {
   --backgroundColor_light: rgba(112, 170, 205);
   --backgroundColor_dark: rgba(29, 35, 49);
@@ -37,8 +42,8 @@ html.light {
   background-color: var(--backgroundColor_light);
   background-image: url("src/assets/SVG/schwalben.svg");
   background-repeat: no-repeat;
-  background-position-y: 200px;
-  background-position-x: 280px;
+  background-position-y: 120px;
+  background-position-x: 180px;
 }
 
 .v-message {
@@ -52,7 +57,6 @@ html.light {
 
 .v-message > * {
   font-size: 300%;
-  font-weight: bold;
   text-align: center;
 }
 
@@ -143,7 +147,7 @@ body.dark {
 }
 
 .mat-mdc-dialog-container .mdc-dialog__title {
-  font-family: 'ChunkFive', serif !important;
+  font-family: 'Lato', sans-serif !important;
   color: var(--headerTextColor) !important;
 }
 

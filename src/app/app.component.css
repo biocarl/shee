@@ -1,6 +1,4 @@
-.v-abbreviation {
-  font-weight: 700;
-}
+
 
 .v-blue {
   background: #0B72D9;
@@ -23,7 +21,6 @@ h1 {
 
 code {
   background-color: transparent;
-  font-weight: bold;
   padding: 0.25em;
 }
 
@@ -39,7 +36,7 @@ body{
 }
 
 h1{
-  font-family: 'ChunkFive', serif;font-size: 22px;
+  font-size: 22px;
 }
 
 @media screen and (max-width: 1023px){
