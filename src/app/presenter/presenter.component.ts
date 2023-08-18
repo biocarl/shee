@@ -80,5 +80,4 @@ export class PresenterComponent implements OnInit {
   private publishQueryParamAsPresenterEvent(): void {
     this.queryToEventService.publishIfValid(this.route.snapshot.queryParamMap);
   }
-
 }

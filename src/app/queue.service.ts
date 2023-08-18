@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {PresenterMessage} from './presenter-message';
 import {LoggerService} from './logger.service';
+import {BackendQueueService} from "./backend-queue.service";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class QueueService {
     private groupService: GroupService,
     private zone: NgZone,
     private http: HttpClient,
-    private log: LoggerService
+    private log: LoggerService,
+    private backendService: BackendQueueService
   ) {
   }
 
@@ -87,7 +89,8 @@ export class QueueService {
     this.log.logToConsole("Trying to send Post to channel:", payload);
     this.http.post<any>(`${environment.apiUrl}`, payload)
       .subscribe(result => {
-        this.log.logToConsole("Post to channel earlier was successful.", result)
+        this.log.logToConsole("Post to channel earlier was successful.", result);
+        this.backendService.publishMessageToBackend(this.groupService.getGroupName(),topicSuffix,payload.message);
       });
   }
 
